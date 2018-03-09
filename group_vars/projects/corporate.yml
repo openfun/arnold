@@ -1,0 +1,3 @@
+project_name: corporate
+cms_host: corporate-cms.dev.fun-mooc.fr
+lms_host: corporate-lms.dev.fun-mooc.fr

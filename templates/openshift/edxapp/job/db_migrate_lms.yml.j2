@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: dbmigrate-lms
+spec:
+  template:
+    metadata:
+      name: dbmigrate-lms
+    spec:
+      containers:
+      - name: dbmigrate-lms
+        image: "{{ edxapp_image }}:{{ edxapp_tag }}"
+        command: ["python", "manage.py", "lms", "migrate", "--settings", "docker_run"]
+        volumeMounts:
+        - mountPath: /config
+          name: volume-config
+        - mountPath: /data/media
+          name: edxapp-media
+      volumes:
+      - name: volume-config
+        configMap:
+          defaultMode: 420
+          name: config
+      restartPolicy: Never

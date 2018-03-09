@@ -1,0 +1,44 @@
+---
+# This playbook generates all the deployment files for a project:
+# - Openshift deployment files,
+# - Config files for each application.
+#
+# A file is created for each template found in the "templates"
+# directory by applying to it the loaded variables.
+#
+# The files are generated and placed in the "_result" directory,
+# respecting the same structure as in "templates" directory.
+
+- hosts: local
+  tasks:
+
+    - name: create empty directory for result files
+      file:
+        state: "{{ item }}"
+        path: "_result"
+        mode: "0770"
+      with_items:
+        - absent
+        - directory 
+
+    - name: find all Jinja templates in the "templates" directory
+      find:
+        paths: "templates"
+        patterns: "*.j2"
+        recurse: yes
+      register: templates  # Record the list of templates in a variable for use below
+
+    - name: create the same structure in the destination directory
+      file: 
+        path: "_result/{{ item.path | relpath('templates') | dirname }}"
+        recurse: yes
+        state: directory
+      with_items:
+        - "{{ templates.files }}"
+
+    - name: generate all yaml files
+      template:
+        src: "{{ item.path }}"
+        dest: _result/{{ item.path | relpath('templates') | regex_replace('.j2') }}
+      with_items:
+        - "{{ templates.files }}"

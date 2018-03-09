@@ -1,0 +1,5 @@
+domain_name: dev.fun-mooc.fr
+cms_host: "{{ project_name }}-cms.{{ domain_name }}"
+lms_host: "{{ project_name }}-lms.{{ domain_name }}"
+edxapp_image: edxapp
+edxapp_tag: latest
