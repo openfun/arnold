@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: nginx
+  name: nginx
+spec:
+  replicas: 1
+  selector:
+    app: nginx
+    deploymentconfig: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+        deploymentconfig: nginx
+    spec:
+      containers:
+      - image: nginx
+        name: nginx
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /etc/nginx/conf.d
+          name: volume-conf
+        - mountPath: /data/media
+          name: volume-media
+          readOnly: true
+        - mountPath: /data/static
+          name: volume-static
+          readOnly: true
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: nginx
+        name: volume-conf
+      - name: volume-media
+        persistentVolumeClaim:
+          claimName: media
+      - name: volume-static
+        persistentVolumeClaim:
+          claimName: static

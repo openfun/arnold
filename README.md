@@ -15,6 +15,13 @@ The deployment files are crafted by applying project variables to a set of Ansib
 
 To generate the deployment files, run:
 
-    $ ansible-playbook deploy.yml --extra-vars "@group_vars/projects/corporate.yml"
+    $ ansible-playbook deploy.yml -e "customer=corporate env_type=preprod"
+
+The default env_type is `staging`.
+The default customer is `patient0`, a demo site with default configuration.
+
+For a `feature` environment, you should also set a `feature_title` variable with a slug describing the feature:
+
+    $ ansible-playbook deploy.yml -e "env_type=feature feature_title=change-background-color"
 
 The generated files should now be available in the `_result` directory.

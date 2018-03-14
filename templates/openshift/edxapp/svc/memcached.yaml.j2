@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: memcached
+  name: memcached  # name of the service should be host name in nginx
+spec:
+  ports:
+  - name: 11211-tcp
+    port: 11211
+    protocol: TCP
+    targetPort: 11211
+  selector:
+    deploymentconfig: memcached
+  type: ClusterIP

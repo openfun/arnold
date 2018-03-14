@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: cms
+  name: cms
+spec:
+  replicas: 1  # number of pods we want
+  selector:
+    app: cms
+    deploymentconfig: cms
+  template:
+    metadata:
+      labels:
+        app: cms
+        deploymentconfig: cms
+    spec:
+      containers:
+      - env:
+        - name: SERVICE_VARIANT
+          value: cms
+        - name: DJANGO_SETTINGS_MODULE
+          value: cms.envs.docker_run
+        image: "{{ edxapp_image }}:{{ edxapp_tag }}"
+        imagePullPolicy: Always
+        name: cms
+        volumeMounts:
+        - mountPath: /config
+          name: volume-config
+        - mountPath: /edx/var/edxapp/media
+          name: edxapp-media
+        - mountPath: /edx/var/edxapp/static
+          name: edxapp-static
+      volumes:
+      - name: volume-config
+        configMap:
+          defaultMode: 420
+          name: config
+      - name: edxapp-media
+        persistentVolumeClaim:
+          claimName: media
+      - name: edxapp-static
+        persistentVolumeClaim:
+          claimName: static

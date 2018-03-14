@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: nginx
+  name: nginx
+spec:
+  ports:
+  - name: 8071-tcp
+    port: 8071
+    protocol: TCP
+    targetPort: 8071
+  - name: 8081-tcp
+    port: 8081
+    protocol: TCP
+    targetPort: 8081
+  selector:
+    deploymentconfig: nginx
+  type: ClusterIP

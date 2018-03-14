@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: update-courses
+spec:
+  template:
+    metadata:
+      name: update-courses
+    spec:
+      containers:
+      - name: update-courses
+        image: "{{ edxapp_image }}:{{ edxapp_tag }}"
+        command: ["python", "manage.py", "lms", "update_courses", "--settings", "docker_run"]
+        volumeMounts:
+        - mountPath: /config
+          name: volume-config
+      volumes:
+      - name: volume-config
+        configMap:
+          defaultMode: 420
+          name: config
+      restartPolicy: Never

@@ -1,0 +1,27 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: update-assets-cms
+spec:
+  template:
+    metadata:
+      name: update-assets-cms
+    spec:
+      containers:
+      - name: update-assets-cms
+        image: "{{ edxapp_image }}:{{ edxapp_tag }}"
+        command: ["paver", "update_assets", "--settings", "docker_run", "cms"]
+        volumeMounts:
+        - mountPath: /config
+          name: volume-config
+        - mountPath: /edx/var/edxapp/static
+          name: edxapp-static
+      volumes:
+      - name: volume-config
+        configMap:
+          defaultMode: 420
+          name: config
+      - name: edxapp-static
+        persistentVolumeClaim:
+          claimName: static
+      restartPolicy: Never

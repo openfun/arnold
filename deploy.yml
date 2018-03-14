@@ -10,6 +10,11 @@
 # respecting the same structure as in "templates" directory.
 
 - hosts: local
+
+  vars_files:
+  - "group_vars/customer/{{ customer }}.yml"
+  - "group_vars/env_type/{{ env_type }}.yml"
+
   tasks:
 
     - name: create empty directory for result files
