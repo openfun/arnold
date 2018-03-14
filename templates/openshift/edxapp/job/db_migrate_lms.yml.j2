@@ -14,8 +14,6 @@ spec:
         volumeMounts:
         - mountPath: /config
           name: volume-config
-        - mountPath: /data/media
-          name: edxapp-media
       volumes:
       - name: volume-config
         configMap:
