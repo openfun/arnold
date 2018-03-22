@@ -1,16 +1,17 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: update-assets-cms
+  name: collecstatic-lms
+  namespace: "{{ project_name }}"
 spec:
   template:
     metadata:
-      name: update-assets-cms
+      name: collecstatic-lms
     spec:
       containers:
-      - name: update-assets-cms
+      - name: collecstatic-lms
         image: "{{ edxapp_image }}:{{ edxapp_tag }}"
-        command: ["paver", "update_assets", "--settings", "docker_run", "cms"]
+        command: ["python", "manage.py", "lms", "collecstatic", "--noinput", "--settings", "docker_run", "lms"]
         volumeMounts:
         - mountPath: /config
           name: volume-config
