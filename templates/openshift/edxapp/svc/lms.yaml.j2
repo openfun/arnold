@@ -4,6 +4,7 @@ metadata:
   labels:
     app: lms
   name: lms  # name of the service should be host name in nginx
+  namespace: "{{ project_name }}"
 spec:
   ports:
   - name: 8000-tcp

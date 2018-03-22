@@ -4,6 +4,7 @@ metadata:
   labels:
     app: nginx
   name: nginx
+  namespace: "{{ project_name }}"
 spec:
   replicas: 1
   selector:

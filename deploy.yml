@@ -1,49 +1,35 @@
 ---
-# This playbook generates all the deployment files for a project:
-# - Openshift deployment files,
-# - Config files for each application.
+# This playbook pushes all Openshift definition files to build a project.
 #
-# A file is created for each template found in the "templates"
-# directory by applying to it the loaded variables.
-#
-# The files are generated and placed in the "_result" directory,
-# respecting the same structure as in "templates" directory.
+# A definition file is generated and pushed for each template found in the
+# "templates/openshift" directory by injecting loaded variables.
 
 - hosts: local
-
   vars_files:
   - "group_vars/customer/{{ customer }}.yml"
   - "group_vars/env_type/{{ env_type }}.yml"
 
   tasks:
 
-    - name: create empty directory for result files
-      file:
-        state: "{{ item }}"
-        path: "_result"
-        mode: "0770"
-      with_items:
-        - absent
-        - directory 
+  - name: Make sure the project exists in Openshift and is up-to-date
+    openshift_raw:
+      api_version: v1
+      kind: Project
+      name: "{{ project_name }}"
+      description: "{{ project_description|default(project_display_name)|default(project_name) }}"
+      display_name: "{{ project_display_name|default(project_name) }}"
+      state: present
 
-    - name: find all Jinja templates in the "templates" directory
-      find:
-        paths: "templates"
-        patterns: "*.j2"
-        recurse: yes
-      register: templates  # Record the list of templates in a variable for use below
+  - name: Find all templates related to an Openshift definition
+    find:
+      paths: templates/openshift
+      patterns: "*.j2"
+      recurse: yes
+    register: openshift_templates  # Record the list of templates in a variable used below
 
-    - name: create the same structure in the destination directory
-      file: 
-        path: "_result/{{ item.path | relpath('templates') | dirname }}"
-        recurse: yes
-        state: directory
-      with_items:
-        - "{{ templates.files }}"
-
-    - name: generate all yaml files
-      template:
-        src: "{{ item.path }}"
-        dest: _result/{{ item.path | relpath('templates') | regex_replace('.j2') }}
-      with_items:
-        - "{{ templates.files }}"
+  - name: For each template found, make sure an object exists in Openshift and is up-to-date
+    openshift_raw:
+      definition: "{{ lookup('template', item.path | relpath('templates')) | from_yaml }}"
+      state: present
+    with_items:
+      - "{{ openshift_templates.files }}"

@@ -4,9 +4,9 @@ metadata:
   labels:
     app: lms
   name: lms
+  namespace: "{{ project_name }}"
 spec:
   host: {{ lms_host }}
-
   port:
     targetPort: 8071-tcp
   tls:

@@ -4,6 +4,7 @@ metadata:
   labels:
     app: memcached
   name: memcached  # name of the service should be host name in nginx
+  namespace: "{{ project_name }}"
 spec:
   ports:
   - name: 11211-tcp

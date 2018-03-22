@@ -4,9 +4,9 @@ metadata:
   labels:
     app: cms
   name: cms
+  namespace: "{{ project_name }}"
 spec:
   host: {{ cms_host }}
-
   port:
     targetPort: 8081-tcp
   tls:

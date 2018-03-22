@@ -4,6 +4,7 @@ metadata:
   labels:
     app: nginx
   name: nginx
+  namespace: "{{ project_name }}"
 spec:
   ports:
   - name: 8071-tcp
