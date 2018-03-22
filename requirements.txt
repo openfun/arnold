@@ -1,1 +1,2 @@
-Ansible==2.4.3
+ansible==2.5.0rc3
+openshift==0.4.3
