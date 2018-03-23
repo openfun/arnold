@@ -1,17 +1,18 @@
 ---
-# This playbook pushes all Openshift definition files to build a project.
+# This playbook pushes all OpenShift definition files to build a project.
 #
 # A definition file is generated and pushed for each template found in the
 # "templates/openshift" directory by injecting loaded variables.
 
 - hosts: local
+  gather_facts: False
   vars_files:
   - "group_vars/customer/{{ customer }}.yml"
   - "group_vars/env_type/{{ env_type }}.yml"
 
   tasks:
 
-  - name: Make sure the project exists in Openshift and is up-to-date
+  - name: Make sure the project exists in OpenShift and is up-to-date
     openshift_raw:
       api_version: v1
       kind: Project
@@ -20,14 +21,14 @@
       display_name: "{{ project_display_name|default(project_name) }}"
       state: present
 
-  - name: Find all templates related to an Openshift definition
+  - name: Find all templates related to an OpenShift definition
     find:
       paths: templates/openshift
       patterns: "*.j2"
       recurse: yes
     register: openshift_templates  # Record the list of templates in a variable used below
 
-  - name: For each template found, make sure an object exists in Openshift and is up-to-date
+  - name: For each template found, make sure an object exists in OpenShift and is up-to-date
     openshift_raw:
       definition: "{{ lookup('template', item.path | relpath('templates')) | from_yaml }}"
       state: present
