@@ -21,16 +21,12 @@
       display_name: "{{ project_display_name|default(project_name) }}"
       state: present
 
-  - name: Find all templates related to an OpenShift definition
-    find:
-      paths: templates/openshift
-      patterns: "*.j2"
-      recurse: yes
-    register: openshift_templates  # Record the list of templates in a variable used below
-
-  - name: For each template found, make sure an object exists in OpenShift and is up-to-date
+  - name: Make sure all the project objects exist in OpenShift and are up-to-date
     openshift_raw:
-      definition: "{{ lookup('template', item.path | relpath('templates')) | from_yaml }}"
+      definition: "{{ lookup('template', 'templates/' + item + '.j2') | from_yaml }}"
       state: present
     with_items:
-      - "{{ openshift_templates.files }}"
+      - "{{ openshift_base }}"
+      - "{{ openshift_databases }}"
+      - "{{ openshift_jobs }}"
+      - "{{ openshift_routes }}"
