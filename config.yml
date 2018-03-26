@@ -1,0 +1,56 @@
+---
+
+- hosts: local
+  gather_facts: False
+  vars_files:
+  - "group_vars/customer/{{ customer }}.yml"
+  - "group_vars/env_type/{{ env_type }}.yml"
+
+  tasks:
+
+  - name: Find all templates related to configuration
+    find:
+      paths: templates/config
+      patterns: "*.j2"
+      recurse: yes
+    register: templates_config  # Record the list of templates in a variable used below
+
+  - set_fact:
+      # For each template file found, generate the file content by injecting variables and
+      # build an object with this content ready to create config maps in OpenShift
+      templates_config_dict: |
+        {% set res = {} -%}
+        {% for item in templates_config.files -%}
+          {% set filename = item.path | basename | regex_replace('.j2') -%}
+          {% set group = item.path | relpath('templates/config') | dirname -%}
+          {% set ignored = res.setdefault(group, {}).__setitem__(filename, lookup('template', item.path)) -%}
+        {%- endfor %}
+        {{ res }}
+
+  - name: Find all customer specific files related to configuration
+    find:
+      paths: "files/config/{{ customer }}"
+      recurse: yes
+    register: customer_config  # Record the list of files in a variable used below
+
+  - set_fact:
+      # Customer definitions take precedence over template definitions
+      # They may override them if same "group" and same "filename":
+      config_dict: |
+        {% for item in customer_config.files -%}
+          {% set filename = item.path | basename -%}
+          {% set group = item.path | relpath('files/config/' + customer) | dirname -%}
+          {% set ignored = templates_config_dict.setdefault(group, {}).__setitem__(filename, lookup('file', item.path)) -%}
+        {%- endfor %}
+        {{ templates_config_dict }}
+
+  - name: Actually create the config maps in OpenShift
+    openshift_raw:
+      state: present
+      name: "{{ item.key }}"
+      namespace: "{{ project_name }}"
+      definition:
+        apiVersion: v1
+        kind: ConfigMap
+        data: "{{ item.value }}"
+    with_dict: "{{ config_dict }}"
