@@ -30,3 +30,4 @@
       - "{{ openshift_databases }}"
       - "{{ openshift_jobs }}"
       - "{{ openshift_routes }}"
+ 
