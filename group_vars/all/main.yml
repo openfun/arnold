@@ -10,9 +10,16 @@ django_port: 8000
 cms_port: 8081
 lms_port: 8071
 
+# External services IPs
+mongodb_ip: 192.168.10.11
+mysql_ip: 192.168.10.254
+postgresql_ip: 192.168.0.1
+
 # Images
 edxapp_image: edxapp
 edxapp_tag: latest
+richie_image: richie
+richie_tag: latest
 
 # Openshift template files
 openshift_base:
@@ -20,20 +27,20 @@ openshift_base:
   - openshift/edxapp/pvc/media.yml
   - openshift/edxapp/pvc/static.yml
   # Services
+  - openshift/common/svc/mongodb.yml
+  - openshift/common/svc/mysql.yml
+  - openshift/common/svc/nginx.yml
   - openshift/edxapp/svc/cms.yml
   - openshift/edxapp/svc/lms.yml
   - openshift/edxapp/svc/memcached.yml
-  - openshift/edxapp/svc/mongodb.yml
-  - openshift/edxapp/svc/mysql.yml
-  - openshift/edxapp/svc/nginx.yml
   # Deployments
   - openshift/edxapp/dc/cms.yml
   - openshift/edxapp/dc/lms.yml
   - openshift/edxapp/dc/memcached.yml
-  - openshift/edxapp/dc/nginx.yml
+  - openshift/common/dc/nginx.yml
 openshift_databases:
-  - openshift/edxapp/ep/mongodb.yml
-  - openshift/edxapp/ep/mysql.yml
+  - openshift/common/ep/mongodb.yml
+  - openshift/common/ep/mysql.yml
 openshift_jobs:
   - openshift/edxapp/job/collectstatic_cms.yml
   - openshift/edxapp/job/collectstatic_lms.yml
@@ -41,5 +48,5 @@ openshift_jobs:
   - openshift/edxapp/job/db_migrate_lms.yml
   - openshift/edxapp/job/update_courses.yml
 openshift_routes:
-  - openshift/edxapp/route/cms.yml
-  - openshift/edxapp/route/lms.yml
+  - openshift/common/route/cms.yml
+  - openshift/common/route/lms.yml
