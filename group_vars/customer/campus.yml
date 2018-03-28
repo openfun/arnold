@@ -1,3 +1,3 @@
 # Variables specific to the campus customer
 project_display_name: "FUN Campus ({{ env_type }})"
-project_description: "SPOC for universities"
+project_description: "SPOC for universities ({{ env_type }})"
