@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: richie
+  name: richie  # name of the service should be host name in nginx
+  namespace: "{{ project_name }}"
+spec:
+  ports:
+  - name: 8000-tcp
+    port: 8000
+    protocol: TCP
+    targetPort: 8000
+  selector:
+    deploymentconfig: richie
+  type: ClusterIP

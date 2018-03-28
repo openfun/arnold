@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: postgresql
+  # name of the service should be database host name in settings
+  name: postgresql
+  namespace: "{{ project_name }}"
+spec:
+  ports:
+  - name: 5432-tcp
+    port: 5432
+    protocol: TCP
+    targetPort: 5432

@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: richie-collecstatic
+  namespace: "{{ project_name }}"
+spec:
+  template:
+    metadata:
+      name: richie-collecstatic
+    spec:
+      containers:
+      - name: richie-collecstatic
+        env:
+        - name: DJANGO_SETTINGS_MODULE
+          value: richie.settings
+        - name: DJANGO_CONFIGURATION
+          value: {{ django_configuration }}
+        - name: DJANGO_SECRET_KEY
+          value: ThisIsAFakeKeyUsedForBuildingPurpose
+        image: "{{ richie_image }}:{{ richie_tag }}"
+        command: ["python", "manage.py", "collecstatic", "--noinput"]
+        volumeMounts:
+        - mountPath: /data/static
+          name: richie-static
+      volumes:
+      - name: richie-static
+        persistentVolumeClaim:
+          claimName: richie-static
+      restartPolicy: Never
+

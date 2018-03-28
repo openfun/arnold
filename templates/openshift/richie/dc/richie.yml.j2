@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: richie
+  name: richie
+  namespace: "{{ project_name }}"
+spec:
+  replicas: 1  # number of pods we want
+  selector:
+    app: richie
+    deploymentconfig: richie
+  template:
+    metadata:
+      labels:
+        app: richie
+        deploymentconfig: richie
+    spec:
+      containers:
+      - env:
+        - name: DJANGO_SETTINGS_MODULE
+          value: richie.settings
+        - name: DJANGO_CONFIGURATION
+          value: {{ django_configuration }}
+        image: "{{ richie_image }}:{{ richie_tag }}"
+        imagePullPolicy: Always
+        name: richie
+        volumeMounts:
+        - mountPath: /data/media
+          name: richie-media
+        - mountPath: /data/static
+          name: richie-static
+      volumes:
+      - name: richie-media
+        persistentVolumeClaim:
+          claimName: richie-media
+      - name: richie-static
+        persistentVolumeClaim:
+          claimName: richie-static

@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: richie-dbmigrate
+  namespace: "{{ project_name }}"
+spec:
+  template:
+    metadata:
+      name: richie-dbmigrate
+    spec:
+      containers:
+      - name: richie-dbmigrate
+        env:
+        - name: DJANGO_SETTINGS_MODULE
+          value: richie.settings
+        - name: DJANGO_CONFIGURATION
+          value: {{ django_configuration }}
+        - name: DJANGO_SECRET_KEY
+          value: ThisIsAFakeKeyUsedForBuildingPurpose
+        image: "{{ richie_image }}:{{ richie_tag }}"
+        command: ["python", "manage.py", "migrate"]
+      restartPolicy: Never

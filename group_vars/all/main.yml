@@ -1,4 +1,5 @@
 env_type: staging  # default to be overriden on command line
+django_configuration: Staging
 customer: patient0  # default to be overriden on command line
 project_name: "{{ env_type }}-{{ customer }}"
 domain_name: dev.openfun.fr
@@ -26,27 +27,36 @@ openshift_base:
   # Volumes
   - openshift/edxapp/pvc/media.yml
   - openshift/edxapp/pvc/static.yml
+  - openshift/richie/pvc/media.yml
+  - openshift/richie/pvc/static.yml
   # Services
   - openshift/common/svc/mongodb.yml
   - openshift/common/svc/mysql.yml
   - openshift/common/svc/nginx.yml
+  - openshift/common/svc/postgresql.yml
   - openshift/edxapp/svc/cms.yml
   - openshift/edxapp/svc/lms.yml
   - openshift/edxapp/svc/memcached.yml
+  - openshift/richie/svc/richie.yml
   # Deployments
   - openshift/edxapp/dc/cms.yml
   - openshift/edxapp/dc/lms.yml
   - openshift/edxapp/dc/memcached.yml
   - openshift/common/dc/nginx.yml
+  - openshift/richie/dc/richie.yml
 openshift_databases:
   - openshift/common/ep/mongodb.yml
   - openshift/common/ep/mysql.yml
+  - openshift/common/ep/postgresql.yml
 openshift_jobs:
   - openshift/edxapp/job/collectstatic_cms.yml
   - openshift/edxapp/job/collectstatic_lms.yml
   - openshift/edxapp/job/db_migrate_cms.yml
   - openshift/edxapp/job/db_migrate_lms.yml
   - openshift/edxapp/job/update_courses.yml
+  - openshift/richie/job/collectstatic.yml
+  - openshift/richie/job/db_migrate.yml
+  - openshift/richie/job/regenerate_indexes.yml
 openshift_routes:
   - openshift/common/route/cms.yml
   - openshift/common/route/lms.yml

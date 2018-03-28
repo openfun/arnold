@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: richie-regenerate-indexes
+  namespace: "{{ project_name }}"
+spec:
+  template:
+    metadata:
+      name: richie-regenerate-indexes
+    spec:
+      containers:
+      - name: richie-regenerate-indexes
+        env:
+        - name: DJANGO_SETTINGS_MODULE
+          value: richie.settings
+        - name: DJANGO_CONFIGURATION
+          value: {{ django_configuration }}
+        - name: DJANGO_SECRET_KEY
+          value: ThisIsAFakeKeyUsedForBuildingPurpose
+        image: "{{ edxapp_image }}:{{ edxapp_tag }}"
+        command: ["python", "manage.py", "regenerate_indexes"]
+      restartPolicy: Never
+
