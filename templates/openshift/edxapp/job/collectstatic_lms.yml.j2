@@ -1,28 +1,28 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: collecstatic-lms
+  name: edxapp-collecstatic-lms
   namespace: "{{ project_name }}"
 spec:
   template:
     metadata:
-      name: collecstatic-lms
+      name: edxapp-collecstatic-lms
     spec:
       containers:
-      - name: collecstatic-lms
+      - name: edxapp-collecstatic-lms
         image: "{{ edxapp_image }}:{{ edxapp_tag }}"
         command: ["python", "manage.py", "lms", "collecstatic", "--noinput", "--settings", "docker_run", "lms"]
         volumeMounts:
         - mountPath: /config
-          name: volume-config
+          name: edxapp-config
         - mountPath: /edx/var/edxapp/static
           name: edxapp-static
       volumes:
-      - name: volume-config
+      - name: edxapp-config
         configMap:
           defaultMode: 420
-          name: config
+          name: edxapp
       - name: edxapp-static
         persistentVolumeClaim:
-          claimName: static
+          claimName: edxapp-static
       restartPolicy: Never

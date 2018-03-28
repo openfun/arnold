@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: media
+  name: edxapp-media
   namespace: "{{ project_name }}"
 spec:
   accessModes:
@@ -9,4 +9,3 @@ spec:
   resources:
     requests:
       storage: 2Gi
-

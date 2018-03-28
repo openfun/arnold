@@ -2,8 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: cms
-  name: cms  # name of the service should be host name in nginx
+    app: edxapp-cms
+  name: edxapp-cms  # name of the service should be host name in nginx
   namespace: "{{ project_name }}"
 spec:
   ports:
@@ -12,5 +12,5 @@ spec:
     protocol: TCP
     targetPort: 8000
   selector:
-    deploymentconfig: cms
+    deploymentconfig: edxapp-cms
   type: ClusterIP

@@ -1,23 +1,23 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: dbmigrate-cms
+  name: edxapp-dbmigrate-cms
   namespace: "{{ project_name }}"
 spec:
   template:
     metadata:
-      name: dbmigrate-cms
+      name: edxapp-dbmigrate-cms
     spec:
       containers:
-      - name: dbmigrate-cms
+      - name: edxapp-dbmigrate-cms
         image: "{{ edxapp_image }}:{{ edxapp_tag }}"
         command: ["python", "manage.py", "cms", "migrate", "--settings", "docker_run"]
         volumeMounts:
         - mountPath: /config
-          name: volume-config
+          name: edxapp-config
       volumes:
-      - name: volume-config
+      - name: edxapp-config
         configMap:
           defaultMode: 420
-          name: config
+          name: edxapp
       restartPolicy: Never

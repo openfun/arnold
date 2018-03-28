@@ -2,20 +2,20 @@ apiVersion: v1
 kind: DeploymentConfig
 metadata:
   labels:
-    app: memcached
-  name: memcached
+    app: edxapp-memcached
+  name: edxapp-memcached
   namespace: "{{ project_name }}"
 spec:
   replicas: 1  # number of pods we want
   selector:
-    app: memcached
-    deploymentconfig: memcached
+    app: edxapp-memcached
+    deploymentconfig: edxapp-memcached
   template:
     metadata:
       labels:
-        app: memcached
-        deploymentconfig: memcached
+        app: edxapp-memcached
+        deploymentconfig: edxapp-memcached
     spec:
       containers:
         - image: memcached
-          name: memcached
+          name: edxapp-memcached

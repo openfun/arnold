@@ -2,19 +2,19 @@ apiVersion: v1
 kind: DeploymentConfig
 metadata:
   labels:
-    app: lms
-  name: lms
+    app: edxapp-lms
+  name: edxapp-lms
   namespace: "{{ project_name }}"
 spec:
   replicas: 1  # number of pods we want
   selector:
-    app: lms
-    deploymentconfig: lms
+    app: edxapp-lms
+    deploymentconfig: edxapp-lms
   template:
     metadata:
       labels:
-        app: lms
-        deploymentconfig: lms
+        app: edxapp-lms
+        deploymentconfig: edxapp-lms
     spec:
       containers:
       - env:
@@ -24,22 +24,22 @@ spec:
           value: lms.envs.docker_run
         image: "{{ edxapp_image }}:{{ edxapp_tag }}"
         imagePullPolicy: Always
-        name: lms
+        name: edxapp-lms
         volumeMounts:
         - mountPath: /config
-          name: volume-config
+          name: edxapp-config
         - mountPath: /edx/var/edxapp/media
           name: edxapp-media
         - mountPath: /edx/var/edxapp/static
           name: edxapp-static
       volumes:
-      - name: volume-config
+      - name: edxapp-config
         configMap:
           defaultMode: 420
-          name: config
+          name: edxapp
       - name: edxapp-media
         persistentVolumeClaim:
-          claimName: media
+          claimName: edxapp-media
       - name: edxapp-static
         persistentVolumeClaim:
-          claimName: static
+          claimName: edxapp-static
