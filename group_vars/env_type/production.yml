@@ -1,2 +1,3 @@
+should_verify_ssl: true
 # Variables specific to the production environment
 django_configuration: Production

@@ -14,6 +14,7 @@
 
   - name: Make sure the project exists in OpenShift and is up-to-date
     openshift_raw:
+      verify_ssl: "{{ should_verify_ssl }}"
       api_version: v1
       kind: Project
       name: "{{ project_name }}"
@@ -23,6 +24,8 @@
 
   - name: Make sure all the project objects exist in OpenShift and are up-to-date
     openshift_raw:
+      verify_ssl: "{{ should_verify_ssl }}"
+      force: true
       definition: "{{ lookup('template', 'templates/' + item + '.j2') | from_yaml }}"
       state: present
     with_items:

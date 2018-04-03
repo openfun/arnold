@@ -1,3 +1,4 @@
+should_verify_ssl: false
 env_type: staging  # default to be overriden on command line
 django_configuration: Staging
 customer: patient0  # default to be overriden on command line
