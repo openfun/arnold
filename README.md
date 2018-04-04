@@ -74,7 +74,7 @@ These secrets are mounted as environment variables in the application containers
 
 # Quick start
 
-The Ansible playbooks in Arnold are best run with `Docker`.
+Arnold's Ansible playbooks are best run with `Docker`.
 
 Make sure you have a recent version of `Docker` installed on your laptop:
 
