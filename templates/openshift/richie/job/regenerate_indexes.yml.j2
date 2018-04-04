@@ -17,7 +17,6 @@ spec:
           value: {{ django_configuration }}
         - name: DJANGO_SECRET_KEY
           value: ThisIsAFakeKeyUsedForBuildingPurpose
-        image: "{{ edxapp_image }}:{{ edxapp_tag }}"
+        image: "{{ richie_image }}:{{ richie_tag }}"
         command: ["python", "manage.py", "regenerate_indexes"]
       restartPolicy: Never
-
