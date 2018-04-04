@@ -72,20 +72,48 @@ These actions are performed by a job, run upon project creation and based on a `
 These secrets are mounted as environment variables in the application containers that need them.
 
 
-# Deployment
+# Quick start
 
-The deployment files are compiled by injecting project variables in a set of `Ansible` templates.
+The Ansible playbooks in Arnold are best run with `Docker`.
 
-To generate the deployment files, run:
+Make sure you have a recent version of `Docker` installed on your laptop:
 
-    $ ansible-playbook deploy.yml -e "customer=corporate env_type=preprod"
+    $ docker -v
+      Docker version 17.12.0-ce, build c97c6d6
+
+And build Arnold's `Docker` image:
+
+    $  docker build -t arnold-ansible
+
+To login to OpenShift, you also need a recent version of the [OC](https://docs.openshift.com/enterprise/3.0/cli_reference/get_started_cli.html) client installed:
+
+    $ oc version
+      oc v3.9.0-alpha.3+78ddc10
+      kubernetes v1.9.1+a0ce1bc657
+      features: Basic-Auth GSSAPI Kerberos SPNEGO
+
+      Server https://console.dev.openfun.fr:8443
+      openshift v3.7.1+c2ce2c0-1
+      kubernetes v1.7.6+a08f5eeb62
+
+And login to OpenShift:
+
+    $ oc login https://console.dev.openfun.fr:8443 --username=fun --password=xxxxx
+
+
+## Deployment
+
+The deployment files are compiled by injecting project variables in a set of `Ansible` templates and sent to `OpenShift` using Ansible's `openshit_raw` module.
+
+To synchronize the deployment files with `OpenShift`, run:
+
+    $  docker run -it -v $PWD:/app -u $(id -u):$(id -g) -e ANSIBLE_VAULT_PASS=xxxxx -e K8S_AUTH_API_KEY=$(oc whoami -t) -e K8S_AUTH_HOST=https://console.dev.openfun.fr:8443 arnold-ansible ansible-playbook deploy.yml -e "customer=corporate env_type=preprod"
 
 The default env_type is `staging`.
 The default customer is `patient0`, a demo site with default configuration.
 
 For a `feature` environment, you should also set a `feature_title` variable with a slug describing the feature:
 
-    $ ansible-playbook deploy.yml -e "env_type=feature feature_title=change-background-color"
+    .../... ansible-playbook deploy.yml -e "env_type=feature feature_title=change-background-color"
 
-The generated files should now be available in the `_result` directory.
-
+The corresponding objects should now be available in `OpenShift`.
