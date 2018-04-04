@@ -29,18 +29,21 @@
 
   - name: Find all customer specific files related to configuration
     find:
-      paths: "files/configmap/{{ customer }}"
+      paths: "files/configmap/{{ customer }}/{{ env_type }}"
       recurse: yes
     register: customer_configmap  # Record the list of files in a variable used below
 
   - set_fact:
       # Customer definitions take precedence over template definitions
-      # They may override them if same "group" and same "filename":
+      # They may override them if a file is found with the same "filename" in the same "group"
+      #
+      # In the following, we use the "pipe" lookup with "cat" instead of the "file" lookup in
+      # order to keep the content of the files encrypted
       config_dict: |
         {% for item in customer_configmap.files -%}
           {% set filename = item.path | basename -%}
-          {% set group = item.path | relpath('files/configmap/' + customer) | dirname -%}
-          {% set ignored = templates_configmap_dict.setdefault(group, {}).__setitem__(filename, lookup('file', item.path)) -%}
+          {% set group = item.path | relpath('files/configmap/' + customer + '/' + env_type) | dirname -%}
+          {% set ignored = templates_configmap_dict.setdefault(group, {}).__setitem__(filename, lookup('pipe', "cat " + item.path)) -%}
         {%- endfor %}
         {{ templates_configmap_dict }}
 
