@@ -50,7 +50,7 @@ All these development urls are protected by basic authentication. For this purpo
 We use `OpenShift`'s Configmaps for our applications' settings and secret credentials.
 
 Credentials are stored as encrypted files in Configmaps and not as `OpenShift` secrets so that they
-can simply be committed in `Arnold`'s repository. 
+can simply be committed in `Arnold`'s repository.
 
 The credential files are encrypted with `Ansible Vault` and the vault password specific to each
 project is recorded as an `OpenShift` secret while creating the project:
@@ -93,9 +93,13 @@ Make sure you have a recent version of `Docker` installed on your laptop:
 
 And build Arnold's `Docker` image:
 
-    $  docker build -t arnold-ansible
+```bash
+$ cd path/to/cloned/repository
+$ docker build -t arnold-ansible .
+```
 
-To login to OpenShift, you also need a recent version of the [OC](https://docs.openshift.com/enterprise/3.0/cli_reference/get_started_cli.html) client installed:
+To login to OpenShift, you also need a recent version of the `oc` client
+installed:
 
     $ oc version
       oc v3.9.0-alpha.3+78ddc10
@@ -106,9 +110,21 @@ To login to OpenShift, you also need a recent version of the [OC](https://docs.o
       openshift v3.7.1+c2ce2c0-1
       kubernetes v1.7.6+a08f5eeb62
 
+> You can download a recent `oc` release from the [releases
+> page](https://github.com/openshift/origin/releases) of the project's GitHub
+> repository. Once downloaded, untar the archive and copy the `oc` binary
+> somewhere in your `$PATH` (_e.g._ `$HOME/bin`). Alternatively, if you plan to
+> work on the project with [MiniShift](https://github.com/minishift/minishift),
+> please refer to [our installation procedure](./docs/minishift.md).
+
 And login to OpenShift:
 
     $ oc login https://console.dev.openfun.fr:8443 --username=fun --password=xxxxx
+
+> If you are asked to use an "insecure connection" (because "the server uses a
+> certificate signed by an unknown authority") and you are running on our
+> OpenShift's pre-production instance (as the example URL above), you can safely
+> accept.
 
 ## Adding a customer site
 
@@ -133,13 +149,13 @@ The following tasks are necessary to add a new customer in `Arnold`:
 - generate vault passwords for each infrastructure:
     * use the vault passwords to encrypt all credential files in the repository,
     * record each vault password as a secret in the corresponding project in `OpenShift`,
-    * display vault passwords for all environments once in the console so the developper can save them in a password manager.
+    * display vault passwords for all environments once in the console so the developer can save them in a password manager.
 
 These tasks are automated in the `add_customer` playbook:
 
-    $  docker run -it -v $PWD:/app -u $(id -u):$(id -g) -e ANSIBLE_VAULT_PASS=xxxxx -e K8S_AUTH_API_KEY=$(oc whoami -t) -e K8S_AUTH_HOST=https://console.dev.openfun.fr:8443 arnold-ansible ansible-playbook add_customer.yml -e "customer=corporate"
+    $ docker run -it -v $PWD:/app -u $(id -u):$(id -g) -e ANSIBLE_VAULT_PASS=xxxxx -e K8S_AUTH_API_KEY=$(oc whoami -t) -e K8S_AUTH_HOST=https://console.dev.openfun.fr:8443 arnold-ansible ansible-playbook add_customer.yml -e "customer=corporate"
 
-After running the playbook, the developper should manually:
+After running the playbook, the developer should manually:
 
 - customize variables and files as necessary,
 - commit everything to the repository.
@@ -149,7 +165,7 @@ After running the playbook, the developper should manually:
 
 To generate the Configmaps and synchronize them with `OpenShift`, run:
 
-    $  docker run -it -v $PWD:/app -u $(id -u):$(id -g) -e ANSIBLE_VAULT_PASS=xxxxx -e K8S_AUTH_API_KEY=$(oc whoami -t) -e K8S_AUTH_HOST=https://console.dev.openfun.fr:8443 arnold-ansible ansible-playbook config.yml -e "customer=corporate env_type=preprod"
+    $ docker run -it -v $PWD:/app -u $(id -u):$(id -g) -e ANSIBLE_VAULT_PASS=xxxxx -e K8S_AUTH_API_KEY=$(oc whoami -t) -e K8S_AUTH_HOST=https://console.dev.openfun.fr:8443 arnold-ansible ansible-playbook config.yml -e "customer=corporate env_type=preprod"
 
 The default env_type is `staging`.
 The default customer is `patient0`, a demo site with default configuration.
