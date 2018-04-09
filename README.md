@@ -95,7 +95,7 @@ And build Arnold's `Docker` image:
 
 ```bash
 $ cd path/to/cloned/repository
-$ docker build -t arnold-ansible .
+$ docker build -t arnold:$(tr -d '\n' < VERSION) .
 ```
 
 To login to OpenShift, you also need a recent version of the `oc` client
@@ -153,7 +153,7 @@ The following tasks are necessary to add a new customer in `Arnold`:
 
 These tasks are automated in the `add_customer` playbook:
 
-    $ docker run -it -v $PWD:/app -u $(id -u):$(id -g) -e ANSIBLE_VAULT_PASS=xxxxx -e K8S_AUTH_API_KEY=$(oc whoami -t) -e K8S_AUTH_HOST=https://console.dev.openfun.fr:8443 arnold-ansible ansible-playbook add_customer.yml -e "customer=corporate"
+    $ docker run -it -v $PWD:/app -u $(id -u):$(id -g) -e ANSIBLE_VAULT_PASS=xxxxx -e K8S_AUTH_API_KEY=$(oc whoami -t) -e K8S_AUTH_HOST=https://console.dev.openfun.fr:8443 arnold:$(tr -d '\n' < VERSION) ansible-playbook add_customer.yml -e "customer=corporate"
 
 After running the playbook, the developer should manually:
 
@@ -165,7 +165,7 @@ After running the playbook, the developer should manually:
 
 To generate the Configmaps and synchronize them with `OpenShift`, run:
 
-    $ docker run -it -v $PWD:/app -u $(id -u):$(id -g) -e ANSIBLE_VAULT_PASS=xxxxx -e K8S_AUTH_API_KEY=$(oc whoami -t) -e K8S_AUTH_HOST=https://console.dev.openfun.fr:8443 arnold-ansible ansible-playbook config.yml -e "customer=corporate env_type=preprod"
+    $ docker run -it -v $PWD:/app -u $(id -u):$(id -g) -e ANSIBLE_VAULT_PASS=xxxxx -e K8S_AUTH_API_KEY=$(oc whoami -t) -e K8S_AUTH_HOST=https://console.dev.openfun.fr:8443 arnold:$(tr -d '\n' < VERSION) ansible-playbook config.yml -e "customer=corporate env_type=preprod"
 
 The default env_type is `staging`.
 The default customer is `patient0`, a demo site with default configuration.
@@ -177,7 +177,7 @@ The deployment files are compiled by injecting project variables in a set of `An
 
 To synchronize the deployment files with `OpenShift`, run:
 
-    $  docker run -it -v $PWD:/app -u $(id -u):$(id -g) -e ANSIBLE_VAULT_PASS=xxxxx -e K8S_AUTH_API_KEY=$(oc whoami -t) -e K8S_AUTH_HOST=https://console.dev.openfun.fr:8443 arnold-ansible ansible-playbook deploy.yml -e "customer=corporate env_type=preprod"
+    $  docker run -it -v $PWD:/app -u $(id -u):$(id -g) -e ANSIBLE_VAULT_PASS=xxxxx -e K8S_AUTH_API_KEY=$(oc whoami -t) -e K8S_AUTH_HOST=https://console.dev.openfun.fr:8443 arnold:$(tr -d '\n' < VERSION) ansible-playbook deploy.yml -e "customer=corporate env_type=preprod"
 
 For a `feature` environment, you should also set a `feature_title` variable with a slug describing the feature:
 

@@ -53,7 +53,7 @@ spec:
       # are also being decrypted with the vaultpass mounted as environment variable
       # from the secrets.
       - name: init-override
-        image: docker-registry.default.svc:5000/openshift/arnold-ansible:2.5.0
+        image: docker-registry.default.svc:5000/openshift/arnold:0.1.0-alpha
         imagePullPolicy: Always
         env:
         # The vaultpass secret is recorded in OpenShift's secrets when creating a new project
