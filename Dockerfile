@@ -16,11 +16,6 @@ RUN apt-get update && \
     apt-get install -y curl python-pip && \
     rm -rf /var/lib/apt/lists/*
 
-ADD ./requirements.txt /app/
-RUN pip install -r requirements.txt
-
-ADD ./ansible.cfg /app/
-
 # Install Open Shift client
 ENV OC_VERSION=v3.9.0 \
     OC_TAG_SHA=191fece
@@ -30,10 +25,12 @@ RUN curl -sLo /tmp/oc.tar.gz https://github.com/openshift/origin/releases/downlo
     mv /tmp/openshift-origin-client-tools-${OC_VERSION}-${OC_TAG_SHA}-linux-64bit/oc /usr/local/bin/ && \
     rm -rf /tmp/oc.tar.gz /tmp/openshift-origin-client-tools-${OC_VERSION}-${OC_TAG_SHA}-linux-64bit
 
-ADD ./.vault_pass.sh /app/
-RUN chmod +x /app/.vault_pass.sh
+ADD ./requirements.txt /app/
+RUN pip install -r requirements.txt
 
-ADD ./bin/entrypoint /app/bin/
+# Copy the application sources in the container so that we can run all playbooks
+# within the container (without volumes)
+COPY . /app/
 
 # Give the "root" group the same permissions as the "root" user on /etc/passwd
 # to allow a user belonging to the root group to add new users; typically the

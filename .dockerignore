@@ -1,0 +1,4 @@
+.ansible/
+.git/
+.gitignore
+*.retry
