@@ -33,10 +33,9 @@ RUN curl -sLo /tmp/oc.tar.gz https://github.com/openshift/origin/releases/downlo
 ADD ./.vault_pass.sh /app/
 RUN chmod +x /app/.vault_pass.sh
 
-ADD ./entrypoint.sh /
-RUN chmod +x /entrypoint.sh
+ADD ./bin/entrypoint /app/bin/
 
 RUN echo "ALL ALL=NOPASSWD: ALL" > /etc/sudoers.d/usermod
 RUN chmod 666 /etc/passwd
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/app/bin/entrypoint"]
