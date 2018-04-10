@@ -1,14 +1,29 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # The container user (see USER in the Dockerfile) is an un-privileged user that
 # does not exists and is not created during the build phase (see Dockerfile).
 # Hence, we use this entrypoint to wrap commands that will be run in the
 # container to create an entry for this user in the /etc/passwd file.
+export HOME=/app
 
+# Create docker user as defined in the Dockerfile (see USER statement) or
+# overriden by the `--user` option of `docker run`
 if ! whoami &> /dev/null; then
   if [ -w /etc/passwd ]; then
-    echo "app:x:$(id -u):0:Arnold's App:/app:/sbin/nologin" >> /etc/passwd
+    echo "app:x:$(id -u):0:Arnold's App:${HOME:-/app}:/sbin/nologin" >> /etc/passwd
   fi
 fi
+
+# Login to OpenShift to create configuration files in the container itself
+echo "******************************************************************"
+echo "OpenShift server: ${K8S_AUTH_HOST}"
+
+login_options=""
+if [ ${INSECURE_SKIP_TLS_VERIFY} -eq 1 ]; then
+    login_options="--insecure-skip-tls-verify=true"
+fi
+
+oc login ${K8S_AUTH_HOST} --token=${K8S_AUTH_API_KEY} ${login_options}
+echo "******************************************************************"
 
 exec "$@"

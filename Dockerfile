@@ -36,6 +36,7 @@ COPY . /app/
 # to allow a user belonging to the root group to add new users; typically the
 # docker user (see entrypoint).
 RUN chmod g=u /etc/passwd
+RUN chmod g=u /app
 
 ENTRYPOINT ["/app/bin/entrypoint"]
 
