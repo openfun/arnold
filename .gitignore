@@ -1,3 +1,4 @@
 .ansible/
 *.retry
 .vault_pass
+env.d/*

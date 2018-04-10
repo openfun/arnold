@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+source "$(dirname "${BASH_SOURCE[0]}")/_config.sh"
+
+# Run a command in Arnold's container
+_docker_run "$@"
