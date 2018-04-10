@@ -1,14 +1,14 @@
 #!/bin/bash
+#
+# The container user (see USER in the Dockerfile) is an un-privileged user that
+# does not exists and is not created during the build phase (see Dockerfile).
+# Hence, we use this entrypoint to wrap commands that will be run in the
+# container to create an entry for this user in the /etc/passwd file.
 
-USER_ID=$(id -u)
-GROUP_ID=$(id -g)
+if ! whoami &> /dev/null; then
+  if [ -w /etc/passwd ]; then
+    echo "app:x:$(id -u):0:Arnold's App:/app:/sbin/nologin" >> /etc/passwd
+  fi
+fi
 
-echo "app:x:$USER_ID:$GROUP_ID:app:/app:/bin/bash" >> /etc/passwd
-sudo groupadd app -g $GROUP_ID
-sudo usermod -a -G app app
-
-sudo chown $USER_ID:$GROUP_ID /app
-export HOME=/app
-
-# Execute command
 exec "$@"

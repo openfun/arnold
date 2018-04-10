@@ -13,7 +13,7 @@ WORKDIR /app
 
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y curl python-pip sudo && \
+    apt-get install -y curl python-pip && \
     rm -rf /var/lib/apt/lists/*
 
 ADD ./requirements.txt /app/
@@ -35,7 +35,12 @@ RUN chmod +x /app/.vault_pass.sh
 
 ADD ./bin/entrypoint /app/bin/
 
-RUN echo "ALL ALL=NOPASSWD: ALL" > /etc/sudoers.d/usermod
-RUN chmod 666 /etc/passwd
+# Give the "root" group the same permissions as the "root" user on /etc/passwd
+# to allow a user belonging to the root group to add new users; typically the
+# docker user (see entrypoint).
+RUN chmod g=u /etc/passwd
 
 ENTRYPOINT ["/app/bin/entrypoint"]
+
+# Un-privileged user running the application
+USER 10000
