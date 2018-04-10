@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+#
+# Arnold's dev script
+#
+# We use KVM as the default hypervisor, if you want to use VirtualBox instead,
+# please set the USE_KVM environment variable to 0, e.g.:
+#
+# USE_KVM=0 bin/dev
+#
+set -eo pipefail
+
+# KVM settings
+USE_KVM=${USE_KVM:-1}
+KVM_DEFAULT_NETWORK="default"
+KVM_DEFAULT_NETWORK_CONFIGURATION="/etc/libvirt/qemu/networks/${KVM_DEFAULT_NETWORK}.xml"
+
+
+# _create-kvm-default-network: create KVM default network (if required)
+function _create-kvm-default-network() {
+
+    if [ $USE_KVM -eq 0 ]; then
+        echo "Will NOT ensure that default KVM network exists (reason: USE_KVM=0)"
+        return
+    fi
+
+    echo "Checking if KVM ${KVM_DEFAULT_NETWORK} network exists"
+    virsh net-list --all | grep ${KVM_DEFAULT_NETWORK}
+
+    if [ $? -ne 0 ]; then
+        echo "Will create KVM ${KVM_DEFAULT_NETWORK} network (admin priviledges are required)"
+        sudo virsh net-define ${KVM_DEFAULT_NETWORK_CONFIGURATION}
+        sudo virsh net-autostart ${KVM_DEFAULT_NETWORK}
+        sudo virsh net-start ${KVM_DEFAULT_NETWORK}
+    else
+        echo "Will NOT create KVM ${KVM_DEFAULT_NETWORK} network (reason: already exists)"
+    fi
+}
+
+
+# _run-minishift: start minishift server with --vm-driver=virtualbox if the
+# environment variable USE_KVM as been set to 0
+function _run-minishift() {
+
+    local opts=""
+    if [ $USE_KVM -eq 0 ]; then
+        opts="--vm-driver=virtualbox"
+    fi
+
+    echo "Starting minishift with options: ${opts}"
+    minishift start ${opts}
+    minishift status
+
+    echo -e "\n**** MiniShift is up and running ****"
+    echo "local console: https://$(minishift ip):8443"
+    echo "username: developer"
+    echo "password: developer"
+
+    echo -e "\nTo login as administrator, use:"
+    echo "$ oc login -u system:admin"
+}
+
+
+# Main entrypoint
+function main() {
+    _create-kvm-default-network
+    _run-minishift
+}
+
+main "$@"
