@@ -41,9 +41,10 @@ COPY . /app/
 
 # Give the "root" group the same permissions as the "root" user on /etc/passwd
 # to allow a user belonging to the root group to add new users; typically the
-# docker user (see entrypoint).
-RUN chmod g=u /etc/passwd
-RUN chmod g=u /app
+# docker user (see entrypoint). And also allow the root group to create files in
+# /app that is the running-user's home directory.
+RUN chmod g=u /etc/passwd && \
+    chmod g=u /app
 
 ENTRYPOINT ["/app/bin/entrypoint"]
 
