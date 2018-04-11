@@ -7,6 +7,13 @@
 # - by GitLab for CI/CD operations,
 # - by OpenShift in init containers.
 #
+# In order to run this container, you will need to provide the following
+# environment variables:
+#
+# - ANSIBLE_VAULT_PASS: used to decrypt vaulted content
+# - K8S_AUTH_API_KEY: OpenShift user's API token (required to run oc commands)
+# - K8S_AUTH_HOST: OpenShift's console url (e.g. https://openshift.startup.com:8443)
+
 FROM debian:stretch
 
 WORKDIR /app
