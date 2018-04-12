@@ -4,13 +4,13 @@
 # does not exists and is not created during the build phase (see Dockerfile).
 # Hence, we use this entrypoint to wrap commands that will be run in the
 # container to create an entry for this user in the /etc/passwd file.
-export HOME=/app
+export HOME=/home/arnold
 
 # Create docker user as defined in the Dockerfile (see USER statement) or
 # overriden by the `--user` option of `docker run`
 if ! whoami &> /dev/null; then
   if [ -w /etc/passwd ]; then
-    echo "app:x:$(id -u):0:Arnold's App:${HOME:-/app}:/sbin/nologin" >> /etc/passwd
+    echo "app:x:$(id -u):0:Arnold's App:${HOME}:/sbin/nologin" >> /etc/passwd
   fi
 fi
 

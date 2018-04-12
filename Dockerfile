@@ -32,7 +32,7 @@ RUN curl -sLo /tmp/oc.tar.gz https://github.com/openshift/origin/releases/downlo
     mv /tmp/openshift-origin-client-tools-${OC_VERSION}-${OC_TAG_SHA}-linux-64bit/oc /usr/local/bin/ && \
     rm -rf /tmp/oc.tar.gz /tmp/openshift-origin-client-tools-${OC_VERSION}-${OC_TAG_SHA}-linux-64bit
 
-ADD ./requirements.txt /app/
+COPY ./requirements.txt /app/
 RUN pip install -r requirements.txt
 
 # Copy the application sources in the container so that we can run all playbooks
@@ -42,9 +42,10 @@ COPY . /app/
 # Give the "root" group the same permissions as the "root" user on /etc/passwd
 # to allow a user belonging to the root group to add new users; typically the
 # docker user (see entrypoint). And also allow the root group to create files in
-# /app that is the running-user's home directory.
+# /home/arnold that is the running-user's home directory.
 RUN chmod g=u /etc/passwd && \
-    chmod g=u /app
+    mkdir /home/arnold && \
+    chmod g=u /home/arnold
 
 ENTRYPOINT ["/app/bin/entrypoint"]
 
