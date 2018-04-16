@@ -1,0 +1,82 @@
+image: docker:latest
+
+# TODO:
+#   - activate overlay2
+#
+# When using dind, it's wise to use the overlayfs driver for
+# improved performance.
+# variables:
+#   DOCKER_DRIVER: overlay2
+
+# We use the docker in docker (dind) flavor of the docker service, meaning that
+# we are running docker in a docker gitlab runner.
+services:
+  - docker:dind
+
+# Pipeline stages describe jobs ordering and categorization. One (or multiple)
+# job(s) can be attached to a stage.
+stages:
+  - build
+  - test
+  - deploy
+
+# Before executing a job's script, we check the output of docker info
+before_script:
+  - docker info
+
+# Build Arnold's docker image
+build:image:
+  stage: build
+  script:
+    - IMAGE="arnold:$(tr -d '\n' < VERSION)"
+    - docker build -t ${IMAGE} .
+    - mkdir -p docker/images
+    - docker save -o docker/images/arnold.tar ${IMAGE}
+  # Store the built as an artifact that can be reused in other jobs
+  artifacts:
+    paths:
+      - docker/
+
+# TODO:
+#   - Unset INSECURE_SKIP_TLS_VERIFY when switching to the production server
+test:image:
+  stage: test
+  script:
+    - IMAGE="arnold:$(tr -d '\n' < VERSION)"
+    - docker load < docker/images/arnold.tar
+    - docker run --rm
+        -e K8S_AUTH_HOST
+        -e K8S_AUTH_API_KEY
+        -e INSECURE_SKIP_TLS_VERIFY=1
+        ${IMAGE}
+        oc whoami
+  # Define the build:image job as a dependency; this allows us to use dependent
+  # job artifacts.
+  dependencies:
+    - build:image
+
+# Disclaimer: this job fails
+#
+# At the time of writing, this job is a POC to ensure that we can run ansible
+# playbooks within GitLabCI using our OpenShift Service Account (deployment
+# bot). Even if the playbook run fails, it runs; this is what we wanted to
+# achieve. The next step is to improve our deployment strategy (playbook).
+#
+# TODO:
+#   - This job should be generic, ie must be able to run the deployment for a
+#     customer in a particular environment
+#
+deploy:corporate:preprod:
+  stage: deploy
+  script:
+    - IMAGE="arnold:$(tr -d '\n' < VERSION)"
+    - docker load < docker/images/arnold.tar
+    - docker run --rm
+        -e K8S_AUTH_HOST
+        -e K8S_AUTH_API_KEY
+        -e INSECURE_SKIP_TLS_VERIFY=1
+        ${IMAGE}
+        ansible-playbook deploy.yml -e "customer=corporate env_type=preprod"
+  dependencies:
+    - build:image
+    - test:image
