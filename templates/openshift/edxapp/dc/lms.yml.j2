@@ -70,7 +70,7 @@ spec:
             cp -rL /tmp/configmap/* /tmp/config;
             for i in $(find /tmp/configmap -name "*.vault.*");
             do
-              ansible-vault view ${i} > /tmp/config/$(basename ${i});
+              ansible-vault view --vault-password-file .vault_pass.sh ${i} > /tmp/config/$(basename ${i});
             done
         volumeMounts:
         - mountPath: /tmp/configmap
