@@ -1,38 +1,13 @@
 ---
-# This playbook pushes all OpenShift definition files to build a project.
-#
-# A definition file is generated and pushed for each template found in the
-# "templates/openshift" directory by injecting loaded variables.
+# This playbook deploys an application
 
 - hosts: local
   gather_facts: False
   vars_files:
-  - "group_vars/customer/{{ customer }}.yml"
-  - "group_vars/env_type/{{ env_type }}.yml"
+    - "group_vars/customer/{{ customer }}.yml"
+    - "group_vars/env_type/{{ env_type }}.yml"
 
   tasks:
 
-  - name: Make sure the project exists in OpenShift and is up-to-date
-    openshift_raw:
-      verify_ssl: "{{ should_verify_ssl }}"
-      api_version: v1
-      kind: Project
-      name: "{{ project_name }}"
-      description: "{{ project_description|default(project_display_name)|default(project_name) }}"
-      display_name: "{{ project_display_name|default(project_name) }}"
-      state: present
-
-  - name: Make sure all the project objects exist in OpenShift and are up-to-date
-    openshift_raw:
-      verify_ssl: "{{ should_verify_ssl }}"
-      force: true
-      definition: "{{ lookup('template', 'templates/' + item + '.j2') | from_yaml }}"
-      state: present
-    with_items:
-      - "{{ openshift_volumes }}"
-      - "{{ openshift_services }}"
-      - "{{ openshift_endpoints }}"
-      - "{{ openshift_jobs }}"
-      - "{{ openshift_deployments }}"
-      - "{{ openshift_routes }}"
- 
+  - name: deploy new project
+    debug: msg="Deploy customer {{ customer }} on {{ env_type }}"
