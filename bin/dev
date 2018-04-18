@@ -57,6 +57,14 @@ function _run-minishift() {
 
     echo -e "\nTo login as administrator, use:"
     echo "$ oc login -u system:admin"
+    echo -e "***************************************\n"
+}
+
+
+# _login: login to minishift
+function _login() {
+
+    oc login https://$(minishift ip):8443 --username=developer --password=developer
 }
 
 
@@ -64,6 +72,7 @@ function _run-minishift() {
 function main() {
     _create-kvm-default-network
     _run-minishift
+    _login
 }
 
 main "$@"

@@ -47,13 +47,25 @@ function _configure_environment() {
 #
 # To run this util, we suppose that:
 #
-#   - you are using minishft
+#   - you are using minishift
 #   - minishift has been already started (see bin/dev script)
 #   - your have already logged in to your minishift instance via the oc login
 #     command
 function _docker_run() {
 
     _configure_environment
+
+    # Check that minishift is running
+    if ! minishift status | grep Running > /dev/null ; then
+        echo "Error: minishift is not running. Please start it first."
+        exit 1
+    fi
+
+    # Check that the current user is already logged in minishift
+    if ! oc whoami &> /dev/null; then
+        echo "Error: you need to login to minishift first."
+        exit 1
+    fi
 
     docker run --rm -it \
         --env-file $env_file \
