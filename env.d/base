@@ -2,7 +2,10 @@
 ANSIBLE_VAULT_PASS=
 
 # ---- OpenShift ----
-INSECURE_SKIP_TLS_VERIFY=0
+# Allow connecting to OpenShift without checking the SSL certificate:
+#   1 for yes
+#   0 for no
+INSECURE_SKIP_TLS_VERIFY=1
 
 # ---- Kubernetes ----
 # API token as given by: oc whoami -t
