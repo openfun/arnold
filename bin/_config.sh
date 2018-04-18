@@ -68,6 +68,7 @@ function _docker_run() {
     fi
 
     docker run --rm -it \
+        -u $(id -u) \
         --env-file $env_file \
         --env K8S_AUTH_API_KEY=$(oc whoami -t) \
         --env K8S_AUTH_HOST="https://$(minishift ip):8443" \
