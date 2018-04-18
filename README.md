@@ -114,8 +114,8 @@ installed:
 > page](https://github.com/openshift/origin/releases) of the project's GitHub
 > repository. Once downloaded, untar the archive and copy the `oc` binary
 > somewhere in your `$PATH` (_e.g._ `$HOME/bin`). Alternatively, if you plan to
-> work on the project with [MiniShift](https://github.com/minishift/minishift),
-> please refer to [our installation procedure](./docs/minishift.md).
+> work on the project with [MiniShift](https://github.com/MiniShift/MiniShift),
+> please refer to [our installation procedure](./docs/MiniShift.md).
 
 And login to OpenShift:
 
@@ -160,16 +160,32 @@ After running the playbook, the developer should manually:
 - customize variables and files as necessary,
 - commit everything to the repository.
 
+## Create new project
+
+To create a new project in `OpenShift`, run:
+
+    $ docker run -it -v $PWD:/app -u $(id -u):$(id -g) -e ANSIBLE_VAULT_PASS=xxxxx -e K8S_AUTH_API_KEY=$(oc whoami -t) -e K8S_AUTH_HOST=https://console.dev.openfun.fr:8443 arnold:$(tr -d '\n' < VERSION) ansible-playbook create_project.yml -e "customer=corporate env_type=preprod"
+
+### Development
+
+In development with MiniShift you can use the helper script:
+
+    $ bin/ansible-playbook create_project.yml -e "env_type=development"
 
 ## Generating the Configmaps
 
 To generate the Configmaps and synchronize them with `OpenShift`, run:
 
-    $ docker run -it -v $PWD:/app -u $(id -u):$(id -g) -e ANSIBLE_VAULT_PASS=xxxxx -e K8S_AUTH_API_KEY=$(oc whoami -t) -e K8S_AUTH_HOST=https://console.dev.openfun.fr:8443 arnold:$(tr -d '\n' < VERSION) ansible-playbook config.yml -e "customer=corporate env_type=preprod"
+    $ docker run -it -v $PWD:/app -u $(id -u):$(id -g) -e ANSIBLE_VAULT_PASS=xxxxx -e K8S_AUTH_API_KEY=$(oc whoami -t) -e K8S_AUTH_HOST=https://console.dev.openfun.fr:8443 arnold:$(tr -d '\n' < VERSION) ansible-playbook create_config.yml -e "customer=corporate env_type=preprod"
 
 The default env_type is `staging`.
 The default customer is `patient0`, a demo site with default configuration.
 
+### Development
+
+In development with MiniShift you can use the helper script:
+
+    $ bin/ansible-playbook create_config.yml -e "env_type=development"
 
 ## Deploying the applications
 
@@ -184,3 +200,9 @@ For a `feature` environment, you should also set a `feature_title` variable with
     .../... ansible-playbook deploy.yml -e "env_type=feature feature_title=change-background-color"
 
 The corresponding objects should now be available in `OpenShift`.
+
+### Development
+
+In development with MiniShift you can use the helper script:
+
+    $ bin/ansible-playbook deploy.yml -e "env_type=development"
