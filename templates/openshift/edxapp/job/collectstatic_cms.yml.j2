@@ -11,7 +11,7 @@ spec:
       containers:
       - name: edxapp-collecstatic-cms
         image: "{{ edxapp_image }}:{{ edxapp_tag }}"
-        command: ["python", "manage.py", "cms", "collecstatic", "--noinput", "--settings", "docker_run", "cms"]
+        command: ["python", "manage.py", "cms", "collectstatic", "--noinput", "--settings", "docker_run", "cms"]
         volumeMounts:
         - mountPath: /config
           name: edxapp-config

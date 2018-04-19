@@ -11,7 +11,7 @@ spec:
       containers:
       - name: edxapp-collecstatic-lms
         image: "{{ edxapp_image }}:{{ edxapp_tag }}"
-        command: ["python", "manage.py", "lms", "collecstatic", "--noinput", "--settings", "docker_run", "lms"]
+        command: ["python", "manage.py", "lms", "collectstatic", "--noinput", "--settings", "docker_run", "lms"]
         volumeMounts:
         - mountPath: /config
           name: edxapp-config
