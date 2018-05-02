@@ -27,13 +27,20 @@
   - name: Make sure all the project objects exist in OpenShift and are up-to-date
     openshift_raw:
       verify_ssl: "{{ should_verify_ssl }}"
-      force: true
       definition: "{{ lookup('template', 'templates/' + item + '.j2') | from_yaml }}"
       state: present
     with_items:
       - "{{ openshift_volumes }}"
       - "{{ openshift_services }}"
-      - "{{ openshift_endpoints }}"
       - "{{ openshift_jobs }}"
+
+  - name: Make sure all the project objects exist or force recreation
+    openshift_raw:
+      verify_ssl: "{{ should_verify_ssl }}"
+      force: true
+      definition: "{{ lookup('template', 'templates/' + item + '.j2') | from_yaml }}"
+      state: present
+    with_items:
+      - "{{ openshift_endpoints }}"
       - "{{ openshift_deployments }}"
       - "{{ openshift_routes }}"
