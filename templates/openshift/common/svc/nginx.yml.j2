@@ -7,14 +7,12 @@ metadata:
   namespace: "{{ project_name }}"
 spec:
   ports:
-  - name: 8071-tcp
-    port: 8071
+{% for port in nginx_ports %}
+  - name: {{ port }}-tcp
+    port: {{ port }}
     protocol: TCP
-    targetPort: 8071
-  - name: 8081-tcp
-    port: 8081
-    protocol: TCP
-    targetPort: 8081
+    targetPort: {{ port }}
+{% endfor %}
   selector:
     deploymentconfig: nginx
   type: ClusterIP
