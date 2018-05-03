@@ -1,5 +1,6 @@
 # ---- Ansible settings ----
 ANSIBLE_VAULT_PASS=
+ANSIBLE_RETRY_FILES_SAVE_PATH=
 
 # ---- OpenShift ----
 # Allow connecting to OpenShift without checking the SSL certificate:
