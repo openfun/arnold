@@ -37,6 +37,29 @@ $ chmod +x /tmp/docker-machine-driver-kvm
 $ sudo cp /tmp/docker-machine-driver-kvm /usr/local/bin/docker-machine-driver-kvm
 ```
 
+_nota bene_: if for some reasons, you cannot find the default network
+configuration on your system (`/etc/libvirt/qemu/networks/default.xml` for
+ubuntu), you can create it with the following content:
+
+```xml
+<!-- /etc/libvirt/qemu/networks/default.xml -->
+<network>
+  <name>default</name>
+  <!-- feel free to generate a new uuid via uuidgen -->
+  <uuid>74996da2-ade7-4a28-b87e-4fb121fbfb29</uuid>
+  <forward mode='nat'/>
+  <!-- you may need to adapt the bridge name to your configuration, e.g. virbr1 -->
+  <bridge name='virbr0' stp='on' delay='0'/>
+  <!-- you can generate a random mac address here -->
+  <mac address='52:54:00:fd:6e:bf'/>
+  <ip address='192.168.122.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='192.168.122.2' end='192.168.122.254'/>
+    </dhcp>
+  </ip>
+</network>
+```
+
 ## Install MiniShift
 
 For ubuntu:
@@ -62,7 +85,7 @@ $ minishift start [--vm-driver=virtualbox]
 ```
 
 > Nota bene: if you are using VirtualBox as hypervisor, you will need to add the
-`--vm-driver=virtualbox` option to the `start` command.
+> `--vm-driver=virtualbox` option to the `start` command.
 
 When starting `minishift` for the first time, it will install the latest release
 of `oc` (OpenShift CLI) for you. To add it to your `$PATH`, add the following
