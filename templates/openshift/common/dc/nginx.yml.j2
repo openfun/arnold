@@ -17,28 +17,16 @@ spec:
         deploymentconfig: nginx
     spec:
       containers:
-      - image: nginx
+      - image: fundocker/openshift-nginx:1.13
         name: nginx
         ports:
         - containerPort: 80
           protocol: TCP
         volumeMounts:
-        - mountPath: /etc/nginx/conf.d
-          name: volume-conf
-        - mountPath: /data/media
-          name: volume-media
-          readOnly: true
-        - mountPath: /data/static
-          name: volume-static
+        - name: volume-conf
+          mountPath: /etc/nginx/conf.d
           readOnly: true
       volumes:
-      - configMap:
-          defaultMode: 420
+      - name: volume-conf
+        configMap:
           name: nginx
-        name: volume-conf
-      - name: volume-media
-        persistentVolumeClaim:
-          claimName: media
-      - name: volume-static
-        persistentVolumeClaim:
-          claimName: static

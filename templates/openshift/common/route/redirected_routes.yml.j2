@@ -1,0 +1,17 @@
+kind: Route
+apiVersion: v1
+metadata:
+  labels:
+    app: alias-{{ item }}
+  name: alias-{{ item }}
+  namespace: "{{ project_name }}"
+spec:
+  host: {{ item }}
+  port:
+    targetPort: {{ redirect_port }}-tcp
+  to:
+    kind: Service
+    name: nginx
+    weight: 100
+  tls:
+    termination: passthrough

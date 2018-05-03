@@ -1,0 +1,19 @@
+# {{ ansible_managed }}
+# Nginx to redirect Aliases routes tu their main route
+
+server {
+  listen {{ redirect_port }};
+  server_name localhost;
+
+  rewrite ^ https://$new_url$request_uri permanent;
+}
+
+map $http_host $new_url {
+  # Aliases route must be redirected to main route
+  # Alias         # Main route
+{% for main_route in routes %}
+  {% for alias in main_route.aliases %}
+  {{ alias }}     {{ main_route.route }};
+  {% endfor %}
+{% endfor %}
+}
