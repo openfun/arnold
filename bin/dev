@@ -10,7 +10,7 @@
 set -eo pipefail
 
 # KVM settings
-USE_KVM=${USE_KVM:-1}
+USE_KVM=${USE_KVM:-0}
 KVM_DEFAULT_NETWORK="default"
 KVM_DEFAULT_NETWORK_CONFIGURATION="/etc/libvirt/qemu/networks/${KVM_DEFAULT_NETWORK}.xml"
 
