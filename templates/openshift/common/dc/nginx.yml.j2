@@ -23,10 +23,22 @@ spec:
         - containerPort: 80
           protocol: TCP
         volumeMounts:
-        - name: volume-conf
-          mountPath: /etc/nginx/conf.d
+        - mountPath: /etc/nginx/conf.d
+          name: volume-conf
+          readOnly: true
+        - mountPath: /data/media/richie
+          name: richie-media
+          readOnly: true
+        - mountPath: /data/static/richie
+          name: richie-static
           readOnly: true
       volumes:
       - name: volume-conf
         configMap:
           name: nginx
+      - name: richie-media
+        persistentVolumeClaim:
+          claimName: richie-media
+      - name: richie-static
+        persistentVolumeClaim:
+          claimName: richie-static
