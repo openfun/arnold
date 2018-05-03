@@ -18,7 +18,7 @@ spec:
         - name: DJANGO_SECRET_KEY
           value: ThisIsAFakeKeyUsedForBuildingPurpose
         image: "{{ richie_image }}:{{ richie_tag }}"
-        command: ["python", "manage.py", "collecstatic", "--noinput"]
+        command: ["python", "manage.py", "collectstatic", "--noinput"]
         volumeMounts:
         - mountPath: /data/static
           name: richie-static
@@ -27,4 +27,3 @@ spec:
         persistentVolumeClaim:
           claimName: richie-static
       restartPolicy: Never
-

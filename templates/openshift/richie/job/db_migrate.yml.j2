@@ -17,6 +17,16 @@ spec:
           value: {{ django_configuration }}
         - name: DJANGO_SECRET_KEY
           value: ThisIsAFakeKeyUsedForBuildingPurpose
+        - name: POSTGRES_DB
+          value: {{ richie_database.name }}
+        - name: POSTGRES_USER
+          value: {{ richie_database.user }}
+        - name: POSTGRES_PASSWORD
+          value: {{ richie_database.password }}
+        - name: POSTGRES_HOST
+          value: {{ richie_database.host }}
+        - name: POSTGRES_PORT
+          value: "{{ richie_database.port }}"
         image: "{{ richie_image }}:{{ richie_tag }}"
         command: ["python", "manage.py", "migrate"]
       restartPolicy: Never

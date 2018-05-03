@@ -4,19 +4,22 @@ env_type: staging  # default to be overriden on command line
 django_configuration: Staging
 customer: patient0  # default to be overriden on command line
 project_name: "{{ env_type }}-{{ customer }}"
-domain_name: dev.openfun.fr
+domain_name: dev.openfun.fr  # default to be overriden on command line
 lms_host: "{{ project_name }}-lms.{{ domain_name }}"
 cms_host: "{{ project_name }}-cms.{{ domain_name }}"
+richie_host: "{{ project_name }}-richie.{{ domain_name }}"
 
 # Ports
 django_port:    8000
 cms_port:       8081
 lms_port:       8071
+richie_port:    8061
 redirect_port:  8999
 
 nginx_ports:
   - "{{ cms_port }}"
   - "{{ lms_port }}"
+  - "{{ richie_port }}"
   - "{{ redirect_port }}"
 
 # External services IPs
@@ -25,10 +28,18 @@ mysql_ip:       192.168.10.254
 postgresql_ip:  192.168.0.1
 
 # Images
-edxapp_image:   edxapp
-edxapp_tag:     latest
-richie_image:   richie
-richie_tag:     latest
+edxapp_image:   fundocker/edxapp
+edxapp_tag:     ginkgo.1
+richie_image:   fundocker/richie
+richie_tag:     0.1.0-alpha.3-alpine
+
+# Databases
+richie_database:
+  host: postgresql-richie
+  port: "5432"
+  name: richie
+  user: fun
+  password: pass
 
 # Openshift template files
 openshift_deployments:
@@ -36,6 +47,7 @@ openshift_deployments:
   # - openshift/edxapp/dc/lms.yml
   # - openshift/edxapp/dc/memcached.yml
   - openshift/common/dc/nginx.yml
+  - openshift/richie/dc/postgresql.yml
   - openshift/richie/dc/richie.yml
 openshift_endpoints:
   - openshift/common/ep/mongodb.yml
@@ -53,6 +65,7 @@ openshift_jobs:
 openshift_routes:
   # - openshift/common/route/cms.yml
   # - openshift/common/route/lms.yml
+  - openshift/common/route/richie.yml
 openshift_services:
   - openshift/common/svc/mongodb.yml
   - openshift/common/svc/mysql.yml
@@ -61,6 +74,7 @@ openshift_services:
   # - openshift/edxapp/svc/cms.yml
   # - openshift/edxapp/svc/lms.yml
   # - openshift/edxapp/svc/memcached.yml
+  - openshift/richie/svc/postgresql.yml
   - openshift/richie/svc/richie.yml
 openshift_volumes:
   # - openshift/edxapp/pvc/media.yml
