@@ -32,9 +32,9 @@ richie_tag:     latest
 
 # Openshift template files
 openshift_deployments:
-  - openshift/edxapp/dc/cms.yml
-  - openshift/edxapp/dc/lms.yml
-  - openshift/edxapp/dc/memcached.yml
+  # - openshift/edxapp/dc/cms.yml
+  # - openshift/edxapp/dc/lms.yml
+  # - openshift/edxapp/dc/memcached.yml
   - openshift/common/dc/nginx.yml
   - openshift/richie/dc/richie.yml
 openshift_endpoints:
@@ -42,28 +42,28 @@ openshift_endpoints:
   - openshift/common/ep/mysql.yml
   - openshift/common/ep/postgresql.yml
 openshift_jobs:
-  - openshift/edxapp/job/collectstatic_cms.yml
-  - openshift/edxapp/job/collectstatic_lms.yml
-  - openshift/edxapp/job/db_migrate_cms.yml
-  - openshift/edxapp/job/db_migrate_lms.yml
-  - openshift/edxapp/job/update_courses.yml
+  # - openshift/edxapp/job/collectstatic_cms.yml
+  # - openshift/edxapp/job/collectstatic_lms.yml
+  # - openshift/edxapp/job/db_migrate_cms.yml
+  # - openshift/edxapp/job/db_migrate_lms.yml
+  # - openshift/edxapp/job/update_courses.yml
   - openshift/richie/job/collectstatic.yml
   - openshift/richie/job/db_migrate.yml
-  - openshift/richie/job/regenerate_indexes.yml
+  # - openshift/richie/job/regenerate_indexes.yml
 openshift_routes:
-  - openshift/common/route/cms.yml
-  - openshift/common/route/lms.yml
+  # - openshift/common/route/cms.yml
+  # - openshift/common/route/lms.yml
 openshift_services:
   - openshift/common/svc/mongodb.yml
   - openshift/common/svc/mysql.yml
   - openshift/common/svc/nginx.yml
   - openshift/common/svc/postgresql.yml
-  - openshift/edxapp/svc/cms.yml
-  - openshift/edxapp/svc/lms.yml
-  - openshift/edxapp/svc/memcached.yml
+  # - openshift/edxapp/svc/cms.yml
+  # - openshift/edxapp/svc/lms.yml
+  # - openshift/edxapp/svc/memcached.yml
   - openshift/richie/svc/richie.yml
 openshift_volumes:
-  - openshift/edxapp/pvc/media.yml
-  - openshift/edxapp/pvc/static.yml
+  # - openshift/edxapp/pvc/media.yml
+  # - openshift/edxapp/pvc/static.yml
   - openshift/richie/pvc/media.yml
   - openshift/richie/pvc/static.yml
