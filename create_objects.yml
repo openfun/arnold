@@ -26,7 +26,7 @@
       display_name: "{{ project_display_name|default(project_name) }}"
       state: present
 
-  - name: Make sure all the project objects exist in OpenShift and are up-to-date
+  - name: Make sure immutable project objects exist in OpenShift and are up-to-date
     openshift_raw:
       verify_ssl: "{{ should_verify_ssl }}"
       definition: "{{ lookup('template', 'templates/' + item + '.j2') | from_yaml }}"
@@ -36,7 +36,7 @@
       - "{{ openshift_services }}"
       - "{{ openshift_jobs }}"
 
-  - name: Make sure all the project objects exist or force recreation
+  - name: Force mutable project objects creation or update in OpenShift
     openshift_raw:
       verify_ssl: "{{ should_verify_ssl }}"
       force: true

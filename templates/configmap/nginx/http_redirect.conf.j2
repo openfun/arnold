@@ -1,5 +1,5 @@
 # {{ ansible_managed }}
-# Nginx to redirect Aliases routes tu their main route
+# Nginx configuration to redirect aliased routes to their main route
 
 server {
   listen {{ redirect_port }};
@@ -9,7 +9,7 @@ server {
 }
 
 map $http_host $new_url {
-  # Aliases route must be redirected to main route
+  # Aliased route must be redirected to the main route
   # Alias         # Main route
 {% for main_route in routes %}
   {% for alias in main_route.aliases %}
