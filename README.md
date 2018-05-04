@@ -206,3 +206,8 @@ The corresponding objects should now be available in `OpenShift`.
 In development with MiniShift you can use the helper script:
 
     $ bin/ansible-playbook deploy.yml -e "env_type=development"
+
+# Developers documentations
+
+* [Configuring MiniShift](./docs/minishift.md)
+* [Routes Redirections](./docs/redirection.md)

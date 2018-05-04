@@ -1,3 +1,4 @@
+---
 should_verify_ssl: false
 env_type: staging  # default to be overriden on command line
 django_configuration: Staging
@@ -66,14 +67,3 @@ openshift_volumes:
   - openshift/edxapp/pvc/static.yml
   - openshift/richie/pvc/media.yml
   - openshift/richie/pvc/static.yml
-
-# OpenShift redirected_routes exemple
-# routes:                         # routes to be redirected
-#   - route: www.maindomain.tld   # main domain this route must be existe
-#     aliases:                    # aliases to create for redirection to the main route
-#       - maindomain.tld
-#       - main-domain.tld
-#   - route: main_route
-#     aliases:
-#       - alias_1
-#       - alias_2

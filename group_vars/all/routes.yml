@@ -1,0 +1,11 @@
+---
+# OpenShift redirected_routes exemple
+# routes:                         # routes to be redirected
+#   - route: www.maindomain.tld   # main domain this route must be existe
+#     aliases:                    # aliases to create for redirection to the main route
+#       - maindomain.tld
+#       - main-domain.tld
+#   - route: main_route
+#     aliases:
+#       - alias_1
+#       - alias_2
