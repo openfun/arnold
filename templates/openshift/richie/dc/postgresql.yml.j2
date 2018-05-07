@@ -29,3 +29,6 @@ spec:
               value: "{{ richie_database.user }}"
             - name: POSTGRESQL_PASSWORD
               value: "{{ richie_database.password }}"
+          envFrom:
+            - secretRef:
+                name: richie
