@@ -1,3 +1,3 @@
-# Variables specific to dev environments
-
+# Variables specific to development environments
 domain_name: "{{ lookup('env', 'MINISHIFT_IP') }}.nip.io"
+django_configuration: Development
