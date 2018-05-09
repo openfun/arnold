@@ -38,8 +38,6 @@ richie_database:
   host: postgresql-richie
   port: "5432"
   name: richie
-  user: fun
-  password: pass
 
 # Openshift template files
 openshift_deployments:

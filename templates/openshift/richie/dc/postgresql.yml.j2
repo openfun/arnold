@@ -25,10 +25,6 @@ spec:
           env:
             - name: POSTGRESQL_DATABASE
               value: "{{ richie_database.name }}"
-            - name: POSTGRESQL_USER
-              value: "{{ richie_database.user }}"
-            - name: POSTGRESQL_PASSWORD
-              value: "{{ richie_database.password }}"
           envFrom:
             - secretRef:
                 name: richie

@@ -11,22 +11,21 @@ spec:
       containers:
       - name: richie-dbmigrate
         env:
-        - name: DJANGO_SETTINGS_MODULE
-          value: richie.settings
-        - name: DJANGO_CONFIGURATION
-          value: {{ django_configuration }}
-        - name: DJANGO_SECRET_KEY
-          value: ThisIsAFakeKeyUsedForBuildingPurpose
-        - name: POSTGRES_DB
-          value: {{ richie_database.name }}
-        - name: POSTGRES_USER
-          value: {{ richie_database.user }}
-        - name: POSTGRES_PASSWORD
-          value: {{ richie_database.password }}
-        - name: POSTGRES_HOST
-          value: {{ richie_database.host }}
-        - name: POSTGRES_PORT
-          value: "{{ richie_database.port }}"
+          - name: DJANGO_SETTINGS_MODULE
+            value: richie.settings
+          - name: DJANGO_CONFIGURATION
+            value: {{ django_configuration }}
+          - name: POSTGRES_DB
+            value: {{ richie_database.name }}
+          - name: POSTGRES_HOST
+            value: {{ richie_database.host }}
+          - name: POSTGRES_PORT
+            value: "{{ richie_database.port }}"
+          - name: DJANGO_ALLOWED_HOSTS
+            value: "{{ richie_host }}"
+        envFrom:
+          - secretRef:
+              name: richie
         image: "{{ richie_image }}:{{ richie_tag }}"
         command: ["python", "manage.py", "migrate"]
       restartPolicy: Never
