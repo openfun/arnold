@@ -1,10 +1,10 @@
 ---
 should_verify_ssl: false
-env_type: staging  # default to be overriden on command line
-django_configuration: Staging
+env_type: development  # default to be overriden on command line
+django_configuration: Development
 customer: patient0  # default to be overriden on command line
 project_name: "{{ env_type }}-{{ customer }}"
-domain_name: dev.openfun.fr  # default to be overriden on command line
+domain_name: dev.openfun.fr
 lms_host: "{{ project_name }}-lms.{{ domain_name }}"
 cms_host: "{{ project_name }}-cms.{{ domain_name }}"
 richie_host: "{{ project_name }}-richie.{{ domain_name }}"
