@@ -16,13 +16,13 @@ spec:
         - mountPath: /config
           name: edxapp-config
         - mountPath: /edx/var/edxapp/static
-          name: edxapp-static
+          name: edxapp-v-static
       volumes:
       - name: edxapp-config
         configMap:
           defaultMode: 420
           name: edxapp
-      - name: edxapp-static
+      - name: edxapp-v-static
         persistentVolumeClaim:
-          claimName: edxapp-static
+          claimName: edxapp-pvc-static
       restartPolicy: Never

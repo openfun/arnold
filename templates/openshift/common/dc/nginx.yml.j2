@@ -27,18 +27,18 @@ spec:
           name: volume-conf
           readOnly: true
         - mountPath: /data/media/richie
-          name: richie-media
+          name: richie-v-media
           readOnly: true
         - mountPath: /data/static/richie
-          name: richie-static
+          name: richie-v-static
           readOnly: true
       volumes:
       - name: volume-conf
         configMap:
           name: nginx
-      - name: richie-media
+      - name: richie-v-media
         persistentVolumeClaim:
-          claimName: richie-media
-      - name: richie-static
+          claimName: richie-pvc-media
+      - name: richie-v-static
         persistentVolumeClaim:
-          claimName: richie-static
+          claimName: richie-pvc-static

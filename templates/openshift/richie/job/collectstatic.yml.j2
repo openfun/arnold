@@ -16,7 +16,7 @@ spec:
           - name: DJANGO_CONFIGURATION
             value: {{ django_configuration }}
           - name: POSTGRES_DB
-              value: {{ richie_database.name }}
+            value: {{ richie_database.name }}
           - name: POSTGRES_HOST
             value: {{ richie_database.host }}
           - name: POSTGRES_PORT
@@ -30,9 +30,9 @@ spec:
         command: ["python", "manage.py", "collectstatic", "--noinput"]
         volumeMounts:
         - mountPath: /data/static
-          name: richie-static
+          name: richie-v-static
       volumes:
-      - name: richie-static
+      - name: richie-v-static
         persistentVolumeClaim:
-          claimName: richie-static
+          claimName: richie-pvc-static
       restartPolicy: Never
