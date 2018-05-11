@@ -6,7 +6,8 @@
     recurse: yes
   register: templates_configmap  # Record the list of templates in a variable used below
 
-- set_fact:
+- name: set_fact templates_configmap_dict
+  set_fact:
     # For each template file found, generate the file content by injecting variables and
     # build an object with this content ready to create config maps in OpenShift
     templates_configmap_dict: |
@@ -17,6 +18,7 @@
         {% set ignored = res.setdefault(group, {}).__setitem__(filename, lookup('template', item.path)) -%}
       {%- endfor %}
       {{ res }}
+  when: templates_configmap.matched != 0
 
 - name: Find all customer specific files related to configuration
   find:
@@ -24,7 +26,8 @@
     recurse: yes
   register: customer_configmap  # Record the list of files in a variable used below
 
-- set_fact:
+- name: set_fact config_dict
+  set_fact:
     # Customer definitions take precedence over template definitions
     # They may override them if a file is found with the same "filename" in the same "group"
     #
@@ -53,3 +56,4 @@
           version: "{{ deployment_stamp }}"
       data: "{{ item.value }}"
   with_dict: "{{ config_dict }}"
+  when: item is not none
