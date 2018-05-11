@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: hello
+  name: hello  # name of the service should be host name in nginx
+  namespace: "{{ project_name }}"
+spec:
+  ports:
+  - name: {{ hello_port }}-tcp
+    port: {{ hello_port }}
+    protocol: TCP
+    targetPort: {{ hello_port }}
+  selector:
+    deploymentconfig: hello
+  type: ClusterIP

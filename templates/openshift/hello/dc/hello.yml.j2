@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: hello
+  name: hello
+  namespace: "{{ project_name }}"
+spec:
+  replicas: 1  # number of pods we want
+  selector:
+    app: hello
+    deploymentconfig: hello
+  template:
+    metadata:
+      labels:
+        app: hello
+        deploymentconfig: hello
+    spec:
+      containers:
+      - name: hello-openshift
+        image: openshift/hello-openshift
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources: {}
+        volumeMounts:
+        - name: tmp
+          mountPath: "/tmp"
+        terminationMessagePath: "/dev/termination-log"
+        imagePullPolicy: IfNotPresent
+        capabilities: {}
+        securityContext:
+          capabilities: {}
+          privileged: false
+      volumes:
+      - name: tmp
+        emptyDir: {}
+      restartPolicy: Always
+      dnsPolicy: ClusterFirst

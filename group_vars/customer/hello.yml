@@ -1,0 +1,20 @@
+# Variables specific to the patient0 customer
+# Patient 0 is a demo site with default configuration
+project_display_name: "Hello ({{ env_type }})"
+project_description: "A minimal project with a hello-word app ({{ env_type }})"
+hello_host: "{{ project_name }}.{{ domain_name }}"
+hello_port: "8080"
+
+nginx_ports:
+  - "{{ redirect_port }}"
+
+# Openshift template files
+openshift_deployments:
+  - openshift/hello/dc/hello.yml
+openshift_endpoints:
+openshift_jobs:
+openshift_routes:
+  - openshift/hello/route/hello.yml
+openshift_services:
+  - openshift/hello/svc/hello.yml
+openshift_volumes:
