@@ -1,10 +1,14 @@
 ---
 should_verify_ssl: false
 env_type: development  # default to be overriden on command line
-django_configuration: Development
 customer: patient0  # default to be overriden on command line
 project_name: "{{ env_type }}-{{ customer }}"
+
+# URL
 domain_name: dev.openfun.fr
+
+# django_port
+django_configuration: Development
 
 # Ports
 django_port:    8000
