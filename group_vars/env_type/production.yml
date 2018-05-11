@@ -1,3 +1,4 @@
 # Variables specific to the production environment
 django_configuration: Production
 should_verify_ssl: true
+acme_env: live

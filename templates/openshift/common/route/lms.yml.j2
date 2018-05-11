@@ -5,6 +5,8 @@ metadata:
     app: lms
   name: lms
   namespace: "{{ project_name }}"
+  annotations:
+    kubernetes.io/tls-acme: "true"
 spec:
   host: {{ lms_host }}
   port:

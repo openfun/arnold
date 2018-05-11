@@ -1,0 +1,34 @@
+---
+# This playbook create the ACME controler in a project.
+# The definition files are lookup form github maintainer repository.
+# https://github.com/tnozicka/openshift-acme
+
+- hosts: local
+  gather_facts: False
+  vars_files:
+    - "group_vars/customer/{{ customer }}.yml"
+    - "group_vars/env_type/{{ env_type }}.yml"
+
+  tasks:
+
+    - name: Create all openshift-acme OpenShift objects
+      openshift_raw:
+        verify_ssl: "{{ should_verify_ssl }}"
+        force: true
+        namespace: "{{ project_name }}"
+        definition: "{{ lookup('url', acme_git + item + '.yaml', split_lines=False) | from_yaml }}"
+      with_items:
+        - "{{ acme_openshift_objects }}"
+
+    - name: Add role to serviceaccount
+      openshift_raw:
+        verify_ssl: "{{ should_verify_ssl }}"
+        force: true
+        state: present
+        definition: "{{ lookup('template', 'templates/openshift/common/rolebinding/add-role-to-sa.yml.j2') | from_yaml }}"
+      with_items:
+        - "{{ openshift_rolesbinding }}"
+      ignore_errors: true
+      # The rolebinding is created but openshift_raw fail
+      # see this issue
+      # https://github.com/ansible/ansible/issues/36845

@@ -5,6 +5,8 @@ metadata:
     app: hello
   name: hello
   namespace: "{{ project_name }}"
+  annotations:
+    kubernetes.io/tls-acme: "true" 
 spec:
   host: "{{ hello_host }}"
   tls:

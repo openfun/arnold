@@ -1,0 +1,13 @@
+# ACME (Automated Certificate Management Environment)
+# We use the letsencrypt staging-environment exept in production
+# https://letsencrypt.org/docs/staging-environment/
+acme_env: staging
+acme_git: "https://raw.githubusercontent.com/tnozicka/openshift-acme/master/deploy/letsencrypt-{{ acme_env }}/single-namespace/"
+acme_openshift_objects:
+  - role
+  - serviceaccount
+  - imagestream
+  - deployment
+openshift_rolesbinding:
+  - role: openshift-acme
+    user: openshift-acme
