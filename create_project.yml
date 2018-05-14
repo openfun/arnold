@@ -1,5 +1,23 @@
 ---
-- import_playbook: create_objects.yml
-- import_playbook: create_secrets.yml
-- import_playbook: create_config.yml
-- import_playbook: deploy.yml
+# This playbook creates an OpenShift project for a particular
+# customer/environment
+
+- hosts: local
+  gather_facts: False
+  vars_files:
+    - "group_vars/customer/{{ customer }}.yml"
+    - "group_vars/env_type/{{ env_type }}.yml"
+
+  tasks:
+
+  - debug: msg="Project name {{ project_name }} - domain {{ domain_name }}"
+
+  - name: Make sure the project exists in OpenShift and is up-to-date
+    openshift_raw:
+      verify_ssl: "{{ should_verify_ssl }}"
+      api_version: v1
+      kind: Project
+      name: "{{ project_name }}"
+      description: "{{ project_description|default(project_display_name)|default(project_name) }}"
+      display_name: "{{ project_display_name|default(project_name) }}"
+      state: present

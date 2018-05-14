@@ -16,35 +16,17 @@
 
   - debug: msg="Project name {{ project_name }} - domain {{ domain_name }}"
 
-  - name: Make sure the project exists in OpenShift and is up-to-date
-    openshift_raw:
-      verify_ssl: "{{ should_verify_ssl }}"
-      api_version: v1
-      kind: Project
-      name: "{{ project_name }}"
-      description: "{{ project_description|default(project_display_name)|default(project_name) }}"
-      display_name: "{{ project_display_name|default(project_name) }}"
-      state: present
-
-  - name: Make sure immutable project objects exist in OpenShift and are up-to-date
+  - name: Make sure required project objects exist in OpenShift and are up-to-date
     openshift_raw:
       verify_ssl: "{{ should_verify_ssl }}"
       definition: "{{ lookup('template', 'templates/' + item + '.j2') | from_yaml }}"
       state: present
     with_items:
       - "{{ openshift_volumes }}"
-      - "{{ openshift_services }}"
-      - "{{ openshift_jobs }}"
-
-  - name: Force mutable project objects creation or update in OpenShift
-    openshift_raw:
-      verify_ssl: "{{ should_verify_ssl }}"
-      force: true
-      definition: "{{ lookup('template', 'templates/' + item + '.j2') | from_yaml }}"
-      state: present
-    with_items:
       - "{{ openshift_endpoints }}"
       - "{{ openshift_deployments }}"
+      - "{{ openshift_services }}"
+      - "{{ openshift_jobs }}"
       - "{{ openshift_routes }}"
 
   - name: Build a list of all aliases
