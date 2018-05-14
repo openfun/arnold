@@ -1,12 +1,20 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: richie-regenerate-indexes
+  name: "richie-regenerate-indexes-{{ deploy_flag }}"
   namespace: "{{ project_name }}"
+  labels:
+    app: richie
+    version: "{{ richie_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
 spec:
   template:
     metadata:
-      name: richie-regenerate-indexes
+      name: richie-regenerate-indexes-{{ deploy_flag }}
+      labels:
+        app: richie
+        version: "{{ richie_tag }}"
+        deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:
       - name: richie-regenerate-indexes

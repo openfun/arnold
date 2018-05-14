@@ -3,7 +3,9 @@ kind: Service
 metadata:
   labels:
     app: nginx
-  name: nginx
+    version: "{{ nginx_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: nginx-{{ deployment_stamp }}
   namespace: "{{ project_name }}"
 spec:
   ports:
@@ -14,5 +16,5 @@ spec:
     targetPort: {{ port }}
 {% endfor %}
   selector:
-    deploymentconfig: nginx
+    deploymentconfig: nginx-{{ deploy_flag }}
   type: ClusterIP

@@ -3,21 +3,24 @@ kind: DeploymentConfig
 metadata:
   labels:
     app: nginx
-  name: nginx
+    version: "{{ nginx_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: nginx-{{ deployment_stamp }}
   namespace: "{{ project_name }}"
 spec:
   replicas: 1
   selector:
-    app: nginx
-    deploymentconfig: nginx
+    deploymentconfig: nginx-{{ deploy_flag }}
   template:
     metadata:
       labels:
         app: nginx
-        deploymentconfig: nginx
+        version: "{{ nginx_tag }}"
+        deploymentconfig: nginx-{{ deployment_stamp }}
+        deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:
-      - image: fundocker/openshift-nginx:1.13
+      - image: {{ nginx_image }}:{{ nginx_tag }}
         name: nginx
         ports:
         - containerPort: 80

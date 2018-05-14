@@ -1,12 +1,20 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: richie-dbmigrate
+  name: "richie-dbmigrate-{{ deploy_flag }}"
   namespace: "{{ project_name }}"
+  labels:
+    app: richie
+    version: "{{ richie_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
 spec:
   template:
     metadata:
-      name: richie-dbmigrate
+      name: "richie-dbmigrate-{{ deploy_flag }}"
+      labels:
+        app: richie
+        version: "{{ richie_tag }}"
+        deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:
       - name: richie-dbmigrate
@@ -14,11 +22,11 @@ spec:
           - name: DJANGO_SETTINGS_MODULE
             value: richie.settings
           - name: DJANGO_CONFIGURATION
-            value: {{ django_configuration }}
+            value: "{{ django_configuration }}"
           - name: POSTGRES_DB
-            value: {{ richie_database.name }}
+            value: "{{ richie_database.name }}"
           - name: POSTGRES_HOST
-            value: {{ richie_database.host }}
+            value: "{{ richie_database.host }}"
           - name: POSTGRES_PORT
             value: "{{ richie_database.port }}"
           - name: DJANGO_ALLOWED_HOSTS

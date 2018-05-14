@@ -3,6 +3,10 @@ kind: PersistentVolumeClaim
 metadata:
   name: richie-pvc-static
   namespace: "{{ project_name }}"
+  labels:
+    app: richie
+    version: "{{ richie_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
 spec:
   accessModes:
   - ReadWriteMany

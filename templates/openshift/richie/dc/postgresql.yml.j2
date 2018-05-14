@@ -3,21 +3,24 @@ kind: DeploymentConfig
 metadata:
   labels:
     app: postgresql
-  name: postgresql-richie
+    version: "{{ postgresql_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: "postgresql-richie-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
   replicas: 1
   selector:
-    app: postgresql
-    deploymentconfig: postgresql
+    deploymentconfig: "postgresql-richie-{{ deploy_flag }}"
   template:
     metadata:
       labels:
         app: postgresql
-        deploymentconfig: postgresql
+        version: "{{ postgresql_tag }}"
+        deploymentconfig: "postgresql-richie-{{ deployment_stamp }}"
+        deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:
-        - image: centos/postgresql-96-centos7
+        - image: {{ postgresql_image }}:{{ postgresql_tag }}
           name: postgresql
           ports:
           - containerPort: "5432"

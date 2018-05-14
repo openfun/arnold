@@ -1,5 +1,5 @@
 upstream richie-backend {
-  server richie:{{ django_port }} fail_timeout=0;
+  server richie-{{ deploy_flag }}:{{ django_port }} fail_timeout=0;
 }
 
 server {

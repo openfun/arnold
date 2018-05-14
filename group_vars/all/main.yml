@@ -5,9 +5,6 @@ django_configuration: Development
 customer: patient0  # default to be overriden on command line
 project_name: "{{ env_type }}-{{ customer }}"
 domain_name: dev.openfun.fr
-lms_host: "{{ project_name }}-lms.{{ domain_name }}"
-cms_host: "{{ project_name }}-cms.{{ domain_name }}"
-richie_host: "{{ project_name }}-richie.{{ domain_name }}"
 
 # Ports
 django_port:    8000
@@ -28,14 +25,32 @@ mysql_ip:       192.168.10.254
 postgresql_ip:  192.168.0.1
 
 # Images
-edxapp_image:   fundocker/edxapp
-edxapp_tag:     ginkgo.1
-richie_image:   fundocker/richie
-richie_tag:     0.1.0-alpha.3-alpine
+#
+# Service flag should only contain alphanumeric (or '-') characters. It should
+# validate the following regexp: '[a-z]([-a-z0-9]*[a-z0-9])?'
+edxapp_image:      "fundocker/edxapp"
+edxapp_tag:        "ginkgo.1"
+nginx_image:       "fundocker/openshift-nginx"
+nginx_tag:         "1.13"
+postgresql_image:  "centos/postgresql-96-centos7"
+postgresql_tag:    "9.6"
+richie_image:      "fundocker/richie"
+richie_tag:        "0.1.0-alpha.3-alpine"
+
+# A deployment flag is used to make deployments unique (blue-green strategy).
+# This deployment flag should be a lower-case code name containing only
+# alpha-numeric characters or dashes. It defaults to "init" and will be
+# overriden for each deployment (see deploy.yml playbook).
+deploy_flag: "init"
+
+# Services hosts
+lms_host: "{{ project_name }}-lms.{{ domain_name }}"
+cms_host: "{{ project_name }}-cms.{{ domain_name }}"
+richie_host: "{{ project_name }}-richie-{{ deploy_flag }}.{{ domain_name }}"
 
 # Databases
 richie_database:
-  host: postgresql-richie
+  host: postgresql-richie-{{ deploy_flag }}
   port: "5432"
   name: richie
 

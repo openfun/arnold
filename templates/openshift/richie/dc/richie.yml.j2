@@ -3,18 +3,21 @@ kind: DeploymentConfig
 metadata:
   labels:
     app: richie
-  name: richie
+    version: "{{ richie_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: richie-{{ deployment_stamp }}
   namespace: "{{ project_name }}"
 spec:
   replicas: 1  # number of pods we want
   selector:
-    app: richie
-    deploymentconfig: richie
+    deploymentconfig: richie-{{ deploy_flag }}
   template:
     metadata:
       labels:
         app: richie
-        deploymentconfig: richie
+        version: "{{ richie_tag }}"
+        deploymentconfig: richie-{{ deployment_stamp }}
+        deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:
         - name: richie

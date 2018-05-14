@@ -2,9 +2,11 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: postgresql
+    app: postgresql-richie
+    version: "{{ postgresql_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
   # name of the service should be database host name in settings
-  name: postgresql-richie
+  name: "{{ richie_database.host }}"
   namespace: "{{ project_name }}"
 spec:
   ports:
@@ -13,5 +15,5 @@ spec:
     protocol: TCP
     targetPort: 5432
   selector:
-    deploymentconfig: postgresql-richie
+    deploymentconfig: "postgresql-richie-{{ deploy_flag }}"
   type: ClusterIP
