@@ -5,10 +5,12 @@ metadata:
     app: alias-{{ item }}
   name: alias-{{ item }}
   namespace: "{{ project_name }}"
+  annotations:
+    kubernetes.io/tls-acme: "true"
 spec:
   host: {{ item }}
   port:
-    targetPort: {{ redirect_port }}-tcp
+    targetPort: {{ aliases_port }}-tcp
   to:
     kind: Service
     name: nginx

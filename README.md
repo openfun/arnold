@@ -210,4 +210,4 @@ In development with MiniShift you can use the helper script:
 # Developers documentations
 
 * [Configuring MiniShift](./docs/minishift.md)
-* [Routes Redirections](./docs/redirection.md)
+* [Routes aliases](./docs/aliases_routes.md)

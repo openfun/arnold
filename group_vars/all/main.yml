@@ -4,10 +4,7 @@ env_type: development  # default to be overriden on command line
 customer: patient0  # default to be overriden on command line
 project_name: "{{ env_type }}-{{ customer }}"
 
-# URL
-domain_name: dev.openfun.fr
-
-# django_port
+# Django
 django_configuration: Development
 
 # Ports
@@ -15,13 +12,13 @@ django_port:    8000
 cms_port:       8081
 lms_port:       8071
 richie_port:    8061
-redirect_port:  8999
+aliases_port:   8999
 
 nginx_ports:
   - "{{ cms_port }}"
   - "{{ lms_port }}"
   - "{{ richie_port }}"
-  - "{{ redirect_port }}"
+  - "{{ aliases_port }}"
 
 # External services IPs
 mongodb_ip:     192.168.10.11
@@ -79,10 +76,6 @@ openshift_jobs:
   - openshift/richie/job/collectstatic.yml
   - openshift/richie/job/db_migrate.yml
   # - openshift/richie/job/regenerate_indexes.yml
-openshift_routes:
-  # - openshift/common/route/cms.yml
-  # - openshift/common/route/lms.yml
-  - openshift/common/route/richie.yml
 openshift_services:
   - openshift/common/svc/mongodb.yml
   - openshift/common/svc/mysql.yml

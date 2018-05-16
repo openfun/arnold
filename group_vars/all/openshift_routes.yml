@@ -1,0 +1,23 @@
+---
+# URL
+domain_name: dev.openfun.fr
+lms_host: "{{ project_name }}-lms.{{ domain_name }}"
+cms_host: "{{ project_name }}-cms.{{ domain_name }}"
+richie_host: "{{ project_name }}-richie.{{ domain_name }}"
+
+openshift_routes:
+  # - openshift/common/route/cms.yml
+  # - openshift/common/route/lms.yml
+  - openshift/common/route/richie.yml
+
+# OpenShift aliases_routes exemple
+# openshift_aliases_routes:       # routes to be redirected
+#   - route: www.maindomain.tld   # main domain this route must be existe
+#     aliases:                    # aliases to create for redirection to the main route
+#       - maindomain.tld
+#       - main-domain.tld
+#   - route: main_route
+#     aliases:
+#       - alias_1
+#       - alias_2
+openshift_aliases_routes:

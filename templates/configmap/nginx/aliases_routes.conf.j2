@@ -2,7 +2,7 @@
 # Nginx configuration to redirect aliased routes to their main route
 
 server {
-  listen {{ redirect_port }};
+  listen {{ aliases_port }};
   server_name localhost;
 
   rewrite ^ https://$new_url$request_uri permanent;
@@ -11,8 +11,8 @@ server {
 map $http_host $new_url {
   # Aliased route must be redirected to the main route
   # Alias         # Main route
-{% if routes is iterable %}
-{% for main_route in routes %}
+{% if openshift_aliases_routes is iterable %}
+{% for main_route in openshift_aliases_routes %}
   {% for alias in main_route.aliases %}
   {{ alias }}     {{ main_route.route }};
   {% endfor %}

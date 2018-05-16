@@ -1,20 +1,28 @@
-# Variables specific to the patient0 customer
-# Patient 0 is a demo site with default configuration
+# Variables specific to the hello customer
+# Hello is a demo site with default configuration
+# for a minimal dev app
 project_display_name: "Hello ({{ env_type }})"
 project_description: "A minimal project with a hello-word app ({{ env_type }})"
 hello_host: "{{ project_name }}.{{ domain_name }}"
 hello_port: "8080"
 
 nginx_ports:
-  - "{{ redirect_port }}"
+  - "{{ aliases_port }}"
 
 # Openshift template files
 openshift_deployments:
   - openshift/hello/dc/hello.yml
+  - openshift/common/dc/nginx.yml
 openshift_endpoints:
 openshift_jobs:
 openshift_routes:
   - openshift/hello/route/hello.yml
 openshift_services:
   - openshift/hello/svc/hello.yml
+  - openshift/common/svc/nginx.yml
 openshift_volumes:
+openshift_aliases_routes:
+   - route: "{{ hello_host }}"
+     aliases:
+       - "{{ project_name }}-first-alias.{{ domain_name }}"
+       - "{{ project_name }}-alias2.{{ domain_name }}"
