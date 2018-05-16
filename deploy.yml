@@ -21,6 +21,8 @@
 
   - debug: msg="Deploying {{ project_name }} - {{ domain_name }} ({{ deploy_flag }})"
 
+  - import_tasks: tasks/create_config.yml
+
   - name: Deploy new stack to OpenShift
     openshift_raw:
       verify_ssl: "{{ should_verify_ssl }}"
