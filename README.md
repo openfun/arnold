@@ -210,4 +210,6 @@ In development with MiniShift you can use the helper script:
 # Developers documentations
 
 * [Configuring MiniShift](./docs/minishift.md)
+* [Naming convention](./docs/naming_conventions.md)
 * [Routes aliases](./docs/aliases_routes.md)
+* [Customers app](./docs/customers.md)
