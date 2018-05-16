@@ -30,7 +30,7 @@ postgresql_ip:  192.168.0.1
 # Service flag should only contain alphanumeric (or '-') characters. It should
 # validate the following regexp: '[a-z]([-a-z0-9]*[a-z0-9])?'
 edxapp_image:      "fundocker/edxapp"
-edxapp_tag:        "ginkgo.1"
+edxapp_tag:        "ginkgo.1-1.0.0"
 nginx_image:       "fundocker/openshift-nginx"
 nginx_tag:         "1.13"
 postgresql_image:  "centos/postgresql-96-centos7"
@@ -57,9 +57,9 @@ richie_database:
 
 # Openshift template files
 openshift_deployments:
-  # - openshift/edxapp/dc/cms.yml
-  # - openshift/edxapp/dc/lms.yml
-  # - openshift/edxapp/dc/memcached.yml
+  - openshift/edxapp/dc/cms.yml
+  - openshift/edxapp/dc/lms.yml
+  - openshift/edxapp/dc/memcached.yml
   - openshift/common/dc/nginx.yml
   - openshift/richie/dc/postgresql.yml
   - openshift/richie/dc/richie.yml
@@ -68,26 +68,30 @@ openshift_endpoints:
   - openshift/common/ep/mysql.yml
   - openshift/common/ep/postgresql.yml
 openshift_jobs:
-  # - openshift/edxapp/job/collectstatic_cms.yml
-  # - openshift/edxapp/job/collectstatic_lms.yml
-  # - openshift/edxapp/job/db_migrate_cms.yml
-  # - openshift/edxapp/job/db_migrate_lms.yml
-  # - openshift/edxapp/job/update_courses.yml
+  - openshift/edxapp/job/collectstatic_cms.yml
+  - openshift/edxapp/job/collectstatic_lms.yml
+  - openshift/edxapp/job/db_migrate_cms.yml
+  - openshift/edxapp/job/db_migrate_lms.yml
+  - openshift/edxapp/job/update_courses.yml
   - openshift/richie/job/collectstatic.yml
   - openshift/richie/job/db_migrate.yml
-  # - openshift/richie/job/regenerate_indexes.yml
+  - openshift/richie/job/regenerate_indexes.yml
+openshift_routes:
+  - openshift/common/route/cms.yml
+  - openshift/common/route/lms.yml
+  - openshift/common/route/richie.yml
 openshift_services:
   - openshift/common/svc/mongodb.yml
   - openshift/common/svc/mysql.yml
   - openshift/common/svc/nginx.yml
   - openshift/common/svc/postgresql.yml
-  # - openshift/edxapp/svc/cms.yml
-  # - openshift/edxapp/svc/lms.yml
-  # - openshift/edxapp/svc/memcached.yml
+  - openshift/edxapp/svc/cms.yml
+  - openshift/edxapp/svc/lms.yml
+  - openshift/edxapp/svc/memcached.yml
   - openshift/richie/svc/postgresql.yml
   - openshift/richie/svc/richie.yml
 openshift_volumes:
-  # - openshift/edxapp/pvc/media.yml
-  # - openshift/edxapp/pvc/static.yml
+  - openshift/edxapp/pvc/media.yml
+  - openshift/edxapp/pvc/static.yml
   - openshift/richie/pvc/media.yml
   - openshift/richie/pvc/static.yml
