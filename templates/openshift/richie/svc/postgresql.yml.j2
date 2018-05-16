@@ -15,5 +15,5 @@ spec:
     protocol: TCP
     targetPort: 5432
   selector:
-    deploymentconfig: "postgresql-richie-{{ deploy_flag }}"
+    deploymentconfig: "postgresql-richie-{{ deployment_stamp }}"
   type: ClusterIP

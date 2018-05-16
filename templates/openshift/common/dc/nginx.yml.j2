@@ -10,7 +10,7 @@ metadata:
 spec:
   replicas: 1
   selector:
-    deploymentconfig: nginx-{{ deploy_flag }}
+    deploymentconfig: nginx-{{ deployment_stamp }}
   template:
     metadata:
       labels:
@@ -38,7 +38,7 @@ spec:
       volumes:
       - name: volume-conf
         configMap:
-          name: nginx-{{ deploy_flag }}
+          name: nginx-{{ deployment_stamp }}
       - name: richie-v-media
         persistentVolumeClaim:
           claimName: richie-pvc-media

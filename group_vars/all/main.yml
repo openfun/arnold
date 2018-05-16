@@ -41,16 +41,16 @@ richie_tag:        "0.1.0-alpha.3-alpine"
 # This deployment flag should be a lower-case code name containing only
 # alpha-numeric characters or dashes. It defaults to "init" and will be
 # overriden for each deployment (see deploy.yml playbook).
-deploy_flag: "init"
+deployment_stamp: "init"
 
 # Services hosts
 lms_host: "{{ project_name }}-lms.{{ domain_name }}"
 cms_host: "{{ project_name }}-cms.{{ domain_name }}"
-richie_host: "{{ project_name }}-richie-{{ deploy_flag }}.{{ domain_name }}"
+richie_host: "{{ project_name }}-richie-{{ deployment_stamp }}.{{ domain_name }}"
 
 # Databases
 richie_database:
-  host: postgresql-richie-{{ deploy_flag }}
+  host: postgresql-richie-{{ deployment_stamp }}
   port: "5432"
   name: richie
 

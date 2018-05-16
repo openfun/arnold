@@ -10,7 +10,7 @@ metadata:
 spec:
   replicas: 1  # number of pods we want
   selector:
-    deploymentconfig: richie-{{ deploy_flag }}
+    deploymentconfig: richie-{{ deployment_stamp }}
   template:
     metadata:
       labels:

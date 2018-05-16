@@ -14,5 +14,5 @@ spec:
     protocol: TCP
     targetPort: 8000
   selector:
-    deploymentconfig: "richie-{{ deploy_flag }}"
+    deploymentconfig: "richie-{{ deployment_stamp }}"
   type: ClusterIP

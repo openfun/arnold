@@ -16,5 +16,5 @@ spec:
     targetPort: {{ port }}
 {% endfor %}
   selector:
-    deploymentconfig: nginx-{{ deploy_flag }}
+    deploymentconfig: nginx-{{ deployment_stamp }}
   type: ClusterIP
