@@ -14,8 +14,6 @@
 
   tasks:
 
-  - debug: msg="Project name {{ project_name }} - domain {{ domain_name }}"
-
   - name: Make sure immutable project objects exist in OpenShift and are up-to-date
     openshift_raw:
       verify_ssl: "{{ should_verify_ssl }}"
