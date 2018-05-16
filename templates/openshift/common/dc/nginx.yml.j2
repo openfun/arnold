@@ -38,7 +38,7 @@ spec:
       volumes:
       - name: volume-conf
         configMap:
-          name: nginx
+          name: nginx-{{ deploy_flag }}
       - name: richie-v-media
         persistentVolumeClaim:
           claimName: richie-pvc-media

@@ -42,10 +42,14 @@
   openshift_raw:
     verify_ssl: "{{ should_verify_ssl }}"
     state: present
-    name: "{{ item.key }}"
+    name: "{{ item.key }}-{{ deploy_flag }}"
     namespace: "{{ project_name }}"
     definition:
       apiVersion: v1
       kind: ConfigMap
+      metadata:
+        labels:
+          app: "{{ item.key }}"
+          version: "{{ deploy_flag }}"
       data: "{{ item.value }}"
   with_dict: "{{ config_dict }}"
