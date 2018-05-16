@@ -55,18 +55,11 @@ test:image:
   dependencies:
     - build:image
 
-# Disclaimer: this job fails
-#
-# At the time of writing, this job is a POC to ensure that we can run ansible
-# playbooks within GitLabCI using our OpenShift Service Account (deployment
-# bot). Even if the playbook run fails, it runs; this is what we wanted to
-# achieve. The next step is to improve our deployment strategy (playbook).
-#
 # TODO:
 #   - This job should be generic, ie must be able to run the deployment for a
 #     customer in a particular environment
 #
-deploy:corporate:preprod:
+deploy:patient-zero:production:
   stage: deploy
   script:
     - IMAGE="arnold:$(tr -d '\n' < VERSION)"
@@ -76,7 +69,7 @@ deploy:corporate:preprod:
         -e K8S_AUTH_API_KEY
         -e INSECURE_SKIP_TLS_VERIFY=1
         ${IMAGE}
-        ansible-playbook deploy.yml -e "customer=corporate env_type=preprod"
+        ansible-playbook deploy.yml -e "customer=patient0 env_type=production"
   dependencies:
     - build:image
     - test:image
