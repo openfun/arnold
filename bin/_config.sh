@@ -2,6 +2,14 @@
 
 set -eo pipefail
 
+# _set_env: set minishift environment
+function _set_minishift_env() {
+    # We avoid using eval() in shell scripts, so we catch minishift's path to
+    # binaries and we explictly add it to $PATH.
+    MINISHIFT_PATH=$(minishift oc-env | grep -v \# | sed "s|export PATH=\"\(.*\):\$PATH\"|\1|")
+    export PATH="$MINISHIFT_PATH:$PATH"
+}
+
 # _configure_environment: configure environment file to use with Docker
 #
 # usage: _configure_environment [environment]
@@ -53,6 +61,7 @@ function _configure_environment() {
 #     command
 function _docker_run() {
 
+    _set_minishift_env
     _configure_environment
 
     # Check that minishift is running

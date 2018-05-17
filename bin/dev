@@ -9,6 +9,8 @@
 #
 set -eo pipefail
 
+source "$(dirname "${BASH_SOURCE[0]}")/_config.sh"
+
 # KVM settings
 USE_KVM=${USE_KVM:-0}
 KVM_DEFAULT_NETWORK="default"
@@ -63,7 +65,7 @@ function _run-minishift() {
 
 # _login: login to minishift
 function _login() {
-
+    _set_minishift_env
     oc login https://$(minishift ip):8443 --username=developer --password=developer
 }
 
