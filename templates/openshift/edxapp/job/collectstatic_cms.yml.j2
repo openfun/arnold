@@ -1,12 +1,20 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: edxapp-collecstatic-cms
+  name: edxapp-collecstatic-cms-{{ deployment_stamp }}
   namespace: "{{ project_name }}"
+  labels:
+    app: edxapp-cms
+    version: "{{ edxapp_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
 spec:
   template:
     metadata:
-      name: edxapp-collecstatic-cms
+      name: edxapp-collecstatic-cms-{{ deployment_stamp }}
+      labels:
+        app: edxapp-cms
+        version: "{{ edxapp_tag }}"
+        deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:
       - name: edxapp-collecstatic-cms

@@ -3,18 +3,21 @@ kind: DeploymentConfig
 metadata:
   labels:
     app: edxapp-cms
-  name: edxapp-cms
+    version: "{{ edxapp_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: edxapp-cms-{{ deployment_stamp }}
   namespace: "{{ project_name }}"
 spec:
   replicas: 1  # number of pods we want
   selector:
     app: edxapp-cms
-    deploymentconfig: edxapp-cms
+    deploymentconfig: edxapp-cms-{{ deployment_stamp }}
   template:
     metadata:
       labels:
         app: edxapp-cms
-        deploymentconfig: edxapp-cms
+        deploymentconfig: edxapp-cms-{{ deployment_stamp }}
+        deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:
       - env:
@@ -36,7 +39,7 @@ spec:
       - name: edxapp-config
         configMap:
           defaultMode: 420
-          name: edxapp
+          name: edxapp-{{ deployment_stamp }}
       - name: edxapp-v-media
         persistentVolumeClaim:
           claimName: edxapp-pvc-media

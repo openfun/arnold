@@ -1,5 +1,5 @@
 upstream lms-backend {
-  server lms:{{ django_port }} fail_timeout=0;
+  server edxapp-lms-{{ deployment_stamp }}:{{ django_port }} fail_timeout=0;
 }
 
 server {

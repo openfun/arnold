@@ -3,18 +3,21 @@ kind: DeploymentConfig
 metadata:
   labels:
     app: edxapp-lms
-  name: edxapp-lms
+    version: "{{ edxapp_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: edxapp-lms-{{ deployment_stamp }}
   namespace: "{{ project_name }}"
 spec:
   replicas: 1  # number of pods we want
   selector:
     app: edxapp-lms
-    deploymentconfig: edxapp-lms
+    deploymentconfig: edxapp-lms-{{ deployment_stamp }}
   template:
     metadata:
       labels:
         app: edxapp-lms
-        deploymentconfig: edxapp-lms
+        deploymentconfig: edxapp-lms-{{ deployment_stamp }}
+        deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:
       - name: edxapp-lms
@@ -81,7 +84,7 @@ spec:
       - name: edxapp-configmap
         configMap:
           defaultMode: 420
-          name: edxapp
+          name: edxapp-{{ deployment_stamp }}
       - name: edxapp-config
         emptyDir: {}  # volume that lives as long as the pod lives
       - name: edxapp-v-media

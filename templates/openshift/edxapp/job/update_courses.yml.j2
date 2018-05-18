@@ -1,12 +1,20 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: edxapp-update-courses
+  name: edxapp-update-courses-{{ deployment_stamp }}
+  labels:
+    app: edxapp
+    version: "{{ edxapp_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
   template:
     metadata:
-      name: edxapp-update-courses
+      name: edxapp-update-courses-{{ deployment_stamp }}
+      labels:
+        app: edxapp
+        version: "{{ edxapp_tag }}"
+        deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:
       - name: edxapp-update-courses

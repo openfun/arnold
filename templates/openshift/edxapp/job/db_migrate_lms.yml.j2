@@ -1,12 +1,20 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: edxapp-dbmigrate-lms
+  name: edxapp-dbmigrate-lms-{{ deployment_stamp }}
   namespace: "{{ project_name }}"
+  labels:
+    app: edxapp-lms
+    version: "{{ edxapp_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
 spec:
   template:
     metadata:
-      name: edxapp-dbmigrate-lms
+      name: edxapp-dbmigrate-lms-{{ deployment_stamp }}
+      labels:
+        app: edxapp-lms
+        version: "{{ edxapp_tag }}"
+        deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:
       - name: edxapp-dbmigrate-lms

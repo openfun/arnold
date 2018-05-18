@@ -1,5 +1,5 @@
 upstream cms-backend {
-  server cms:{{ django_port }} fail_timeout=0;
+  server edxapp-cms-{{ deployment_stamp }}:{{ django_port }} fail_timeout=0;
 }
 
 server {

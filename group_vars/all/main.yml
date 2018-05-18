@@ -45,8 +45,8 @@ richie_tag:        "0.1.0-alpha.3-alpine"
 deployment_stamp: "init"
 
 # Services hosts
-lms_host: "{{ project_name }}-lms.{{ domain_name }}"
-cms_host: "{{ project_name }}-cms.{{ domain_name }}"
+lms_host: "{{ project_name }}-lms-{{ deployment_stamp }}.{{ domain_name }}"
+cms_host: "{{ project_name }}-cms-{{ deployment_stamp }}.{{ domain_name }}"
 richie_host: "{{ project_name }}-richie-{{ deployment_stamp }}.{{ domain_name }}"
 
 # Databases
