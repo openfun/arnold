@@ -49,10 +49,14 @@ lms_host: "{{ project_name }}-lms-{{ deployment_stamp }}.{{ domain_name }}"
 cms_host: "{{ project_name }}-cms-{{ deployment_stamp }}.{{ domain_name }}"
 richie_host: "{{ project_name }}-richie-{{ deployment_stamp }}.{{ domain_name }}"
 
-# Databases
-richie_database:
-  host: postgresql-richie-{{ deployment_stamp }}
+# Cluster databases (used for development or feature deployments)
+postgresql:
+  host: "postgresql"
   port: "5432"
+
+richie_database:
+  host: "{{ postgresql.host }}"
+  port: "{{ postgresql.port }}"
   name: richie
 
 # Openshift template files
@@ -61,7 +65,7 @@ openshift_deployments:
   - openshift/edxapp/dc/lms.yml
   - openshift/edxapp/dc/memcached.yml
   - openshift/common/dc/nginx.yml
-  - openshift/richie/dc/postgresql.yml
+  - openshift/common/dc/postgresql.yml
   - openshift/richie/dc/richie.yml
 openshift_endpoints:
   - openshift/common/ep/mongodb.yml
@@ -88,7 +92,6 @@ openshift_services:
   - openshift/edxapp/svc/cms.yml
   - openshift/edxapp/svc/lms.yml
   - openshift/edxapp/svc/memcached.yml
-  - openshift/richie/svc/postgresql.yml
   - openshift/richie/svc/richie.yml
 openshift_volumes:
   - openshift/edxapp/pvc/media.yml

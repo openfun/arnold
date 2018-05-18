@@ -5,26 +5,26 @@ metadata:
     app: postgresql
     version: "{{ postgresql_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
-  name: "postgresql-richie-{{ deployment_stamp }}"
+  name: "postgresql-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
   replicas: 1
   selector:
-    deploymentconfig: "postgresql-richie-{{ deployment_stamp }}"
+    deploymentconfig: "postgresql-{{ deployment_stamp }}"
   template:
     metadata:
       labels:
         app: postgresql
         version: "{{ postgresql_tag }}"
-        deploymentconfig: "postgresql-richie-{{ deployment_stamp }}"
+        deploymentconfig: "postgresql-{{ deployment_stamp }}"
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:
         - image: {{ postgresql_image }}:{{ postgresql_tag }}
           name: postgresql
           ports:
-          - containerPort: "5432"
-            protocol: TCP
+            - containerPort: {{ postgresql.port }}
+              protocol: TCP
           env:
             - name: POSTGRESQL_DATABASE
               value: "{{ richie_database.name }}"

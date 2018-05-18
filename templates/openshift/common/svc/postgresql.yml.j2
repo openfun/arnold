@@ -3,12 +3,19 @@ kind: Service
 metadata:
   labels:
     app: postgresql
+    version: "{{ postgresql_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
   # name of the service should be database host name in settings
-  name: postgresql
+  name: "{{ postgresql.host }}"
   namespace: "{{ project_name }}"
 spec:
   ports:
-  - name: 5432-tcp
-    port: 5432
-    protocol: TCP
-    targetPort: 5432
+    - name: {{ postgresql.port }}-tcp
+      port: {{ postgresql.port }}
+      protocol: TCP
+      targetPort: {{ postgresql.port }}
+{% if env_type == "development"  %}
+  selector:
+    deploymentconfig: "postgresql-{{ deployment_stamp }}"
+  type: ClusterIP
+{% endif%}
