@@ -25,7 +25,7 @@ spec:
         - name: SERVICE_VARIANT
           value: lms
         - name: DJANGO_SETTINGS_MODULE
-          value: lms.envs.docker_run
+          value: lms.envs.fun.docker_run
         image: "{{ edxapp_image }}:{{ edxapp_tag }}"
         imagePullPolicy: IfNotPresent
         volumeMounts:
@@ -56,25 +56,12 @@ spec:
       # are also being decrypted with the vaultpass mounted as environment variable
       # from the secrets.
       - name: init-override
-        image: docker-registry.default.svc:5000/openshift/arnold:0.1.0-alpha
-        imagePullPolicy: Always
-        env:
-        # The vaultpass secret is recorded in OpenShift's secrets when creating a new project
-        - name: ANSIBLE_VAULT_PASS
-          valueFrom:
-            secretKeyRef:
-              name: vaultpass
-              key: vaultpass
-        # "cp -rL" because OpenShift mounted the files in configMap as symnolic links
+        image: busybox
+        imagePullPolicy: IfNotPresent
         command:
-          - "/bin/bash"
+          - "sh"
           - "-c"
-          - |
-            cp -rL /tmp/configmap/* /tmp/config;
-            for i in $(find /tmp/configmap -name "*.vault.*");
-            do
-              ansible-vault view --vault-password-file .vault_pass.sh ${i} > /tmp/config/$(basename ${i});
-            done
+          - cp -rL /tmp/configmap/* /tmp/config || exit 0
         volumeMounts:
         - mountPath: /tmp/configmap
           name: edxapp-configmap

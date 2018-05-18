@@ -24,7 +24,7 @@ spec:
         - name: SERVICE_VARIANT
           value: cms
         - name: DJANGO_SETTINGS_MODULE
-          value: cms.envs.docker_run
+          value: cms.envs.fun.docker_run
         image: "{{ edxapp_image }}:{{ edxapp_tag }}"
         imagePullPolicy: IfNotPresent
         name: edxapp-cms
@@ -35,11 +35,45 @@ spec:
           name: edxapp-v-media
         - mountPath: /edx/var/edxapp/static
           name: edxapp-v-static
+      initContainers:
+      # The first init container has nothing mounted on its "/config" directory
+      # We copy its content to the "/tmp/config" directory where the second init
+      # container can override the settings files before the main edxapp container
+      # can use it as its configuration to start.
+      - name: init-copy
+        image: "{{ edxapp_image }}:{{ edxapp_tag }}"
+        imagePullPolicy: IfNotPresent
+        # Add "|| exit 0" so that the command does not fail when the /config directory is empty
+        command:
+          - "/bin/bash"
+          - "-c"
+          - cp -r /config/* /tmp/config || exit 0
+        volumeMounts:
+        - mountPath: /tmp/config
+          name: edxapp-config
+      # The second init container overrides settings files with what is available in
+      # the "edxapp" configmap for this project. In this process, the vaulted files
+      # are also being decrypted with the vaultpass mounted as environment variable
+      # from the secrets.
+      - name: init-override
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        command:
+          - "sh"
+          - "-c"
+          - cp -rL /tmp/configmap/* /tmp/config || exit 0
+        volumeMounts:
+        - mountPath: /tmp/configmap
+          name: edxapp-configmap
+        - mountPath: /tmp/config
+          name: edxapp-config
       volumes:
-      - name: edxapp-config
+      - name: edxapp-configmap
         configMap:
           defaultMode: 420
           name: edxapp-{{ deployment_stamp }}
+      - name: edxapp-config
+        emptyDir: {}  # volume that lives as long as the pod lives
       - name: edxapp-v-media
         persistentVolumeClaim:
           claimName: edxapp-pvc-media
