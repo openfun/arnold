@@ -26,7 +26,7 @@ spec:
         - name: DJANGO_SETTINGS_MODULE
           value: cms.envs.docker_run
         image: "{{ edxapp_image }}:{{ edxapp_tag }}"
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         name: edxapp-cms
         volumeMounts:
         - mountPath: /config

@@ -22,7 +22,7 @@ spec:
       containers:
         - name: richie
           image: "{{ richie_image }}:{{ richie_tag }}"
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           env:
             - name: DJANGO_SETTINGS_MODULE
               value: richie.settings

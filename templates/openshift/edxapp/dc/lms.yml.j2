@@ -27,7 +27,7 @@ spec:
         - name: DJANGO_SETTINGS_MODULE
           value: lms.envs.docker_run
         image: "{{ edxapp_image }}:{{ edxapp_tag }}"
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         volumeMounts:
         - mountPath: /config
           name: edxapp-config
@@ -42,7 +42,7 @@ spec:
       # can use it as its configuration to start.
       - name: init-copy
         image: "{{ edxapp_image }}:{{ edxapp_tag }}"
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         # Add "|| exit 0" so that the command does not fail when the /config directory is empty
         command:
           - "/bin/bash"
