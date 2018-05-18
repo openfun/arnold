@@ -1,12 +1,14 @@
 # MiniShift
 
-## Pre-requisite: install & configure KVM hypervisor
+## Pre-requisite: install & configure an hypervisor
 
 MiniShift needs an hypervisor to work with. The following documentation focuses
 on the installation of KVM as it's MiniShift's default hypervisor, but know that
 [VirtualBox](https://www.virtualbox.org/wiki/Downloads) is also supported. If
 you have already installed and configured KVM (or VirtualBox), you can safely
 skip this section.
+
+### Using KVM as hypervisor
 
 ```bash
 # Install kvm
@@ -59,6 +61,19 @@ ubuntu), you can create it with the following content:
   </ip>
 </network>
 ```
+
+### Using VirtualBox
+
+Using VirtualBox is pretty straight forward: we invite you to follow
+installation instructions from the [official project
+page](https://www.virtualbox.org/).
+
+**Important notice**
+
+When you first start `minishift` (see below), it will create a `minishift`
+virtual machine (VM). To increase network performance, we strongly invite you to
+start the VirtualBox GUI and change the network adapter from its default (_Intel
+PRO/1000 MT Desktop_) to **PCnet-FAST III**.
 
 ## Install MiniShift
 
