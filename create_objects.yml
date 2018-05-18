@@ -10,7 +10,7 @@
     - "group_vars/customer/{{ customer }}.yml"
     - "group_vars/env_type/{{ env_type }}.yml"
   vars:
-    _openshift_aliases_routes: []
+    routes_aliases: []
 
   tasks:
 
@@ -30,15 +30,15 @@
 
   - name: Build a list of all aliases
     set_fact:
-      _openshift_aliases_routes: "{{ _openshift_aliases_routes }} + [ '{{ item }}']"
-    with_items: "{{ openshift_aliases_routes | json_query('[*].aliases') }}"
+      routes_aliases: "{{ routes_aliases }} + [ '{{ item }}']"
+    with_items: "{{ openshift_routes_aliases | json_query('[*].aliases') }}"
     when: item is not none and item != ""
 
   - name: Make sure all redirected routes exist or force recreation
     openshift_raw:
       verify_ssl: "{{ should_verify_ssl }}"
       force: true
-      definition: "{{ lookup('template', 'templates/openshift/common/route/aliases_routes.yml.j2') | from_yaml }}"
+      definition: "{{ lookup('template', 'templates/openshift/common/route/routes_aliases.yml.j2') | from_yaml }}"
       state: present
-    with_items: "{{ _openshift_aliases_routes }}"
-    when: _openshift_aliases_routes is defined
+    with_items: "{{ routes_aliases }}"
+    when: routes_aliases is defined

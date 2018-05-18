@@ -2,7 +2,7 @@
 # Hello is a demo site with default configuration
 # for a minimal dev app
 project_display_name: "Hello ({{ env_type }})"
-project_description: "A minimal project with a hello-word app ({{ env_type }})"
+project_description: "A minimal project with a hello-world app ({{ env_type }})"
 hello_host: "{{ project_name }}.{{ domain_name }}"
 hello_port: "8080"
 
@@ -21,7 +21,7 @@ openshift_services:
   - openshift/hello/svc/hello.yml
   - openshift/common/svc/nginx.yml
 openshift_volumes:
-openshift_aliases_routes:
+openshift_routes_aliases:
    - route: "{{ hello_host }}"
      aliases:
        - "{{ project_name }}-first-alias.{{ domain_name }}"

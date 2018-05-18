@@ -1,6 +1,6 @@
 ---
-# This playbook create the ACME controler in a project.
-# The definition files are lookup form github maintainer repository.
+# This playbook creates the ACME controler in a project.
+# The definition files are lookups targeting openshift-acme GitHub repository.
 # https://github.com/tnozicka/openshift-acme
 
 - hosts: local

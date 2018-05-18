@@ -3,3 +3,4 @@
 - import_playbook: create_objects.yml
 - import_playbook: create_secrets.yml
 - import_playbook: create_config.yml
+- import_playbook: create_acme.yml

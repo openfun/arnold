@@ -10,8 +10,8 @@ openshift_routes:
   # - openshift/common/route/lms.yml
   - openshift/common/route/richie.yml
 
-# OpenShift aliases_routes exemple
-# openshift_aliases_routes:       # routes to be redirected
+# OpenShift routes_aliases exemple
+# openshift_routes_aliases:       # routes to be redirected
 #   - route: www.maindomain.tld   # main domain this route must be existe
 #     aliases:                    # aliases to create for redirection to the main route
 #       - maindomain.tld
@@ -20,4 +20,4 @@ openshift_routes:
 #     aliases:
 #       - alias_1
 #       - alias_2
-openshift_aliases_routes:
+openshift_routes_aliases:

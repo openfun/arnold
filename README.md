@@ -211,5 +211,5 @@ In development with MiniShift you can use the helper script:
 
 * [Configuring MiniShift](./docs/minishift.md)
 * [Naming convention](./docs/naming_conventions.md)
-* [Routes aliases](./docs/aliases_routes.md)
+* [Routes aliases](./docs/routes_aliases.md)
 * [Customers app](./docs/customers.md)

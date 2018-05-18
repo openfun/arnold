@@ -1,6 +1,6 @@
 # Aliases routes
 
-The idea is that we would send all the traffic for a domain and it's subdomains
+The idea is that we would send all the traffic for a domain and its subdomains
 to OpenShift (HAproxy does not filter anymore). And we also want to redirect
 some routes.
 
@@ -39,7 +39,7 @@ For exemple, if you want to redirect `domain.tld` and `main-domain.tld` to
 
 ```yml
 # OpenShift redirected_routes exemple
-# openshift_aliases_routes:       # routes to be redirected
+# openshift_routes_aliases:       # routes to be redirected
 #   - route: www.maindomain.tld   # main domain this route must be existe
 #     aliases:                    # aliases to create for redirection to the main route
 #       - maindomain.tld
@@ -48,7 +48,7 @@ For exemple, if you want to redirect `domain.tld` and `main-domain.tld` to
 #     aliases:
 #       - alias_1
 #       - alias_2
-openshift_aliases_routes:
+openshift_routes_aliases:
   - route: www.maindomain.tld
     aliases:
       - maindomain.tld
