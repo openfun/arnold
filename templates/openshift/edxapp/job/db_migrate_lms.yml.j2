@@ -19,13 +19,48 @@ spec:
       containers:
       - name: edxapp-dbmigrate-lms
         image: "{{ edxapp_image }}:{{ edxapp_tag }}"
-        command: ["python", "manage.py", "lms", "migrate", "--settings", "docker_run"]
+        env:
+          - name: DJANGO_SETTINGS_MODULE
+            value: lms.envs.fun.docker_run
+        command: ["python", "manage.py", "lms", "migrate"]
         volumeMounts:
         - mountPath: /config
           name: edxapp-config
+      initContainers:
+        # This initContainer has nothing mounted on its "/config" directory. We
+        # copy its content (fun-platform default settings) to the "/tmp/config"
+        # directory (edxapp-config volume). Then, we copy service variant
+        # configMaps that may override default configuration (docker_run*.py and
+        # settings.yml) in that same "/tmp/config" directory. And finally, we
+        # also copy sensible credentials from edxapp secret
+        # (credentials.vault.yaml). When this initContainer shuts down, the
+        # "edxapp-config" volume has been filled with all project settings that
+        # will be used to run the service variant container.
+        - name: init-create-config
+          image: "{{ edxapp_image }}:{{ edxapp_tag }}"
+          imagePullPolicy: IfNotPresent
+          command:
+            - "/bin/bash"
+            - "-c"
+            - cp -r /config/* /tmp/config &&
+              cp -rL /tmp/configmap-lms/* /tmp/config/lms/ &&
+              cp /tmp/secret/credentials.vault.yml /tmp/config/lms/credentials.vault.yaml
+          volumeMounts:
+            - mountPath: /tmp/config
+              name: edxapp-config
+            - mountPath: /tmp/configmap-lms
+              name: edxapp-configmap-lms
+            - mountPath: /tmp/secret
+              name: edxapp-secret
       volumes:
-      - name: edxapp-config
+      - name: edxapp-configmap-lms
         configMap:
           defaultMode: 420
-          name: edxapp
+          name: edxapp-lms-{{ deployment_stamp }}
+      - name: edxapp-config
+        emptyDir: {}  # volume that lives as long as the pod lives
+      - name: edxapp-secret
+        secret:
+          secretName: edxapp
+
       restartPolicy: Never
