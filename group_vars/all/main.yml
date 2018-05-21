@@ -31,6 +31,10 @@ postgresql_ip:  192.168.0.1
 # validate the following regexp: '[a-z]([-a-z0-9]*[a-z0-9])?'
 edxapp_image:      "fundocker/edxapp"
 edxapp_tag:        "ginkgo.1-1.0.0"
+mongodb_image:     "centos/mongodb-32-centos7"
+mongodb_tag:       "3.2"
+mysql_image:       "centos/mysql-57-centos7"
+mysql_tag:         "5.7"
 nginx_image:       "fundocker/openshift-nginx"
 nginx_tag:         "1.13"
 postgresql_image:  "centos/postgresql-96-centos7"
@@ -50,6 +54,12 @@ cms_host: "{{ project_name }}-cms-{{ deployment_stamp }}.{{ domain_name }}"
 richie_host: "{{ project_name }}-richie-{{ deployment_stamp }}.{{ domain_name }}"
 
 # Cluster databases (used for development or feature deployments)
+mongodb:
+  host: "mongodb"
+  port: "27017"
+mysql:
+  host: "mysql"
+  port: "3306"
 postgresql:
   host: "postgresql"
   port: "5432"
@@ -59,14 +69,22 @@ richie_database:
   port: "{{ postgresql.port }}"
   name: richie
 
+edxapp:
+  database:
+    name: "edxapp"
+
 # Openshift template files
 openshift_deployments:
-  - openshift/edxapp/dc/cms.yml
-  - openshift/edxapp/dc/lms.yml
-  - openshift/edxapp/dc/memcached.yml
-  - openshift/common/dc/nginx.yml
-  - openshift/common/dc/postgresql.yml
-  - openshift/richie/dc/richie.yml
+  common:
+    - openshift/edxapp/dc/cms.yml
+    - openshift/edxapp/dc/lms.yml
+    - openshift/edxapp/dc/memcached.yml
+    - openshift/common/dc/nginx.yml
+    - openshift/common/dc/postgresql.yml
+    - openshift/richie/dc/richie.yml
+  development:
+    - openshift/common/dc/mongodb.yml
+    - openshift/common/dc/mysql.yml
 openshift_endpoints:
   - openshift/common/ep/mongodb.yml
   - openshift/common/ep/mysql.yml

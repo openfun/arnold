@@ -3,13 +3,19 @@ kind: Service
 metadata:
   labels:
     app: mongodb
+    version: "{{ mongodb_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
   # name of the service should be mongodb host name in settings
-  name: mongodb
+  name: "{{ mongodb.host }}"
   namespace: "{{ project_name }}"
 spec:
   ports:
-  - name: 27017-tcp
-    port: 27017
+  - name: {{ mongodb.port }}-tcp
+    port: {{ mongodb.port }}
     protocol: TCP
-    targetPort: 27017
-
+    targetPort: {{ mongodb.port }}
+{% if env_type == "development"  %}
+  selector:
+    deploymentconfig: "mongodb-{{ deployment_stamp }}"
+  type: ClusterIP
+{% endif%}

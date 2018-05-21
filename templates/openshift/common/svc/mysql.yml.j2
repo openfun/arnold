@@ -3,13 +3,19 @@ kind: Service
 metadata:
   labels:
     app: mysql
+    version: "{{ mysql_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
   # name of the service should be database host name in settings
-  name: mysql
+  name: "{{ mysql.host }}"
   namespace: "{{ project_name }}"
 spec:
   ports:
-  - name: 3306-tcp
-    port: 3306
+  - name: {{ mysql.port }}-tcp
+    port: {{ mysql.port }}
     protocol: TCP
-    targetPort: 3306
-
+    targetPort: {{ mysql.port }}
+{% if env_type == "development"  %}
+  selector:
+    deploymentconfig: "mysql-{{ deployment_stamp }}"
+  type: ClusterIP
+{% endif%}
