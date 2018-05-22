@@ -1,0 +1,82 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: edxapp-import-demo-course-{{ deployment_stamp }}
+  namespace: "{{ project_name }}"
+  labels:
+    app: edxapp
+    version: "{{ edxapp_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+spec:
+  template:
+    metadata:
+      name: edxapp-import-demo-course-{{ deployment_stamp }}
+      labels:
+        app: edxapp
+        version: "{{ edxapp_tag }}"
+        deployment_stamp: "{{ deployment_stamp }}"
+    spec:
+      containers:
+        - name: edxapp-import-demo-course
+          image: "{{ edxapp_image }}:{{ edxapp_tag }}"
+          env:
+            - name: DJANGO_SETTINGS_MODULE
+              value: cms.envs.fun.docker_run
+          command:
+            - "bash"
+            - "-c"
+            - curl -sL -o /tmp/demo_course.tgz {{ demo_course_url }} &&
+                cd /tmp &&
+                tar xzf /tmp/demo_course.tgz &&
+                cd - &&
+                python manage.py cms import /edx/app/edxapp/data /tmp/edx-demo-course*
+          volumeMounts:
+            - mountPath: /config
+              name: edxapp-config
+            - mountPath: /edx/var/edxapp/media
+              name: edxapp-v-media
+            - mountPath: /edx/app/edxapp/data
+              name: edxapp-v-data
+      initContainers:
+        # This initContainer has nothing mounted on its "/config" directory. We
+        # copy its content (fun-platform default settings) to the "/tmp/config"
+        # directory (edxapp-config volume). Then, we copy service variant
+        # configMaps that may override default configuration (docker_run*.py and
+        # settings.yml) in that same "/tmp/config" directory. And finally, we
+        # also copy sensible credentials from edxapp secret
+        # (credentials.vault.yaml). When this initContainer shuts down, the
+        # "edxapp-config" volume has been filled with all project settings that
+        # will be used to run the service variant container.
+        - name: init-create-config
+          image: "{{ edxapp_image }}:{{ edxapp_tag }}"
+          imagePullPolicy: IfNotPresent
+          command:
+            - "/bin/bash"
+            - "-c"
+            - cp -r /config/* /tmp/config &&
+              cp -rL /tmp/configmap-cms/* /tmp/config/cms/ &&
+              cp /tmp/secret/credentials.vault.yml /tmp/config/cms/credentials.vault.yaml
+          volumeMounts:
+            - mountPath: /tmp/config
+              name: edxapp-config
+            - mountPath: /tmp/configmap-cms
+              name: edxapp-configmap-cms
+            - mountPath: /tmp/secret
+              name: edxapp-secret
+      volumes:
+        - name: edxapp-configmap-cms
+          configMap:
+            defaultMode: 420
+            name: edxapp-cms-{{ deployment_stamp }}
+        - name: edxapp-config
+          emptyDir: {}  # volume that lives as long as the pod lives
+        - name: edxapp-secret
+          secret:
+            secretName: edxapp
+        - name: edxapp-v-media
+          persistentVolumeClaim:
+            claimName: edxapp-pvc-media
+        - name: edxapp-v-data
+          persistentVolumeClaim:
+            claimName: edxapp-pvc-data
+      restartPolicy: Never

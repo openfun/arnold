@@ -1,0 +1,32 @@
+---
+# This playbook pushes an OpenShift definition file for a project.
+#
+# A definition file is generated and pushed for a template given the
+# `object_template` path.
+#
+# Usage:
+#
+#   $ bin/ansible-playbook create_object.yml \
+#       -e "object_template=templates/openshift/edxapp/job/import_demo_course.yml.j2"
+#
+
+- hosts: local
+  gather_facts: False
+  vars_files:
+    - "group_vars/customer/{{ customer }}.yml"
+    - "group_vars/env_type/{{ env_type }}.yml"
+  vars:
+    object_template: ""
+
+  tasks:
+
+  - debug: msg="Project name {{ project_name }} - domain {{ domain_name }}"
+
+  - debug: msg="Object template {{ object_template}}"
+
+  - name: Create object
+    openshift_raw:
+      verify_ssl: "{{ should_verify_ssl }}"
+      definition: "{{ lookup('template', object_template) | from_yaml }}"
+      state: present
+      force: true
