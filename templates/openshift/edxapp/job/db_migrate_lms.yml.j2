@@ -26,6 +26,8 @@ spec:
         volumeMounts:
         - mountPath: /config
           name: edxapp-config
+        - mountPath: /edx/var/edxapp/media
+          name: edxapp-v-media
       initContainers:
         # This initContainer has nothing mounted on its "/config" directory. We
         # copy its content (fun-platform default settings) to the "/tmp/config"
@@ -62,5 +64,7 @@ spec:
       - name: edxapp-secret
         secret:
           secretName: edxapp
-
+      - name: edxapp-v-media
+        persistentVolumeClaim:
+          claimName: edxapp-pvc-media
       restartPolicy: Never

@@ -33,7 +33,7 @@ spec:
           name: edxapp-config
         - mountPath: /edx/var/edxapp/media
           name: edxapp-v-media
-        - mountPath: /edx/var/edxapp/staticfiles
+        - mountPath: /edx/app/edxapp/staticfiles
           name: edxapp-v-static
       initContainers:
         # This initContainer has nothing mounted on its "/config" directory. We
