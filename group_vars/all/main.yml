@@ -69,10 +69,6 @@ richie_database:
   port: "{{ postgresql.port }}"
   name: richie
 
-edxapp:
-  database:
-    name: "edxapp"
-
 # Openshift template files
 openshift_deployments:
   common:

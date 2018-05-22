@@ -27,7 +27,7 @@ spec:
               protocol: TCP
           env:
             - name: MONGODB_DATABASE
-              value: "{{ edxapp.database.name }}"
+              value: edxapp
           envFrom:
             - secretRef:
                 name: edxapp
