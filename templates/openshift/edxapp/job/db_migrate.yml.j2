@@ -1,31 +1,37 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: edxapp-dbmigrate-cms-{{ deployment_stamp }}
+  name: edxapp-dbmigrate-{{ deployment_stamp }}
   namespace: "{{ project_name }}"
   labels:
-    app: edxapp-cms
+    app: edxapp
     version: "{{ edxapp_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
 spec:
   template:
     metadata:
-      name: edxapp-dbmigrate-cms-{{ deployment_stamp }}
+      name: edxapp-dbmigrate-{{ deployment_stamp }}
       labels:
-        app: edxapp-cms
+        app: edxapp
         version: "{{ edxapp_tag }}"
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:
-      - name: edxapp-dbmigrate-cms
+      - name: edxapp-dbmigrate
         image: "{{ edxapp_image }}:{{ edxapp_tag }}"
         env:
           - name: DJANGO_SETTINGS_MODULE
-            value: cms.envs.fun.docker_run
-        command: ["python", "manage.py", "cms", "migrate"]
+            value: lms.envs.fun.docker_run
+        command:
+          - "/bin/bash"
+          - "-c"
+          - DJANGO_SETTINGS_MODULE=lms.envs.fun.docker_run python manage.py lms migrate &&
+            DJANGO_SETTINGS_MODULE=cms.envs.fun.docker_run python manage.py cms migrate
         volumeMounts:
         - mountPath: /config
           name: edxapp-config
+        - mountPath: /edx/var/edxapp/media
+          name: edxapp-v-media
       initContainers:
         # This initContainer has nothing mounted on its "/config" directory. We
         # copy its content (fun-platform default settings) to the "/tmp/config"
@@ -43,16 +49,24 @@ spec:
             - "/bin/bash"
             - "-c"
             - cp -r /config/* /tmp/config &&
+              cp -rL /tmp/configmap-lms/* /tmp/config/lms/ &&
               cp -rL /tmp/configmap-cms/* /tmp/config/cms/ &&
+              cp /tmp/secret/credentials.vault.yml /tmp/config/lms/credentials.vault.yaml &&
               cp /tmp/secret/credentials.vault.yml /tmp/config/cms/credentials.vault.yaml
           volumeMounts:
             - mountPath: /tmp/config
               name: edxapp-config
+            - mountPath: /tmp/configmap-lms
+              name: edxapp-configmap-lms
             - mountPath: /tmp/configmap-cms
               name: edxapp-configmap-cms
             - mountPath: /tmp/secret
               name: edxapp-secret
       volumes:
+      - name: edxapp-configmap-lms
+        configMap:
+          defaultMode: 420
+          name: edxapp-lms-{{ deployment_stamp }}
       - name: edxapp-configmap-cms
         configMap:
           defaultMode: 420
@@ -62,4 +76,7 @@ spec:
       - name: edxapp-secret
         secret:
           secretName: edxapp
+      - name: edxapp-v-media
+        persistentVolumeClaim:
+          claimName: edxapp-pvc-media
       restartPolicy: Never

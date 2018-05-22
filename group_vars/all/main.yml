@@ -88,9 +88,7 @@ openshift_endpoints:
 openshift_jobs:
   - openshift/edxapp/job/collectstatic_cms.yml
   - openshift/edxapp/job/collectstatic_lms.yml
-  - openshift/edxapp/job/db_migrate_cms.yml
-  - openshift/edxapp/job/db_migrate_lms.yml
-  - openshift/edxapp/job/update_courses.yml
+  - openshift/edxapp/job/db_migrate.yml
   - openshift/richie/job/collectstatic.yml
   - openshift/richie/job/db_migrate.yml
   - openshift/richie/job/regenerate_indexes.yml
