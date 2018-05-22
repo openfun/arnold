@@ -35,6 +35,8 @@ spec:
           name: edxapp-v-media
         - mountPath: /edx/app/edxapp/staticfiles
           name: edxapp-v-static
+        - mountPath: /edx/app/edxapp/data
+          name: edxapp-v-data
       initContainers:
         # This initContainer has nothing mounted on its "/config" directory. We
         # copy its content (fun-platform default settings) to the "/tmp/config"
@@ -77,3 +79,6 @@ spec:
         - name: edxapp-v-static
           persistentVolumeClaim:
             claimName: edxapp-pvc-static
+        - name: edxapp-v-data
+          persistentVolumeClaim:
+            claimName: edxapp-pvc-data

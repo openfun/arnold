@@ -106,6 +106,7 @@ openshift_services:
   - openshift/edxapp/svc/memcached.yml
   - openshift/richie/svc/richie.yml
 openshift_volumes:
+  - openshift/edxapp/pvc/data.yml
   - openshift/edxapp/pvc/media.yml
   - openshift/edxapp/pvc/static.yml
   - openshift/richie/pvc/media.yml
