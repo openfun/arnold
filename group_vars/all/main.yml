@@ -30,7 +30,7 @@ postgresql_ip:  192.168.0.1
 # Service flag should only contain alphanumeric (or '-') characters. It should
 # validate the following regexp: '[a-z]([-a-z0-9]*[a-z0-9])?'
 edxapp_image:      "fundocker/edxapp"
-edxapp_tag:        "ginkgo.1-1.0.0"
+edxapp_tag:        "ginkgo.1-1.0.1"
 mongodb_image:     "centos/mongodb-32-centos7"
 mongodb_tag:       "3.2"
 mysql_image:       "centos/mysql-57-centos7"

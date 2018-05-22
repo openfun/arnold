@@ -35,7 +35,7 @@ spec:
         # configMaps that may override default configuration (docker_run*.py and
         # settings.yml) in that same "/tmp/config" directory. And finally, we
         # also copy sensible credentials from edxapp secret
-        # (credentials.vault.yaml). When this initContainer shuts down, the
+        # (credentials.vault.yml). When this initContainer shuts down, the
         # "edxapp-config" volume has been filled with all project settings that
         # will be used to run the service variant container.
         - name: init-create-config
@@ -46,7 +46,7 @@ spec:
             - "-c"
             - cp -r /config/* /tmp/config &&
               cp -rL /tmp/configmap-cms/* /tmp/config/cms/ &&
-              cp /tmp/secret/credentials.vault.yml /tmp/config/cms/credentials.vault.yaml
+              cp /tmp/secret/credentials.vault.yml /tmp/config/cms/secrets.yml
           volumeMounts:
             - mountPath: /tmp/config
               name: edxapp-config
