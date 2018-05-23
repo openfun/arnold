@@ -144,6 +144,16 @@ documentation (see below).
 The full documentation of the project is available in this repository (see
 [./docs](./docs)) (and also in readthedocs soon).
 
+## Contributing
+
+Please, see the [CONTRIBUTING](CONTRIBUTING.md) file.
+
+## Contributor Code of Conduct
+
+Please note that this project is released with a [Contributor Code of
+Conduct](http://contributor-covenant.org/). By participating in this project you
+agree to abide by its terms. See [CODE_OF_CONDUCT](CODE_OF_CONDUCT.md) file.
+
 ## License
 
 The code in this repository is licensed under the MIT license terms unless
