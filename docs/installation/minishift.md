@@ -1,5 +1,9 @@
 # MiniShift
 
+Minishift is a tool that helps you run OpenShift locally by running a
+single-node OpenShift cluster inside a VM. We recommend you to install it to
+test Arnold or work on it.
+
 ## Pre-requisite: install & configure an hypervisor
 
 MiniShift needs an hypervisor to work with. The following documentation focuses
@@ -68,21 +72,24 @@ Using VirtualBox is pretty straight forward: we invite you to follow
 installation instructions from the [official project
 page](https://www.virtualbox.org/).
 
-**Important notice**
+️⚠️️⚠️️️⚠️️ **Important notice** ⚠️️⚠️️⚠️️
 
 When you first start `minishift` (see below), it will create a `minishift`
-virtual machine (VM). To increase network performance, we strongly invite you to
-start the VirtualBox GUI and change the network adapter from its default (_Intel
-PRO/1000 MT Desktop_) to **PCnet-FAST III**.
+virtual machine (VM). To increase overall performances, we strongly invite you
+to start the VirtualBox GUI and make the following changes:
+
+1.  change the network adapter from its default (_Intel PRO/1000 MT Desktop_) to
+    **PCnet-FAST III**.
+2.  allocate at least **4Gb base memory**
 
 ## Install MiniShift
 
-For ubuntu:
+For GNU/Linux:
 
 ```bash
 # See latest releases at:
 # https://github.com/minishift/minishift/releases
-$ MS_RELEASE="1.16.0"
+$ MS_RELEASE="1.17.0"
 $ curl -L https://github.com/minishift/minishift/releases/download/v${MS_RELEASE}/minishift-${MS_RELEASE}-linux-amd64.tgz -o /tmp/minishift-${MS_RELEASE}-linux-amd64.tgz
 $ pushd /tmp
 $ tar xvzf /tmp/minishift-${MS_RELEASE}-linux-amd64.tgz
@@ -103,10 +110,13 @@ $ minishift start [--vm-driver=virtualbox]
 > `--vm-driver=virtualbox` option to the `start` command.
 
 When starting `minishift` for the first time, it will install the latest release
-of `oc` (OpenShift CLI) for you. To add it to your `$PATH`, add the following
-line to your `.bashrc` or `.zshrc`:
+of `oc` (OpenShift CLI) for you. To add `oc` to your `$PATH`, ask minishift:
 
 ```bash
-# Add oc to the $PATH
-eval $(minishift oc-env)
+# Ask minishift which path should be added to $PATH
+$ minishift oc-env
+export PATH="/home/user/.minishift/cache/oc/v3.9.0/linux:$PATH"
+
+# Now run this command to add "oc" to $PATH in the current shell
+$ export PATH="/home/user/.minishift/cache/oc/v3.9.0/linux:$PATH"
 ```

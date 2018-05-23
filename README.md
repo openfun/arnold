@@ -27,7 +27,7 @@ changes to your OpenShift instance that orchestrate your OpenEdx services.
   [MiniShift](https://docs.openshift.org/latest/minishift/getting-started/)): as
   Arnold should talk with someone, you'll need a running OpenShift instance to
   use this project. For development or demo purpose, please read our
-  [instructions to install MiniShift](./docs/minishift.md) on your machine in a
+  [instructions to install MiniShift](./docs/installation/minishift.md) on your machine in a
   few minutes.
 
 ## Quick start
@@ -47,7 +47,7 @@ $ git clone git@github.com:openfun/arnold.git
 Second requirement: you'll need to ensure that you have a working OpenShift
 instance that will be used to deploy our services. For development or testing
 purpose, we recommend you to install MiniShift (see Arnold's
-[documentation](./docs/minishift.md)).
+[documentation](./docs/installation/minishift.md)).
 
 As we heavily rely on Ansible and OpenShift, we've cooked a Docker container
 image that bundles Ansible and the OpenShift CLI (you have already installed
@@ -84,7 +84,7 @@ $ vim env.d/development
 > for development as they are dynamically defined in our sugar scripts.
 
 Before running our first playbook, we need to start MiniShift and login to
-MiniShift's console _via_ the `oc login` command. This can be achieve with a
+MiniShift's console _via_ the `oc login` command. This can be achieved with a
 second helper:
 
 ```bash
