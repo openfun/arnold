@@ -23,7 +23,7 @@
 
   - import_tasks: tasks/create_config.yml
 
-  - name: Deploy new DCs required for development
+  - name: Deploy development-specific DCs
     openshift_raw:
       verify_ssl: "{{ should_verify_ssl }}"
       definition: "{{ lookup('template', 'templates/' + item + '.j2') | from_yaml }}"

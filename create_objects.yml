@@ -16,7 +16,7 @@
 
   - debug: msg="Project name {{ project_name }} - domain {{ domain_name }}"
 
-  - name: Create DCs required for development
+  - name: Create development-specific DCs
     openshift_raw:
       verify_ssl: "{{ should_verify_ssl }}"
       definition: "{{ lookup('template', 'templates/' + item + '.j2') | from_yaml }}"
