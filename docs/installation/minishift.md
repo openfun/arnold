@@ -98,12 +98,13 @@ For GNU/Linux:
 # https://github.com/minishift/minishift/releases
 $ MS_RELEASE="1.17.0"
 $ curl -L https://github.com/minishift/minishift/releases/download/v${MS_RELEASE}/minishift-${MS_RELEASE}-linux-amd64.tgz -o /tmp/minishift-${MS_RELEASE}-linux-amd64.tgz
-$ pushd /tmp
+$ cd /tmp
 $ tar xvzf /tmp/minishift-${MS_RELEASE}-linux-amd64.tgz
 $ sudo cp /tmp/minishift-${MS_RELEASE}-linux-amd64/minishift /usr/local/bin/minishift
-$ popd
+$ cd -
 $ rm -Rf /tmp/minishift*
 ```
+
 
 ## Getting started with MiniShift
 
