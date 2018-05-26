@@ -43,9 +43,9 @@ function _create-kvm-default-network() {
 # environment variable USE_KVM as been set to 0
 function _run-minishift() {
 
-    local opts=""
+    local opts="--memory=4GB"
     if [ $USE_KVM -eq 0 ]; then
-        opts="--vm-driver=virtualbox"
+        opts="$ops --vm-driver=virtualbox"
     fi
 
     echo "Starting minishift with options: ${opts}"
@@ -65,7 +65,7 @@ function _run-minishift() {
 
 # _login: login to minishift
 function _login() {
-    _set_minishift_env
+    _set_minishift_path
     oc login https://$(minishift ip):8443 --username=developer --password=developer
 }
 

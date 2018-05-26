@@ -2,8 +2,8 @@
 
 set -eo pipefail
 
-# _set_env: set minishift environment
-function _set_minishift_env() {
+# _set_minishift_path: add minishift path to the global PATH
+function _set_minishift_path() {
     # We avoid using eval() in shell scripts, so we catch minishift's path to
     # binaries and we explictly add it to $PATH.
     MINISHIFT_PATH=$(minishift oc-env | grep -v \# | sed "s|export PATH=\"\(.*\):\$PATH\"|\1|")
@@ -35,7 +35,7 @@ function _set_minishift_env() {
 #     command
 function _docker_run() {
 
-    _set_minishift_env
+    _set_minishift_path
 
     local env_file="env.d/development"
     local args
