@@ -44,11 +44,6 @@ $ cd path/to/working/directory
 $ git clone git@github.com:openfun/arnold.git
 ```
 
-Second requirement: you'll need to ensure that you have a working OpenShift
-instance that will be used to deploy our services. For development or testing
-purpose, we recommend you to install MiniShift (see Arnold's
-[documentation](./docs/installation/minishift.md)).
-
 As we heavily rely on Ansible and OpenShift, we've cooked a Docker container
 image that bundles Ansible and the OpenShift CLI (you have already installed
 Docker on your machine right?). You can build this image with a little helper we
@@ -73,8 +68,8 @@ instance that will be used to deploy your services. For development or testing
 purpose, we recommend you to install and start a MiniShift (see Arnold's
 [documentation](./docs/installation/minishift.md)).
 
-Now let's have fun (sic!) by creating an OpenShift project for a customer in a
-particular environment with a new helper:
+Now that you have a working OpenShift, let's have fun (sic!) by creating a project for a customer
+in a particular environment with a new helper:
 
 > When running this command, you'll be asked for a **vault password**. The
 > default value for this demo is: `arnold`.

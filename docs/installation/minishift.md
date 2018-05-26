@@ -100,16 +100,53 @@ $ rm -Rf /tmp/minishift*
 
 ## Getting started with MiniShift
 
-Let's test our MiniShift installation:
+Let's test our installation and login to MiniShift's console _via_ the `oc login` command.
+This can be achieved with a helper:
 
 ```bash
-$ minishift start [--vm-driver=virtualbox]
+$ bin/dev
+```
+
+Once executed, the `bin/dev` script should print the local OpenShift console URL
+and default credentials to login:
+
+```
+**** MiniShift is up and running ****
+local console: https://192.168.99.100:8443
+username: developer
+password: developer
+
+To login as administrator, use:
+$ oc login -u system:admin
+***************************************
+```
+
+Open your web browser with the console url (_e.g._ something similar to
+[https://192.168.99.100:8443](https://192.168.99.100:8443)), add a security
+exception to for the missing SSL certificate, login with **developer**
+credentials (see `minishift` output above) and be amazed by OpenShift web
+console.
+
+
+## Direct commands
+
+The bin/dev script is just a wrapper to start MiniShift and login to its OC CLI. You can start
+MiniShift directly with the following commands:
+
+```bash
+$ minishift start --memory=4GB [--vm-driver=virtualbox]
 ```
 
 > Nota bene: if you are using VirtualBox as hypervisor, you will need to add the
 > `--vm-driver=virtualbox` option to the `start` command.
 
-When starting `minishift` for the first time, it will install the latest release
+When using virtualbox as hypervisor, the `memory` option will only be effective the first time you
+start MiniShift (when the VM is created in VirtualBox). 4GB is the minimum required to play
+Open edX's database migrations. If you encounter issues running such migrations, check in
+VirtualBox that MiniShift has enough RAM allocated.
+
+
+When starting `MiniShift` for the first time, it will install the latest release
 of `oc` (OpenShift CLI) for you. To add `oc` to your `$PATH`, ask minishift:
 
 ```bash
@@ -119,4 +156,10 @@ export PATH="/home/user/.minishift/cache/oc/v3.9.0/linux:$PATH"
 
 # Now run this command to add "oc" to $PATH in the current shell
 $ export PATH="/home/user/.minishift/cache/oc/v3.9.0/linux:$PATH"
+```
+
+You can then login to the MiniShift OC CLI directly with the following command:
+
+```bash
+$ oc login https://$(minishift ip):8443 --username=developer --password=developer
 ```
