@@ -107,11 +107,15 @@ $ oc login -u system:admin
 
 Open your web browser with the console url (_e.g._ something similar to
 [https://192.168.99.100:8443](https://192.168.99.100:8443)), add a security
-exception to for the missing SSL certificate, login and be amazed by OpenShift
-web console.
+exception to for the missing SSL certificate, login with **developer**
+credentials (see `minishift` output above) and be amazed by OpenShift web
+console.
 
 Now let's have fun (sic!) by creating an OpenShift project for a customer in a
 particular environment with a new helper:
+
+> When running this command, you'll be asked for a **vault password**. The
+> default value for this demo is: `arnold`.
 
 ```bash
 $ bin/init
