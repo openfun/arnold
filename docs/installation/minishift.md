@@ -4,13 +4,35 @@ Minishift is a tool that helps you run OpenShift locally by running a
 single-node OpenShift cluster inside a VM. We recommend you to install it to
 test Arnold or work on it.
 
+
 ## Pre-requisite: install & configure an hypervisor
 
-MiniShift needs an hypervisor to work with. The following documentation focuses
-on the installation of KVM as it's MiniShift's default hypervisor, but know that
-[VirtualBox](https://www.virtualbox.org/wiki/Downloads) is also supported. If
-you have already installed and configured KVM (or VirtualBox), you can safely
-skip this section.
+MiniShift needs an hypervisor to work with: it uses KVM by default by can also run on
+[VirtualBox](https://www.virtualbox.org/wiki/Downloads). 
+
+We recommend using VirtualBox because developers are more likely to have it on their
+laptops and we encountered networking issues with KVM.
+
+If you have already installed and configured VirtualBox (or KVM), you can safely skip
+this section.
+
+
+### Using VirtualBox
+
+Using VirtualBox is pretty straight forward: we invite you to follow
+installation instructions from the [official project
+page](https://www.virtualbox.org/).
+
+️⚠️️⚠️️️⚠️️ **Important notice** ⚠️️⚠️️⚠️️
+
+When you first start `minishift` (see below), it will create a `minishift`
+virtual machine (VM). To increase overall performances, we strongly invite you
+to start the VirtualBox GUI and make the following changes:
+
+1.  change the network adapter from its default (_Intel PRO/1000 MT Desktop_) to
+    **PCnet-FAST III**.
+2.  allocate at least **4Gb base memory**
+
 
 ### Using KVM as hypervisor
 
@@ -66,23 +88,8 @@ ubuntu), you can create it with the following content:
 </network>
 ```
 
-### Using VirtualBox
 
-Using VirtualBox is pretty straight forward: we invite you to follow
-installation instructions from the [official project
-page](https://www.virtualbox.org/).
-
-️⚠️️⚠️️️⚠️️ **Important notice** ⚠️️⚠️️⚠️️
-
-When you first start `minishift` (see below), it will create a `minishift`
-virtual machine (VM). To increase overall performances, we strongly invite you
-to start the VirtualBox GUI and make the following changes:
-
-1.  change the network adapter from its default (_Intel PRO/1000 MT Desktop_) to
-    **PCnet-FAST III**.
-2.  allocate at least **4Gb base memory**
-
-## Install MiniShift
+## Installing MiniShift
 
 For GNU/Linux:
 
