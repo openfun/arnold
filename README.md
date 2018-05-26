@@ -68,48 +68,10 @@ REPOSITORY          TAG                 IMAGE ID            CREATED             
 arnold              0.1.0-alpha         549baa2b861b        4 days ago          824MB
 ```
 
-When we will use sugar scripts in the `bin/` directory, we will implicitly run
-Arnold's docker image loading the `env.d/development` environment variables
-definition. We need to create this file from the `env.d/base` template:
-
-```bash
-# Create development environment variables definition from base template
-$ cp env.d/base env.d/development
-
-# Edit this file to suite your needs
-$ vim env.d/development
-```
-
-> Note that the `K8S_AUTH_API_KEY` and `K8S_AUTH_HOST` vars can be left empty
-> for development as they are dynamically defined in our sugar scripts.
-
-Before running our first playbook, we need to start MiniShift and login to
-MiniShift's console _via_ the `oc login` command. This can be achieved with a
-second helper:
-
-```bash
-$ bin/dev
-```
-
-Once executed, the `bin/dev` script should print the local OpenShift console URL
-and default credentials to login:
-
-```
-**** MiniShift is up and running ****
-local console: https://192.168.99.100:8443
-username: developer
-password: developer
-
-To login as administrator, use:
-$ oc login -u system:admin
-***************************************
-```
-
-Open your web browser with the console url (_e.g._ something similar to
-[https://192.168.99.100:8443](https://192.168.99.100:8443)), add a security
-exception to for the missing SSL certificate, login with **developer**
-credentials (see `minishift` output above) and be amazed by OpenShift web
-console.
+Second requirement: you'll need to ensure that you have a working OpenShift
+instance that will be used to deploy your services. For development or testing
+purpose, we recommend you to install and start a MiniShift (see Arnold's
+[documentation](./docs/installation/minishift.md)).
 
 Now let's have fun (sic!) by creating an OpenShift project for a customer in a
 particular environment with a new helper:

@@ -10,48 +10,22 @@ function _set_minishift_env() {
     export PATH="$MINISHIFT_PATH:$PATH"
 }
 
-# _configure_environment: configure environment file to use with Docker
-#
-# usage: _configure_environment [environment]
-#
-# environment: target environment file name (e.g. development for
-# env.d/development)
-function _configure_environment() {
-
-    environment=${1:-development}
-    env_file="env.d/${environment}"
-
-    if [[ ! -e $env_file ]]; then
-        echo "Environment file ${env_file} does not exists. You should create it first:"
-        echo ""
-        echo "  $ cp env.d/base env.d/${environment}"
-        echo ""
-        echo "And then edit it with relevant values."
-        exit 1
-    fi
-}
-
 # _docker_run: wrap docker run command
 #
-# usage: _docker_run [options] [ARGS...]
+# usage: _docker_run [OPTIONS] [COMMAND]
 #
-# options: docker run command options
-# ARGS   : docker run command arguments
+#   OPTIONS: docker run options
+#    --env-file: file to set environment variables (_e.g._ env.d/production)
 #
-# DISCLAIMER:
+#   COMMAND: command to be run in Arnold container (_e.g._ ansible-playbook create_objects.yml) 
 #
-# /!\ DO NOT USE THIS UTILITY FOR A PRODUCTION ENVIRONMENT /!\
+# purpose:
 #
-# This utility function is only meant to get used by developers on their local
-# machine to test various OpenShift configurations or instances.
-#
-# PURPOSE:
-#
-# This utility improves the developer experience by dynamically generating
+# This utility improves the developer experience by dynamically setting
 # environment variables required to run ansible playbooks and play with
 # minishift from Arnold's container (see Dockerfile).
 #
-# PREREQUISITE:
+# prerequisite:
 #
 # To run this util, we suppose that:
 #
@@ -62,7 +36,29 @@ function _configure_environment() {
 function _docker_run() {
 
     _set_minishift_env
-    _configure_environment
+
+    local env_file="env.d/development"
+    local args
+    local i=1
+
+    while [[ "$#" -ge "1" ]]; do
+        local key="$1"
+        shift
+
+        case "$key" in
+            --env-file=*)
+                env_file="${key#*=}"
+                ;;
+            --env-file)
+                env_file="$1"
+                shift
+                ;;
+            *)
+                args[i]=$key
+                ;;
+        esac
+        i=$(($i+1))
+    done
 
     # Check that minishift is running
     if ! minishift status | grep Running > /dev/null ; then
@@ -84,5 +80,5 @@ function _docker_run() {
         --env MINISHIFT_IP="$(minishift ip)" \
         -v $PWD:/app \
         arnold:$(tr -d '\n' < VERSION) \
-        "$@"
+        "${args[@]}"
 }

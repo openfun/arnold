@@ -23,7 +23,7 @@ if [[ ${INSECURE_SKIP_TLS_VERIFY} -eq 1 ]]; then
     login_options="--insecure-skip-tls-verify=true"
 fi
 
-oc login ${K8S_AUTH_HOST} --token="${K8S_AUTH_API_KEY}" ${login_options} > /dev/null
+oc login ${K8S_AUTH_HOST} --token="${K8S_AUTH_API_KEY}" ${login_options}
 echo "******************************************************************"
 
 exec "$@"
