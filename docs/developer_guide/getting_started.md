@@ -3,41 +3,14 @@
 Now that Docker, OpenShift (or MiniShift) and Arnold are installed and
 functional on your system, it's time to play!
 
-> **Disclaimer**: the following tutorial has been written using MiniShift in
-> development environment. We will update this documentation soon for production
-> environments.
 
 ## Using development environment
 
-Before running our first playbook, we need to start MiniShift and login to
-MiniShift's console _via_ the `oc login` command. This can be achieved with a
-second helper:
-
-```bash
-$ bin/dev
-```
-
-Once executed, the `bin/dev` script should print the local OpenShift console URL
-and default credentials to login:
-
-```
-**** MiniShift is up and running ****
-local console: https://192.168.99.100:8443
-username: developer
-password: developer
-
-To login as administrator, use:
-$ oc login -u system:admin
-***************************************
-```
-
-Open your web browser with the console url (_e.g._ something similar to
-[https://192.168.99.100:8443](https://192.168.99.100:8443)), add a security
-exception to for the missing SSL certificate, login and be amazed by OpenShift
-web console.
-
 Now let's have fun (sic!) by creating an OpenShift project for a customer in a
 particular environment with a new helper:
+
+> When running this command, you'll be asked for a **vault password**. The
+> default value for this demo is: `arnold`.
 
 ```bash
 $ bin/init
@@ -60,6 +33,7 @@ $ bin/deploy
 
 As we are using a blue-green deployment strategy, you should now have two
 running versions of each service, congratulations! 🎉🎉🎉
+
 
 ## Using native Docker commands
 

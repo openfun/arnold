@@ -33,22 +33,30 @@ arnold              0.1.0-alpha         549baa2b861b        4 days ago          
 
 ## Configure Arnold
 
-When we will use sugar scripts in the `bin/` directory, we will implicitly run
-Arnold's docker image loading the `env.d/development` environment variables
-definition. We need to create this file from the `env.d/base` template:
+When running sugar scripts in the `bin/` directory, Arnold's docker image is
+implicitly run with environment variables as defined in `env.d/development`.
+
+If you need to customize the environment variables used, you need to create a custom
+file:
 
 ```bash
-# Create development environment variables definition from base template
-$ cp env.d/base env.d/development
+# Create a production environment from the default "development" environment
+$ cp env.d/development env.d/production
 
 # Edit this file to suite your needs
-$ vim env.d/development
+$ vim env.d/production
 ```
 
+All environment files except `development` are git ignored as they may contain sensitive
+information.
+
 > Note that the `K8S_AUTH_API_KEY` and `K8S_AUTH_HOST` vars can be left empty
-> for development as they are dynamically defined in our sugar scripts.
+> for development as they are dynamically defined in our sugar scripts but need to
+> be set in the environment file for a securized OpenShift instance.
 
-**TODO**
+You can then specify the environment file when running a sugar script by setting the
+`env-file` option as in the following example:
 
-* improve the documentation and this feature for other environments (staging,
-  production, etc.)
+```bash
+$ bin/init --env-file=env.d/production
+```
