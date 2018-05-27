@@ -2,6 +2,10 @@
 domain_name: "{{ lookup('env', 'MINISHIFT_IP') }}.nip.io"
 django_configuration: Development
 
+# Use development images in the development environment
+edxapp_tag: "ginkgo.1-1.0.3-dev"
+richie_tag: "0.1.0-alpha.3-alpine-dev"
+
 # Override Openshift template files because databases are containers
 # instead of external services reachable via endpoints
 openshift_deployments:
