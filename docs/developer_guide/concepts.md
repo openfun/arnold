@@ -8,12 +8,13 @@ with in the code and the documentation of the project.
 What we call a customer is more or less an hosted instance of Open edX.
 
 A customer instance can be installed in several environments. We currently
-defined four different ones:
+defined five different ones:
 
+* **development**: deploy our projects to MiniShift on developer's laptops,
 * **feature**: one environment for each feature branch, the feature being
   described by its title (**e.g** `feat/99-change-background-color`),
 * **staging**: aggregating all features before a release,
-* **preprod**: validating a release before going live,
+* **preproduction**: validating a release before going live,
 * **production**: customer facing operations.
 
 In order to deploy our applications, we need to generate configuration files
@@ -33,7 +34,8 @@ The application name is generated using the following pattern:
 
 where:
 
-* `environment`: the name of the environment (feature, staging, preprod or prod)
+* `environment`: the name of the environment (development, feature, staging,
+  preproduction or production)
 * `customer`: the one-word name of the customer site (fun, campus, corporate,
   ademe, etc.)
 * `application`: the one-word name of the application (lms, cms, etc.)
@@ -42,13 +44,18 @@ where:
 
 The application name is used as a subdomain of the `domain_name` defined in
 `group_vars/all/openshift_routes.yml` (_e.g._ `example.com`) to compose urls,
-except for production environments where urls are set to the customer's domain.
+except for:
+
+* the development environment where urls are set as a subdomain of nip.io,
+  the subdomain being the local IP address of the MiniShift instance
+  (**e.g.** 192.168.0.1.nip.io),
+* the production environment where urls are set to the customer's domain.
 
 Here are some examples of valid urls on the `example.com` platform:
 
 * staging-campus-cms.example.com
 * staging-campus-lms.example.com
-* preprod-fun-lms.example.com
+* preproduction-fun-lms.example.com
 * feature-coporate-lms--change-background-color-on-contact-form.example.com
 
 All these development urls are protected by basic authentication. For this
