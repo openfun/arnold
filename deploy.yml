@@ -23,22 +23,13 @@
 
   - import_tasks: tasks/create_config.yml
 
-  - name: Deploy development-specific DCs
-    openshift_raw:
-      verify_ssl: "{{ should_verify_ssl }}"
-      definition: "{{ lookup('template', 'templates/' + item + '.j2') | from_yaml }}"
-      state: present
-    with_items:
-      - "{{ openshift_deployments.development }}"
-    when: env_type == "development"
-
   - name: Deploy new stack to OpenShift
     openshift_raw:
       verify_ssl: "{{ should_verify_ssl }}"
       definition: "{{ lookup('template', 'templates/' + item + '.j2') | from_yaml }}"
       state: present
     with_items:
-      - "{{ openshift_deployments.common }}"
+      - "{{ openshift_deployments }}"
       - "{{ openshift_services }}"
       - "{{ openshift_jobs }}"
       - "{{ openshift_routes }}"

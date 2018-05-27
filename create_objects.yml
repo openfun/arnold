@@ -16,15 +16,6 @@
 
   - debug: msg="Project name {{ project_name }} - domain {{ domain_name }}"
 
-  - name: Create development-specific DCs
-    openshift_raw:
-      verify_ssl: "{{ should_verify_ssl }}"
-      definition: "{{ lookup('template', 'templates/' + item + '.j2') | from_yaml }}"
-      state: present
-    with_items:
-      - "{{ openshift_deployments.development }}"
-    when: env_type == "development"
-
   - name: Make sure required project objects exist in OpenShift and are up-to-date
     openshift_raw:
       verify_ssl: "{{ should_verify_ssl }}"
@@ -33,7 +24,7 @@
     with_items:
       - "{{ openshift_volumes }}"
       - "{{ openshift_endpoints }}"
-      - "{{ openshift_deployments.common }}"
+      - "{{ openshift_deployments }}"
       - "{{ openshift_services }}"
       - "{{ openshift_jobs }}"
       - "{{ openshift_routes }}"
