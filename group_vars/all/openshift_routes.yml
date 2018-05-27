@@ -21,3 +21,4 @@ openshift_routes:
 #       - alias_1
 #       - alias_2
 openshift_routes_aliases:
+    # No route aliases
