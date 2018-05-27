@@ -19,6 +19,7 @@
         definition: "{{ lookup('url', acme_git + item + '.yaml', split_lines=False) | from_yaml }}"
       with_items:
         - "{{ acme_openshift_objects }}"
+      when: env_type != 'development'
 
     - name: Add role to serviceaccount
       openshift_raw:
@@ -29,6 +30,7 @@
       with_items:
         - "{{ openshift_rolesbinding }}"
       ignore_errors: true
+      when: env_type != 'development'
       # The rolebinding is created but openshift_raw fail
       # see this issue
       # https://github.com/ansible/ansible/issues/36845
