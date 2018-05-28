@@ -17,7 +17,7 @@ module to make Ansible talk with OpenShift.
 
 As a DevOps using this project, you will need to adapt OpenShift object
 templates to suite your needs or constraints and run playbooks to push your
-changes to your OpenShift instance that orchestrate your OpenEdx services.
+changes to your OpenShift instance that orchestrates your OpenEdx services.
 
 ## Requirements
 
@@ -26,7 +26,7 @@ changes to your OpenShift instance that orchestrate your OpenEdx services.
 * [OpenShift](https://docs.openshift.org/latest/welcome/index.html) (or
   [MiniShift](https://docs.openshift.org/latest/minishift/getting-started/)): as
   Arnold should talk with someone, you'll need a running OpenShift instance to
-  use this project. For development or demo purpose, please read our
+  use this project. For development or demo purposes, please read our
   [instructions to install MiniShift](./docs/installation/minishift.md) on your machine in a
   few minutes.
 
