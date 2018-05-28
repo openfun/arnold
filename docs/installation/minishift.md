@@ -7,8 +7,8 @@ test Arnold or work on it.
 
 ## Pre-requisite: install & configure an hypervisor
 
-MiniShift needs an hypervisor to work with: it uses KVM by default but can also run on
-[VirtualBox](https://www.virtualbox.org/wiki/Downloads). 
+MiniShift needs an hypervisor to work with: it uses KVM by default by can also run on
+[VirtualBox](https://www.virtualbox.org/wiki/Downloads).
 
 We recommend using VirtualBox because developers are more likely to have it on their
 laptops and we encountered networking issues with KVM.
@@ -54,13 +54,13 @@ $ sudo virsh net-start default
 
 # Install docker-machine
 $ DOCKER_MACHINE_RELEASE="0.14.0"
-$ curl -L https://github.com/docker/machine/releases/download/v${DOCKER_MACHINE_RELEASE}/docker-machine-`uname -s`-`uname -m` -o /tmp/docker-machine
+$ curl -L "https://github.com/docker/machine/releases/download/v${DOCKER_MACHINE_RELEASE}/docker-machine-$(uname -s)-$(uname -m)" -o /tmp/docker-machine
 $ chmod +x /tmp/docker-machine
 $ sudo cp /tmp/docker-machine /usr/local/bin/docker-machine
 
 # Install kvm driver
 $ DOCKER_MACHINE_KVM_DRIVER_RELEASE="0.7.0"
-$ curl -L https://github.com/dhiltgen/docker-machine-kvm/releases/download/v${DOCKER_MACHINE_KVM_DRIVER_RELEASE}/docker-machine-driver-kvm -o /tmp/docker-machine-driver-kvm
+$ curl -L "https://github.com/dhiltgen/docker-machine-kvm/releases/download/v${DOCKER_MACHINE_KVM_DRIVER_RELEASE}/docker-machine-driver-kvm" -o /tmp/docker-machine-driver-kvm
 $ chmod +x /tmp/docker-machine-driver-kvm
 $ sudo cp /tmp/docker-machine-driver-kvm /usr/local/bin/docker-machine-driver-kvm
 ```
@@ -91,13 +91,13 @@ ubuntu), you can create it with the following content:
 
 ## Installing MiniShift
 
-For GNU/Linux:
+For **GNU/Linux**:
 
 ```bash
 # See latest releases at:
 # https://github.com/minishift/minishift/releases
 $ MS_RELEASE="1.17.0"
-$ curl -L https://github.com/minishift/minishift/releases/download/v${MS_RELEASE}/minishift-${MS_RELEASE}-linux-amd64.tgz -o /tmp/minishift-${MS_RELEASE}-linux-amd64.tgz
+$ curl -L "https://github.com/minishift/minishift/releases/download/v${MS_RELEASE}/minishift-${MS_RELEASE}-linux-amd64.tgz" -o /tmp/minishift-${MS_RELEASE}-linux-amd64.tgz
 $ cd /tmp
 $ tar xvzf /tmp/minishift-${MS_RELEASE}-linux-amd64.tgz
 $ sudo cp /tmp/minishift-${MS_RELEASE}-linux-amd64/minishift /usr/local/bin/minishift
@@ -105,6 +105,9 @@ $ cd -
 $ rm -Rf /tmp/minishift*
 ```
 
+For other systems like **MacOSX** or **Windows**, please refer to the official
+MiniShift documentation:
+https://docs.openshift.org/latest/minishift/getting-started/installing.html
 
 ## Getting started with MiniShift
 
@@ -169,5 +172,5 @@ $ export PATH="/home/user/.minishift/cache/oc/v3.9.0/linux:$PATH"
 You can then login to the MiniShift OC CLI directly with the following command:
 
 ```bash
-$ oc login https://$(minishift ip):8443 --username=developer --password=developer
+$ oc login "https://$(minishift ip):8443" --username=developer --password=developer
 ```
