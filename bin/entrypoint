@@ -16,7 +16,7 @@ oc_login() {
       login_options="--insecure-skip-tls-verify=true"
   fi
 
-  oc login ${K8S_AUTH_HOST} --token="${K8S_AUTH_API_KEY}" ${login_options}
+  oc login "${K8S_AUTH_HOST}" --token="${K8S_AUTH_API_KEY}" ${login_options}
   echo "******************************************************************"
 }
 
@@ -33,4 +33,4 @@ if ${OC_LOGIN:-true} ; then
   oc_login
 fi
 
-exec ${@}
+exec "${@}"

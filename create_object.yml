@@ -20,9 +20,11 @@
 
   tasks:
 
-  - debug: msg="Project name {{ project_name }} - domain {{ domain_name }}"
+  - name: Print project details
+    debug: msg="Project name {{ project_name }} - domain {{ domain_name }}"
 
-  - debug: msg="Object template {{ object_template}}"
+  - name: Print OpenShift object template path
+    debug: msg="Object template {{ object_template}}"
 
   - name: Create object
     openshift_raw:

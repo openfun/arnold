@@ -12,9 +12,11 @@
 
   tasks:
 
-  - debug: msg="Project name {{ project_name }} - domain {{ domain_name }}"
+  - name: Print project details
+    debug: msg="Project name {{ project_name }} - domain {{ domain_name }}"
 
-  - debug: msg="Object template {{ load_fixtures_template }}"
+  - name: Print Object template
+    debug: msg="Object template {{ load_fixtures_template }}"
 
   - name: Import demo course and create demo users
     openshift_raw:

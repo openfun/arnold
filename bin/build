@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-docker build -t arnold:$(tr -d '\n' < VERSION) .
+docker build -t "arnold:$(tr -d '\n' < VERSION)" .

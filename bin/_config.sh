@@ -17,7 +17,7 @@ function _set_minishift_path() {
 #   OPTIONS: docker run options
 #    --env-file: file to set environment variables (_e.g._ env.d/production)
 #
-#   COMMAND: command to be run in Arnold container (_e.g._ ansible-playbook create_objects.yml) 
+#   COMMAND: command to be run in Arnold container (_e.g._ ansible-playbook create_objects.yml)
 #
 # purpose:
 #
@@ -57,7 +57,7 @@ function _docker_run() {
                 args[i]=$key
                 ;;
         esac
-        i=$(($i+1))
+        i=$(( i+1 ))
     done
 
     # Check that minishift is running
@@ -73,12 +73,12 @@ function _docker_run() {
     fi
 
     docker run --rm -it \
-        -u $(id -u) \
-        --env-file $env_file \
-        --env K8S_AUTH_API_KEY=$(oc whoami -t) \
+        -u "$(id -u)" \
+        --env-file "$env_file" \
+        --env K8S_AUTH_API_KEY="$(oc whoami -t)" \
         --env K8S_AUTH_HOST="https://$(minishift ip):8443" \
         --env MINISHIFT_IP="$(minishift ip)" \
-        -v $PWD:/app \
-        arnold:$(tr -d '\n' < VERSION) \
+        -v "$PWD:/app" \
+        "arnold:$(tr -d '\n' < VERSION)" \
         "${args[@]}"
 }
