@@ -79,8 +79,27 @@ $ bin/init
 ```
 
 Tadaaa! Arnold has created a new OpenShift project called `patient0-development`
-with a collection of services up and running. You can change the customer /
-environment to deploy by overriding default environment variables:
+with a collection of services up and running.
+
+Note that the `edxapp-dbmigrate-init` job may take some time. When it has
+completed successfully, you can create a demo course and some users by running:
+
+```bash
+$ bin/ansible-playbook load_fixtures.yml
+```
+
+The following users will be created:
+
+| username | password | email               | is staff | is superuser |
+|---------:|:--------:|:-------------------:|:--------:|:------------:|
+| student  | student  | student@example.com | no       | no           |
+| teacher  | teacher  | teacher@example.com | no       | no           |
+| staff    | staff    | staff@example.com   | yes      | no           |
+| admin    | admin    | admin@example.com   | yes      | yes          |
+
+
+You could also try deploying the same services for another customer and/or environment by
+overriding the default Ansible variables:
 
 ```bash
 $ bin/init -e "env_type=staging customer=campus"

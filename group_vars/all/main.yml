@@ -41,9 +41,6 @@ postgresql_tag:    "9.6"
 richie_image:      "fundocker/richie"
 richie_tag:        "0.1.0-alpha.3-alpine"
 
-# edX demo course release (should be compatible with deployed edxapp release)
-demo_course_url: "https://github.com/edx/edx-demo-course/archive/open-release/ginkgo.2.tar.gz"
-
 # A deployment flag is used to make deployments unique (blue-green strategy).
 # This deployment flag should be a lower-case code name containing only
 # alpha-numeric characters or dashes. It defaults to "init" and will be

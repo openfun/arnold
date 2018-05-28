@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: edxapp-import-demo-course-{{ deployment_stamp }}
+  name: edxapp-load-fixtures-{{ deployment_stamp }}
   namespace: "{{ project_name }}"
   labels:
     app: edxapp
@@ -10,14 +10,14 @@ metadata:
 spec:
   template:
     metadata:
-      name: edxapp-import-demo-course-{{ deployment_stamp }}
+      name: edxapp-load-fixtures-{{ deployment_stamp }}
       labels:
         app: edxapp
         version: "{{ edxapp_tag }}"
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:
-        - name: edxapp-import-demo-course
+        - name: edxapp-load-fixtures
           image: "{{ edxapp_image }}:{{ edxapp_tag }}"
           env:
             - name: DJANGO_SETTINGS_MODULE
@@ -29,8 +29,12 @@ spec:
                 cd /tmp &&
                 tar xzf /tmp/demo_course.tgz &&
                 cd - &&
-                python manage.py cms import /edx/app/edxapp/data /tmp/edx-demo-course*
+                python manage.py cms import /edx/app/edxapp/data /tmp/edx-demo-course* &&
+                python manage.py cms shell < /tmp/configmap-fixtures/create_demo_users.py
+
           volumeMounts:
+            - mountPath: /tmp/configmap-fixtures
+              name: edxapp-configmap-fixtures
             - mountPath: /config
               name: edxapp-config
             - mountPath: /edx/var/edxapp/media
@@ -66,6 +70,10 @@ spec:
             - mountPath: /tmp/secret
               name: edxapp-secret
       volumes:
+        - name: edxapp-configmap-fixtures
+          configMap:
+            defaultMode: 420
+            name: edxapp-fixtures-{{ deployment_stamp }}
         - name: edxapp-configmap-cms
           configMap:
             defaultMode: 420
