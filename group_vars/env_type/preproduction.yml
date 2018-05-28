@@ -1,3 +1,2 @@
 # Variables specific to the pre-production environment
 django_configuration: PreProduction
-should_verify_ssl: true

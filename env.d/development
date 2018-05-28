@@ -13,3 +13,4 @@ K8S_AUTH_API_KEY=
 # OpenShift console IP as given by: minishift ip
 # Protocol should be https and port 8443
 K8S_AUTH_HOST=
+K8S_AUTH_VERIFY_SSL=no
