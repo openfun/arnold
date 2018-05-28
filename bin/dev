@@ -45,7 +45,7 @@ function _run-minishift() {
 
     local opts="--memory=4GB"
     if [ $USE_KVM -eq 0 ]; then
-        opts="$ops --vm-driver=virtualbox"
+        opts="$opts --vm-driver=virtualbox"
     fi
 
     echo "Starting minishift with options: ${opts}"
