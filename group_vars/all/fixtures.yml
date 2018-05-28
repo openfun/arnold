@@ -1,0 +1,27 @@
+# Fixtures for the `development` and `feature` environments
+
+# edX demo course release (should be compatible with deployed edxapp release)
+demo_course_url: "https://github.com/edx/edx-demo-course/archive/open-release/ginkgo.2.tar.gz"
+
+# Demo users
+demo_users:
+  - email: 'student@example.com'
+    username: student
+    password: student
+    is_staff: false
+    is_superuser: false
+  - email: 'teacher@example.com'
+    username: teacher
+    password: teacher
+    is_staff: false
+    is_superuser: false
+  - email: 'staff@example.com'
+    username: staff
+    password: staff
+    is_staff: true
+    is_superuser: false
+  - email: 'admin@example.com'
+    username: admin
+    password: admin
+    is_staff: true
+    is_superuser: true

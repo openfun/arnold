@@ -1,0 +1,23 @@
+---
+# This playbook runs the load_fixtures job to import a demo course
+# and create demo users
+#
+
+- hosts: local
+  gather_facts: False
+  vars_files:
+    - "group_vars/all/fixtures.yml"
+  vars:
+    load_fixtures_template: "templates/openshift/edxapp/job/load_fixtures.yml.j2"
+
+  tasks:
+
+  - debug: msg="Project name {{ project_name }} - domain {{ domain_name }}"
+
+  - debug: msg="Object template {{ load_fixtures_template }}"
+
+  - name: Import demo course and create demo users
+    openshift_raw:
+      definition: "{{ lookup('template', load_fixtures_template) | from_yaml }}"
+      state: present
+      force: true
