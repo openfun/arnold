@@ -7,7 +7,7 @@ test Arnold or work on it.
 
 ## Pre-requisite: install & configure an hypervisor
 
-MiniShift needs an hypervisor to work with: it uses KVM by default by can also run on
+MiniShift needs an hypervisor to work with: it uses KVM by default but can also run on
 [VirtualBox](https://www.virtualbox.org/wiki/Downloads). 
 
 We recommend using VirtualBox because developers are more likely to have it on their
