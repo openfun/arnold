@@ -1,3 +1,2 @@
 # Variables specific to the staging environment
 django_configuration: Staging
-should_verify_ssl: true

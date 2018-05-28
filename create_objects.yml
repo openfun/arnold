@@ -18,7 +18,6 @@
 
   - name: Make sure required project objects exist in OpenShift and are up-to-date
     openshift_raw:
-      verify_ssl: "{{ should_verify_ssl }}"
       definition: "{{ lookup('template', 'templates/' + item + '.j2') | from_yaml }}"
       state: present
     with_items:
@@ -38,7 +37,6 @@
 
   - name: Make sure all redirected routes exist or force recreation
     openshift_raw:
-      verify_ssl: "{{ should_verify_ssl }}"
       force: true
       definition: "{{ lookup('template', 'templates/openshift/common/route/routes_aliases.yml.j2') | from_yaml }}"
       state: present

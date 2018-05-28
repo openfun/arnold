@@ -13,7 +13,6 @@
 
     - name: Create all openshift-acme OpenShift objects
       openshift_raw:
-        verify_ssl: "{{ should_verify_ssl }}"
         force: true
         namespace: "{{ project_name }}"
         definition: "{{ lookup('url', acme_git + item + '.yaml', split_lines=False) | from_yaml }}"
@@ -23,7 +22,6 @@
 
     - name: Add role to serviceaccount
       openshift_raw:
-        verify_ssl: "{{ should_verify_ssl }}"
         force: true
         state: present
         definition: "{{ lookup('template', 'templates/openshift/common/rolebinding/add-role-to-sa.yml.j2') | from_yaml }}"

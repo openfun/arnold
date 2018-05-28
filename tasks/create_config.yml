@@ -43,7 +43,6 @@
 
 - name: Actually create the config maps in OpenShift
   openshift_raw:
-    verify_ssl: "{{ should_verify_ssl }}"
     state: present
     name: "{{ item.key }}-{{ deployment_stamp }}"
     namespace: "{{ project_name }}"
