@@ -28,10 +28,9 @@ before_script:
 build:image:
   stage: build
   script:
-    - IMAGE="arnold:$(tr -d '\n' < VERSION)"
-    - docker build -t ${IMAGE} .
+    - bin/build
     - mkdir -p docker/images
-    - docker save -o docker/images/arnold.tar ${IMAGE}
+    - docker save -o docker/images/arnold.tar ${ARNOLD_IMAGE}
   # Store the built as an artifact that can be reused in other jobs
   artifacts:
     paths:
@@ -42,13 +41,13 @@ build:image:
 test:image:
   stage: test
   script:
-    - IMAGE="arnold:$(tr -d '\n' < VERSION)"
+    - ARNOLD_IMAGE="arnold:$(tr -d '\n' < VERSION)"
     - docker load < docker/images/arnold.tar
     - docker run --rm
         -e K8S_AUTH_HOST
         -e K8S_AUTH_API_KEY
         -e INSECURE_SKIP_TLS_VERIFY=1
-        ${IMAGE}
+        ${ARNOLD_IMAGE}
         oc whoami
   # Define the build:image job as a dependency; this allows us to use dependent
   # job artifacts.
@@ -62,13 +61,13 @@ test:image:
 deploy:patient-zero:production:
   stage: deploy
   script:
-    - IMAGE="arnold:$(tr -d '\n' < VERSION)"
+    - ARNOLD_IMAGE="arnold:$(tr -d '\n' < VERSION)"
     - docker load < docker/images/arnold.tar
     - docker run --rm
         -e K8S_AUTH_HOST
         -e K8S_AUTH_API_KEY
         -e INSECURE_SKIP_TLS_VERIFY=1
-        ${IMAGE}
+        ${ARNOLD_IMAGE}
         ansible-playbook deploy.yml -e "customer=patient0 env_type=production"
   dependencies:
     - build:image

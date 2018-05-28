@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+ARNOLD_IMAGE="arnold:$(tr -d '\n' < VERSION)"
+
+_docker_run() {
+  if [ -z "$CIRCLE_JOB" ]; then
+    local docker_volume_opts="-v ${PWD}:/app"
+  else
+    local docker_volume_opts=""
+  fi
+  docker run --rm -it \
+    -e OC_LOGIN=false \
+    ${docker_volume_opts} \
+    "${ARNOLD_IMAGE}" \
+    "$@"
+}
+
+print_green() {
+  echo -e "\e[32m${1}\e[0m"
+}
+
+_docker() {
+  echo -e "\n---> Docker: lint\n"
+  docker run --rm -i hadolint/hadolint < Dockerfile
+  print_green "  -> Docker lint OK"
+}
+
+_ansible() {
+  echo -e "\n---> Ansible: check syntax\n"
+  _docker_run ansible-playbook --syntax-check ./*.yml
+  print_green "  -> Ansible syntax OK"
+
+  # https://github.com/willthames/ansible-lint
+  echo -e "\n---> Ansible: lint\n"
+  # Skip [E602] Line too long
+  SKIP_LIST="E602"
+  _docker_run ansible-lint -R -r "${ANSIBLE_LINT_RULES_DIR}" -x $SKIP_LIST ./*.yml
+  print_green "  -> Ansible lint OK"
+}
+
+_bash() {
+  # https://github.com/koalaman/shellcheck
+  echo -e "\n---> Bash: lint\n"
+  _docker_run shellcheck --shell=bash bin/*
+  print_green "  -> Bash lint OK"
+}
+
+_all() {
+  _docker
+  _ansible
+  _bash
+  print_green "\n--> All lints OK"
+}
+
+# launch all lint without parameters
+lint_to_do="${1:-all}"
+"_$lint_to_do"

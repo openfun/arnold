@@ -10,7 +10,8 @@
 
   tasks:
 
-  - debug: msg="Project name {{ project_name }} - domain {{ domain_name }}"
+  - name: Print project details
+    debug: msg="Project name {{ project_name }} - domain {{ domain_name }}"
 
   - name: Make sure the project exists in OpenShift and is up-to-date
     openshift_raw:

@@ -18,22 +18,32 @@ FROM debian:stretch
 
 WORKDIR /app
 
+COPY ./requirements/apt-packages.txt /app/requirements/
+
+# hadolint ignore=DL3015,DL3008
 RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y curl python-pip && \
+    xargs -a /app/requirements/apt-packages.txt apt-get install -y && \
     rm -rf /var/lib/apt/lists/*
 
-# Install Open Shift client
+# Install OpenShift client
 ENV OC_VERSION=v3.9.0 \
     OC_TAG_SHA=191fece
 
-RUN curl -sLo /tmp/oc.tar.gz https://github.com/openshift/origin/releases/download/${OC_VERSION}/openshift-origin-client-tools-${OC_VERSION}-${OC_TAG_SHA}-linux-64bit.tar.gz && \
+RUN curl -sLo /tmp/oc.tar.gz "https://github.com/openshift/origin/releases/download/${OC_VERSION}/openshift-origin-client-tools-${OC_VERSION}-${OC_TAG_SHA}-linux-64bit.tar.gz" && \
     tar xzvf /tmp/oc.tar.gz -C /tmp/ && \
-    mv /tmp/openshift-origin-client-tools-${OC_VERSION}-${OC_TAG_SHA}-linux-64bit/oc /usr/local/bin/ && \
-    rm -rf /tmp/oc.tar.gz /tmp/openshift-origin-client-tools-${OC_VERSION}-${OC_TAG_SHA}-linux-64bit
+    mv "/tmp/openshift-origin-client-tools-${OC_VERSION}-${OC_TAG_SHA}-linux-64bit/oc" /usr/local/bin/ && \
+    rm -rf /tmp/oc.tar.gz "/tmp/openshift-origin-client-tools-${OC_VERSION}-${OC_TAG_SHA}-linux-64bit"
 
-COPY ./requirements.txt /app/
-RUN pip install -r requirements.txt
+COPY ./requirements/pip-requirements.txt /app/requirements/
+RUN pip install -r /app/requirements/pip-requirements.txt
+
+# Install more ansible_lint_rules
+ENV ANSIBLE_LINT_RULES_DIR="/tmp/_ansible_lint_rules"
+
+RUN mkdir -p "${ANSIBLE_LINT_RULES_DIR}" && \
+    curl -sLo /tmp/ansible-lint-rules.zip https://github.com/tsukinowasha/ansible-lint-rules/archive/master.zip && \
+    unzip -j /tmp/ansible-lint-rules.zip  '*/rules/*' -d "${ANSIBLE_LINT_RULES_DIR}" && \
+    rm -rf "/tmp/ansible-lint-rules.zip"
 
 # Copy the application sources in the container so that we can run all playbooks
 # within the container (without volumes)

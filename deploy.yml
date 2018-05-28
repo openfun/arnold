@@ -19,7 +19,8 @@
   - name: Set deployment flag
     set_fact: deployment_stamp="{{ lookup('pipe', 'date +%F-%H-%M-%S-$(cat /proc/sys/kernel/random/uuid | cut -c -8)') }}"
 
-  - debug: msg="Deploying {{ project_name }} - {{ domain_name }} ({{ deployment_stamp }})"
+  - name: Print deployment details
+    debug: msg="Deploying {{ project_name }} - {{ domain_name }} ({{ deployment_stamp }})"
 
   - import_tasks: tasks/create_config.yml
 

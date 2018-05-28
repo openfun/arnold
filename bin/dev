@@ -9,6 +9,7 @@
 #
 set -eo pipefail
 
+# shellcheck source=bin/_config.sh
 source "$(dirname "${BASH_SOURCE[0]}")/_config.sh"
 
 # KVM settings
@@ -20,7 +21,7 @@ KVM_DEFAULT_NETWORK_CONFIGURATION="/etc/libvirt/qemu/networks/${KVM_DEFAULT_NETW
 # _create-kvm-default-network: create KVM default network (if required)
 function _create-kvm-default-network() {
 
-    if [ $USE_KVM -eq 0 ]; then
+    if [[ $USE_KVM -eq 0 ]]; then
         echo "Will NOT ensure that default KVM network exists (reason: USE_KVM=0)"
         return
     fi
@@ -44,12 +45,12 @@ function _create-kvm-default-network() {
 function _run-minishift() {
 
     local opts="--memory=4GB"
-    if [ $USE_KVM -eq 0 ]; then
+    if [[ $USE_KVM -eq 0 ]]; then
         opts="$opts --vm-driver=virtualbox"
     fi
 
     echo "Starting minishift with options: ${opts}"
-    minishift start ${opts}
+    minishift start "${opts}"
     minishift status
 
     echo -e "\n**** MiniShift is up and running ****"
@@ -72,7 +73,7 @@ function _set_max_map_count() {
 # _login: login to minishift
 function _login() {
     _set_minishift_path
-    oc login https://$(minishift ip):8443 --username=developer --password=developer
+    oc login "https://$(minishift ip):8443" --username=developer --password=developer
 }
 
 
