@@ -28,18 +28,20 @@ postgresql_ip:  192.168.0.1
 #
 # Service flag should only contain alphanumeric (or '-') characters. It should
 # validate the following regexp: '[a-z]([-a-z0-9]*[a-z0-9])?'
-edxapp_image:      "fundocker/edxapp"
-edxapp_tag:        "ginkgo.1-1.0.3"
-mongodb_image:     "centos/mongodb-32-centos7"
-mongodb_tag:       "3.2"
-mysql_image:       "centos/mysql-57-centos7"
-mysql_tag:         "5.7"
-nginx_image:       "fundocker/openshift-nginx"
-nginx_tag:         "1.13"
-postgresql_image:  "centos/postgresql-96-centos7"
-postgresql_tag:    "9.6"
-richie_image:      "fundocker/richie"
-richie_tag:        "0.1.0-alpha.3-alpine"
+elasticsearch_image: "fundocker/openshift-elasticsearch"
+elasticsearch_tag:   "6.2.4"
+edxapp_image:        "fundocker/edxapp"
+edxapp_tag:          "ginkgo.1-1.0.3"
+mongodb_image:       "centos/mongodb-32-centos7"
+mongodb_tag:         "3.2"
+mysql_image:         "centos/mysql-57-centos7"
+mysql_tag:           "5.7"
+nginx_image:         "fundocker/openshift-nginx"
+nginx_tag:           "1.13"
+postgresql_image:    "centos/postgresql-96-centos7"
+postgresql_tag:      "9.6"
+richie_image:        "fundocker/richie"
+richie_tag:          "0.1.0-alpha.3-alpine"
 
 # edX demo course release (should be compatible with deployed edxapp release)
 demo_course_url: "https://github.com/edx/edx-demo-course/archive/open-release/ginkgo.2.tar.gz"
@@ -56,6 +58,9 @@ cms_host: "{{ project_name }}-cms-{{ deployment_stamp }}.{{ domain_name }}"
 richie_host: "{{ project_name }}-richie-{{ deployment_stamp }}.{{ domain_name }}"
 
 # Cluster databases (used for development or feature deployments)
+elasticsearch:
+  host: "elasticsearch"
+  port: "9200"
 mongodb:
   host: "mongodb"
   port: "27017"
@@ -76,6 +81,7 @@ openshift_deployments:
   - openshift/edxapp/dc/cms.yml
   - openshift/edxapp/dc/lms.yml
   - openshift/edxapp/dc/memcached.yml
+  - openshift/common/dc/elasticsearch.yml
   - openshift/common/dc/nginx.yml
   - openshift/richie/dc/richie.yml
 openshift_endpoints:
@@ -94,6 +100,7 @@ openshift_routes:
   - openshift/common/route/lms.yml
   - openshift/common/route/richie.yml
 openshift_services:
+  - openshift/common/svc/elasticsearch.yml
   - openshift/common/svc/mongodb.yml
   - openshift/common/svc/mysql.yml
   - openshift/common/svc/nginx.yml
