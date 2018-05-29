@@ -1,5 +1,7 @@
 # Arnold
 
+[![CircleCI](https://circleci.com/gh/openfun/arnold.svg?style=svg)](https://circleci.com/gh/openfun/arnold)
+
 Arnold is a tool to deploy dockerized applications to
 [OpenShift](https://www.openshift.com/) with
 [Ansible](https://www.ansible.com/). It was built by France Université Numérique

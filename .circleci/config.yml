@@ -1,0 +1,80 @@
+# https://circleci.com/docs/2.0/configuration-reference/
+aliases:
+  - &defaults
+    docker:
+      - image: circleci/python:3.6.5-stretch-node-browsers
+    working_directory: ~/fun
+  - &ci_env
+    run:
+      name: Define Environment Variable at Runtime
+      command: |
+        echo 'export IMAGE="arnold:$(tr -d '\n' < VERSION)"' >> $BASH_ENV
+        source $BASH_ENV
+  # Activate dind
+  - &dind
+    setup_remote_docker:
+        docker_layer_caching: true
+
+ci_env:
+
+version: 2
+jobs:
+# Build Arnold's docker image
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      - *dind
+      - *ci_env
+      - run:
+          name: Build arnold production image
+          command: |
+            docker build -t "${IMAGE}" .
+            mkdir -p /tmp/docker/images
+            docker save -o /tmp/docker/images/arnold.tar "${IMAGE}"
+      # Store the built as an artifact that can be reused in other jobs
+      - persist_to_workspace:
+          # Must be an absolute path, or relative path from working_directory.
+          root: /tmp/docker
+          # Must be relative path from root
+          paths:
+            - images
+
+  test:
+    <<: *defaults
+    steps:
+      - checkout
+      - *dind
+      # Restore workspace
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: /tmp/docker
+      - *ci_env
+      - run:
+          name: Load docker image
+          command: |
+            docker load < /tmp/docker/images/arnold.tar
+            docker images
+      - run:
+          name: Test oc client installation
+          command: |
+            docker run --rm \
+              -e OC_LOGIN=false \
+              "${IMAGE}" \
+              oc version
+      - run:
+          name: Test ansible installation
+          command: |
+            docker run --rm \
+              -e OC_LOGIN=false \
+              "${IMAGE}" \
+              ansible --version
+
+workflows:
+  version: 2
+  build_test_and_deploy:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
