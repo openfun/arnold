@@ -6,6 +6,20 @@
 # container to create an entry for this user in the /etc/passwd file.
 export HOME=/home/arnold
 
+oc_login() {
+  # Login to OpenShift to create configuration files in the container itself
+  echo "******************************************************************"
+  echo "Using OpenShift server: ${K8S_AUTH_HOST}"
+
+  login_options=""
+  if [[ ${INSECURE_SKIP_TLS_VERIFY} -eq 1 ]]; then
+      login_options="--insecure-skip-tls-verify=true"
+  fi
+
+  oc login ${K8S_AUTH_HOST} --token="${K8S_AUTH_API_KEY}" ${login_options}
+  echo "******************************************************************"
+}
+
 # Create docker user as defined in the Dockerfile (see USER statement) or
 # overriden by the `--user` option of `docker run`
 if ! whoami &> /dev/null; then
@@ -14,16 +28,9 @@ if ! whoami &> /dev/null; then
   fi
 fi
 
-# Login to OpenShift to create configuration files in the container itself
-echo "******************************************************************"
-echo "Using OpenShift server: ${K8S_AUTH_HOST}"
-
-login_options=""
-if [[ ${INSECURE_SKIP_TLS_VERIFY} -eq 1 ]]; then
-    login_options="--insecure-skip-tls-verify=true"
+# OpenShift login only if $OC_LOGIN is not false
+if ${OC_LOGIN:-true} ; then
+  oc_login
 fi
-
-oc login ${K8S_AUTH_HOST} --token="${K8S_AUTH_API_KEY}" ${login_options}
-echo "******************************************************************"
 
 exec ${@}
