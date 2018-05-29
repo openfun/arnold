@@ -63,6 +63,12 @@ function _run-minishift() {
 }
 
 
+# _set_max_map_count: fix elasticsearch booting issue
+function _set_max_map_count() {
+    minishift ssh -- "sudo sysctl -w vm/max_map_count=262144"
+}
+
+
 # _login: login to minishift
 function _login() {
     _set_minishift_path
@@ -74,6 +80,7 @@ function _login() {
 function main() {
     _create-kvm-default-network
     _run-minishift
+    _set_max_map_count
     _login
 }
 
