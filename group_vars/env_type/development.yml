@@ -1,22 +1,2 @@
 # Variables specific to development environments
 domain_name: "{{ lookup('env', 'MINISHIFT_IP') }}.nip.io"
-django_configuration: Development
-
-# Use development images in the development environment
-edxapp_tag: "ginkgo.1-1.0.3-dev"
-richie_tag: "0.1.0-alpha.3-alpine-dev"
-
-# Override Openshift template files because databases are containers
-# instead of external services reachable via endpoints
-openshift_deployments:
-  - openshift/common/dc/elasticsearch.yml
-  - openshift/common/dc/nginx.yml
-  - openshift/common/dc/mongodb.yml
-  - openshift/common/dc/mysql.yml
-  - openshift/common/dc/postgresql.yml
-  - openshift/edxapp/dc/cms.yml
-  - openshift/edxapp/dc/lms.yml
-  - openshift/edxapp/dc/memcached.yml
-  - openshift/richie/dc/richie.yml
-openshift_endpoints:
-    # No endpoints required for the development environment

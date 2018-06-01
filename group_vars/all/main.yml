@@ -1,47 +1,12 @@
 ---
-env_type: development  # default to be overriden on command line
-customer: patient0  # default to be overriden on command line
+env_type: development
+customer: hello
 project_name: "{{ env_type }}-{{ customer }}"
 
-# Django
-django_configuration: Development
-
-# Ports
-django_port:    8000
-cms_port:       8081
-lms_port:       8071
-richie_port:    8061
-aliases_port:   8999
-
-nginx_ports:
-  - "{{ cms_port }}"
-  - "{{ lms_port }}"
-  - "{{ richie_port }}"
-  - "{{ aliases_port }}"
-
-# External services IPs
-mongodb_ip:     192.168.10.11
-mysql_ip:       192.168.10.254
-postgresql_ip:  192.168.0.1
-
-# Images
-#
-# Service flag should only contain alphanumeric (or '-') characters. It should
-# validate the following regexp: '[a-z]([-a-z0-9]*[a-z0-9])?'
-elasticsearch_image: "fundocker/openshift-elasticsearch"
-elasticsearch_tag:   "6.2.4"
-edxapp_image:        "fundocker/edxapp"
-edxapp_tag:          "ginkgo.1-1.0.3"
-mongodb_image:       "centos/mongodb-32-centos7"
-mongodb_tag:         "3.2"
-mysql_image:         "centos/mysql-57-centos7"
-mysql_tag:           "5.7"
-nginx_image:         "fundocker/openshift-nginx"
-nginx_tag:           "1.13"
-postgresql_image:    "centos/postgresql-96-centos7"
-postgresql_tag:      "9.6"
-richie_image:        "fundocker/richie"
-richie_tag:          "0.1.0-alpha.3-alpine"
+# Hello is a demo site with default configuration
+# for a minimal dev app
+project_display_name: "Override with your project display name"
+project_description: "Override with your project description"
 
 # A deployment flag is used to make deployments unique (blue-green strategy).
 # This deployment flag should be a lower-case code name containing only
@@ -49,66 +14,10 @@ richie_tag:          "0.1.0-alpha.3-alpine"
 # overriden for each deployment (see deploy.yml playbook).
 deployment_stamp: "init"
 
-# Services hosts
-lms_host: "{{ project_name }}-lms-{{ deployment_stamp }}.{{ domain_name }}"
-cms_host: "{{ project_name }}-cms-{{ deployment_stamp }}.{{ domain_name }}"
-richie_host: "{{ project_name }}-richie-{{ deployment_stamp }}.{{ domain_name }}"
-
-# Cluster databases (used for development or feature deployments)
-elasticsearch:
-  host: "elasticsearch"
-  port: "9200"
-mongodb:
-  host: "mongodb"
-  port: "27017"
-mysql:
-  host: "mysql"
-  port: "3306"
-postgresql:
-  host: "postgresql"
-  port: "5432"
-
-richie_database:
-  host: "{{ postgresql.host }}"
-  port: "{{ postgresql.port }}"
-  name: richie
-
 # Openshift template files
 openshift_deployments:
-  - openshift/edxapp/dc/cms.yml
-  - openshift/edxapp/dc/lms.yml
-  - openshift/edxapp/dc/memcached.yml
-  - openshift/common/dc/elasticsearch.yml
-  - openshift/common/dc/nginx.yml
-  - openshift/richie/dc/richie.yml
 openshift_endpoints:
-  - openshift/common/ep/mongodb.yml
-  - openshift/common/ep/mysql.yml
-  - openshift/common/ep/postgresql.yml
 openshift_jobs:
-  - openshift/edxapp/job/collectstatic_cms.yml
-  - openshift/edxapp/job/collectstatic_lms.yml
-  - openshift/edxapp/job/db_migrate.yml
-  - openshift/richie/job/collectstatic.yml
-  - openshift/richie/job/db_migrate.yml
-  - openshift/richie/job/regenerate_indexes.yml
 openshift_routes:
-  - openshift/common/route/cms.yml
-  - openshift/common/route/lms.yml
-  - openshift/common/route/richie.yml
 openshift_services:
-  - openshift/common/svc/elasticsearch.yml
-  - openshift/common/svc/mongodb.yml
-  - openshift/common/svc/mysql.yml
-  - openshift/common/svc/nginx.yml
-  - openshift/common/svc/postgresql.yml
-  - openshift/edxapp/svc/cms.yml
-  - openshift/edxapp/svc/lms.yml
-  - openshift/edxapp/svc/memcached.yml
-  - openshift/richie/svc/richie.yml
 openshift_volumes:
-  - openshift/edxapp/pvc/data.yml
-  - openshift/edxapp/pvc/media.yml
-  - openshift/edxapp/pvc/static.yml
-  - openshift/richie/pvc/media.yml
-  - openshift/richie/pvc/static.yml

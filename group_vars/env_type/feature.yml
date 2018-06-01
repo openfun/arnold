@@ -1,19 +1,1 @@
 # Variables specific to feature environments
-
-# Only in feature environment do we add the feature title to the hosts
-lms_host: "{{ project_name }}-lms--{{ feature_title }}.{{ domain_name }}"
-cms_host: "{{ project_name }}-cms--{{ feature_title }}.{{ domain_name }}"
-
-# Override Openshift template files because databases are containers
-# instead of external services reachable via endpoints
-openshift_deployments:
-  - openshift/common/dc/nginx.yml
-  - openshift/common/dc/mongodb.yml
-  - openshift/common/dc/mysql.yml
-  - openshift/common/dc/postgresql.yml
-  - openshift/edxapp/dc/cms.yml
-  - openshift/edxapp/dc/lms.yml
-  - openshift/edxapp/dc/memcached.yml
-  - openshift/richie/dc/richie.yml
-openshift_endpoints:
-    # No endpoints required for the feature environments

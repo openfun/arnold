@@ -20,6 +20,7 @@
     openshift_raw:
       definition: "{{ lookup('template', 'templates/' + item + '.j2') | from_yaml }}"
       state: present
+      force: yes
     with_items:
       - "{{ openshift_volumes }}"
       - "{{ openshift_endpoints }}"

@@ -1,21 +1,21 @@
 # {{ ansible_managed }}
 # Nginx configuration to redirect aliased routes to their main route
 
+map $http_host $new_http_host {
+{% if openshift_routes_aliases is iterable %}
+{% for main_route in openshift_routes_aliases %}
+{% for alias in main_route.aliases %}
+  {{ alias }} {{ main_route.route }};
+{% endfor %}
+{% endfor %}
+{% endif %}
+}
+
 server {
   listen {{ aliases_port }};
   server_name localhost;
 
-  rewrite ^ https://$new_url$request_uri permanent;
-}
-
-map $http_host $new_url {
-  # Aliased route must be redirected to the main route
-  # Alias         # Main route
-{% if openshift_routes_aliases is iterable %}
-{% for main_route in openshift_routes_aliases %}
-  {% for alias in main_route.aliases %}
-  {{ alias }}     {{ main_route.route }};
-  {% endfor %}
-{% endfor %}
-{% endif %}
+  if ($new_http_host) {
+    rewrite ^ https://$new_http_host$request_uri permanent;
+  }
 }
