@@ -1,0 +1,2 @@
+# Variables specific to development environments
+domain_name: "{{ lookup('env', 'MINISHIFT_IP') }}.nip.io"
