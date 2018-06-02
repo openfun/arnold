@@ -5,6 +5,7 @@ project_display_name: "Hello ({{ env_type }})"
 project_description: "A minimal project with a hello-world app ({{ env_type }})"
 hello_host: "{{ project_name }}.{{ domain_name }}"
 hello_port: "8080"
+hello_msg:  "Hello OpenShift! by Arnold"
 
 # Images
 nginx_image: "fundocker/openshift-nginx"
@@ -12,18 +13,18 @@ nginx_tag:   "1.13"
 
 # Openshift template files
 openshift_deployments:
+  - openshift/common/dc/nginx.yml
   - openshift/hello/dc/hello.yml
-  - openshift/hello/dc/nginx.yml
 openshift_endpoints:
 openshift_jobs:
 openshift_routes:
   - openshift/hello/route/hello.yml
 openshift_services:
+  - openshift/common/svc/nginx.yml
   - openshift/hello/svc/hello.yml
-  - openshift/hello/svc/nginx.yml
 openshift_volumes:
 openshift_routes_aliases:
    - route: "{{ hello_host }}"
      aliases:
        - "{{ project_name }}-first-alias.{{ domain_name }}"
-       #- "{{ project_name }}-second-alias.{{ domain_name }}"
+       - "{{ project_name }}-second-alias.{{ domain_name }}"
