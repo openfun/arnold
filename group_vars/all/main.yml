@@ -49,6 +49,13 @@ richie_tag:          "0.1.0-alpha.3-alpine"
 # overriden for each deployment (see deploy.yml playbook).
 deployment_stamp: "init"
 
+# We allow multiple versions of the secrets for an application. When defining
+# new or modified secrets, you will need to update this value to ensure your DCs
+# and jobs point to the relevant version of the secrets for the next deployment.
+# Read more about secrets handling in the developers documentation:
+# docs/developer_guide/secrets.md
+secret_id: "1.0.0"
+
 # Services hosts
 lms_host: "{{ project_name }}-lms-{{ deployment_stamp }}.{{ domain_name }}"
 cms_host: "{{ project_name }}-cms-{{ deployment_stamp }}.{{ domain_name }}"

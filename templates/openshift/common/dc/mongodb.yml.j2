@@ -30,4 +30,4 @@ spec:
               value: edxapp
           envFrom:
             - secretRef:
-                name: edxapp
+                name: edxapp-{{ secret_id }}

@@ -33,7 +33,8 @@ changes to your OpenShift instance that orchestrate your OpenEdx services.
 2.  [Getting started](./developer_guide/getting_started.md)
 3.  [Using Ansible playbooks](./developer_guide/playbooks.md)
 4.  [Working with routes](./developer_guide/routes_aliases.md)
-5.  [Hello customer](./developer_guide/hello.md)
+5.  [Handling secrets](./developer_guide/secrets.md)
+6.  [Hello customer](./developer_guide/hello.md)
 
 ### III. Contributing
 
