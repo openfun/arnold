@@ -33,7 +33,7 @@ spec:
             value: "{{ richie_host }}"
         envFrom:
           - secretRef:
-              name: richie
+              name: richie-{{ secret_id }}
         image: "{{ richie_image }}:{{ richie_tag }}"
         command: ["python", "manage.py", "collectstatic", "--noinput"]
         volumeMounts:

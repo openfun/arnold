@@ -65,7 +65,7 @@ spec:
         emptyDir: {}  # volume that lives as long as the pod lives
       - name: edxapp-secret
         secret:
-          secretName: edxapp
+          secretName: edxapp-{{ secret_id }}
       - name: edxapp-v-static
         persistentVolumeClaim:
           claimName: edxapp-pvc-static

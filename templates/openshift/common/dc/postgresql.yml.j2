@@ -30,4 +30,4 @@ spec:
               value: "{{ richie_database.name }}"
           envFrom:
             - secretRef:
-                name: richie
+                name: richie-{{ secret_id }}

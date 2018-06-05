@@ -40,7 +40,7 @@ spec:
               value: {{ elasticsearch.host }}
           envFrom:
             - secretRef:
-                name: richie
+                name: richie-{{ secret_id }}
           volumeMounts:
             - name: richie-v-media
               mountPath: /data/media
