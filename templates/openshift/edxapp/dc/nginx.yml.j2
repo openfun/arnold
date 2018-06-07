@@ -5,18 +5,18 @@ metadata:
     app: nginx
     version: "{{ nginx_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
-  name: nginx-{{ deployment_stamp }}
+  name: nginx-edxapp-{{ deployment_stamp }}
   namespace: "{{ project_name }}"
 spec:
   replicas: 1
   selector:
-    deploymentconfig: nginx-{{ deployment_stamp }}
+    deploymentconfig: nginx-edxapp-{{ deployment_stamp }}
   template:
     metadata:
       labels:
         app: nginx
         version: "{{ nginx_tag }}"
-        deploymentconfig: nginx-{{ deployment_stamp }}
+        deploymentconfig: nginx-edxapp-{{ deployment_stamp }}
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:
@@ -27,33 +27,21 @@ spec:
           protocol: TCP
         volumeMounts:
         - mountPath: /etc/nginx/conf.d
-          name: volume-conf
+          name: nginx-v-edxapp
           readOnly: true
-          # FIXME As Richie's PVCs are mounted in /data/{media,static}, the two
-          # following mount points cannot be set as read-only (readOnly: true)
         - mountPath: /data/media
           name: edxapp-v-media
+          readOnly: true
         - mountPath: /data/static
           name: edxapp-v-static
-        - mountPath: /data/media/richie
-          name: richie-v-media
-          readOnly: true
-        - mountPath: /data/static/richie
-          name: richie-v-static
           readOnly: true
       volumes:
-      - name: volume-conf
+      - name: nginx-v-edxapp
         configMap:
-          name: nginx-{{ deployment_stamp }}
+          name: nginx-edxapp-{{ deployment_stamp }}
       - name: edxapp-v-static
         persistentVolumeClaim:
           claimName: edxapp-pvc-static
       - name: edxapp-v-media
         persistentVolumeClaim:
           claimName: edxapp-pvc-media
-      - name: richie-v-media
-        persistentVolumeClaim:
-          claimName: richie-pvc-media
-      - name: richie-v-static
-        persistentVolumeClaim:
-          claimName: richie-pvc-static

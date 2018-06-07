@@ -39,7 +39,7 @@
   - name: Make sure all redirected routes exist or force recreation
     openshift_raw:
       force: true
-      definition: "{{ lookup('template', 'templates/openshift/common/route/routes_aliases.yml.j2') | from_yaml }}"
+      definition: "{{ lookup('template', 'templates/openshift/redirect/route/routes_aliases.yml.j2') | from_yaml }}"
       state: present
     with_items: "{{ routes_aliases }}"
     when: routes_aliases is defined

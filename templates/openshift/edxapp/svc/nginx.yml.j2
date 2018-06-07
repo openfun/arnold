@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: nginx
+    version: "{{ nginx_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: nginx-edxapp-{{ deployment_stamp }}
+  namespace: "{{ project_name }}"
+spec:
+  ports:
+    - name: {{ cms_port }}-tcp
+      port: {{ cms_port }}
+      protocol: TCP
+      targetPort: {{ cms_port }}
+    - name: {{ lms_port }}-tcp
+      port: {{ lms_port }}
+      protocol: TCP
+      targetPort: {{ lms_port }}
+  selector:
+    deploymentconfig: nginx-edxapp-{{ deployment_stamp }}
+  type: ClusterIP
