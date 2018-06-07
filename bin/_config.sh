@@ -17,7 +17,7 @@ function _set_minishift_path() {
 #   OPTIONS: docker run options
 #    --env-file: file to set environment variables (_e.g._ env.d/production)
 #
-#   COMMAND: command to be run in Arnold container (_e.g._ ansible-playbook create_objects.yml)
+#   COMMAND: command to be run in Arnold container (_e.g._ ansible-playbook deploy.yml)
 #
 # purpose:
 #
