@@ -118,33 +118,6 @@ $ docker run --rm -it \
     ansible-playbook create_config.yml -e "customer=patient0 env_type=staging"
 ```
 
-## `create_objects.yml`
-
-As you might expect, this playbook creates all OpenShift objects required for a
-project, _i.e._:
-
-* volumes (_aka_ PVC for Persistant Volume Claim)
-* end points (_aka_ EP)
-* deployment configurations (_aka_ DC)
-* services (_aka_ SVC)
-* jobs
-* routes
-
-All templates for these objects are listed in the `group_vars/all/main.yml` file.
-
-### Usage
-
-```bash
-# development
-$ bin/ansible-playbook create_objects.yml -e "customer=patient0 env_type=staging"
-
-# native command for production
-$ docker run --rm -it \
-    --env-file env.d/production \
-    arnold \
-    ansible-playbook create_objects.yml -e "customer=patient0 env_type=staging"
-```
-
 ## `create_acme.yml`
 
 We use this playbook to automatically generate [Let's
