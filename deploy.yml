@@ -1,7 +1,6 @@
 ---
 # This playbook deploys a whole new stack with the current `deployment_stamp`
 # (see main.yml)
-- import_playbook: create_config.yml
 
 - hosts: local
   gather_facts: False
@@ -33,3 +32,5 @@
       - "{{ openshift_services }}"
       - "{{ openshift_jobs }}"
       - "{{ openshift_routes }}"
+
+    - import_tasks: tasks/create_route_aliases.yml
