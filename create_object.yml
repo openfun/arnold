@@ -7,7 +7,8 @@
 # Usage:
 #
 #   $ bin/ansible-playbook create_object.yml \
-#       -e "object_template=templates/openshift/edxapp/job/import_demo_course.yml.j2"
+#       -e "object_template=templates/openshift/edxapp/job/import_demo_course.yml.j2" \
+#       -e "deployment_stamp=d-180611-08h46m30s"
 #
 
 - hosts: local
@@ -20,14 +21,24 @@
 
   tasks:
 
-  - name: Print project details
-    debug: msg="Project name {{ project_name }} - domain {{ domain_name }}"
+    - name: Print project details
+      debug: msg="Project name {{ project_name }} - domain {{ domain_name }}"
 
-  - name: Print OpenShift object template path
-    debug: msg="Object template {{ object_template}}"
+    - name: Print OpenShift object template path
+      debug: msg="Object template {{ object_template }}"
 
-  - name: Create object
-    openshift_raw:
-      definition: "{{ lookup('template', object_template) | from_yaml }}"
-      state: present
-      force: true
+    - name: Print deployment stamp
+      debug: msg="Deployment stamp {{ deployment_stamp }}"
+
+    # Set the job stamp for this object (only used for jobs)
+    - name: Set job stamp
+      set_fact: job_stamp="j-{{ lookup('pipe', 'date +%y%m%d-%Hh%Mm%Ss') }}"
+
+    - name: Print job stamp
+      debug: msg="Job stamp {{ job_stamp }}"
+
+    - name: Create object
+      openshift_raw:
+        definition: "{{ lookup('template', object_template) | from_yaml }}"
+        state: present
+        force: true

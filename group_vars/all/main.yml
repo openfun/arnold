@@ -43,11 +43,20 @@ postgresql_tag:      "9.6"
 richie_image:        "fundocker/richie"
 richie_tag:          "0.1.0-alpha.3-alpine"
 
-# A deployment flag is used to make deployments unique (blue-green strategy).
-# This deployment flag should be a lower-case code name containing only
-# alpha-numeric characters or dashes. It defaults to "init" and will be
-# overriden for each deployment (see deploy.yml playbook).
-deployment_stamp: "init"
+# Following a blue-green deployment strategy, for each deployment, we create a
+# unique identifier (deployment_stamp) that will be used to create unique
+# OpenShift object names & tags and connect them. This identifier starts with a
+# "d" and contains the deployment datetime (with seconds precision), e.g.
+# d-180611-08h46m30s. Default value is null as it should never be used as is,
+# but initiated in a playbook using a "set_fact" task.
+deployment_stamp: null
+
+# Similarly to deployment stamps, we make job identifiers unique for each
+# running playbook (deploy, create_object) by adding the job datetime (with
+# seconds precision) to the job name, e.g.
+# richie-collecstatic-j-180611-08h46m30s. Default value is null as it should
+# never be used as is, but initiated in a playbook using a "set_fact" task.
+job_stamp: null
 
 # We allow multiple versions of the secrets for an application. When defining
 # new or modified secrets, you will need to update this value to ensure your DCs

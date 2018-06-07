@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: edxapp-collecstatic-lms-{{ deployment_stamp }}
+  name: edxapp-collecstatic-lms-{{ job_stamp }}
   namespace: "{{ project_name }}"
   labels:
     app: edxapp-lms

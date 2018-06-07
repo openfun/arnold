@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+# shellcheck source=bin/_config.sh
+source "$(dirname "${BASH_SOURCE[0]}")/_config.sh"
+
+function usage() {
+    echo "Usage: $0 <JOB_TEMPLATE_PATH> <DEPLOYMENT_STAMP>"
+    echo ""
+    echo "Arguments:"
+    echo "  JOB_TEMPLATE_PATH: path to the template of the job to create"
+    echo "  DEPLOYMENT_STAMP : the deployment stamp to target for this job"
+
+    exit 1
+}
+
+# _set_namespace_for_deployment_stamp: given a deployment_stamp, set the
+# namespace for the job to run, and, deduce the customer & env_type variables.
+# This requires that pods have already been deployed with the given
+# deployment_stamp.
+#
+# usage: _set_namespace_for_deployment_stamp <DEPLOYMENT_STAMP>
+function _set_namespace_for_deployment_stamp() {
+    _set_minishift_path
+
+    namespace=$(oc get -o jsonpath="{.items[0].metadata.namespace}" --no-headers pods -l deployment_stamp="$1")
+
+    # Use bash pattern substitution (variable/pattern/string) to remove either
+    # the env_type or customer from the namespace (e.g. development-patient0)
+    env_type=${namespace/-*/}
+    customer=${namespace/*-/}
+}
+
+function main() {
+
+    if [ -z "$2" ]; then
+        usage
+    fi
+
+    local job_template="$1"
+    local deployment_stamp="$2"
+
+    _set_namespace_for_deployment_stamp "$deployment_stamp"
+
+    echo "Will submit a new job to OpenShift:"
+    echo ""
+    echo "customer        : $customer"
+    echo "env_type        : $env_type"
+    echo "deployment stamp: $deployment_stamp"
+    echo "job             : $job_template"
+
+    _docker_run ansible-playbook create_object.yml \
+        -e "customer=$customer" \
+        -e "env_type=$env_type" \
+        -e "object_template=$job_template" \
+        -e "deployment_stamp=$deployment_stamp"
+}
+
+main "$@"

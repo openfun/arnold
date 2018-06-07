@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: "richie-dbmigrate-{{ deployment_stamp }}"
+  name: "richie-dbmigrate-{{ job_stamp }}"
   namespace: "{{ project_name }}"
   labels:
     app: richie
