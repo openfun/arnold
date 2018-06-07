@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: edxapp-load-fixtures-{{ deployment_stamp }}
+  name: edxapp-load-fixtures-{{ job_stamp }}
   namespace: "{{ project_name }}"
   labels:
     app: edxapp

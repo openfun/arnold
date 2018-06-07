@@ -10,16 +10,16 @@
 
   tasks:
 
-    # Following a blue-green deployment strategy, for each deployment, we create a
-    # unique identifier (deployment_stamp) that will be used to create unique
-    # OpenShift object names & tags and connect them. This identifier contains the
-    # deployment datetime concatenated with a random hash (short uuid), e.g.
-    # 2018-05-16-13-15-48-ef726d57
-    - name: Set deployment flag
-      set_fact: deployment_stamp="{{ lookup('pipe', 'date +%F-%H-%M-%S-$(cat /proc/sys/kernel/random/uuid | cut -c -8)') }}"
+    # Set the deployment stamp value for this deployment
+    - name: Set deployment stamp
+      set_fact: deployment_stamp="d-{{ lookup('pipe', 'date +%y%m%d-%Hh%Mm%Ss') }}"
+
+    # Set the job stamp for this deployment
+    - name: Set job stamp
+      set_fact: job_stamp="j-{{ lookup('pipe', 'date +%y%m%d-%Hh%Mm%Ss') }}"
 
     - name: Print deployment details
-      debug: msg="Deploying {{ project_name }} - {{ domain_name }} ({{ deployment_stamp }})"
+      debug: msg="Deploying {{ project_name }} - {{ domain_name }} (deployment stamp '{{ deployment_stamp }}' job stamp '{{ job_stamp }}')"
 
     - import_tasks: tasks/create_config.yml
 

@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: "richie-regenerate-indexes-{{ deployment_stamp }}"
+  name: "richie-regenerate-indexes-{{ job_stamp }}"
   namespace: "{{ project_name }}"
   labels:
     app: richie
