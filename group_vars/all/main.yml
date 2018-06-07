@@ -82,11 +82,13 @@ richie_database:
 
 # Openshift template files
 openshift_deployments:
+  - openshift/common/dc/elasticsearch.yml
   - openshift/edxapp/dc/cms.yml
   - openshift/edxapp/dc/lms.yml
   - openshift/edxapp/dc/memcached.yml
-  - openshift/common/dc/elasticsearch.yml
-  - openshift/common/dc/nginx.yml
+  - openshift/edxapp/dc/nginx.yml
+  - openshift/redirect/dc/nginx.yml
+  - openshift/richie/dc/nginx.yml
   - openshift/richie/dc/richie.yml
 openshift_endpoints:
   - openshift/common/ep/mongodb.yml
@@ -100,18 +102,20 @@ openshift_jobs:
   - openshift/richie/job/db_migrate.yml
   - openshift/richie/job/regenerate_indexes.yml
 openshift_routes:
-  - openshift/common/route/cms.yml
-  - openshift/common/route/lms.yml
-  - openshift/common/route/richie.yml
+  - openshift/edxapp/route/cms.yml
+  - openshift/edxapp/route/lms.yml
+  - openshift/richie/route/richie.yml
 openshift_services:
   - openshift/common/svc/elasticsearch.yml
   - openshift/common/svc/mongodb.yml
   - openshift/common/svc/mysql.yml
-  - openshift/common/svc/nginx.yml
   - openshift/common/svc/postgresql.yml
   - openshift/edxapp/svc/cms.yml
   - openshift/edxapp/svc/lms.yml
   - openshift/edxapp/svc/memcached.yml
+  - openshift/edxapp/svc/nginx.yml
+  - openshift/redirect/svc/nginx.yml
+  - openshift/richie/svc/nginx.yml
   - openshift/richie/svc/richie.yml
 openshift_volumes:
   - openshift/edxapp/pvc/data.yml

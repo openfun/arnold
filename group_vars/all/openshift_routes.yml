@@ -6,9 +6,9 @@ cms_host: "{{ project_name }}-cms.{{ domain_name }}"
 richie_host: "{{ project_name }}-richie.{{ domain_name }}"
 
 openshift_routes:
-  - openshift/common/route/cms.yml
-  - openshift/common/route/lms.yml
-  - openshift/common/route/richie.yml
+  - openshift/edxapp/route/cms.yml
+  - openshift/edxapp/route/lms.yml
+  - openshift/richie/route/richie.yml
 
 # OpenShift routes_aliases exemple
 # openshift_routes_aliases:       # routes to be redirected

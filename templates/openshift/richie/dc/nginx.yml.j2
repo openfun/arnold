@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: nginx
+    version: "{{ nginx_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: nginx-richie-{{ deployment_stamp }}
+  namespace: "{{ project_name }}"
+spec:
+  replicas: 1
+  selector:
+    deploymentconfig: nginx-richie-{{ deployment_stamp }}
+  template:
+    metadata:
+      labels:
+        app: nginx
+        version: "{{ nginx_tag }}"
+        deploymentconfig: nginx-richie-{{ deployment_stamp }}
+        deployment_stamp: "{{ deployment_stamp }}"
+    spec:
+      containers:
+      - image: "{{ nginx_image }}:{{ nginx_tag }}"
+        name: nginx
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /etc/nginx/conf.d
+          name: nginx-v-richie
+          readOnly: true
+        - mountPath: /data/media/richie
+          name: richie-v-media
+          readOnly: true
+        - mountPath: /data/static/richie
+          name: richie-v-static
+          readOnly: true
+      volumes:
+      - name: nginx-v-richie
+        configMap:
+          name: nginx-richie-{{ deployment_stamp }}
+      - name: richie-v-media
+        persistentVolumeClaim:
+          claimName: richie-pvc-media
+      - name: richie-v-static
+        persistentVolumeClaim:
+          claimName: richie-pvc-static

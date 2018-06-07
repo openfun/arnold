@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: redirect
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: redirect-{{ deployment_stamp }}
+  namespace: "{{ project_name }}"
+spec:
+  replicas: 1
+  selector:
+    deploymentconfig: redirect-{{ deployment_stamp }}
+  template:
+    metadata:
+      labels:
+        app: redirect
+        deploymentconfig: redirect-{{ deployment_stamp }}
+        deployment_stamp: "{{ deployment_stamp }}"
+    spec:
+      containers:
+        - image: "{{ nginx_image }}:{{ nginx_tag }}"
+          name: nginx
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /etc/nginx/conf.d
+              name: nginx-v-redirect
+              readOnly: true
+      volumes:
+        - name: nginx-v-redirect
+          configMap:
+            name: redirect-{{ deployment_stamp }}

@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: nginx
+    version: "{{ nginx_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: nginx-richie-{{ deployment_stamp }}
+  namespace: "{{ project_name }}"
+spec:
+  ports:
+    - name: {{ richie_port }}-tcp
+      port: {{ richie_port }}
+      protocol: TCP
+      targetPort: {{ richie_port }}
+  selector:
+    deploymentconfig: nginx-richie-{{ deployment_stamp }}
+  type: ClusterIP
