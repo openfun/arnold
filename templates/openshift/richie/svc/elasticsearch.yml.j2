@@ -15,5 +15,5 @@ spec:
     protocol: TCP
     targetPort: {{ elasticsearch.port }}
   selector:
-    deploymentconfig: "elasticsearch-{{ deployment_stamp }}"
+    deploymentconfig: "elasticsearch-richie-{{ deployment_stamp }}"
   type: ClusterIP

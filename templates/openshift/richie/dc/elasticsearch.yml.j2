@@ -5,18 +5,18 @@ metadata:
     app: elasticsearch
     version: "{{ elasticsearch_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
-  name: "elasticsearch-{{ deployment_stamp }}"
+  name: "elasticsearch-richie-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
   replicas: 1
   selector:
-    deploymentconfig: "elasticsearch-{{ deployment_stamp }}"
+    deploymentconfig: "elasticsearch-richie-{{ deployment_stamp }}"
   template:
     metadata:
       labels:
         app: elasticsearch
         version: "{{ elasticsearch_tag }}"
-        deploymentconfig: "elasticsearch-{{ deployment_stamp }}"
+        deploymentconfig: "elasticsearch-richie-{{ deployment_stamp }}"
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:

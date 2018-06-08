@@ -9,7 +9,6 @@ richie_tag: "0.1.0-alpha.3-alpine-dev"
 # Override Openshift template files because databases are containers
 # instead of external services reachable via endpoints
 openshift_deployments:
-  - openshift/common/dc/elasticsearch.yml
   - openshift/common/dc/mongodb.yml
   - openshift/common/dc/mysql.yml
   - openshift/common/dc/postgresql.yml
@@ -17,8 +16,10 @@ openshift_deployments:
   - openshift/edxapp/dc/lms.yml
   - openshift/edxapp/dc/memcached.yml
   - openshift/edxapp/dc/nginx.yml
+  - openshift/richie/dc/elasticsearch.yml
   - openshift/richie/dc/nginx.yml
   - openshift/richie/dc/richie.yml
+  - openshift/redirect/dc/nginx.yml
 
 openshift_endpoints:
     # No endpoints required for the development environment
