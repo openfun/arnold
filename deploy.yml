@@ -10,27 +10,27 @@
 
   tasks:
 
-  # Following a blue-green deployment strategy, for each deployment, we create a
-  # unique identifier (deployment_stamp) that will be used to create unique
-  # OpenShift object names & tags and connect them. This identifier contains the
-  # deployment datetime concatenated with a random hash (short uuid), e.g.
-  # 2018-05-16-13-15-48-ef726d57
-  - name: Set deployment flag
-    set_fact: deployment_stamp="{{ lookup('pipe', 'date +%F-%H-%M-%S-$(cat /proc/sys/kernel/random/uuid | cut -c -8)') }}"
+    # Following a blue-green deployment strategy, for each deployment, we create a
+    # unique identifier (deployment_stamp) that will be used to create unique
+    # OpenShift object names & tags and connect them. This identifier contains the
+    # deployment datetime concatenated with a random hash (short uuid), e.g.
+    # 2018-05-16-13-15-48-ef726d57
+    - name: Set deployment flag
+      set_fact: deployment_stamp="{{ lookup('pipe', 'date +%F-%H-%M-%S-$(cat /proc/sys/kernel/random/uuid | cut -c -8)') }}"
 
-  - name: Print deployment details
-    debug: msg="Deploying {{ project_name }} - {{ domain_name }} ({{ deployment_stamp }})"
+    - name: Print deployment details
+      debug: msg="Deploying {{ project_name }} - {{ domain_name }} ({{ deployment_stamp }})"
 
-  - import_tasks: tasks/create_config.yml
+    - import_tasks: tasks/create_config.yml
 
-  - name: Deploy new stack to OpenShift
-    openshift_raw:
-      definition: "{{ lookup('template', 'templates/' + item + '.j2') | from_yaml }}"
-      state: present
-    with_items:
-      - "{{ openshift_deployments }}"
-      - "{{ openshift_services }}"
-      - "{{ openshift_jobs }}"
-      - "{{ openshift_routes }}"
+    - name: Deploy new stack to OpenShift
+      openshift_raw:
+        definition: "{{ lookup('template', 'templates/' + item + '.j2') | from_yaml }}"
+        state: present
+      with_items:
+        - "{{ openshift_deployments }}"
+        - "{{ openshift_services }}"
+        - "{{ openshift_jobs }}"
+        - "{{ openshift_routes }}"
 
     - import_tasks: tasks/create_route_aliases.yml
