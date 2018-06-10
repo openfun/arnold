@@ -50,7 +50,8 @@ function _run-minishift() {
     fi
 
     echo "Starting minishift with options: ${opts}"
-    minishift start "${opts}"
+    # shellcheck disable=SC2086
+    minishift start ${opts}
     minishift status
 
     echo -e "\n**** MiniShift is up and running ****"
