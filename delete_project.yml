@@ -1,0 +1,23 @@
+---
+# This playbook deletes an OpenShift project for a particular
+# customer/environment
+
+- hosts: local
+  gather_facts: False
+  vars_files:
+    - "group_vars/customer/{{ customer }}.yml"
+    - "group_vars/env_type/{{ env_type }}.yml"
+
+  tasks:
+
+  - name: Print project details
+    debug: msg="Project name {{ project_name }} - domain {{ domain_name }}"
+
+  - name: Delete the project
+    openshift_raw:
+      api_version: v1
+      kind: Project
+      name: "{{ project_name }}"
+      description: "{{ project_description|default(project_display_name)|default(project_name) }}"
+      display_name: "{{ project_display_name|default(project_name) }}"
+      state: absent
