@@ -1,0 +1,9 @@
+---
+# Create fixed routes for all apps
+
+- include_tasks: create_static_services_routes.yml
+  loop: "{{ openshift_apps }}"
+  loop_control:
+    loop_var: app
+  when: openshift_apps is defined
+  tags: route

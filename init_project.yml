@@ -24,3 +24,7 @@
       when: item is not none
 
     - import_tasks: tasks/create_route_aliases.yml
+      tags: route
+
+    - import_tasks: tasks/create_static_apps_routes.yml
+      tags: route
