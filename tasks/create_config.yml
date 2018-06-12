@@ -2,7 +2,7 @@
 
 - name: Find all templates related to configuration
   find:
-    paths: templates/configmap
+    paths: apps/configmap
     patterns: "*.j2"
     recurse: yes
   register: templates_configmap  # Record the list of templates in a variable used below
@@ -15,7 +15,7 @@
       {% set res = {} -%}
       {% for item in templates_configmap.files -%}
         {% set filename = item.path | basename | regex_replace('.j2') -%}
-        {% set group = item.path | relpath('templates/configmap') | dirname -%}
+        {% set group = item.path | relpath('apps/configmap') | dirname -%}
         {% set ignored = res.setdefault(group, {}).__setitem__(filename, lookup('template', item.path)) -%}
       {%- endfor %}
       {{ res }}

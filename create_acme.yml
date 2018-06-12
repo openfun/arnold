@@ -23,7 +23,7 @@
       openshift_raw:
         force: true
         state: present
-        definition: "{{ lookup('template', 'templates/openshift/common/rolebinding/add-role-to-sa.yml.j2') | from_yaml }}"
+        definition: "{{ lookup('template', 'apps/_common/rolebinding/add-role-to-sa.yml.j2') | from_yaml }}"
       with_items:
         - "{{ openshift_rolesbinding }}"
       ignore_errors: true

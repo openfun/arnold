@@ -7,7 +7,7 @@
 # Usage:
 #
 #   $ bin/ansible-playbook create_object.yml \
-#       -e "object_template=templates/openshift/edxapp/job/import_demo_course.yml.j2" \
+#       -e "object_template=apps/edxapp/job/import_demo_course.yml.j2"
 #       -e "deployment_stamp=d-180611-08h46m30s"
 #
 
