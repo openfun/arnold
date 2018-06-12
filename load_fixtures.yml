@@ -6,7 +6,7 @@
 - hosts: local
   gather_facts: False
   vars:
-    load_fixtures_template: "templates/openshift/edxapp/job/load_fixtures.yml.j2"
+    load_fixtures_template: "apps/edxapp/job/load_fixtures.yml.j2"
 
   tasks:
 

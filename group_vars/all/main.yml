@@ -111,45 +111,45 @@ richie_database:
 
 # Openshift template files
 openshift_deployments:
-  - openshift/edxapp/dc/cms.yml
-  - openshift/edxapp/dc/lms.yml
-  - openshift/edxapp/dc/memcached.yml
-  - openshift/edxapp/dc/nginx.yml
-  - openshift/redirect/dc/nginx.yml
-  - openshift/richie/dc/elasticsearch.yml
-  - openshift/richie/dc/nginx.yml
-  - openshift/richie/dc/richie.yml
+  - edxapp/dc/cms.yml
+  - edxapp/dc/lms.yml
+  - edxapp/dc/memcached.yml
+  - edxapp/dc/nginx.yml
+  - redirect/dc/nginx.yml
+  - richie/dc/elasticsearch.yml
+  - richie/dc/nginx.yml
+  - richie/dc/richie.yml
 openshift_endpoints:
-  - openshift/common/ep/mongodb.yml
-  - openshift/common/ep/mysql.yml
-  - openshift/common/ep/postgresql.yml
+  - _common/ep/mongodb.yml
+  - _common/ep/mysql.yml
+  - _common/ep/postgresql.yml
 openshift_jobs:
-  - openshift/edxapp/job/collectstatic_cms.yml
-  - openshift/edxapp/job/collectstatic_lms.yml
-  - openshift/edxapp/job/db_migrate.yml
-  - openshift/richie/job/collectstatic.yml
-  - openshift/richie/job/db_migrate.yml
-  - openshift/richie/job/regenerate_indexes.yml
+  - edxapp/job/collectstatic_cms.yml
+  - edxapp/job/collectstatic_lms.yml
+  - edxapp/job/db_migrate.yml
+  - richie/job/collectstatic.yml
+  - richie/job/db_migrate.yml
+  - richie/job/regenerate_indexes.yml
 openshift_routes:
-  - openshift/edxapp/route/cms.yml
-  - openshift/edxapp/route/lms.yml
-  - openshift/richie/route/richie.yml
+  - edxapp/route/cms.yml
+  - edxapp/route/lms.yml
+  - richie/route/richie.yml
 openshift_services:
-  - openshift/common/svc/mongodb.yml
-  - openshift/common/svc/mysql.yml
-  - openshift/common/svc/postgresql.yml
-  - openshift/edxapp/svc/cms.yml
-  - openshift/edxapp/svc/lms.yml
-  - openshift/edxapp/svc/memcached.yml
-  - openshift/edxapp/svc/nginx.yml
-  - openshift/redirect/svc/nginx.yml
-  - openshift/richie/svc/elasticsearch.yml
-  - openshift/richie/svc/nginx.yml
-  - openshift/richie/svc/richie.yml
+  - _common/svc/mongodb.yml
+  - _common/svc/mysql.yml
+  - _common/svc/postgresql.yml
+  - edxapp/svc/cms.yml
+  - edxapp/svc/lms.yml
+  - edxapp/svc/memcached.yml
+  - edxapp/svc/nginx.yml
+  - redirect/svc/nginx.yml
+  - richie/svc/elasticsearch.yml
+  - richie/svc/nginx.yml
+  - richie/svc/richie.yml
 openshift_volumes:
-  - openshift/edxapp/pvc/data.yml
-  - openshift/edxapp/pvc/media.yml
-  - openshift/edxapp/pvc/static.yml
-  - openshift/richie/pvc/media.yml
-  - openshift/richie/pvc/static.yml
+  - edxapp/pvc/data.yml
+  - edxapp/pvc/media.yml
+  - edxapp/pvc/static.yml
+  - richie/pvc/media.yml
+  - richie/pvc/static.yml
 ## _END_ to be deprecated ##

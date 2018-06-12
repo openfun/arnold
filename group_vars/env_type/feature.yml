@@ -7,13 +7,13 @@ cms_host: "{{ project_name }}-cms--{{ feature_title }}.{{ domain_name }}"
 # Override Openshift template files because databases are containers
 # instead of external services reachable via endpoints
 openshift_deployments:
-  - openshift/common/dc/nginx.yml
-  - openshift/common/dc/mongodb.yml
-  - openshift/common/dc/mysql.yml
-  - openshift/common/dc/postgresql.yml
-  - openshift/edxapp/dc/cms.yml
-  - openshift/edxapp/dc/lms.yml
-  - openshift/edxapp/dc/memcached.yml
-  - openshift/richie/dc/richie.yml
+  - _common/dc/nginx.yml
+  - _common/dc/mongodb.yml
+  - _common/dc/mysql.yml
+  - _common/dc/postgresql.yml
+  - edxapp/dc/cms.yml
+  - edxapp/dc/lms.yml
+  - edxapp/dc/memcached.yml
+  - richie/dc/richie.yml
 openshift_endpoints:
     # No endpoints required for the feature environments
