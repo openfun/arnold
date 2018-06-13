@@ -1,3 +1,4 @@
+---
 # Create route aliases
 
 - name: Build a list of all aliases
@@ -5,6 +6,9 @@
     routes_aliases: "{{ routes_aliases }} + [ '{{ item }}']"
   with_items: "{{ openshift_routes_aliases | json_query('[*].aliases') }}"
   when: item is not none and item != ""
+  vars:
+    routes_aliases: []
+
 
 - name: Make sure all redirected routes exist or force recreation
   openshift_raw:
