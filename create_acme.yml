@@ -5,11 +5,10 @@
 
 - hosts: local
   gather_facts: False
-  vars_files:
-    - "group_vars/customer/{{ customer }}.yml"
-    - "group_vars/env_type/{{ env_type }}.yml"
 
   tasks:
+
+    - import_tasks: tasks/set_vars.yml
 
     - name: Create all openshift-acme OpenShift objects
       openshift_raw:

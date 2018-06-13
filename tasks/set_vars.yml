@@ -1,0 +1,14 @@
+---
+# tasks/set_vars.yml
+
+# TODO : set vars for apps here
+
+- name: Include customer env_type vars
+  include_vars:
+    file: "{{ item }}"
+  with_items:
+    - "group_vars/customer/{{ customer }}.yml"
+    - "group_vars/env_type/{{ env_type }}.yml"
+
+- name: Print project details
+  debug: msg="Project name {{ project_name }} - domain {{ domain_name }}"

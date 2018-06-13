@@ -1,15 +1,15 @@
 ---
+
 - import_playbook: create_project.yml
 - import_playbook: create_secrets.yml
 - import_playbook: create_acme.yml
 
 - hosts: local
   gather_facts: False
-  vars_files:
-    - "group_vars/customer/{{ customer }}.yml"
-    - "group_vars/env_type/{{ env_type }}.yml"
 
   tasks:
+
+    - import_tasks: tasks/set_vars.yml
 
     - name: Print project details
       debug: msg="Project name {{ project_name }} - domain {{ domain_name }}"

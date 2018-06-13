@@ -5,21 +5,18 @@
 
 - hosts: local
   gather_facts: False
-  vars_files:
-    - "group_vars/all/fixtures.yml"
   vars:
     load_fixtures_template: "templates/openshift/edxapp/job/load_fixtures.yml.j2"
 
   tasks:
 
-  - name: Print project details
-    debug: msg="Project name {{ project_name }} - domain {{ domain_name }}"
+    - import_tasks: tasks/set_vars.yml
 
-  - name: Print Object template
-    debug: msg="Object template {{ load_fixtures_template }}"
+    - name: Print Object template
+      debug: msg="Object template {{ load_fixtures_template }}"
 
-  - name: Import demo course and create demo users
-    openshift_raw:
-      definition: "{{ lookup('template', load_fixtures_template) | from_yaml }}"
-      state: present
-      force: true
+    - name: Import demo course and create demo users
+      openshift_raw:
+        definition: "{{ lookup('template', load_fixtures_template) | from_yaml }}"
+        state: present
+        force: true

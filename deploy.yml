@@ -4,11 +4,10 @@
 
 - hosts: local
   gather_facts: False
-  vars_files:
-    - "group_vars/customer/{{ customer }}.yml"
-    - "group_vars/env_type/{{ env_type }}.yml"
 
   tasks:
+
+    - import_tasks: tasks/set_vars.yml
 
     # Set the deployment stamp value for this deployment
     - name: Set deployment stamp
