@@ -1,59 +1,43 @@
-# Create ConfigMaps
+# Create ConfigMaps for an app
 
-- name: Find all templates related to configuration
+- name: Find all templates related to configmaps for an app
   find:
-    paths: apps/configmap
+    paths: "apps/{{ app }}/configmap"
     patterns: "*.j2"
     recurse: yes
-  register: templates_configmap  # Record the list of templates in a variable used below
+  register: configmap_templates  # Record the list of templates in a variable used below
 
-- name: set_fact templates_configmap_dict
+- name: set_fact configmaps
   set_fact:
-    # For each template file found, generate the file content by injecting variables and
-    # build an object with this content ready to create config maps in OpenShift
-    templates_configmap_dict: |
-      {% set res = {} -%}
-      {% for item in templates_configmap.files -%}
+    # For each template file found, generate the file content by injecting
+    # variables and build an object with this content ready to create config
+    # maps in OpenShift
+    configmaps: |
+      {% set cm = {} -%}
+      {% for item in configmap_templates.files -%}
         {% set filename = item.path | basename | regex_replace('.j2') -%}
-        {% set group = item.path | relpath('apps/configmap') | dirname -%}
-        {% set ignored = res.setdefault(group, {}).__setitem__(filename, lookup('template', item.path)) -%}
+        {% set group = item.path | dirname | basename -%}
+        {% set ignored = cm.setdefault(group, {}).__setitem__(filename, lookup('template', item.path)) -%}
       {%- endfor %}
-      {{ res }}
-  when: templates_configmap.matched != 0
+      {{ cm }}
+  when: configmap_templates.matched != 0
 
-- name: Find all customer specific files related to configuration
-  find:
-    paths: "files/configmap/{{ customer }}/{{ env_type }}"
-    recurse: yes
-  register: customer_configmap  # Record the list of files in a variable used below
-
-- name: set_fact config_dict
-  set_fact:
-    # Customer definitions take precedence over template definitions
-    # They may override them if a file is found with the same "filename" in the same "group"
-    #
-    # In the following, we use the "pipe" lookup with "cat" instead of the "file" lookup in
-    # order to keep the content of the files encrypted
-    config_dict: |
-      {% for item in customer_configmap.files -%}
-        {% set filename = item.path | basename -%}
-        {% set group = item.path | relpath('files/configmap/' + customer + '/' + env_type) | dirname -%}
-        {% set ignored = templates_configmap_dict.setdefault(group, {}).__setitem__(filename, lookup('pipe', "cat " + item.path)) -%}
-      {%- endfor %}
-      {{ templates_configmap_dict }}
+- name: Display config maps
+  debug: msg="ConfigMaps {{ configmaps }}"
 
 - name: Actually create the config maps in OpenShift
   openshift_raw:
     state: present
-    name: "{{ item.key }}-{{ deployment_stamp }}"
+    name: "{{ app }}-{{ item.key }}-{{ deployment_stamp }}"
     namespace: "{{ project_name }}"
     definition:
       apiVersion: v1
       kind: ConfigMap
       metadata:
         labels:
-          app: "{{ item.key }}"
-          version: "{{ deployment_stamp }}"
+          app: "{{ app }}"
+          service: "{{ item.key }}"
+          deployment_stamp: "{{ deployment_stamp }}"
       data: "{{ item.value }}"
-  with_dict: "{{ config_dict }}"
+  with_dict: "{{ configmaps }}"
   when: item is not none

@@ -27,7 +27,7 @@ spec:
           protocol: TCP
         volumeMounts:
         - mountPath: /etc/nginx/conf.d
-          name: nginx-v-richie
+          name: richie-v-nginx
           readOnly: true
         - mountPath: /data/media/richie
           name: richie-v-media
@@ -36,9 +36,9 @@ spec:
           name: richie-v-static
           readOnly: true
       volumes:
-      - name: nginx-v-richie
+      - name: richie-v-nginx
         configMap:
-          name: nginx-richie-{{ deployment_stamp }}
+          name: richie-nginx-{{ deployment_stamp }}
       - name: richie-v-media
         persistentVolumeClaim:
           claimName: richie-pvc-media
