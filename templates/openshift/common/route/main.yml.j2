@@ -16,7 +16,7 @@ spec:
   tls:
     termination: edge
   port:
-    targetPort: {{ item.0.port | default(8080) }}-tcp
+    targetPort: {{ item.0.port | default('8080') }}-tcp
   to:
     kind: Service
-    name: "{{ item.0.name }}-{{ deployment_stamp | default(init) }}"
+    name: "{{ item.0.name }}-{{ deployment_stamp | default('init', true) }}"
