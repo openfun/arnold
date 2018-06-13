@@ -27,7 +27,7 @@ spec:
           protocol: TCP
         volumeMounts:
         - mountPath: /etc/nginx/conf.d
-          name: nginx-v-edxapp
+          name: edxapp-v-nginx
           readOnly: true
         - mountPath: /data/media
           name: edxapp-v-media
@@ -36,9 +36,9 @@ spec:
           name: edxapp-v-static
           readOnly: true
       volumes:
-      - name: nginx-v-edxapp
+      - name: edxapp-v-nginx
         configMap:
-          name: nginx-edxapp-{{ deployment_stamp }}
+          name: edxapp-nginx-{{ deployment_stamp }}
       - name: edxapp-v-static
         persistentVolumeClaim:
           claimName: edxapp-pvc-static

@@ -25,9 +25,9 @@ spec:
               protocol: TCP
           volumeMounts:
             - mountPath: /etc/nginx/conf.d
-              name: nginx-v-redirect
+              name: redirect-v-nginx
               readOnly: true
       volumes:
-        - name: nginx-v-redirect
+        - name: redirect-v-nginx
           configMap:
-            name: redirect-{{ deployment_stamp }}
+            name: redirect-nginx-{{ deployment_stamp }}

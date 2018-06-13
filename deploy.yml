@@ -20,7 +20,11 @@
     - name: Print deployment details
       debug: msg="Deploying {{ project_name }} - {{ domain_name }} (deployment stamp '{{ deployment_stamp }}' job stamp '{{ job_stamp }}')"
 
-    - import_tasks: tasks/create_config.yml
+    - include_tasks: tasks/create_config.yml
+      loop: "{{ apps }}"
+      loop_control:
+        loop_var: app
+      when: apps is defined
 
     - name: Deploy new stack to OpenShift
       openshift_raw:
