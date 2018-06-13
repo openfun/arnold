@@ -13,16 +13,12 @@
 
 - hosts: local
   gather_facts: False
-  vars_files:
-    - "group_vars/customer/{{ customer }}.yml"
-    - "group_vars/env_type/{{ env_type }}.yml"
   vars:
     object_template: ""
 
   tasks:
 
-    - name: Print project details
-      debug: msg="Project name {{ project_name }} - domain {{ domain_name }}"
+    - import_tasks: tasks/set_vars.yml
 
     - name: Print OpenShift object template path
       debug: msg="Object template {{ object_template }}"
