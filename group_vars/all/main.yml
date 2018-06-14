@@ -3,11 +3,9 @@ env_type: development  # default to be overriden on command line
 customer: patient0  # default to be overriden on command line
 project_name: "{{ env_type }}-{{ customer }}"
 
-
-
 # Openshift applications list for the project
-# Exemple :
-# openshift_apps:
+# Example :
+# apps:
 #   - name: hello
 #     services:
 #       - name:     hello
@@ -23,10 +21,8 @@ project_name: "{{ env_type }}-{{ customer }}"
 #         host:     "{{ env_type }}.richie.{{ domain_name }}"
 #       - name:     postgresql
 #         endpoint: true  # default False
-openshift_apps:
 
-
-## _____ soon deprecated below _________________________________________________
+## /!\  Variables below will soon be deprecated /!\ __________________________##
 # Django
 django_configuration: Development
 
