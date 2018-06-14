@@ -1,0 +1,17 @@
+---
+# This task loops over all applications in {{ apps }}, defines the {{ app }} var
+# and runs the xxx task for this app.
+#
+# USAGE:
+# - include_tasks: tasks/run_tasks_for_apps.yml
+#   vars:
+#     tasks:
+#       - myGreateTask
+#   tags: route
+
+- include_tasks: run_tasks_for_app.yml
+  loop: "{{ apps }}"
+  loop_control:
+    loop_var: app
+  when: apps is defined
+  tags: route

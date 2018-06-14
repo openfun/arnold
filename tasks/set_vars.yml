@@ -1,7 +1,11 @@
 ---
 # tasks/set_vars.yml
 
-# TODO : set vars for apps here
+# TODO : If apps is not define or empty
+#         Create a minimal apps var for the all content of
+#         the apps dir
+
+# TODO : set vars for apps here from apps
 
 - name: Include customer env_type vars
   include_vars:
