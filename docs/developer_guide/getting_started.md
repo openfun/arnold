@@ -13,7 +13,7 @@ particular environment with a new helper:
 > default value for this demo is: `arnold`.
 
 ```bash
-$ bin/init
+$ bin/bootstrap
 ```
 
 Tadaaa! Arnold has created a new OpenShift project called `patient0-development`
@@ -21,7 +21,7 @@ with a collection of services up and running. You can change the customer /
 environment to deploy by overriding default environment variables:
 
 ```bash
-$ bin/init -e "env_type=staging customer=campus"
+$ bin/bootstrap -e "env_type=staging customer=campus"
 ```
 
 If you want to run a new deployment for this project, there is also a helper for
@@ -53,10 +53,10 @@ $ docker run --rm -it \
     --env-file env.d/production \
     --env K8S_AUTH_API_KEY=$(oc whoami -t) \
     arnold \
-    ansible-playbook init_project.yml -e "env_type=production customer=patient0"
+    ansible-playbook bootstrap.yml -e "env_type=production customer=patient0"
 ```
 
-This command will run the `init_project.yml` Ansible playbook with the
+This command will run the `bootstrap.yml` Ansible playbook with the
 `-e "env_type=production customer=patient0"` argument that defines Ansible vars
 for this run.
 

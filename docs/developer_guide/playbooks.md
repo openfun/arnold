@@ -13,12 +13,57 @@ order they are supposed to be used.
 > `development` respectively. **In all cases, the `-e "customer=foo env_type=bar"` option is not required if you want to work with `patient0` in
 > `development`**.
 
+## `delete_project.yml`
+
+This playbook deletes a project with all OpenShift objects for a customer
+(default: `patient0`) in a particular environment (default: `development`).
+
+### Usage
+
+```bash
+# development
+$ bin/ansible-playbook delete_project.yml -e "customer=patient0 env_type=staging"
+
+# native command for production
+$ docker run --rm -it \
+    --env-file env.d/production \
+    arnold \
+    ansible-playbook delete_project.yml -e "customer=patient0 env_type=staging"
+```
+
+## `bootstrap.yml`
+
+This playbook is a "meta" playbook that creates a new project with all required
+OpenShift objects for a customer (default: `patient0`) in a particular
+environment (default: `development`).
+It executes sequentially the following playbooks:
+
+* `delete_project.yml`
+* `init_project.yml`
+* `deploy.yml`
+
+### Usage
+
+```bash
+# sugar development
+$ bin/bootstrap
+
+# development
+$ bin/ansible-playbook bootstrap.yml -e "customer=patient0 env_type=staging"
+
+# native command for production
+$ docker run --rm -it \
+    --env-file env.d/production \
+    arnold \
+    ansible-playbook bootstrap.yml -e "customer=patient0 env_type=staging"
+```
+
 ## `init_project.yml`
 
 This playbook is a "meta" playbook that creates a new project with all required
 OpenShift objects for a customer (default: `patient0`) in a particular
-environment (default: `development`). It executes sequentially the following
-playbooks:
+environment (default: `development`).
+It executes sequentially the following playbooks:
 
 * `create_project.yml`
 * `create_secrets.yml`
@@ -29,6 +74,9 @@ playbooks:
 ### Usage
 
 ```bash
+# sugar development
+$ bin/init
+
 # development
 $ bin/ansible-playbook init_project.yml -e "customer=patient0 env_type=staging"
 

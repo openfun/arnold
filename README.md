@@ -77,7 +77,7 @@ in a particular environment with a new helper:
 > default value for this demo is: `arnold`.
 
 ```bash
-$ bin/init
+$ bin/bootstrap
 ```
 
 Tadaaa! Arnold has created a new OpenShift project called `patient0-development`
@@ -104,7 +104,7 @@ You could also try deploying the same services for another customer and/or envir
 overriding the default Ansible variables:
 
 ```bash
-$ bin/init -e "env_type=staging customer=campus"
+$ bin/bootstrap -e "env_type=staging customer=campus"
 ```
 
 If you want to run a new deployment for this project, there is also a helper for
