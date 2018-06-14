@@ -1,0 +1,15 @@
+---
+# Patch routes of all services of one app to the new deployment_stamp
+
+- name: Print patch details
+  debug: msg="[{{ app.name }}] Patch route[{{ app.name }}-{{ prefixe }}] with deployment_stamp[{{ deployment_stamp }}]"
+
+- name: Patch sure static route exists for all services
+  openshift_raw:
+    force: true
+    definition: "{{ lookup('template', 'templates/openshift/common/route/main.yml.j2') | from_yaml }}"
+    state: present
+  with_nested:
+    - "{{ app.services }}"
+    - "{{ prefixe }}"
+  when: item.0.host is defined

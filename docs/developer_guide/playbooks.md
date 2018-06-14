@@ -91,6 +91,8 @@ The `deploy.yml` playbook defines a new `deployment_stamp` to create a whole new
 stack by defining OpenShift objects with unique labels and names. This allows us
 to initiate a blue/green deployment strategy.
 
+https://framindmap.org/c/maps/507624/public
+
 ### Usage
 
 ```bash

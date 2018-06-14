@@ -1,0 +1,19 @@
+---
+
+- hosts: local
+  gather_facts: False
+
+  tasks:
+
+    - import_tasks: tasks/set_vars.yml
+
+    # Patch all current routes of all apps after deploy
+    - include_tasks: tasks/run_tasks_for_apps.yml
+      vars:
+        prefixe: "current"
+        tasks:
+          - deploy_get_stamp_from_route
+          - deploy_patch_route
+      tags:
+        - route
+        - deploy

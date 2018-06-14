@@ -11,8 +11,6 @@
 
     - import_tasks: tasks/set_vars.yml
 
-    - name: Print project details
-      debug: msg="Project name {{ project_name }} - domain {{ domain_name }}"
 
     - import_tasks: tasks/create_route_aliases.yml
 
