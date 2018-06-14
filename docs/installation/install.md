@@ -58,5 +58,5 @@ You can then specify the environment file when running a sugar script by setting
 `env-file` option as in the following example:
 
 ```bash
-$ bin/init --env-file=env.d/production
+$ bin/bootstrap --env-file=env.d/production
 ```
