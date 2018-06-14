@@ -1,0 +1,18 @@
+---
+# Get deployment_stamp from a route
+
+- name: Print get details
+  debug: msg="[{{ app.name }}] route.name[{{ app.name }}-{{ prefixe }}] "
+
+- name: Get deployment_stamp of route
+  openshift_raw:
+    definition: "{{ lookup('template', 'templates/openshift/common/utils/get_deployment_stamp_form_route.yml.j2') | from_yaml }}"
+  register: my_route
+
+- name: set_fact deployment_stamp to delete
+  set_fact:
+    route_deployment_stamp: "{{ my_route.result.metadata.labels.deployment_stamp }}"
+    # cacheable: true
+
+- name: Print old route_deployment_stamp
+  debug: msg="[{{ app.name }}] route_deployment_stamp [{{ route_deployment_stamp }}]"

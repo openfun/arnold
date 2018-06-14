@@ -6,7 +6,7 @@ metadata:
   labels:
     env_type:         "{{ env_type }}"
     customer:         "{{ customer }}"
-    app:              "{{ app.name }}-{{ deployment_stamp | default('init', true) }}"
+    app:              "{{ app.name }}"
     version:          "{{ item.0.tag | default('init', true) }}"
     deployment_stamp: "{{ deployment_stamp | default('init', true) }}"
   annotations:
