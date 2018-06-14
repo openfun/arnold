@@ -8,7 +8,7 @@
 - name: Make sure static route exists
   openshift_raw:
     force: true
-    definition: "{{ lookup('template', 'templates/openshift/common/route/main.yml.j2') | from_yaml }}"
+    definition: "{{ lookup('template', 'apps/_common/templates/route/main.yml.j2') | from_yaml }}"
     state: present
   with_nested:
     - "{{ app.services }}"
