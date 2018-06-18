@@ -1,0 +1,68 @@
+---
+# Create ConfigMaps for an app
+
+# Make a raw list of configmap templates for an app
+- name: Select configMap templates
+  set_fact:
+    service: "{{ item | regex_replace('apps/(.*)/templates/(.*)/_configs/(.*).j2', '\\2') }}"
+    filename: "{{ item | basename | regex_replace('.j2') }}"
+    content: "{{ lookup('template', item) }}"
+  register: raw_configmaps
+  with_items: "{{ app | json_query('services[*].configs[]') }}"
+
+# ConfigMap data are first grouped by service:
+#
+# [
+#     "nginx", // the service name
+#     [        // a list of configmaps for this service
+#         {
+#             "content": "...",
+#             "filename": "cms.conf",
+#             "service": "nginx"
+#         },
+#         {
+#             "content": "...",
+#             "filename": "lms.conf",
+#             "service": "nginx"
+#         }
+#     ]
+# ]
+#
+# And then updated as a dictionnary of files per services:
+#
+# {
+#   "nginx": {
+#       "cms.conf": "...",
+#       "lms.conf": "..."
+#   }
+# }
+- name: Format configMaps
+  set_fact:
+    configmaps: |
+      {% set configmaps = {} %}
+      {% for service in raw_configmaps.results | map(attribute='ansible_facts') | groupby('service') %}
+      {% set _ = configmaps.update({service.0: {}}) %}
+      {% for cm in service.1 %}
+      {% set _ = configmaps.get(service.0).update({cm.filename: cm.content}) %}
+      {% endfor %}
+      {% endfor %}
+      {{ configmaps }}
+
+- name: Display config maps
+  debug: var=configmaps
+
+- name: Create the config maps in OpenShift
+  openshift_raw:
+    state: present
+    name: "{{ app.name }}-{{ item.key }}-{{ deployment_stamp }}"
+    namespace: "{{ project_name }}"
+    definition:
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        labels:
+          app: "{{ app.name }}"
+          service: "{{ item.key }}"
+          deployment_stamp: "{{ deployment_stamp }}"
+      data: "{{ item.value }}"
+  with_dict: "{{ configmaps }}"

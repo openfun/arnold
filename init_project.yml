@@ -14,19 +14,15 @@
     - name: Print project details
       debug: msg="Project name {{ project_name }} - domain {{ domain_name }}"
 
-    - name: Make sure base objects exist in OpenShift and are up-to-date
-      openshift_raw:
-        definition: "{{ lookup('template', 'apps/' + item + '.j2') | from_yaml }}"
-        state: present
-      with_items:
-        - "{{ openshift_volumes }}"
-        - "{{ openshift_endpoints }}"
-      when: item is not none
-
     - import_tasks: tasks/create_route_aliases.yml
 
     - include_tasks: tasks/run_tasks_for_apps.yml
       vars:
         tasks:
+          - create_app_volumes
+          - create_app_endpoints
           - create_static_services_routes
-      tags: route
+      tags:
+        - volume
+        - endpoint
+        - route

@@ -1,0 +1,64 @@
+---
+# Deploy an app
+
+- name: Set templates list for this app
+  set_fact:
+    templates: "{{ app | json_query('services[*].templates[]') | list }}"
+  tags: deploy
+
+- name: Set OpenShift objects to create
+  set_fact:
+    deployments: "{{ templates | map('regex_search', '.*/dc.yml.j2$') | select('string') | list }}"
+    services: "{{ templates | map('regex_search', '.*/svc.yml.j2$') | select('string') | list }}"
+    jobs: "{{ templates | map('regex_search', '.*/job_.*.yml.j2$') | select('string') | list }}"
+    routes: "{{ templates | map('regex_search', '.*/route.yml.j2$') | select('string') | list }}"
+  tags:
+    - deploy
+    - deployment
+    - service
+    - job
+    - route
+
+- name: Display OpenShift's deployments for this app
+  debug:
+    var=deployments
+  tags:
+    - deploy
+    - deployment
+
+- name: Display OpenShift's services for this app
+  debug:
+    var=services
+  tags:
+    - deploy
+    - service
+
+- name: Display OpenShift's jobs for this app
+  debug:
+    var=jobs
+  tags:
+    - deploy
+    - job
+
+- name: Display OpenShift's routes for this app
+  debug:
+    var=routes
+  tags:
+    - deploy
+    - route
+
+- name: Deploy new stack to OpenShift
+  openshift_raw:
+    definition: "{{ lookup('template', item) | from_yaml }}"
+    state: present
+  with_items:
+    - "{{ deployments }}"
+    - "{{ services }}"
+    - "{{ jobs }}"
+    - "{{ routes }}"
+  tags:
+    - deploy
+    - deployment
+    - service
+    - job
+    - route

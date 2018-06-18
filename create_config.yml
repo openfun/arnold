@@ -6,7 +6,7 @@
   tasks:
 
     - import_tasks: tasks/set_vars.yml
-    - include_tasks: tasks/create_config.yml
+    - include_tasks: tasks/create_app_config.yml
       loop: "{{ apps }}"
       loop_control:
         loop_var: app
