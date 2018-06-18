@@ -20,20 +20,13 @@
     - name: Print deployment details
       debug: msg="Deploying {{ project_name }} - {{ domain_name }} (deployment stamp '{{ deployment_stamp }}' job stamp '{{ job_stamp }}')"
 
-    - include_tasks: tasks/create_config.yml
-      loop: "{{ apps }}"
-      loop_control:
-        loop_var: app
-      when: apps is defined
-
-    - name: Deploy new stack to OpenShift
-      openshift_raw:
-        definition: "{{ lookup('template', 'apps/' + item + '.j2') | from_yaml }}"
-        state: present
-      with_items:
-        - "{{ openshift_deployments }}"
-        - "{{ openshift_services }}"
-        - "{{ openshift_jobs }}"
-        - "{{ openshift_routes }}"
+    - include_tasks: tasks/run_tasks_for_apps.yml
+      vars:
+        tasks:
+          - tasks/create_app_config
+          - tasks/deploy_app
+      tags:
+        - config
+        - deploy
 
     - import_tasks: tasks/create_route_aliases.yml

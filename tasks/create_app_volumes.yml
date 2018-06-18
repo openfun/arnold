@@ -1,0 +1,15 @@
+---
+# Create volumes for an app
+
+- name: Print app name
+  debug: msg="App name {{ app.name }}"
+  tags: route
+
+- name: Make sure application volumes exist
+  openshift_raw:
+    force: true
+    definition: "{{ lookup('template', item) | from_yaml }}"
+    state: present
+  with_items: "{{ app.volumes }}"
+  when: app.volumes is defined
+  tags: volume

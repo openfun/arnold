@@ -1,27 +1,11 @@
 ---
 # tasks/set_vars.yml
 
-# TODO :
-#  - if apps is not defined or empty, create a minimal "apps" var with objects
-#    and vars from the apps/ directory
-#  - set vars for apps
-- name: List available applications
-  find:
-    paths: apps
-    patterns: "*"
-    excludes: "_*"
-    file_type: directory
-    recurse: no
-  register: matching_apps
-  when: apps is not defined
+- name: Lookup applications and set the apps var
+  set_fact: apps="{{ lookup('pipe', 'python plugins/utils/lookup_apps.py') | from_yaml }}"
 
-- name: Set a flat applications list
-  set_fact:
-    apps: "{{ matching_apps.files | map(attribute='path') | map('basename') | list }}"
-  when: matching_apps is not skipped
-
-- name: Display available apps
-  debug: msg="Applications {{ apps }}"
+- name: Display looked up applications
+  debug: var=apps
 
 - name: Include customer env_type vars
   include_vars:

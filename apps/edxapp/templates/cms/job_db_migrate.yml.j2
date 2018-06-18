@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: edxapp-dbmigrate-{{ job_stamp }}
+  name: edxapp-cms-dbmigrate-{{ job_stamp }}
   namespace: "{{ project_name }}"
   labels:
     app: edxapp
@@ -21,12 +21,11 @@ spec:
         image: "{{ edxapp_image }}:{{ edxapp_tag }}"
         env:
           - name: DJANGO_SETTINGS_MODULE
-            value: lms.envs.fun.docker_run
+            value: cms.envs.fun.docker_run
         command:
           - "/bin/bash"
           - "-c"
-          - DJANGO_SETTINGS_MODULE=lms.envs.fun.docker_run python manage.py lms migrate &&
-            DJANGO_SETTINGS_MODULE=cms.envs.fun.docker_run python manage.py cms migrate
+          - DJANGO_SETTINGS_MODULE=cms.envs.fun.docker_run python manage.py cms migrate
         volumeMounts:
         - mountPath: /config
           name: edxapp-config
@@ -51,24 +50,16 @@ spec:
             - "/bin/bash"
             - "-c"
             - cp -r /config/* /tmp/config &&
-              cp -rL /tmp/configmap-lms/* /tmp/config/lms/ &&
               cp -rL /tmp/configmap-cms/* /tmp/config/cms/ &&
-              cp /tmp/secret/credentials.vault.yml /tmp/config/lms/secrets.yml &&
               cp /tmp/secret/credentials.vault.yml /tmp/config/cms/secrets.yml
           volumeMounts:
             - mountPath: /tmp/config
               name: edxapp-config
-            - mountPath: /tmp/configmap-lms
-              name: edxapp-configmap-lms
             - mountPath: /tmp/configmap-cms
               name: edxapp-configmap-cms
             - mountPath: /tmp/secret
               name: edxapp-secret
       volumes:
-      - name: edxapp-configmap-lms
-        configMap:
-          defaultMode: 420
-          name: edxapp-lms-{{ deployment_stamp }}
       - name: edxapp-configmap-cms
         configMap:
           defaultMode: 420
