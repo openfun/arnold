@@ -39,6 +39,7 @@
         tasks:
           - deploy_get_stamp_from_route
           - deploy_patch_route
+          - delete_app
       tags:
         - route
         - deploy
