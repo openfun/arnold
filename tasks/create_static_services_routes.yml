@@ -1,11 +1,7 @@
 ---
 # Create static routes for services of an app
 
-- name: Print app name
-  debug: msg="App name {{ app.name }}"
-  tags: route
-
-- name: Make sure static route exists
+- name: Make sure static route exists for app[{{ app.name }}]
   openshift_raw:
     force: true
     definition: "{{ lookup('template', 'apps/_common/templates/route/main.yml.j2') | from_yaml }}"

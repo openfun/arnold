@@ -1,0 +1,22 @@
+---
+# Patch all apps dest routes with src stack
+
+- name: Print switch details
+  debug: msg="[{{ app.name }}] Switch routes from {{ prefixe_route_src }} to {{ prefixe_route_dest }}"
+  tags: switch
+
+- include_tasks: deploy_get_stamp_from_route.yml
+  vars:
+    prefixe: "{{ prefixe_route_src }}"
+  tags: switch
+
+- include_tasks: deploy_patch_route.yml
+  vars:
+    prefixe: "{{ prefixe_route_dest }}"
+    deployment_stamp: "{{ route_deployment_stamp }}"
+  tags: switch
+
+- include_tasks: deploy_patch_route.yml
+  vars:
+    prefixe: "{{ prefixe_route_src }}"
+  tags: switch

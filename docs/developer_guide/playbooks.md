@@ -106,6 +106,27 @@ $ docker run --rm -it \
     ansible-playbook deploy.yml -e "customer=patient0 env_type=staging"
 ```
 
+## `switch.yml`
+
+The `switch.yml` playbook move the current stack to the previous route
+and move the next stack to the current route.
+
+### Usage
+
+```bash
+# sugar development
+$ bin/switch -e "customer=patient0 env_type=staging"
+
+# development
+$ bin/ansible-playbook switch.yml -e "customer=patient0 env_type=staging"
+
+# native command for production
+$ docker run --rm -it \
+    --env-file env.d/production \
+    arnold \
+    ansible-playbook switch.yml -e "customer=patient0 env_type=staging"
+```
+
 ## `create_project.yml`
 
 This playbook only creates a new OpenShift project name defined with the
