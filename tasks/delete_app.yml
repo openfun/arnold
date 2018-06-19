@@ -1,0 +1,9 @@
+---
+# Delete objects of the last deployment_stamp
+- include_tasks: deploy_apps.yml
+  vars:
+    deployment_state: "absent"
+    deployment_stamp: "{{ route_deployment_stamp }}"
+  tags:
+    - delete
+    - deploy
