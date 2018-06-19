@@ -1,5 +1,6 @@
 ---
-# Delete objects of the last deployment_stamp
+# Delete objects of the last deployment_stamp 
+
 - include_tasks: deploy_apps.yml
   vars:
     deployment_state: "absent"

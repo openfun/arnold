@@ -6,9 +6,6 @@
 #     - 'absent': all objects are deleted
 #   deployment_stamp : the stamp of the object we going to creat or delete
 
-- name: Print desired state
-  debug: msg="OpenShift objects with deployment_stamp={{ deployment_stamp }} must be {{ deployment_state | default('present') }}"
-
 - name: "OpenShift objects with deployment_stamp[{{ deployment_stamp }}] must be {{ deployment_state | default('present') }}"
   openshift_raw:
     definition: "{{ lookup('template', 'templates/' + item + '.j2') | from_yaml }}"

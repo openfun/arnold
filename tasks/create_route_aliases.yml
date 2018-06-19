@@ -9,7 +9,6 @@
   vars:
     routes_aliases: []
 
-
 - name: Make sure all redirected routes exist or force recreation
   openshift_raw:
     force: true
