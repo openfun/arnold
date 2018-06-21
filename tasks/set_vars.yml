@@ -4,7 +4,28 @@
 - name: Lookup applications and set the apps var
   set_fact: apps="{{ lookup('pipe', 'python plugins/utils/lookup_apps.py') | from_yaml }}"
 
-- name: Display looked up applications
+# If the playbook is invoqued with the app_filter extra var, we restrict apps
+# to the list passed as an argument, e.g.:
+#
+#     $ ansible-playbook foo.yml -e "app_filter='richie,redirect'"
+#
+# This task will build the jmespath query to restrict apps to the selected
+# one(s), e.g.:
+#
+#    [?name=='richie' || name=='redirect']
+- name: Set app filtering query
+  set_fact:
+    # We use escaped double quotes in the first regex_replace filter to be able
+    # to add single quotes around app name in the query
+    app_filter_query: "{{ app_filter.split(',') | map('regex_replace', '(.*)', \"name=='\\1'\") | join(' || ') | regex_replace('(.*)', '[?\\1]') }}"
+  when: app_filter is defined
+
+- name: Filter apps
+  set_fact:
+    apps: "{{ apps | json_query(app_filter_query) }}"
+  when: app_filter_query is defined
+
+- name: Display selected applications
   debug: var=apps
 
 - name: Include customer env_type vars
