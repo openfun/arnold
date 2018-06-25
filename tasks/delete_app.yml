@@ -4,7 +4,7 @@
 - include_tasks: deploy_apps.yml
   vars:
     deployment_state: "absent"
-    deployment_stamp: "{{ route_deployment_stamp }}"
+    deployment_stamp: "{{ app_route_deployment_stamp }}"
   tags:
     - delete
     - deploy

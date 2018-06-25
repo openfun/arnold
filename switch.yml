@@ -1,8 +1,8 @@
 ---
 # This playbook switch all routes:
-# 1. point the "current" route to the stack that was pointed by the "next" route,
-# 2. point the "previous" route to the stack that was pointed by the "current" route just before we changed it in 1)
-# 3. delete the stack that was pointed by the "previous" route just before we changed it in 2)
+# 1. point the "previous" route to the stack that was pointed by the "current" route,
+# 2. point the "current" route to the stack that was pointed by the "next" route,
+# 3. delete the stack that was pointed by the "previous" route,
 # 4. patch the next route to the init stamp
 
 - hosts: local
@@ -12,7 +12,6 @@
 
     - import_tasks: tasks/set_vars.yml
 
-    # Patch all apps dest routes with src stack
     - include_tasks: tasks/run_tasks_for_apps.yml
       vars:
         tasks:

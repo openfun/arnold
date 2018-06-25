@@ -7,8 +7,8 @@ metadata:
     env_type:         "{{ env_type }}"
     customer:         "{{ customer }}"
     app:              "{{ app.name }}"
-    version:          "{{ item.0.tag | default('init', true) }}"
-    deployment_stamp: "{{ deployment_stamp | default('init', true) }}"
+    version:          "{{ item.0.tag | default('null', true) }}"
+    deployment_stamp: "{{ deployment_stamp | default('null', true) }}"
   annotations:
     kubernetes.io/tls-acme: "true"
 spec:

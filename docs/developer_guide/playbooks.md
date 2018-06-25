@@ -91,8 +91,6 @@ The `deploy.yml` playbook defines a new `deployment_stamp` to create a whole new
 stack by defining OpenShift objects with unique labels and names. This allows us
 to initiate a blue/green deployment strategy.
 
-https://framindmap.org/c/maps/507624/public
-
 ### Usage
 
 ```bash
@@ -108,8 +106,10 @@ $ docker run --rm -it \
 
 ## `switch.yml`
 
-The `switch.yml` playbook move the current stack to the previous route
-and move the next stack to the current route.
+The `switch.yml` playbook moves:
+1. the *current* stack to the *previous* route
+2. the *next* stack to the *current* route.
+
 
 ### Usage
 
