@@ -10,7 +10,7 @@
     # Patch all current routes of all apps after deploy
     - include_tasks: tasks/run_tasks_for_apps.yml
       vars:
-        prefixe: "current"
+        prefix: "current"
         tasks:
           - deploy_get_stamp_from_route
           - deploy_patch_route

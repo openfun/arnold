@@ -1,10 +1,11 @@
 ---
-# tasks for managing apps
+# Task set to manage apps
+#
 # Args:
 #   deployment_state:
-#     - present : default value, all objects are created
-#     - 'absent': all objects are deleted
-#   deployment_stamp : the stamp of the object we going to creat or delete
+#     - "present": default value, all objects are created
+#     - "absent":  all objects are deleted
+#   deployment_stamp: the stamp of the object we are going to create or delete
 
 - name: "OpenShift objects with deployment_stamp[{{ deployment_stamp }}] must be {{ deployment_state | default('present') }}"
   openshift_raw:

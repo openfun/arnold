@@ -1,5 +1,7 @@
 # coding=utf-8
 # pylint: disable=I0011,E0401,C0103,C0111,W0212
+# https://github.com/octplane/ansible_stdout_compact_logger
+
 
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
@@ -128,7 +130,7 @@ class TestStringMethods(unittest.TestCase):
     def test_hash_array2(self):
         hs = {u'cmd': ['one', 'two']}
         expected_result = """{
-  - cmd: [ 
+  - cmd: [
     - one
     - two
    ]
@@ -144,7 +146,7 @@ class TestStringMethods(unittest.TestCase):
         hs = {u'cmd': {'bar': ['one', 'two']}}
         expected_result = """{
   - cmd: {
-    - bar: [ 
+    - bar: [
       - one
       - two
      ]
@@ -155,7 +157,7 @@ class TestStringMethods(unittest.TestCase):
     def test_multiline_single(self):
         # pylint: disable=I0011,C0303
         hs = [["foo", "bar"]]
-        expected_result = """[ [ 
+        expected_result = """[ [
   - foo
   - bar
  ] ]"""
