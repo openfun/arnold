@@ -14,28 +14,37 @@
 # - K8S_AUTH_API_KEY: OpenShift user's API token (required to run oc commands)
 # - K8S_AUTH_HOST: OpenShift's console url (e.g. https://openshift.startup.com:8443)
 
-FROM debian:stretch
+FROM openshift/jenkins-slave-base-centos7
+
 
 WORKDIR /app
 
 COPY ./requirements/apt-packages.txt /app/requirements/
 
 # hadolint ignore=DL3015,DL3008
-RUN apt-get update && \
-    xargs -a /app/requirements/apt-packages.txt apt-get install -y && \
-    rm -rf /var/lib/apt/lists/*
+# RUN apt-get update && \
+#     xargs -a /app/requirements/apt-packages.txt apt-get install -y && \
+#     rm -rf /var/lib/apt/lists/*
+
+
+RUN yum makecache && \
+    yum install -y epel-release && \
+    yum install -y python2-pip gcc shellcheck && \
+    yum clean all -y
+
 
 # Install OpenShift client
-ENV OC_VERSION=v3.9.0 \
-    OC_TAG_SHA=191fece
+# ENV OC_VERSION=v3.9.0 \
+#     OC_TAG_SHA=191fece
 
-RUN curl -sLo /tmp/oc.tar.gz "https://github.com/openshift/origin/releases/download/${OC_VERSION}/openshift-origin-client-tools-${OC_VERSION}-${OC_TAG_SHA}-linux-64bit.tar.gz" && \
-    tar xzvf /tmp/oc.tar.gz -C /tmp/ && \
-    mv "/tmp/openshift-origin-client-tools-${OC_VERSION}-${OC_TAG_SHA}-linux-64bit/oc" /usr/local/bin/ && \
-    rm -rf /tmp/oc.tar.gz "/tmp/openshift-origin-client-tools-${OC_VERSION}-${OC_TAG_SHA}-linux-64bit"
+# RUN curl -sLo /tmp/oc.tar.gz "https://github.com/openshift/origin/releases/download/${OC_VERSION}/openshift-origin-client-tools-${OC_VERSION}-${OC_TAG_SHA}-linux-64bit.tar.gz" && \
+#     tar xzvf /tmp/oc.tar.gz -C /tmp/ && \
+#     mv "/tmp/openshift-origin-client-tools-${OC_VERSION}-${OC_TAG_SHA}-linux-64bit/oc" /usr/local/bin/ && \
+#     rm -rf /tmp/oc.tar.gz "/tmp/openshift-origin-client-tools-${OC_VERSION}-${OC_TAG_SHA}-linux-64bit"
 
 COPY ./requirements/pip-requirements.txt /app/requirements/
-RUN pip install -r /app/requirements/pip-requirements.txt
+RUN pip install --upgrade pip setuptools && \
+    pip install -r /app/requirements/pip-requirements.txt
 
 # Install more ansible_lint_rules
 ENV ANSIBLE_LINT_RULES_DIR="/tmp/_ansible_lint_rules"

@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: "deploy-test"
+objects:
+  - apiVersion: v1
+    kind: BuildConfig
+    metadata:
+      name: "jenkins-deploy"
+    spec:
+      source:
+        git:
+          # TODO custom repo // Arnold github
+          uri: "https://github.com/openfun/arnold.git"
+          ref: "add-jenkins"
+          # TODO Add secret object with credentials for github (private repo case)
+      strategy:
+        type: JenkinsPipeline
+        jenkinsPipelineStrategy:
+          jenkinsfilePath: "Jenkinsfile"
+          # TODO:
+          # Add env vars (maybe)
