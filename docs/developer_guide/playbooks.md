@@ -38,9 +38,9 @@ OpenShift objects for a customer (default: `patient0`) in a particular
 environment (default: `development`).
 It executes sequentially the following playbooks:
 
-* `delete_project.yml`
-* `init_project.yml`
-* `deploy.yml`
+- `delete_project.yml`
+- `init_project.yml`
+- `deploy.yml`
 
 ### Usage
 
@@ -65,11 +65,9 @@ OpenShift objects for a customer (default: `patient0`) in a particular
 environment (default: `development`).
 It executes sequentially the following playbooks:
 
-* `create_project.yml`
-* `create_secrets.yml`
-* `create_config.yml`
-* `create_acme.yml`
-* `create_objects.yml`
+- `create_project.yml`
+- `create_secrets.yml`
+- `create_acme.yml`
 
 ### Usage
 
@@ -143,27 +141,6 @@ $ docker run --rm -it \
     --env-file env.d/production \
     arnold \
     ansible-playbook create_secrets.yml --ask-vault-pass -e "customer=patient0 env_type=staging"
-```
-
-## `create_config.yml`
-
-This playbook creates required `ConfigMap` objects for each service. Default
-`ConfigMap`s that will be created are stored in
-`templates/configmap/<< service >>`. Know that these `ConfigMap`s can be
-overridden by adding them to
-`files/configmap/{{ customer }}/{{ env_type }}/<< service >>`.
-
-### Usage
-
-```bash
-# development
-$ bin/ansible-playbook create_config.yml -e "customer=patient0 env_type=staging"
-
-# native command for production
-$ docker run --rm -it \
-    --env-file env.d/production \
-    arnold \
-    ansible-playbook create_config.yml -e "customer=patient0 env_type=staging"
 ```
 
 ## `create_acme.yml`
