@@ -1,8 +1,86 @@
 ---
 # tasks/set_vars.yml
 
-- name: Lookup applications and set the apps var
-  set_fact: apps="{{ lookup('pipe', 'python plugins/utils/lookup_apps.py') | from_yaml }}"
+- name: Include customer env_type vars
+  include_vars:
+    file: "{{ item }}"
+  with_items:
+    - "group_vars/customer/{{ customer }}.yml"
+    - "group_vars/env_type/{{ env_type }}.yml"
+
+# The following tasks goal is to define the `apps` var that describes
+# applications to work on.
+#
+# The first task scans the `apps/` directory of the repository to look for
+# applications (services/volumes/configMap & related templates) and store those
+# definitions in the `available_apps` var.
+#
+# Once done, if the `apps` var has already been defined in group_vars, we merge
+# `apps` with `available_apps` definitions. This is useful to had metadata to
+# services that cannot be guessed while scanning the `apps` directory.
+#
+# Example: let's say that for your patient0 customer, you have defined a
+# particular "host" for the "postgresql" service of the "richie" application,
+# e.g.:
+#
+#     # group_vars/customer/patient0.yml
+#     apps:
+#       - name: "richie"
+#         services:
+#           - name: "postgresql"
+#             host: "pg.foo.com"
+#
+# While scanning the `apps/` folder, the `available_apps` var definition for the
+# "richie" application will be:
+#
+#     {
+#       "name": "richie",
+#       "services": [
+#         {
+#           "name": "postgresql",
+#           "templates": [
+#             "apps/richie/templates/postgresql/dc.yml.j2",
+#             "apps/richie/templates/postgresql/ep.yml.j2",
+#             "apps/richie/templates/postgresql/svc.yml.j2"
+#           ]
+#         }
+#       ]
+#     }
+#
+# And the final (merged) application definition:
+#
+#     {
+#       "name": "richie",
+#       "services": [
+#         {
+#           "name": "postgresql",
+#           "host": "pg.foo.com",
+#           "templates": [
+#             "apps/richie/templates/postgresql/dc.yml.j2",
+#             "apps/richie/templates/postgresql/ep.yml.j2",
+#             "apps/richie/templates/postgresql/svc.yml.j2"
+#           ]
+#         }
+#       ]
+#     }
+- name: Lookup available applications
+  set_fact: available_apps="{{ lookup('pipe', 'python plugins/utils/lookup_apps.py') | from_yaml }}"
+
+- name: Display available applications
+  debug: var=available_apps
+
+- name: Add meta-data to available applications
+  set_fact:
+    app: "{{ available_apps | json_query(\"[?name=='\" + item.name + \"']\") | first | merge_with_app(item) }}"
+  register: merged_apps
+  with_items: "{{ apps | default(available_apps) }}"
+
+- name: Set applications for this project
+  set_fact:
+    apps: "{{ merged_apps | json_query('results[*].ansible_facts.app') }}"
+
+- name: Display enriched applications definitions
+  debug: var=apps
 
 # If the playbook is invoqued with the apps_filter extra var, we restrict apps
 # to the list passed as an argument, e.g.:
@@ -27,13 +105,6 @@
 
 - name: Display selected applications
   debug: var=apps
-
-- name: Include customer env_type vars
-  include_vars:
-    file: "{{ item }}"
-  with_items:
-    - "group_vars/customer/{{ customer }}.yml"
-    - "group_vars/env_type/{{ env_type }}.yml"
 
 - name: Print project details
   debug: msg="Project name {{ project_name }} - domain {{ domain_name }}"
