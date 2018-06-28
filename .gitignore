@@ -1,4 +1,11 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Ansible temporary files
 .ansible/
 *.retry
 .vault_pass
+
+# Environment
 env.d/*
