@@ -11,6 +11,12 @@ from deepmerge import always_merger
 def merge_with_app(base, new):
     """Merge data from the "new" application to the "base" application"""
 
+    if base is None:
+        raise AnsibleFilterError("input base app is empty")
+
+    if new is None:
+        raise AnsibleFilterError("input new app is empty")
+
     if not isinstance(base, dict) or not isinstance(new, dict):
         raise AnsibleFilterError("input apps definitions should be 'dict' types")
 
