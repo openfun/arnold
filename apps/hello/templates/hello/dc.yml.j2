@@ -3,18 +3,19 @@ kind: DeploymentConfig
 metadata:
   labels:
     app: hello
-  name: hello
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: "hello-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
   replicas: 1  # number of pods we want
   selector:
-    app: hello
-    deploymentconfig: hello
+    deploymentconfig: "hello-{{ deployment_stamp }}"
   template:
     metadata:
       labels:
         app: hello
-        deploymentconfig: hello
+        deploymentconfig: "hello-{{ deployment_stamp }}"
+        deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:
       - name: hello-openshift
@@ -24,7 +25,7 @@ spec:
           protocol: TCP
         env:
           - name: RESPONSE
-            value: "{{ hello_msg }}"
+            value: "{{ hello_msg }} - {{ deployment_stamp }}"
         resources: {}
         volumeMounts:
         - name: tmp

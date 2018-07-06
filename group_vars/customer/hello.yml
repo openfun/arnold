@@ -3,6 +3,14 @@
 # for a minimal dev app
 project_display_name: "Hello ({{ env_type }})"
 project_description: "A minimal project with a hello-world app ({{ env_type }})"
+
+apps:
+  - name: hello
+    services:
+      - name:       hello
+        host:       "hello.{{ project_name }}.{{ domain_name }}"
+
+## _____ soon deprecated below _________________________________________________
 hello_host: "{{ project_name }}.{{ domain_name }}"
 hello_port: "8080"
 hello_msg:  "Hello OpenShift! by Arnold"
@@ -12,18 +20,20 @@ nginx_ports:
 
 # Openshift template files
 openshift_deployments:
-  - openshift/common/dc/nginx.yml
   - openshift/hello/dc/hello.yml
+  - openshift/richie/dc/elasticsearch.yml
+  - openshift/richie/dc/nginx.yml
+  - openshift/richie/dc/richie.yml
 openshift_endpoints:
 openshift_jobs:
 openshift_routes:
   - openshift/hello/route/hello.yml
+  - openshift/richie/route/richie.yml
 openshift_services:
-  - openshift/common/svc/nginx.yml
   - openshift/hello/svc/hello.yml
+  - openshift/richie/svc/elasticsearch.yml
+  - openshift/richie/svc/nginx.yml
+  - openshift/richie/svc/richie.yml
 openshift_volumes:
-openshift_routes_aliases:
-   - route: "{{ hello_host }}"
-     aliases:
-       - "{{ project_name }}-first-alias.{{ domain_name }}"
-       - "{{ project_name }}-second-alias.{{ domain_name }}"
+  - openshift/richie/pvc/media.yml
+  - openshift/richie/pvc/static.yml
