@@ -27,7 +27,7 @@
       vars:
         tasks:
           - tasks/create_app_config
-          - tasks/deploy_app
+          - tasks/manage_app
       tags:
         - config
         - deploy
