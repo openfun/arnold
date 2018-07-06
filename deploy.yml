@@ -30,7 +30,7 @@
           - tasks/deploy_app
       tags:
         - config
-	- deploy
+        - deploy
 
     # Patch all next routes of all apps after deploy
     - include_tasks: tasks/run_tasks_for_apps.yml
