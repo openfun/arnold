@@ -64,7 +64,7 @@
 #       ]
 #     }
 - name: Lookup available applications
-  set_fact: available_apps="{{ lookup('pipe', 'python plugins/utils/lookup_apps.py') | from_yaml }}"
+  set_fact: available_apps="{{ lookup('apps', 'apps/') }}"
 
 - name: Display available applications
   debug: msg="available_apps={{available_apps | to_nice_yaml}}"
