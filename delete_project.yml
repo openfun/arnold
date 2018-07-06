@@ -17,4 +17,3 @@
         description: "{{ project_description|default(project_display_name)|default(project_name) }}"
         display_name: "{{ project_display_name|default(project_name) }}"
         state: absent
-      
