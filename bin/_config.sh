@@ -61,13 +61,13 @@ function _docker_run() {
     done
 
     # Check that minishift is running
-    if ! minishift status | grep Running > /dev/null ; then
+    if ${OC_LOGIN} && ! minishift status | grep Running > /dev/null ; then
         echo "Error: minishift is not running. Please start it first."
         exit 1
     fi
 
     # Check that the current user is already logged in minishift
-    if ! oc whoami &> /dev/null; then
+    if ${OC_LOGIN} && ! oc whoami &> /dev/null; then
         echo "Error: you need to login to minishift first."
         exit 1
     fi
@@ -75,6 +75,7 @@ function _docker_run() {
     docker run --rm -it \
         -u "$(id -u)" \
         --env-file "$env_file" \
+        --env OC_LOGIN \
         --env K8S_AUTH_API_KEY="$(oc whoami -t)" \
         --env K8S_AUTH_HOST="https://$(minishift ip):8443" \
         --env MINISHIFT_IP="$(minishift ip)" \
