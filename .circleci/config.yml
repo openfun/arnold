@@ -93,6 +93,18 @@ jobs:
       - *dind
       - run: bin/lint docker
 
+
+  lint-plugins:
+    <<: *defaults
+
+    steps:
+      - checkout
+      - *dind
+      - *ci_env
+      - *attach_workspace
+      - *docker_load
+      - run: bin/lint plugins
+
   test-built:
     <<: *defaults
 
@@ -153,13 +165,18 @@ workflows:
       - lint-docker:
           requires:
             - build
+      - lint-plugins:
+          requires:
+            - build
       - test-built:
           requires:
           - lint-bash
           - lint-docker
           - lint-ansible
+          - lint-plugins
       - test-plugins:
           requires:
           - lint-bash
           - lint-docker
           - lint-ansible
+          - lint-plugins

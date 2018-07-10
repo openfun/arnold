@@ -47,10 +47,25 @@ _bash() {
   print_green "  -> Bash lint OK"
 }
 
+_plugins() {
+  echo -e "\n---> Plugins: flake8\n"
+  _docker_run flake8 plugins tests
+  print_green "  -> Flake8 check OK"
+
+  echo -e "\n---> Plugins: isort\n"
+  _docker_run isort --recursive --diff --check-only plugins tests
+  print_green "  -> isort check OK"
+
+  echo -e "\n---> Plugins: Pylint\n"
+  _docker_run pylint plugins tests
+  print_green "  -> Pylint check OK"
+}
+
 _all() {
   _docker
   _ansible
   _bash
+  _plugins
   print_green "\n--> All lints OK"
 }
 
