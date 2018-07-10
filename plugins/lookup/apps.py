@@ -2,18 +2,27 @@
 """
 Applications lookup
 """
+# pylint: disable=bad-continuation
 from __future__ import absolute_import, division, print_function
 
+import os
+import re
+
+from ansible.plugins.lookup import LookupBase
+
+# pylint: disable=invalid-name
 __metaclass__ = type
 
 DOCUMENTATION = """
     lookup: apps
     author: Open FUN (France Universite Numerique) <fun.dev(at)fun-mooc.fr>
     version_added: "0.1"
-    short_description: walk through an application tree to discover deployable applications
+    short_description: walk through an application tree to discover deployable
+        applications
     description:
-        Lookup ready-to-deploy applications following recommended Arnold applications'
-        tree, e.g. for the "richie" application and the "apps" ``apps_path``:
+        Lookup ready-to-deploy applications following recommended Arnold
+        applications' tree, e.g. for the "richie" application and the
+        "apps" ``apps_path``:
 
             apps/richie
             ├── templates
@@ -42,7 +51,8 @@ DOCUMENTATION = """
             └── vars
                 └── main.yml
 
-        Analysing this tree with ``lookup_apps`` should return the following data structure:
+        Analysing this tree with ``lookup_apps`` should return the
+        following data structure:
 
             [
                 {
@@ -108,14 +118,11 @@ RETURN = """
     type: list
 """
 
-import os
-import re
-
-from ansible.plugins.filter.core import to_nice_yaml
-from ansible.plugins.lookup import LookupBase
-
 
 class LookupModule(LookupBase):
+    """Apps lookup module"""
+
+    # pylint: disable=arguments-differ, too-many-locals
     def run(self, apps_paths, variables, **kwargs):
 
         app_volumes_dir = "_volumes"
@@ -157,13 +164,17 @@ class LookupModule(LookupBase):
                     apps_path, app["name"], "templates", tail
                 ):
                     templates = [os.path.join(root, f) for f in files]
-                    app["services"].append({"name": tail, "templates": templates})
+                    app["services"].append(
+                        {"name": tail, "templates": templates}
+                    )
                     continue
 
                 # ./apps/foo/templates/bar/_configs directory
                 if tail == service_config_dir:
                     service = os.path.basename(head)
-                    idx = map(lambda s: s.get("name"), app["services"]).index(service)
+                    idx = [s.get("name") for s in app["services"]].index(
+                        service
+                    )
                     configs = [os.path.join(root, f) for f in files]
                     app["services"][idx].update({"configs": configs})
                     continue

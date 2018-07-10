@@ -28,7 +28,7 @@ def merge_with_app(base, new):
     if base["name"] != new["name"]:
         raise AnsibleFilterError("input apps should have the same name")
 
-    if not len(base["name"]):
+    if not base["name"]:
         raise AnsibleFilterError("input apps name cannot be empty")
 
     result = deepcopy(base)
@@ -43,7 +43,7 @@ def merge_with_app(base, new):
             continue
         new_service = new_app_selected_services[0]
         for k in ("configs", "templates"):
-            if not new_service.get(k):
+            if new_service.get(k) is None:
                 continue
             # Use the list(set()) trick to remove duplicated items
             base_service[k] = sorted(list(set(new_service[k] + base_service[k])))
@@ -56,8 +56,11 @@ def merge_with_app(base, new):
     return result
 
 
+# pylint: disable=no-self-use,too-few-public-methods
 class FilterModule(object):
     """Filters used to deep merge python objects"""
 
     def filters(self):
+        """List plugin filters"""
+
         return {"merge_with_app": merge_with_app}
