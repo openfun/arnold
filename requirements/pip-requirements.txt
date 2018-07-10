@@ -5,6 +5,11 @@ deepmerge==0.0.4
 jmespath==0.9.3
 openshift==0.4.4
 
+# Quality
+flake8
+isort
+pylint
+
 # Tests
 pytest
 pytest-coverage
