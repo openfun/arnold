@@ -117,6 +117,27 @@ jobs:
               "${ARNOLD_IMAGE}" \
               ansible --version
 
+  # FIXME: we have deactivated plugins test coverage as the container user is
+  # not allowed to write to /app/.coverage and CircleCI does not allow to mount
+  # volumes with "docker run" commands.
+  test-plugins:
+    <<: *defaults
+
+    steps:
+      - checkout
+      - *dind
+      - *attach_workspace
+      - *docker_load
+      - *ci_env
+      - run:
+          name: Run unit tests for local plugins
+          command: |
+            docker run --rm \
+              -e OC_LOGIN=false \
+              --tmpfs /app/.pytest_cache \
+              "${ARNOLD_IMAGE}" \
+              python -m pytest --no-cov
+
 workflows:
   version: 2
 
@@ -132,7 +153,12 @@ workflows:
       - lint-docker:
           requires:
             - build
-      - test:
+      - test-built:
+          requires:
+          - lint-bash
+          - lint-docker
+          - lint-ansible
+      - test-plugins:
           requires:
           - lint-bash
           - lint-docker
