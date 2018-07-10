@@ -1,26 +1,32 @@
-# https://circleci.com/docs/2.0/configuration-reference/
+# CircleCI's configuration for Arnold
+#
+# Reference: https://circleci.com/docs/2.0/configuration-reference/
+
 aliases:
   - &defaults
     docker:
       - image: circleci/python:3.6.5-stretch-node-browsers
     working_directory: ~/fun
+
   # Activate Docker in Docker (aka dind)
   - &dind
     setup_remote_docker:
-        docker_layer_caching: true
+      docker_layer_caching: true
+
   - &ci_env
     run:
       name: Define Environment Variable at Runtime
       command: |
         echo 'export ARNOLD_IMAGE="arnold:$(tr -d '\n' < VERSION)"' >> $BASH_ENV
         source $BASH_ENV
+
   - &docker_load
     run:
       name: Load docker image
       command: |
         docker load < /tmp/docker/images/arnold.tar
         docker images
-  # Attach workspace
+
   - &attach_workspace
     attach_workspace:
       # Must be absolute path or relative path from working_directory
@@ -31,13 +37,15 @@ ci_env:
 version: 2
 jobs:
 
-# Build Arnold's docker image
+  # Build Arnold's docker image
   build:
     # We use the machine executor, i.e. a VM, not a container
     machine:
       # Cache docker layers so that we strongly speed up this job execution
       docker_layer_caching: true
+
     working_directory: ~/fun
+
     steps:
       - checkout
       - *ci_env
@@ -47,7 +55,7 @@ jobs:
             bin/build
             mkdir -p /tmp/docker/images
             docker save -o /tmp/docker/images/arnold.tar "${ARNOLD_IMAGE}"
-      # Store the built as an artifact that can be reused in other jobs
+      # Save the built to the workspace so that it can be reused in other jobs
       - persist_to_workspace:
           # Must be an absolute path, or relative path from working_directory.
           root: /tmp/docker
@@ -55,8 +63,9 @@ jobs:
           paths:
             - images
 
-  ansible_lint:
+  lint-ansible:
     <<: *defaults
+
     steps:
       - checkout
       - *dind
@@ -65,8 +74,9 @@ jobs:
       - *docker_load
       - run: bin/lint ansible
 
-  bash_lint:
+  lint-bash:
     <<: *defaults
+
     steps:
       - checkout
       - *dind
@@ -75,15 +85,17 @@ jobs:
       - *docker_load
       - run: bin/lint bash
 
-  docker_lint:
+  lint-docker:
     <<: *defaults
+
     steps:
       - checkout
       - *dind
       - run: bin/lint docker
 
-  test:
+  test-built:
     <<: *defaults
+
     steps:
       - checkout
       - *dind
@@ -107,20 +119,21 @@ jobs:
 
 workflows:
   version: 2
-  build_lint_and_test:
+
+  arnold:
     jobs:
       - build
-      - ansible_lint:
+      - lint-ansible:
           requires:
             - build
-      - bash_lint:
+      - lint-bash:
           requires:
             - build
-      - docker_lint:
+      - lint-docker:
           requires:
             - build
       - test:
           requires:
-          - bash_lint
-          - docker_lint
-          - ansible_lint
+          - lint-bash
+          - lint-docker
+          - lint-ansible
