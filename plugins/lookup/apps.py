@@ -25,31 +25,28 @@ DOCUMENTATION = """
         "apps" ``apps_path``:
 
             apps/richie
-            ├── templates
-            │   ├── elasticsearch
-            │   │   ├── dc.yml.j2
-            │   │   └── svc.yml.j2
-            │   ├── nginx
-            │   │   ├── _configs
-            │   │   │   └── richie.conf.j2
-            │   │   ├── dc.yml.j2
-            │   │   └── svc.yml.j2
-            │   ├── postgresql
-            │   │   ├── dc.yml.j2
-            │   │   ├── ep.yml.j2
-            │   │   └── svc.yml.j2
-            │   ├── richie
-            │   │   ├── dc.yml.j2
-            │   │   ├── job_collectstatic.yml.j2
-            │   │   ├── job_db_migrate.yml.j2
-            │   │   ├── job_regenerate_indexes.yml.j2
-            │   │   ├── route.yml.j2
-            │   │   └── svc.yml.j2
-            │   └── _volumes
-            │       ├── media.yml.j2
-            │       └── static.yml.j2
-            └── vars
-                └── main.yml
+                └── templates
+                    ├── elasticsearch
+                    │   ├── dc.yml.j2
+                    │   └── svc.yml.j2
+                    ├── nginx
+                    │   ├── _configs
+                    │   │   └── richie.conf.j2
+                    │   ├── dc.yml.j2
+                    │   └── svc.yml.j2
+                    ├── postgresql
+                    │   ├── dc.yml.j2
+                    │   ├── ep.yml.j2
+                    │   └── svc.yml.j2
+                    ├── richie
+                    │   ├── dc.yml.j2
+                    │   ├── job_collectstatic.yml.j2
+                    │   ├── job_db_migrate.yml.j2
+                    │   ├── job_regenerate_indexes.yml.j2
+                    │   └── svc.yml.j2
+                    └── _volumes
+                        ├── media.yml.j2
+                        └── static.yml.j2
 
         Analysing this tree with ``lookup_apps`` should return the
         following data structure:
@@ -164,17 +161,13 @@ class LookupModule(LookupBase):
                     apps_path, app["name"], "templates", tail
                 ):
                     templates = [os.path.join(root, f) for f in files]
-                    app["services"].append(
-                        {"name": tail, "templates": templates}
-                    )
+                    app["services"].append({"name": tail, "templates": templates})
                     continue
 
                 # ./apps/foo/templates/bar/_configs directory
                 if tail == service_config_dir:
                     service = os.path.basename(head)
-                    idx = [s.get("name") for s in app["services"]].index(
-                        service
-                    )
+                    idx = [s.get("name") for s in app["services"]].index(service)
                     configs = [os.path.join(root, f) for f in files]
                     app["services"][idx].update({"configs": configs})
                     continue
