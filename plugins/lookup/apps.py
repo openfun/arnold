@@ -25,28 +25,31 @@ DOCUMENTATION = """
         "apps" ``apps_path``:
 
             apps/richie
-                └── templates
-                    ├── elasticsearch
-                    │   ├── dc.yml.j2
-                    │   └── svc.yml.j2
-                    ├── nginx
-                    │   ├── _configs
-                    │   │   └── richie.conf.j2
-                    │   ├── dc.yml.j2
-                    │   └── svc.yml.j2
-                    ├── postgresql
-                    │   ├── dc.yml.j2
-                    │   ├── ep.yml.j2
-                    │   └── svc.yml.j2
-                    ├── richie
-                    │   ├── dc.yml.j2
-                    │   ├── job_collectstatic.yml.j2
-                    │   ├── job_db_migrate.yml.j2
-                    │   ├── job_regenerate_indexes.yml.j2
-                    │   └── svc.yml.j2
-                    └── _volumes
-                        ├── media.yml.j2
-                        └── static.yml.j2
+                ├── templates
+                │   ├── elasticsearch
+                │   │   ├── dc.yml.j2
+                │   │   └── svc.yml.j2
+                │   ├── nginx
+                │   │   ├── _configs
+                │   │   │   └── richie.conf.j2
+                │   │   ├── dc.yml.j2
+                │   │   └── svc.yml.j2
+                │   ├── postgresql
+                │   │   ├── dc.yml.j2
+                │   │   ├── ep.yml.j2
+                │   │   └── svc.yml.j2
+                │   ├── richie
+                │   │   ├── dc.yml.j2
+                │   │   ├── job_collectstatic.yml.j2
+                │   │   ├── job_db_migrate.yml.j2
+                │   │   ├── job_regenerate_indexes.yml.j2
+                │   │   └── svc.yml.j2
+                │   └── _volumes
+                │       ├── media.yml.j2
+                │       └── static.yml.j2
+                └── vars
+                    └── all
+                        └── main.yml
 
         Analysing this tree with ``lookup_apps`` should return the
         following data structure:
@@ -95,6 +98,13 @@ DOCUMENTATION = """
                     "volumes": [
                         "apps/richie/templates/_volumes/static.yml.j2",
                         "apps/richie/templates/_volumes/media.yml.j2"
+                    ],
+                    vars: [
+                        {
+                            "type": "all",
+                            "name": "main",
+                            "path": "apps/richie/vars/all/main.yml",
+                        },
                     ]
                 }
             ]
@@ -119,7 +129,10 @@ RETURN = """
 class LookupModule(LookupBase):
     """Apps lookup module"""
 
-    # pylint: disable=arguments-differ, too-many-locals
+    # This function needs a serious refactoring, Pylint is right and it makes no
+    # sense to disable all the following warnings.
+    #
+    # pylint: disable=arguments-differ,too-many-locals,too-many-nested-blocks,too-many-branches,
     def run(self, apps_paths, variables, **kwargs):
 
         app_volumes_dir = "_volumes"
@@ -147,7 +160,7 @@ class LookupModule(LookupBase):
                 if root == os.path.join(apps_path, tail):
                     if app is not None:
                         apps.append(app)
-                    app = {"name": tail, "services": []}
+                    app = {"name": tail, "services": [], "vars": []}
                     continue
 
                 # ./apps/foo/_volumes directory
@@ -172,6 +185,23 @@ class LookupModule(LookupBase):
                     app["services"][idx].update({"configs": configs})
                     continue
 
+                # ./apps/foo/vars/all
+                #
+                # For now we only accept "all" type vars, but this can evolve soon.
+                for var_type in ("all",):
+                    if root == os.path.join(apps_path, app["name"], "vars", var_type):
+                        for file_ in files:
+                            name, ext = os.path.splitext(file_)
+                            # We only consider YAML files
+                            if ext != ".yml":
+                                continue
+                            app["vars"].append(
+                                {
+                                    "type": var_type,
+                                    "name": name,
+                                    "path": os.path.join(root, file_),
+                                }
+                            )
             apps.append(app)
 
         return apps
