@@ -57,7 +57,7 @@ _plugins() {
   print_green "  -> isort check OK"
 
   echo -e "\n---> Plugins: Pylint\n"
-  _docker_run pylint plugins tests
+  _docker_run pylint -f colorized plugins tests
   print_green "  -> Pylint check OK"
 }
 
