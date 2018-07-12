@@ -2,6 +2,9 @@
 __pycache__/
 *.py[cod]
 
+# Editors
+.vscode
+
 # Ansible temporary files
 .ansible/
 *.retry
