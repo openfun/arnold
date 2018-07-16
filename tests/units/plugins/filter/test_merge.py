@@ -247,6 +247,72 @@ class TestMergeWithAppFilter(unittest.TestCase):
 
         self.assertDictDeepEqual(merge_with_app(base, new), expected)
 
+    def test_services_merge_with_new_keys(self):
+        """Test app services merge with new keys (meta)"""
+
+        base = {
+            "name": "foo",
+            "services": [
+                {
+                    "name": "bar",
+                    "configs": ["bar.conf"],
+                    "templates": ["bar/dc.yml", "bar/svc.yml"],
+                },
+                {
+                    "name": "baz",
+                    "configs": ["baz.conf"],
+                    "templates": ["baz/dc.yml", "baz/svc.yml", "baz/ep.yml"],
+                },
+            ],
+            "volumes": ["volumes/foo_bar.yml", "volumes/foo_baz.yml"],
+        }
+
+        # As the "fun" service does not exist in the "base" app services, we
+        # expect that it won't be copied, but simply ignored.
+        new = {
+            "name": "foo",
+            "host": "foo.com",
+            "services": [
+                {
+                    "name": "bar",
+                    "configs": ["bar2.conf"],
+                    "templates": ["bar/dc.yml", "bar/ep.yml"],
+                    "subdomain": "bar",
+                },
+                {
+                    "name": "fun",
+                    "configs": ["fun.conf"],
+                    "templates": ["fun/dc.yml", "fun/svc.yml"],
+                },
+            ],
+            "volumes": ["volumes/foo_fun.yml"],
+        }
+
+        expected = {
+            "name": "foo",
+            "host": "foo.com",
+            "services": [
+                {
+                    "name": "bar",
+                    "configs": ["bar.conf", "bar2.conf"],
+                    "templates": ["bar/dc.yml", "bar/svc.yml", "bar/ep.yml"],
+                    "subdomain": "bar",
+                },
+                {
+                    "name": "baz",
+                    "configs": ["baz.conf"],
+                    "templates": ["baz/dc.yml", "baz/svc.yml", "baz/ep.yml"],
+                },
+            ],
+            "volumes": [
+                "volumes/foo_bar.yml",
+                "volumes/foo_baz.yml",
+                "volumes/foo_fun.yml",
+            ],
+        }
+
+        self.assertDictDeepEqual(merge_with_app(base, new), expected)
+
     def test_services_merge_with_no_config(self):
         """Test app services merge"""
 
