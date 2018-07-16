@@ -7,6 +7,7 @@ from copy import deepcopy
 from ansible.errors import AnsibleFilterError
 
 
+# pylint: disable=invalid-name,too-many-branches
 def merge_with_app(base, new):
     """
         Merge data from the "new" application to the "base" application.
@@ -48,10 +49,20 @@ def merge_with_app(base, new):
             # Use the list(set()) trick to remove duplicated items
             base_service[k] = sorted(list(set(new_service[k] + base_service[k])))
 
+        # Add service missing keys (could be meta, such as host, etc.)
+        for k, v in new_service.iteritems():
+            if base_service.get(k) is None:
+                base_service[k] = v
+
     # Merge volumes (if any)
     if result.get("volumes") and new.get("volumes"):
         # Use the list(set()) trick to remove duplicated items
         result["volumes"] = sorted(list(set(new["volumes"] + result["volumes"])))
+
+    # Add new keys for this app
+    for k, v in new.iteritems():
+        if k not in result:
+            result[k] = v
 
     return result
 
