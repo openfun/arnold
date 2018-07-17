@@ -1,11 +1,11 @@
 ---
 # tasks/set_vars.yml
 
-- name: Include customer env_type vars
+- name: Include global customer & env_type vars
   include_vars:
     file: "{{ item }}"
   with_items:
-    - "group_vars/customer/{{ customer }}.yml"
+    - "group_vars/customer/{{ customer }}/main.yml"
     - "group_vars/env_type/{{ env_type }}.yml"
 
 # The following tasks goal is to define the `apps` var that describes
@@ -67,10 +67,10 @@
   set_fact: available_apps="{{ lookup('apps', 'apps/') }}"
 
 - name: Display available applications
-  debug: msg="available_apps={{available_apps | to_nice_yaml}}"
+  debug: msg="available_apps={{ available_apps | to_nice_yaml }}"
 
 - name: Display defined applications
-  debug: msg="apps={{apps | to_nice_yaml}}"
+  debug: msg="apps={{ apps | to_nice_yaml }}"
   when: apps is defined
 
 - name: Add meta-data to available applications
@@ -84,7 +84,7 @@
     apps: "{{ merged_apps | json_query('results[*].ansible_facts._app') }}"
 
 - name: Display enriched applications definitions
-  debug: msg="apps={{apps | to_nice_yaml}}"
+  debug: msg="apps={{ apps | to_nice_yaml }}"
 
 # If the playbook is invoqued with the apps_filter extra var, we restrict apps
 # to the list passed as an argument, e.g.:
@@ -108,7 +108,18 @@
   when: apps_filter_query is defined
 
 - name: Display selected applications
-  debug: msg="apps={{apps | to_nice_yaml}}"
+  debug: msg="apps={{ apps | to_nice_yaml }}"
+
+- name: Include "all" type vars for applications
+  include_vars:
+    file: "{{ item.path }}"
+  with_items: "{{ apps | json_query(\"[*].vars[?type=='all']\") | flatten }}"
+
+- name: Override specific vars given a customer and its env_type
+  include_vars:
+    file: "{{ item }}"
+  with_fileglob:
+    - "group_vars/customer/{{ customer }}/{{ env_type }}/*.yml"
 
 - name: Print project details
   debug: msg="Project name {{ project_name }} - domain {{ domain_name }}"
