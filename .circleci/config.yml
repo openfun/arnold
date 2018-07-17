@@ -129,6 +129,34 @@ jobs:
               "${ARNOLD_IMAGE}" \
               ansible --version
 
+  # Test the bootstrap playbook on a real OpenShift cluster installed in CircleCI's VM.
+  test-bootstrap:
+    machine: true
+    working_directory: ~/fun
+    steps:
+      - checkout
+      - *attach_workspace
+      - *docker_load
+      - *ci_env
+      - run:
+          name: Install the OC client
+          command: |
+            wget https://github.com/openshift/origin/releases/download/v3.9.0/openshift-origin-client-tools-v3.9.0-191fece-linux-64bit.tar.gz -P /tmp/openshift/
+            tar xzf /tmp/openshift/openshift*.tar.gz --strip-components=1 -C /tmp/openshift/
+            cp /tmp/openshift/oc $HOME/bin/
+      - run:
+          name: Configure Docker insecure registries for OpenShift cluster
+          command: |
+            sudo bash -c "echo '{\"insecure-registries\": [\"172.30.0.0/16\"]}' > /etc/docker/daemon.json"
+            sudo service docker restart
+      - run:
+          name: Bootstrap the test applications in OpenShift
+          command: |
+            LOCALE_IP=$(ip -o addr show eth0 | grep -v inet6 | sed "s/^.* inet \([0-9.]*\)\/[0-9]* .*$/\1/")
+            oc cluster up --server-loglevel=5 --public-hostname="${LOCALE_IP}"
+            oc login -u developer -p developer https://${LOCALE_IP}:8443 --insecure-skip-tls-verify=true
+            echo "arnold" | USE_TTY=false ./bin/bootstrap
+
   # FIXME: we have deactivated plugins test coverage as the container user is
   # not allowed to write to /app/.coverage and CircleCI does not allow to mount
   # volumes with "docker run" commands.
@@ -169,6 +197,12 @@ workflows:
           requires:
             - build
       - test-built:
+          requires:
+          - lint-bash
+          - lint-docker
+          - lint-ansible
+          - lint-plugins
+      - test-bootstrap:
           requires:
           - lint-bash
           - lint-docker

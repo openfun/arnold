@@ -35,8 +35,6 @@ function _set_minishift_path() {
 #     command
 function _docker_run() {
 
-    _set_minishift_path
-
     local env_file="env.d/development"
     local args
     local i=1
@@ -60,25 +58,29 @@ function _docker_run() {
         i=$(( i+1 ))
     done
 
-    # Check that minishift is running
-    if ${OC_LOGIN} && ! minishift status | grep Running > /dev/null ; then
-        echo "Error: minishift is not running. Please start it first."
-        exit 1
-    fi
-
-    # Check that the current user is already logged in minishift
+    # Check that the current user is already logged in OpenShift
     if ${OC_LOGIN} && ! oc whoami &> /dev/null; then
-        echo "Error: you need to login to minishift first."
+        echo "Error: you need to login to an OpenShift server first."
         exit 1
     fi
 
-    docker run --rm -it \
+    [[ "$USE_TTY" == "false" ]] && TTY_OPTION="" || TTY_OPTION="-t"
+
+    # Get the OpenShift host from OC
+    OPENSHIFT_HOST=$(oc version | grep Server | awk '{print $2}')
+
+    # The OpenShift host is of the form https://domain:8443 so we can
+    # extract the domain from it
+    # shellcheck disable=SC2034,SC2001
+    OPENSHIFT_DOMAIN=$(echo "${OPENSHIFT_HOST}" | sed 's#https://\(.*\):8443#\1#')
+
+    docker run --rm -i ${TTY_OPTION} \
         -u "$(id -u)" \
         --env-file "$env_file" \
         --env OC_LOGIN \
         --env K8S_AUTH_API_KEY="$(oc whoami -t)" \
-        --env K8S_AUTH_HOST="https://$(minishift ip):8443" \
-        --env MINISHIFT_IP="$(minishift ip)" \
+        --env K8S_AUTH_HOST="${OPENSHIFT_HOST}" \
+        --env OPENSHIFT_DOMAIN \
         -v "$PWD:/app" \
         "arnold:$(tr -d '\n' < VERSION)" \
         "${args[@]}"

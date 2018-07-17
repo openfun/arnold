@@ -6,11 +6,3 @@ ANSIBLE_RETRY_FILES_SAVE_PATH=
 #   1 for yes
 #   0 for no
 INSECURE_SKIP_TLS_VERIFY=1
-
-# ---- Kubernetes ----
-# API token as given by: oc whoami -t
-K8S_AUTH_API_KEY=
-# OpenShift console IP as given by: minishift ip
-# Protocol should be https and port 8443
-K8S_AUTH_HOST=
-K8S_AUTH_VERIFY_SSL=no
