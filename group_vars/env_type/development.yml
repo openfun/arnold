@@ -1,5 +1,5 @@
 # Variables specific to development environments
-domain_name: "{{ lookup('env', 'MINISHIFT_IP') }}.nip.io"
+domain_name: "{{ lookup('env', 'OPENSHIFT_DOMAIN') }}.nip.io"
 django_configuration: Development
 
 # Use development images in the development environment
