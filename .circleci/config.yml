@@ -118,14 +118,12 @@ jobs:
           name: Test oc client installation
           command: |
             docker run --rm \
-              -e OC_LOGIN=false \
               "${ARNOLD_IMAGE}" \
               oc version
       - run:
           name: Test ansible installation
           command: |
             docker run --rm \
-              -e OC_LOGIN=false \
               "${ARNOLD_IMAGE}" \
               ansible --version
 
@@ -173,7 +171,6 @@ jobs:
           name: Run unit tests for local plugins
           command: |
             docker run --rm \
-              -e OC_LOGIN=false \
               --tmpfs /app/.pytest_cache \
               "${ARNOLD_IMAGE}" \
               python -m pytest --no-cov

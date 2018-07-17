@@ -3,8 +3,6 @@
 # shellcheck source=bin/_config.sh
 source "$(dirname "${BASH_SOURCE[0]}")/_config.sh"
 
-export OC_LOGIN=false
-
 # Run pytest
 #
 # nota bene: we run `python -m pytest` instead of the `pytest` command to add

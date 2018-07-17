@@ -28,8 +28,8 @@ if ! whoami &> /dev/null; then
   fi
 fi
 
-# OpenShift login only if $OC_LOGIN is not false
-if ${OC_LOGIN:-true} ; then
+# Login to OpenShift only if $K8S_AUTH_HOST is defined
+if [[ ! -z ${K8S_AUTH_HOST} ]]; then
   oc_login
 fi
 
