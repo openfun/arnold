@@ -3,17 +3,3 @@
 # Only in feature environment do we add the feature title to the hosts
 lms_host: "{{ project_name }}-lms--{{ feature_title }}.{{ domain_name }}"
 cms_host: "{{ project_name }}-cms--{{ feature_title }}.{{ domain_name }}"
-
-# Override Openshift template files because databases are containers
-# instead of external services reachable via endpoints
-openshift_deployments:
-  - _common/templates/dc/nginx.yml
-  - _common/templates/dc/mongodb.yml
-  - _common/templates/dc/mysql.yml
-  - _common/templates/dc/postgresql.yml
-  - edxapp/templates/dc/cms.yml
-  - edxapp/templates/dc/lms.yml
-  - edxapp/templates/dc/memcached.yml
-  - richie/templates/dc/richie.yml
-openshift_endpoints:
-    # No endpoints required for the feature environments

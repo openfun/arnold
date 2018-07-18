@@ -1,14 +1,6 @@
 ---
 # URL
 domain_name: dev.openfun.fr
-lms_host: "{{ project_name }}-lms.{{ domain_name }}"
-cms_host: "{{ project_name }}-cms.{{ domain_name }}"
-richie_host: "{{ project_name }}-richie.{{ domain_name }}"
-
-openshift_routes:
-  - edxapp/route/cms.yml
-  - edxapp/route/lms.yml
-  - richie/route/richie.yml
 
 # OpenShift routes_aliases exemple
 # openshift_routes_aliases:       # routes to be redirected

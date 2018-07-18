@@ -17,23 +17,3 @@ hello_msg:  "Hello OpenShift! by Arnold"
 
 nginx_ports:
   - "{{ aliases_port }}"
-
-# Openshift template files
-openshift_deployments:
-  - openshift/hello/dc/hello.yml
-  - openshift/richie/dc/elasticsearch.yml
-  - openshift/richie/dc/nginx.yml
-  - openshift/richie/dc/richie.yml
-openshift_endpoints:
-openshift_jobs:
-openshift_routes:
-  - openshift/hello/route/hello.yml
-  - openshift/richie/route/richie.yml
-openshift_services:
-  - openshift/hello/svc/hello.yml
-  - openshift/richie/svc/elasticsearch.yml
-  - openshift/richie/svc/nginx.yml
-  - openshift/richie/svc/richie.yml
-openshift_volumes:
-  - openshift/richie/pvc/media.yml
-  - openshift/richie/pvc/static.yml

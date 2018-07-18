@@ -108,48 +108,4 @@ richie_database:
   host: "{{ postgresql.host }}"
   port: "{{ postgresql.port }}"
   name: richie
-
-# Openshift template files
-openshift_deployments:
-  - edxapp/templates/dc/cms.yml
-  - edxapp/templates/dc/lms.yml
-  - edxapp/templates/dc/memcached.yml
-  - edxapp/templates/dc/nginx.yml
-  - redirect/templates/dc/nginx.yml
-  - richie/templates/dc/elasticsearch.yml
-  - richie/templates/dc/nginx.yml
-  - richie/templates/dc/richie.yml
-openshift_endpoints:
-  - _common/templates/ep/mongodb.yml
-  - _common/templates/ep/mysql.yml
-  - _common/templates/ep/postgresql.yml
-openshift_jobs:
-  - edxapp/templates/job/collectstatic_cms.yml
-  - edxapp/templates/job/collectstatic_lms.yml
-  - edxapp/templates/job/db_migrate.yml
-  - richie/templates/job/collectstatic.yml
-  - richie/templates/job/db_migrate.yml
-  - richie/templates/job/regenerate_indexes.yml
-openshift_routes:
-  - edxapp/templates/route/cms.yml
-  - edxapp/templates/route/lms.yml
-  - richie/templates/route/richie.yml
-openshift_services:
-  - _common/templates/svc/mongodb.yml
-  - _common/templates/svc/mysql.yml
-  - _common/templates/svc/postgresql.yml
-  - edxapp/templates/svc/cms.yml
-  - edxapp/templates/svc/lms.yml
-  - edxapp/templates/svc/memcached.yml
-  - edxapp/templates/svc/nginx.yml
-  - redirect/templates/svc/nginx.yml
-  - richie/templates/svc/elasticsearch.yml
-  - richie/templates/svc/nginx.yml
-  - richie/templates/svc/richie.yml
-openshift_volumes:
-  - edxapp/templates/pvc/data.yml
-  - edxapp/templates/pvc/media.yml
-  - edxapp/templates/pvc/static.yml
-  - richie/templates/pvc/media.yml
-  - richie/templates/pvc/static.yml
 ## _END_ to be deprecated ##
