@@ -127,10 +127,15 @@ jobs:
               "${ARNOLD_IMAGE}" \
               ansible --version
 
+
   # Test the bootstrap playbook on a real OpenShift cluster installed in CircleCI's VM.
   test-bootstrap:
-    machine: true
+
+    machine:
+      docker_layer_caching: true
+
     working_directory: ~/fun
+
     steps:
       - checkout
       - *attach_workspace
@@ -142,18 +147,38 @@ jobs:
             wget https://github.com/openshift/origin/releases/download/v3.9.0/openshift-origin-client-tools-v3.9.0-191fece-linux-64bit.tar.gz -P /tmp/openshift/
             tar xzf /tmp/openshift/openshift*.tar.gz --strip-components=1 -C /tmp/openshift/
             cp /tmp/openshift/oc $HOME/bin/
+
       - run:
           name: Configure Docker insecure registries for OpenShift cluster
           command: |
             sudo bash -c "echo '{\"insecure-registries\": [\"172.30.0.0/16\"]}' > /etc/docker/daemon.json"
             sudo service docker restart
+
       - run:
           name: Bootstrap the test applications in OpenShift
           command: |
-            LOCALE_IP=$(ip -o addr show eth0 | grep -v inet6 | sed "s/^.* inet \([0-9.]*\)\/[0-9]* .*$/\1/")
-            oc cluster up --server-loglevel=5 --public-hostname="${LOCALE_IP}"
-            oc login -u developer -p developer https://${LOCALE_IP}:8443 --insecure-skip-tls-verify=true
-            echo "arnold" | USE_TTY=false ./bin/bootstrap
+            export OPENSHIFT_DOMAIN=$(hostname -I | awk '{print $1}')
+            export K8S_AUTH_HOST="https://${OPENSHIFT_DOMAIN}:8443"
+            oc cluster up --server-loglevel=5 --public-hostname="${OPENSHIFT_DOMAIN}"
+            oc login "${K8S_AUTH_HOST}" -u developer -p developer --insecure-skip-tls-verify=true
+            export K8S_AUTH_API_KEY="$(oc whoami -t)"
+            echo "arnold" | docker run --rm -i \
+                --env-file env.d/development \
+                --env K8S_AUTH_API_KEY \
+                --env K8S_AUTH_HOST \
+                --env OPENSHIFT_DOMAIN \
+                "arnold:$(tr -d '\n' < VERSION)" \
+                ansible-playbook bootstrap.yml --ask-vault-pass -e "env_type=ci"
+            for try in $(seq 5); do
+              echo "Testing hello application http response ($try)"
+              curl -vk "https://next.hello.ci-patient0.${OPENSHIFT_DOMAIN}.nip.io/" 2> /tmp/hello.err > /tmp/hello.out
+              if grep "HTTP/1.1 200 OK" /tmp/hello.err && grep "Hello OpenShift! by Arnold" /tmp/hello.out; then
+                exit 0
+              fi
+              sleep 10
+            done
+            exit 1
+
 
   # FIXME: we have deactivated plugins test coverage as the container user is
   # not allowed to write to /app/.coverage and CircleCI does not allow to mount
