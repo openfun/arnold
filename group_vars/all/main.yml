@@ -88,7 +88,7 @@ secret_id: "1.0.0"
 # Services hosts
 lms_host: "{{ project_name }}-lms-{{ deployment_stamp }}.{{ domain_name }}"
 cms_host: "{{ project_name }}-cms-{{ deployment_stamp }}.{{ domain_name }}"
-richie_host: "{{ project_name }}-richie-{{ deployment_stamp }}.{{ domain_name }}"
+richie_host: "richie.{{ project_name }}.{{ domain_name }}"
 
 # Cluster databases (used for development or feature deployments)
 elasticsearch:
