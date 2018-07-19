@@ -2,21 +2,24 @@ apiVersion: v1
 kind: DeploymentConfig
 metadata:
   labels:
-    app: elasticsearch
+    app: richie
+    service: elasticsearch
     version: "{{ elasticsearch_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
-  name: "elasticsearch-richie-{{ deployment_stamp }}"
+  name: "elasticsearch-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
   replicas: 1
   selector:
-    deploymentconfig: "elasticsearch-richie-{{ deployment_stamp }}"
+    app: richie
+    deploymentconfig: "elasticsearch-{{ deployment_stamp }}"
   template:
     metadata:
       labels:
-        app: elasticsearch
+        app: richie
+        service: elasticsearch
         version: "{{ elasticsearch_tag }}"
-        deploymentconfig: "elasticsearch-richie-{{ deployment_stamp }}"
+        deploymentconfig: "elasticsearch-{{ deployment_stamp }}"
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:

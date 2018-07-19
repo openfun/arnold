@@ -5,6 +5,7 @@ metadata:
   namespace: "{{ project_name }}"
   labels:
     app: richie
+    service: richie
     version: "{{ richie_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
 spec:
@@ -13,6 +14,7 @@ spec:
       name: richie-regenerate-indexes-{{ deployment_stamp }}
       labels:
         app: richie
+        service: richie
         version: "{{ richie_tag }}"
         deployment_stamp: "{{ deployment_stamp }}"
     spec:

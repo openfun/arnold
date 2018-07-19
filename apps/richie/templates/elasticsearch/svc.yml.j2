@@ -2,7 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: elasticsearch
+    app: richie
+    service: elasticsearch
     version: "{{ elasticsearch_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
   # name of the service should be database host name in settings
@@ -15,5 +16,6 @@ spec:
     protocol: TCP
     targetPort: {{ elasticsearch.port }}
   selector:
-    deploymentconfig: "elasticsearch-richie-{{ deployment_stamp }}"
+    app: richie
+    deploymentconfig: "elasticsearch-{{ deployment_stamp }}"
   type: ClusterIP

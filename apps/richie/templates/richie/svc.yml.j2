@@ -3,6 +3,7 @@ kind: Service
 metadata:
   labels:
     app: richie
+    service: richie
     version: "{{ richie_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
   name: richie-{{ deployment_stamp }}  # name of the service should be host name in nginx
@@ -14,5 +15,6 @@ spec:
     protocol: TCP
     targetPort: 8000
   selector:
+    app: richie
     deploymentconfig: "richie-{{ deployment_stamp }}"
   type: ClusterIP
