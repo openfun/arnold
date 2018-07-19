@@ -40,6 +40,10 @@ function main() {
     local job_template="$1"
     local deployment_stamp="$2"
 
+    # Set OpenShift's environment (you'll need to be logged in to an OpenShift
+    # server)
+    _set_openshift_env
+
     _set_namespace_for_deployment_stamp "$deployment_stamp"
 
     echo "Will submit a new job to OpenShift:"
