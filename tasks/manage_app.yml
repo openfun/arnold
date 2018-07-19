@@ -26,25 +26,29 @@
     - route
 
 - name: Display OpenShift's deployments for this app
-  debug: msg="deployments={{ deployments | to_nice_yaml}}"
+  debug: msg="{{ deployments | to_nice_yaml}}"
+  when: deployments
   tags:
     - deploy
     - deployment
 
 - name: Display OpenShift's services for this app
-  debug: msg="services={{services | to_nice_yaml}}"
+  debug: msg="{{ services | to_nice_yaml }}"
+  when: services
   tags:
     - deploy
     - service
 
 - name: Display OpenShift's jobs for this app
-  debug: msg="jobs={{jobs | to_nice_yaml}}"
+  debug: msg="{{ jobs | to_nice_yaml }}"
+  when: jobs
   tags:
     - deploy
     - job
 
 - name: Display OpenShift's routes for this app
-  debug: msg="routes={{routes | to_nice_yaml}}"
+  debug: msg="{{ routes | to_nice_yaml }}"
+  when: routes
   tags:
     - deploy
     - route

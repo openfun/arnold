@@ -66,11 +66,15 @@
 - name: Lookup available applications
   set_fact: available_apps="{{ lookup('apps', 'apps/') }}"
 
-- name: Display available applications
-  debug: msg="available_apps={{ available_apps | to_nice_yaml }}"
+- name: Display available applications (available_apps)
+  debug:
+    msg: "{{ available_apps | to_nice_yaml }}"
+    verbosity: 3
 
-- name: Display defined applications
-  debug: msg="apps={{ apps | to_nice_yaml }}"
+- name: Display defined applications (apps)
+  debug:
+    msg: "{{ apps | to_nice_yaml }}"
+    verbosity: 3
   when: apps is defined
 
 - name: Add meta-data to available applications
@@ -83,8 +87,10 @@
   set_fact:
     apps: "{{ merged_apps | json_query('results[*].ansible_facts._app') }}"
 
-- name: Display enriched applications definitions
-  debug: msg="apps={{ apps | to_nice_yaml }}"
+- name: Display enriched applications definitions (apps)
+  debug:
+    msg: "{{ apps | to_nice_yaml }}"
+    verbosity: 2
 
 # If the playbook is invoqued with the apps_filter extra var, we restrict apps
 # to the list passed as an argument, e.g.:
@@ -107,8 +113,10 @@
     apps: "{{ apps | json_query(apps_filter_query) }}"
   when: apps_filter_query is defined
 
-- name: Display selected applications
-  debug: msg="apps={{ apps | to_nice_yaml }}"
+- name: Display selected applications (apps)
+  debug:
+    msg: "{{ apps | to_nice_yaml }}"
+    verbosity: 1
 
 - name: Include "all" type vars for applications
   include_vars:
@@ -122,4 +130,6 @@
     - "group_vars/customer/{{ customer }}/{{ env_type }}/*.yml"
 
 - name: Print project details
-  debug: msg="Project name {{ project_name }} - domain {{ domain_name }}"
+  debug:
+    msg: "Project name {{ project_name }} - domain {{ domain_name }}"
+    verbosity: 1

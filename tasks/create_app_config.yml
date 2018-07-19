@@ -49,7 +49,9 @@
       {{ configmaps }}
 
 - name: Display config maps
-  debug: var=configmaps
+  debug:
+    var: configmaps
+    verbosity: 3
 
 - name: Create the config maps in OpenShift
   openshift_raw:
