@@ -2,3 +2,10 @@
 # Patient 0 is a demo site with default configuration
 project_display_name: "Patient 0 ({{ env_type }})"
 project_description: "A demo project with a typical installation ({{ env_type }})"
+
+apps:
+  - name: richie
+    services:
+      - name: nginx
+        host: "{{ richie_host }}"
+        port: 8061
