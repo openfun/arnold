@@ -17,6 +17,9 @@
     object_template: ""
 
   tasks:
+    - name: Display playbook name
+      debug: msg="==== Starting create_object playbook ===="
+      tags: deploy
 
     - import_tasks: tasks/set_vars.yml
 

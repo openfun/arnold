@@ -6,6 +6,9 @@
   gather_facts: False
 
   tasks:
+    - name: Display playbook name
+      debug: msg="==== Starting deploy playbook ===="
+      tags: deploy
 
     - import_tasks: tasks/set_vars.yml
 
@@ -19,8 +22,12 @@
       set_fact: job_stamp="j-{{ lookup('pipe', 'date +%y%m%d-%Hh%Mm%Ss') }}"
       tags: deploy
 
-    - name: Print deployment details
+    - name: Display deployment details
       debug: msg="Deploying {{ project_name }}-{{ domain_name }} (deployment stamp '{{ deployment_stamp }}' job stamp '{{ job_stamp }}')"
+      tags: deploy
+
+    - name: Display apps to deploy
+      debug: msg="{{ apps | to_nice_yaml }}"
       tags: deploy
 
     - include_tasks: tasks/run_tasks_for_apps.yml

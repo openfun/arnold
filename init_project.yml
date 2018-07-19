@@ -8,6 +8,9 @@
   gather_facts: False
 
   tasks:
+    - name: Display playbook name
+      debug: msg="==== Starting init_project playbook ===="
+      tags: deploy
 
     - import_tasks: tasks/set_vars.yml
 
