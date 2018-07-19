@@ -1,7 +1,12 @@
 apiVersion: v1
 kind: Route
 metadata:
-  name: "{{ app.name }}-{{ prefix }}"
+  # An application can define several routes (e.g. two services with two
+  # different routes). Our goal here is to get the deployment_stamp of a
+  # deployed stack by getting a route object. As the deployment_stamp is
+  # commonly shared among objects of a stack, there is no need to get more than
+  # one route to achieve this.
+  name: "{{ app | json_query('services[?host].name') | first }}-{{ prefix }}"
   namespace: "{{ project_name }}"
   labels:
     env_type: {{ env_type }}
