@@ -30,7 +30,7 @@ spec:
           - name: POSTGRES_DB
             value: "{{ richie_database.name }}"
           - name: POSTGRES_HOST
-            value: "{{ richie_database.host }}"
+            value: "{{ richie_database.host }}-{{ deployment_stamp }}"
           - name: POSTGRES_PORT
             value: "{{ richie_database.port }}"
           - name: DJANGO_ALLOWED_HOSTS
