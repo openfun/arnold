@@ -8,15 +8,17 @@ metadata:
     service: richie
     version: "{{ richie_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
+    job_stamp: "{{ job_stamp }}"
 spec:
   template:
     metadata:
-      name: "richie-collecstatic-{{ deployment_stamp }}"
+      name: "richie-collecstatic-{{ job_stamp }}"
       labels:
         app: richie
         service: richie
         version: "{{ richie_tag }}"
         deployment_stamp: "{{ deployment_stamp }}"
+        job_stamp: "{{ job_stamp }}"
     spec:
       containers:
       - name: richie-collecstatic

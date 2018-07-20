@@ -5,18 +5,20 @@ metadata:
   namespace: "{{ project_name }}"
   labels:
     app: richie
-    version: "{{ richie_tag }}"
     service: richie
+    version: "{{ richie_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
+    job_stamp: "{{ job_stamp }}"
 spec:
   template:
     metadata:
-      name: "richie-dbmigrate-{{ deployment_stamp }}"
+      name: "richie-dbmigrate-{{ job_stamp }}"
       labels:
         app: richie
         service: richie
         version: "{{ richie_tag }}"
         deployment_stamp: "{{ deployment_stamp }}"
+        job_stamp: "{{ job_stamp }}"
     spec:
       containers:
       - name: richie-dbmigrate
