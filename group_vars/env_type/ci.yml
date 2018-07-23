@@ -1,9 +1,5 @@
 # CI environment variables
-#
-# NB: the "hello" app is a demo site with default configuration for a minimal
-# deployment test
-project_display_name: "Hello ({{ env_type }})"
-project_description: "A minimal project with a hello-world app ({{ env_type }})"
+project_description: "A minimal project to test apps bootstrapping ({{ env_type }})"
 domain_name: "{{ lookup('env', 'OPENSHIFT_DOMAIN') }}.nip.io"
 
 apps:
@@ -11,6 +7,11 @@ apps:
     services:
       - name: "hello"
         host: "hello.{{ project_name }}.{{ domain_name }}"
+  - name: richie
+    services:
+      - name: nginx
+        host: "richie.{{ project_name }}.{{ domain_name }}"
+        port: 8061
 
 ## _____ soon deprecated below _________________________________________________
 hello_host: "{{ project_name }}.{{ domain_name }}"

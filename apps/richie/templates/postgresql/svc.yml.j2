@@ -20,7 +20,7 @@ spec:
 # not "development" or "feature" (not yet implemented). In environments other
 # than "development" or "feature", we use a PostgreSQL cluster outside of
 # OpenShift.
-{% if env_type == "development"  %}
+{% if env_type in ("ci", "development", "feature")  %}
   selector:
     app: richie
     service: postgresql
