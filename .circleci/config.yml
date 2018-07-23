@@ -203,7 +203,7 @@ jobs:
               # Wait for the application to respond
               for try in \$(seq 5); do
                 echo "Testing \${app} application http response (\$try)"
-                curl -vk "https://next.\${app}.ci-patient0.\${OPENSHIFT_DOMAIN}.nip.io/" 2> /tmp/\${app}.err > /tmp/\${app}.out
+                curl -vLk "https://next.\${app}.ci-patient0.\${OPENSHIFT_DOMAIN}.nip.io/" 2> /tmp/\${app}.err > /tmp/\${app}.out
                 if grep "HTTP/1.1 200 OK" /tmp/\${app}.err && grep "\${content}" /tmp/\${app}.out; then
                   exit 0
                 fi
@@ -219,6 +219,10 @@ jobs:
       - run:
           name: Test the "hello" application bootstrapping
           command: bin/ci-bootstrap "hello" "Hello OpenShift! by Arnold"
+
+      - run:
+          name: Test the "richie" application bootstrapping
+          command: bin/ci-bootstrap "richie" "Installation successful!"
 
   # FIXME: we have deactivated plugins test coverage as the container user is
   # not allowed to write to /app/.coverage and CircleCI does not allow to mount
