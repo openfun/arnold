@@ -20,3 +20,7 @@
         description: "{{ project_description|default(project_display_name)|default(project_name) }}"
         display_name: "{{ project_display_name|default(project_name) }}"
         state: present
+      register: new_project
+      until: new_project.result is defined and new_project.result.status is success
+      retries: 30
+      delay: 10
