@@ -2,32 +2,35 @@ apiVersion: v1
 kind: DeploymentConfig
 metadata:
   labels:
-    app: mysql
-    version: "{{ mysql_tag }}"
+    app: edxapp
+    service: mysql
+    version: "{{ edxapp_mysql_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
   name: "mysql-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
   replicas: 1
   selector:
+    app: edxapp
     deploymentconfig: "mysql-{{ deployment_stamp }}"
   template:
     metadata:
       labels:
-        app: mysql
-        version: "{{ mysql_tag }}"
-        deploymentconfig: "mysql-{{ deployment_stamp }}"
+        app: edxapp
+        service: mysql
+        version: "{{ edxapp_mysql_image_tag }}"
         deployment_stamp: "{{ deployment_stamp }}"
+        deploymentconfig: "mysql-{{ deployment_stamp }}"
     spec:
       containers:
-        - image: {{ mysql_image }}:{{ mysql_tag }}
+        - image: "{{ edxapp_mysql_image_name }}:{{ edxapp_mysql_image_tag }}"
           name: mysql
           ports:
-            - containerPort: {{ mysql.port }}
+            - containerPort: "{{ edxapp_mysql_port }}"
               protocol: TCP
           env:
             - name: MYSQL_DATABASE
-              value: edxapp
+              value: "{{ edxapp_mysql_database }}"
           envFrom:
             - secretRef:
-                name: edxapp-{{ secret_id }}
+                name: "edxapp-{{ secret_id }}"

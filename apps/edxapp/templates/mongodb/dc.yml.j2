@@ -2,32 +2,35 @@ apiVersion: v1
 kind: DeploymentConfig
 metadata:
   labels:
-    app: mongodb
-    version: "{{ mongodb_tag }}"
+    app: edxapp
+    service: mongodb
+    version: "{{ edxapp_mongodb_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
   name: "mongodb-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
   replicas: 1
   selector:
+    app: edxapp
     deploymentconfig: "mongodb-{{ deployment_stamp }}"
   template:
     metadata:
       labels:
-        app: mongodb
-        version: "{{ mongodb_tag }}"
+        app: edxapp
+        service: mongodb
+        version: "{{ edxapp_mongodb_image_tag }}"
         deploymentconfig: "mongodb-{{ deployment_stamp }}"
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:
-        - image: {{ mongodb_image }}:{{ mongodb_tag }}
+        - image: "{{ edxapp_mongodb_image_name }}:{{ edxapp_mongodb_image_tag }}"
           name: mongodb
           ports:
-            - containerPort: {{ mongodb.port }}
+            - containerPort: "{{ edxapp_mongodb_port }}"
               protocol: TCP
           env:
             - name: MONGODB_DATABASE
-              value: edxapp
+              value: "{{ edxapp_mongodb_database }}"
           envFrom:
             - secretRef:
-                name: edxapp-{{ secret_id }}
+                name: "edxapp-{{ secret_id }}"
