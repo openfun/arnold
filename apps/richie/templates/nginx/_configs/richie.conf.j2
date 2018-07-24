@@ -1,9 +1,9 @@
 upstream richie-backend {
-  server richie-{{ deployment_stamp }}:{{ django_port }} fail_timeout=0;
+  server richie-{{ deployment_stamp }}:{{ richie_django_port }} fail_timeout=0;
 }
 
 server {
-  listen {{ richie_port }};
+  listen {{ richie_nginx_port }};
   server_name localhost;
 
   client_max_body_size 100M;
@@ -32,5 +32,4 @@ server {
     root /data/static/richie;
     try_files /$file =404;
   }
-
 }

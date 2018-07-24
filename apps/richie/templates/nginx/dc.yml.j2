@@ -4,7 +4,7 @@ metadata:
   labels:
     app: richie
     service: nginx
-    version: "{{ nginx_tag }}"
+    version: "{{ richie_nginx_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
   name: nginx-{{ deployment_stamp }}
   namespace: "{{ project_name }}"
@@ -18,12 +18,12 @@ spec:
       labels:
         app: richie
         service: nginx
-        version: "{{ nginx_tag }}"
+        version: "{{ richie_nginx_image_tag }}"
         deploymentconfig: nginx-{{ deployment_stamp }}
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:
-      - image: "{{ nginx_image }}:{{ nginx_tag }}"
+      - image: "{{ richie_nginx_image_name }}:{{ richie_nginx_image_tag }}"
         name: nginx
         ports:
         - containerPort: 80

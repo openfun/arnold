@@ -4,16 +4,16 @@ metadata:
   labels:
     app: richie
     service: nginx
-    version: "{{ nginx_tag }}"
+    version: "{{ richie_nginx_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
   name: nginx-{{ deployment_stamp }}
   namespace: "{{ project_name }}"
 spec:
   ports:
-    - name: {{ richie_port }}-tcp
-      port: {{ richie_port }}
+    - name: {{ richie_nginx_port }}-tcp
+      port: {{ richie_nginx_port }}
       protocol: TCP
-      targetPort: {{ richie_port }}
+      targetPort: {{ richie_nginx_port }}
   selector:
     app: richie
     deploymentconfig: nginx-{{ deployment_stamp }}

@@ -6,7 +6,7 @@ metadata:
   labels:
     app: richie
     service: richie
-    version: "{{ richie_tag }}"
+    version: "{{ richie_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
     job_stamp: "{{ job_stamp }}"
 spec:
@@ -16,7 +16,7 @@ spec:
       labels:
         app: richie
         service: richie
-        version: "{{ richie_tag }}"
+        version: "{{ richie_image_tag }}"
         deployment_stamp: "{{ deployment_stamp }}"
         job_stamp: "{{ job_stamp }}"
     spec:
@@ -26,18 +26,18 @@ spec:
           - name: DJANGO_SETTINGS_MODULE
             value: richie.settings
           - name: DJANGO_CONFIGURATION
-            value: "{{ django_configuration }}"
+            value: "{{ richie_django_configuration }}"
           - name: POSTGRES_DB
-            value: "{{ richie_database.name }}"
+            value: "{{ richie_postgresql_database }}"
           - name: POSTGRES_HOST
-            value: "{{ richie_database.host }}-{{ deployment_stamp }}"
+            value: "{{ richie_postgresql_host }}-{{ deployment_stamp }}"
           - name: POSTGRES_PORT
-            value: "{{ richie_database.port }}"
+            value: "{{ richie_postgresql_port }}"
           - name: DJANGO_ALLOWED_HOSTS
             value: "{{ richie_host }}"
         envFrom:
           - secretRef:
               name: richie-{{ secret_id }}
-        image: "{{ richie_image }}:{{ richie_tag }}"
+        image: "{{ richie_image_name }}:{{ richie_image_tag }}"
         command: ["python", "manage.py", "migrate"]
       restartPolicy: Never

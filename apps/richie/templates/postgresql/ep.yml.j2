@@ -9,7 +9,7 @@ metadata:
   namespace: "{{ project_name }}"
 subsets:
   - addresses:
-    - ip: {{ postgresql_ip }}
+    - ip: {{ endpoint_postgresql_ip }}
     ports:
     - port: 5432
       name: 5432-tcp

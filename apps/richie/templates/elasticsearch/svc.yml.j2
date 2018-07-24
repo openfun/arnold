@@ -4,17 +4,17 @@ metadata:
   labels:
     app: richie
     service: elasticsearch
-    version: "{{ elasticsearch_tag }}"
+    version: "{{ richie_elasticsearch_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
   # name of the service should be database host name in settings
-  name: "{{ elasticsearch.host }}-{{ deployment_stamp }}"
+  name: "{{ richie_elasticsearch_host }}-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
   ports:
-  - name: {{ elasticsearch.port }}-tcp
-    port: {{ elasticsearch.port }}
+  - name: {{ richie_elasticsearch_port }}-tcp
+    port: {{ richie_elasticsearch_port }}
     protocol: TCP
-    targetPort: {{ elasticsearch.port }}
+    targetPort: {{ richie_elasticsearch_port }}
   selector:
     app: richie
     deploymentconfig: "elasticsearch-{{ deployment_stamp }}"

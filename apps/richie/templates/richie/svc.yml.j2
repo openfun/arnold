@@ -4,7 +4,7 @@ metadata:
   labels:
     app: richie
     service: richie
-    version: "{{ richie_tag }}"
+    version: "{{ richie_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
   name: richie-{{ deployment_stamp }}  # name of the service should be host name in nginx
   namespace: "{{ project_name }}"
