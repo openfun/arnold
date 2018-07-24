@@ -1,2 +1,2 @@
 # Variables specific to the pre-production environment
-django_configuration: PreProduction
+richie_django_configuration: PreProduction

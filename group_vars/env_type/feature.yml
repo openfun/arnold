@@ -1,4 +1,5 @@
 # Variables specific to feature environments
+richie_django_configuration: "Feature"
 
 # Only in feature environment do we add the feature title to the hosts
 lms_host: "{{ project_name }}-lms--{{ feature_title }}.{{ domain_name }}"

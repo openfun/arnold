@@ -4,7 +4,7 @@ metadata:
   labels:
     app: richie
     service: postgresql
-    version: "{{ postgresql_tag }}"
+    version: "{{ richie_postgresql_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
   name: "postgresql-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
@@ -18,19 +18,19 @@ spec:
       labels:
         app: richie
         service: postgresql
-        version: "{{ postgresql_tag }}"
+        version: "{{ richie_postgresql_image_tag }}"
         deploymentconfig: "postgresql-{{ deployment_stamp }}"
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:
-        - image: {{ postgresql_image }}:{{ postgresql_tag }}
+        - image: {{ richie_postgresql_image_name }}:{{ richie_postgresql_image_tag }}
           name: postgresql
           ports:
-            - containerPort: {{ postgresql.port }}
+            - containerPort: {{ richie_postgresql_port }}
               protocol: TCP
           env:
             - name: POSTGRESQL_DATABASE
-              value: "{{ richie_database.name }}"
+              value: "{{ richie_postgresql_database }}"
           envFrom:
             - secretRef:
                 name: richie-{{ secret_id }}

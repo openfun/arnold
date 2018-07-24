@@ -4,7 +4,7 @@ metadata:
   labels:
     app: richie
     service: elasticsearch
-    version: "{{ elasticsearch_tag }}"
+    version: "{{ richie_elasticsearch_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
   name: "elasticsearch-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
@@ -18,13 +18,13 @@ spec:
       labels:
         app: richie
         service: elasticsearch
-        version: "{{ elasticsearch_tag }}"
+        version: "{{ richie_elasticsearch_image_tag }}"
         deploymentconfig: "elasticsearch-{{ deployment_stamp }}"
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:
-        - image: {{ elasticsearch_image }}:{{ elasticsearch_tag }}
+        - image: {{ richie_elasticsearch_image_name }}:{{ richie_elasticsearch_image_tag }}
           name: elasticsearch
           ports:
-            - containerPort: {{ elasticsearch.port }}
+            - containerPort: {{ richie_elasticsearch_port }}
               protocol: TCP

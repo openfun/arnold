@@ -1,2 +1,2 @@
 # Variables specific to the staging environment
-django_configuration: Staging
+richie_django_configuration: Staging

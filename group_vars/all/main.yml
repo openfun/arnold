@@ -22,15 +22,18 @@ project_name: "{{ env_type }}-{{ customer }}"
 #       - name:     postgresql
 #         endpoint: true  # default False
 
+# List environments that are trashable, i.e. not defining services using
+# endpoints but deployment configurations for their databases.
+trashable_env_types:
+  - "ci"
+  - "development"
+  - "feature"
+
 ## /!\  Variables below will soon be deprecated /!\ __________________________##
-# Django
-django_configuration: Development
 
 # Ports
-django_port:    8000
 cms_port:       8081
 lms_port:       8071
-richie_port:    8061
 aliases_port:   8999
 
 nginx_ports:
@@ -39,29 +42,21 @@ nginx_ports:
   - "{{ richie_port }}"
   - "{{ aliases_port }}"
 
-# External services IPs
+# Endpoints IP
 mongodb_ip:     192.168.10.11
 mysql_ip:       192.168.10.254
-postgresql_ip:  192.168.0.1
+endpoint_postgresql_ip:  192.168.0.1
 
 # Images
 #
 # Service flag should only contain alphanumeric (or '-') characters. It should
 # validate the following regexp: '[a-z]([-a-z0-9]*[a-z0-9])?'
-elasticsearch_image: "fundocker/openshift-elasticsearch"
-elasticsearch_tag:   "6.2.4"
 edxapp_image:        "fundocker/edxapp"
 edxapp_tag:          "ginkgo.1-1.0.3"
 mongodb_image:       "centos/mongodb-32-centos7"
 mongodb_tag:         "3.2"
 mysql_image:         "centos/mysql-57-centos7"
 mysql_tag:           "5.7"
-nginx_image:         "fundocker/openshift-nginx"
-nginx_tag:           "1.13"
-postgresql_image:    "centos/postgresql-96-centos7"
-postgresql_tag:      "9.6"
-richie_image:        "fundocker/richie"
-richie_tag:          "0.1.0-alpha.3-alpine"
 
 # Following a blue-green deployment strategy, for each deployment, we create a
 # unique identifier (deployment_stamp) that will be used to create unique
@@ -88,24 +83,12 @@ secret_id: "1.0.0"
 # Services hosts
 lms_host: "{{ project_name }}-lms-{{ deployment_stamp }}.{{ domain_name }}"
 cms_host: "{{ project_name }}-cms-{{ deployment_stamp }}.{{ domain_name }}"
-richie_host: "richie.{{ project_name }}.{{ domain_name }}"
 
 # Cluster databases (used for development or feature deployments)
-elasticsearch:
-  host: "elasticsearch"
-  port: "9200"
 mongodb:
   host: "mongodb"
   port: "27017"
 mysql:
   host: "mysql"
   port: "3306"
-postgresql:
-  host: "postgresql"
-  port: "5432"
-
-richie_database:
-  host: "{{ postgresql.host }}"
-  port: "{{ postgresql.port }}"
-  name: richie
 ## _END_ to be deprecated ##
