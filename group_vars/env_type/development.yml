@@ -1,6 +1,29 @@
 # Variables specific to development environments
 domain_name: "{{ lookup('env', 'OPENSHIFT_DOMAIN') }}.nip.io"
 
+# Routes
+edxapp_cms_host: "cms.{{ project_name}}.{{ domain_name }}"
+edxapp_lms_host: "lms.{{ project_name}}.{{ domain_name }}"
+richie_host: "richie.{{ project_name}}.{{ domain_name }}"
+
+# Ports
+edxapp_nginx_cms_port: 8081
+edxapp_nginx_lms_port: 8071
+richie_nginx_port: 8061
+
 # Use development images in the development environment
-edxapp_tag: "ginkgo.1-1.0.3-dev"
+edxapp_image_tag: "ginkgo.1-1.0.3-dev"
 richie_image_tag: "0.1.0-alpha.3-alpine-dev"
+
+apps:
+  - name: richie
+    services:
+      - name: nginx
+        host: "{{ richie_host }}"
+        port: "{{ richie_nginx_port }}"
+  - name: edxapp
+    services:
+      - name: nginx
+        host: "{{ edxapp_cms_host }}"
+        port: "{{ edxapp_nginx_cms_port }}"
+        # TODO: add edxapp LMS host here

@@ -1,24 +1,28 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: edxapp-lms-dbmigrate-{{ job_stamp }}
+  name: lms-dbmigrate-{{ job_stamp }}
   namespace: "{{ project_name }}"
   labels:
     app: edxapp
-    version: "{{ edxapp_tag }}"
+    service: lms
+    version: "{{ edxapp_image_tag }}"
+    job_stamp: "{{ job_stamp }}"
     deployment_stamp: "{{ deployment_stamp }}"
 spec:
   template:
     metadata:
-      name: edxapp-dbmigrate-{{ deployment_stamp }}
+      name: lms-dbmigrate-{{ job_stamp }}
       labels:
         app: edxapp
-        version: "{{ edxapp_tag }}"
+        service: lms
+        version: "{{ edxapp_image_tag }}"
+        job_stamp: "{{ job_stamp }}"
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:
-      - name: edxapp-dbmigrate
-        image: "{{ edxapp_image }}:{{ edxapp_tag }}"
+      - name: lms-dbmigrate-{{ job_stamp }}
+        image: "{{ edxapp_image_name }}:{{ edxapp_image_tag }}"
         env:
           - name: DJANGO_SETTINGS_MODULE
             value: lms.envs.fun.docker_run
@@ -44,7 +48,7 @@ spec:
         # container. Please refer to the documentation to better understand our
         # settings generation mecanism.
         - name: init-create-config
-          image: "{{ edxapp_image }}:{{ edxapp_tag }}"
+          image: "{{ edxapp_image_name }}:{{ edxapp_image_tag }}"
           imagePullPolicy: IfNotPresent
           command:
             - "/bin/bash"

@@ -2,13 +2,14 @@ apiVersion: v1
 kind: Endpoints
 metadata:
   labels:
-    app: mysql
+    app: edxapp
+    ednpoint: mysql
   # name of the endpoint should be the same as the corresponding service
   name: mysql
   namespace: "{{ project_name }}"
 subsets:
   - addresses:
-    - ip: {{ mysql_ip }}
+    - ip: "{{ endpoint_mysql_ip }}"
     ports:
-    - port: 3306
-      name: 3306-tcp
+    - port: "{{ edxapp_mysql_port }}"
+      name: "{{ edxapp_mysql_port }}-tcp"

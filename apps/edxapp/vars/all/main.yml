@@ -1,0 +1,35 @@
+# Application default configuration
+
+# -- routes
+edxapp_cms_host: "cms.{{ project_name}}.{{ domain_name }}"
+edxapp_lms_host: "lms.{{ project_name}}.{{ domain_name }}"
+
+# -- edxapp (cms/lms)
+edxapp_image_name: "fundocker/edxapp"
+edxapp_image_tag: "ginkgo.1-1.0.3"
+edxapp_django_port: 8000
+
+# -- memcached
+edxapp_memcached_image_name: memcached
+edxapp_memcached_image_tag: latest
+edxapp_memcached_port: 11211
+
+# -- mongo
+edxapp_mongodb_image_name: "centos/mongodb-32-centos7"
+edxapp_mongodb_image_tag: "3.2"
+edxapp_mongodb_host: mongodb
+edxapp_mongodb_port: 27017
+edxapp_mongodb_database: edxapp
+
+# -- mysql
+edxapp_mysql_image_name: "centos/mysql-57-centos7"
+edxapp_mysql_image_tag: "5.7"
+edxapp_mysql_host: mysql
+edxapp_mysql_port: 3306
+edxapp_mysql_database: edxapp
+
+# -- nginx
+edxapp_nginx_image_name: "fundocker/openshift-nginx"
+edxapp_nginx_image_tag: "1.13"
+edxapp_nginx_cms_port: 8081
+edxapp_nginx_lms_port: 8071

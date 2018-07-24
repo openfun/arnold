@@ -1,9 +1,9 @@
 upstream cms-backend {
-  server edxapp-cms-{{ deployment_stamp }}:{{ django_port }} fail_timeout=0;
+  server cms-{{ deployment_stamp }}:{{ edxapp_django_port }} fail_timeout=0;
 }
 
 server {
-  listen {{ cms_port }};
+  listen {{ edxapp_nginx_cms_port }};
   server_name localhost;
 
   # Prevent invalid display courseware in IE 10+ with high privacy settings

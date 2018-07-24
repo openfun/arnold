@@ -2,16 +2,19 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: edxapp-memcached
+    app: edxapp
+    service: memcached
+    version: "{{ edxapp_memcached_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
-  name: "edxapp-memcached-{{ deployment_stamp }}"  # name of the service should be host name in nginx
+  name: "memcached-{{ deployment_stamp }}"  # name of the service should be host name in nginx
   namespace: "{{ project_name }}"
 spec:
   ports:
-  - name: 11211-tcp
-    port: 11211
+  - name: "{{ edxapp_memcached_port }}-tcp"
+    port: {{ edxapp_memcached_port }}
     protocol: TCP
-    targetPort: 11211
+    targetPort: {{ edxapp_memcached_port }}
   selector:
-    deploymentconfig: "edxapp-memcached-{{ deployment_stamp }}"
+    app: edxapp
+    deploymentconfig: "memcached-{{ deployment_stamp }}"
   type: ClusterIP

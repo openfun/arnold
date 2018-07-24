@@ -29,34 +29,10 @@ trashable_env_types:
   - "development"
   - "feature"
 
-## /!\  Variables below will soon be deprecated /!\ __________________________##
-
-# Ports
-cms_port:       8081
-lms_port:       8071
-aliases_port:   8999
-
-nginx_ports:
-  - "{{ cms_port }}"
-  - "{{ lms_port }}"
-  - "{{ richie_port }}"
-  - "{{ aliases_port }}"
-
 # Endpoints IP
-mongodb_ip:     192.168.10.11
-mysql_ip:       192.168.10.254
+endpoint_mongodb_ip:     192.168.10.11
+endpoint_mysql_ip:       192.168.10.254
 endpoint_postgresql_ip:  192.168.0.1
-
-# Images
-#
-# Service flag should only contain alphanumeric (or '-') characters. It should
-# validate the following regexp: '[a-z]([-a-z0-9]*[a-z0-9])?'
-edxapp_image:        "fundocker/edxapp"
-edxapp_tag:          "ginkgo.1-1.0.3"
-mongodb_image:       "centos/mongodb-32-centos7"
-mongodb_tag:         "3.2"
-mysql_image:         "centos/mysql-57-centos7"
-mysql_tag:           "5.7"
 
 # Following a blue-green deployment strategy, for each deployment, we create a
 # unique identifier (deployment_stamp) that will be used to create unique
@@ -80,15 +56,8 @@ job_stamp: null
 # docs/developer_guide/secrets.md
 secret_id: "1.0.0"
 
-# Services hosts
-lms_host: "{{ project_name }}-lms-{{ deployment_stamp }}.{{ domain_name }}"
-cms_host: "{{ project_name }}-cms-{{ deployment_stamp }}.{{ domain_name }}"
-
-# Cluster databases (used for development or feature deployments)
-mongodb:
-  host: "mongodb"
-  port: "27017"
-mysql:
-  host: "mysql"
-  port: "3306"
-## _END_ to be deprecated ##
+# TODO: move the following settings to the redirect app
+# Ports
+aliases_port: 8999
+nginx_ports:
+  - "{{ aliases_port }}"

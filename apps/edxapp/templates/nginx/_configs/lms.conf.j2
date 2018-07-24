@@ -1,9 +1,9 @@
 upstream lms-backend {
-  server edxapp-lms-{{ deployment_stamp }}:{{ django_port }} fail_timeout=0;
+  server lms-{{ deployment_stamp }}:{{ edxapp_django_port }} fail_timeout=0;
 }
 
 server {
-  listen {{ lms_port }};
+  listen {{ edxapp_nginx_lms_port }};
   server_name localhost;
 
   # Prevent invalid display courseware in IE 10+ with high privacy settings
