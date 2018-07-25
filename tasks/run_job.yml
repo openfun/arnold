@@ -1,0 +1,24 @@
+---
+# Run job synchronously
+
+- name: Display job template
+  debug:
+    msg: "Submitting job: {{ job_template }} [deployment_stamp: {{ deployment_stamp }} // job_stamp: {{ job_stamp }}]"
+
+- name: Submit job
+  openshift_raw:
+    definition: "{{ lookup('template', job_template) | from_yaml }}"
+    state: "present"
+  register: submitted_job
+  tags:
+    - deploy
+    - job
+
+- name: Wait for job completion
+  debug:
+    msg: "{{ lookup('openshift', api_version='v1', namespace=project_name, kind='Job', resource_name=submitted_job.result.metadata.name) }}"
+    verbosity: 2
+  register: job
+  until: lookup('openshift', api_version='v1', namespace=project_name, kind='Job', resource_name=submitted_job.result.metadata.name).status.succeeded > 0
+  retries: 360
+  delay: 5
