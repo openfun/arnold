@@ -3,15 +3,20 @@ project_description: "A minimal project to test apps bootstrapping ({{ env_type 
 domain_name: "{{ lookup('env', 'OPENSHIFT_DOMAIN') }}.nip.io"
 
 apps:
-  - name: "hello"
+  - name: hello
     services:
-      - name: "hello"
+      - name: hello
         host: "hello.{{ project_name }}.{{ domain_name }}"
   - name: richie
     services:
       - name: nginx
         host: "richie.{{ project_name }}.{{ domain_name }}"
         port: 8061
+  - name: edxapp
+    services:
+      - name: nginx
+        host: "cms.{{ project_name}}.{{ domain_name }}"
+        port: 8081
 
 ## _____ soon deprecated below _________________________________________________
 hello_host: "{{ project_name }}.{{ domain_name }}"

@@ -226,6 +226,10 @@ jobs:
           name: Test the "richie" application bootstrapping
           command: bin/ci-bootstrap "richie" "Installation successful!"
 
+      - run:
+          name: Test the "edxapp" application bootstrapping
+          command: bin/ci-bootstrap "edxapp" "Welcome to Open edX Studio"
+
   # FIXME: we have deactivated plugins test coverage as the container user is
   # not allowed to write to /app/.coverage and CircleCI does not allow to mount
   # volumes with "docker run" commands.
