@@ -151,6 +151,8 @@ jobs:
       - run:
           name: Configure Docker insecure registries for OpenShift cluster
           command: |
+            # Elasticsearch requires to increase this setting's default value
+            sudo sysctl -w vm/max_map_count=262144
             sudo bash -c "echo '{\"insecure-registries\": [\"172.30.0.0/16\"]}' > /etc/docker/daemon.json"
             sudo service docker restart
 
