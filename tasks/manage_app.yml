@@ -60,11 +60,35 @@
   with_items:
     - "{{ deployments }}"
     - "{{ services }}"
-    - "{{ jobs }}"
     - "{{ routes }}"
   tags:
     - deploy
     - deployment
     - service
-    - job
     - route
+
+- name: Prepare jobs ordering
+  set_fact:
+    template: "{{ item }}"
+    basename: "{{ item | basename }}"
+  register: jobs_basename
+  with_items: "{{ jobs | flatten }}"
+  tags:
+    - deploy
+    - job
+
+- name: Sort jobs alphabetically according to their basename
+  set_fact:
+    jobs: "{{ jobs_basename.results | sort(attribute='ansible_facts.basename') | map(attribute='ansible_facts.template') | list }}"
+  tags:
+    - deploy
+    - job
+
+- name: Run jobs
+  include_tasks: tasks/run_job.yml
+  loop: "{{ jobs }}"
+  loop_control:
+    loop_var: job_template
+  tags:
+    - deploy
+    - job
