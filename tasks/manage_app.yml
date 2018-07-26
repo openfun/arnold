@@ -67,6 +67,39 @@
     - service
     - route
 
+- name: Wait for pods to be running
+  debug:
+    msg: |
+      {{
+        lookup(
+          'openshift',
+          api_version='v1',
+          namespace=project_name,
+          kind='Pod',
+          label_selector='app=' + app.name + ',deployment_stamp=' + deployment_stamp
+        )
+      }}
+    verbosity: 2
+  register: pods
+  # Note that we force the lookup result to be a list, else, in case of a single
+  # service app, returned result is a dict leading to an unexpected length.
+  until: |
+    (
+      [
+        lookup(
+          'openshift',
+          api_version='v1',
+          namespace=project_name,
+          kind='Pod',
+          label_selector='app=' + app.name + ',deployment_stamp=' + deployment_stamp
+        )
+      ] | flatten | json_query('[?status.phase==`Running`].metadata.name') | length
+    ) == (
+      deployments | flatten | length
+    )
+  retries: 60
+  delay: 5
+
 - name: Prepare jobs ordering
   set_fact:
     template: "{{ item }}"
