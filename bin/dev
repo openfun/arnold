@@ -2,88 +2,42 @@
 #
 # Arnold's dev script
 #
-# We use KVM as the default hypervisor, if you want to use VirtualBox instead,
-# please set the USE_KVM environment variable to 0, e.g.:
+# Before running this script, please make sure that your system met the
+# following requirements:
 #
-# USE_KVM=0 bin/dev
+#   1. Make sure that the "/etc/docker/daemon.json" file contains the
+#      "172.30.0.0/16" insecure registry:
+#
+#          {
+#              "insecure-registries" : ["172.30.0.0/16"]
+#          }
+#
+#    2. To run ES, you will need to ensure that your kernel's vm.max_map_count
+#       parameter is at least 262144:
+#
+#           $ sudo sysctl -w vm/max_map_count=262144
 #
 set -eo pipefail
 
-# shellcheck source=bin/_config.sh
-source "$(dirname "${BASH_SOURCE[0]}")/_config.sh"
-
-# KVM settings
-USE_KVM=${USE_KVM:-0}
-KVM_DEFAULT_NETWORK="default"
-KVM_DEFAULT_NETWORK_CONFIGURATION="/etc/libvirt/qemu/networks/${KVM_DEFAULT_NETWORK}.xml"
+# Default dev credentials
+OC_USER="developer"
+OC_PASSWORD="developer"
 
 
-# _create-kvm-default-network: create KVM default network (if required)
-function _create-kvm-default-network() {
+# _start_cluster: starts an OpenShift minimal cluster
+function _start_cluster() {
 
-    if [[ $USE_KVM -eq 0 ]]; then
-        echo "Will NOT ensure that default KVM network exists (reason: USE_KVM=0)"
-        return
-    fi
+    OPENSHIFT_DOMAIN=$(hostname -I | awk '{print $1}')
+    K8S_AUTH_HOST="https://${OPENSHIFT_DOMAIN}:8443"
 
-    echo "Checking if KVM ${KVM_DEFAULT_NETWORK} network exists"
-    virsh net-list --all | grep ${KVM_DEFAULT_NETWORK}
-
-    if [ $? -ne 0 ]; then
-        echo "Will create KVM ${KVM_DEFAULT_NETWORK} network (admin priviledges are required)"
-        sudo virsh net-define ${KVM_DEFAULT_NETWORK_CONFIGURATION}
-        sudo virsh net-autostart ${KVM_DEFAULT_NETWORK}
-        sudo virsh net-start ${KVM_DEFAULT_NETWORK}
-    else
-        echo "Will NOT create KVM ${KVM_DEFAULT_NETWORK} network (reason: already exists)"
-    fi
-}
-
-
-# _run-minishift: start minishift server with --vm-driver=virtualbox if the
-# environment variable USE_KVM as been set to 0
-function _run-minishift() {
-
-    local opts="--memory=4GB"
-    if [[ $USE_KVM -eq 0 ]]; then
-        opts="$opts --vm-driver=virtualbox"
-    fi
-
-    echo "Starting minishift with options: ${opts}"
-    # shellcheck disable=SC2086
-    minishift start ${opts}
-    minishift status
-
-    echo -e "\n**** MiniShift is up and running ****"
-    echo "local console: https://$(minishift ip):8443"
-    echo "username: developer"
-    echo "password: developer"
-
-    echo -e "\nTo login as administrator, use:"
-    echo "$ oc login -u system:admin"
-    echo -e "***************************************\n"
-}
-
-
-# _set_max_map_count: fix elasticsearch booting issue
-function _set_max_map_count() {
-    minishift ssh -- "sudo sysctl -w vm/max_map_count=262144"
-}
-
-
-# _login: login to minishift
-function _login() {
-    _set_minishift_path
-    oc login "https://$(minishift ip):8443" --username=developer --password=developer
+    oc cluster up --server-loglevel=5 --public-hostname="${OPENSHIFT_DOMAIN}"
+    oc login "${K8S_AUTH_HOST}" -u "${OC_USER}" -p "${OC_PASSWORD}" --insecure-skip-tls-verify=true
 }
 
 
 # Main entrypoint
 function main() {
-    _create-kvm-default-network
-    _run-minishift
-    _set_max_map_count
-    _login
+    _start_cluster
 }
 
 main "$@"
