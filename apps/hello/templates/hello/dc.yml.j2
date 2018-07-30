@@ -8,8 +8,6 @@ metadata:
   namespace: "{{ project_name }}"
 spec:
   replicas: 1  # number of pods we want
-  selector:
-    deploymentconfig: "hello-hello-{{ deployment_stamp }}"
   template:
     metadata:
       labels:

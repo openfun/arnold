@@ -8,8 +8,6 @@ metadata:
   namespace: "{{ project_name }}"
 spec:
   replicas: 1
-  selector:
-    deploymentconfig: redirect-nginx-{{ deployment_stamp }}
   template:
     metadata:
       labels:
