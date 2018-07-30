@@ -32,6 +32,38 @@ aliases:
       # Must be absolute path or relative path from working_directory
       at: /tmp/docker
 
+  - &install_openshift_cluster
+    run:
+      name: Install the OC client
+      command: |
+        wget https://github.com/openshift/origin/releases/download/v3.9.0/openshift-origin-client-tools-v3.9.0-191fece-linux-64bit.tar.gz -P /tmp/openshift/
+        tar xzf /tmp/openshift/openshift*.tar.gz --strip-components=1 -C /tmp/openshift/
+        cp /tmp/openshift/oc $HOME/bin/
+
+  - &configure_openshift_cluster
+    run:
+      name: Configure Docker for OpenShift cluster
+      command: |
+        # Elasticsearch requires to increase this setting's default value
+        sudo sysctl -w vm/max_map_count=262144
+        sudo bash -c "echo '{\"insecure-registries\": [\"172.30.0.0/16\"]}' > /etc/docker/daemon.json"
+        sudo service docker restart
+
+  - &run_openshift_cluster
+    run:
+      name: Run local OpenShift cluster & configure environment
+      command: |
+        export OPENSHIFT_DOMAIN=$(hostname -I | awk '{print $1}')
+        export K8S_AUTH_HOST="https://${OPENSHIFT_DOMAIN}:8443"
+        oc cluster up --server-loglevel=5 --public-hostname="${OPENSHIFT_DOMAIN}"
+        oc login "${K8S_AUTH_HOST}" -u developer -p developer --insecure-skip-tls-verify=true
+        export K8S_AUTH_API_KEY="$(oc whoami -t)"
+        # Set OpenShift's environment variables for future steps
+        echo "export OPENSHIFT_DOMAIN=${OPENSHIFT_DOMAIN}" >> $BASH_ENV
+        echo "export K8S_AUTH_HOST=${K8S_AUTH_HOST}" >> $BASH_ENV
+        echo "export K8S_AUTH_API_KEY=${K8S_AUTH_API_KEY}" >> $BASH_ENV
+        source $BASH_ENV
+
 ci_env:
 
 version: 2
@@ -128,8 +160,9 @@ jobs:
               ansible --version
 
 
-  # Test the bootstrap playbook on a real OpenShift cluster installed in CircleCI's VM.
-  test-bootstrap:
+  # Test the bootstrap playbook on the "hello" application
+  # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
+  test-bootstrap-hello:
 
     machine:
       docker_layer_caching: true
@@ -141,46 +174,57 @@ jobs:
       - *attach_workspace
       - *docker_load
       - *ci_env
-      - run:
-          name: Install the OC client
-          command: |
-            wget https://github.com/openshift/origin/releases/download/v3.9.0/openshift-origin-client-tools-v3.9.0-191fece-linux-64bit.tar.gz -P /tmp/openshift/
-            tar xzf /tmp/openshift/openshift*.tar.gz --strip-components=1 -C /tmp/openshift/
-            cp /tmp/openshift/oc $HOME/bin/
-
-      - run:
-          name: Configure Docker insecure registries for OpenShift cluster
-          command: |
-            # Elasticsearch requires to increase this setting's default value
-            sudo sysctl -w vm/max_map_count=262144
-            sudo bash -c "echo '{\"insecure-registries\": [\"172.30.0.0/16\"]}' > /etc/docker/daemon.json"
-            sudo service docker restart
-
-      - run:
-          name: Run local OpenShift cluster & configure environment
-          command: |
-            export OPENSHIFT_DOMAIN=$(hostname -I | awk '{print $1}')
-            export K8S_AUTH_HOST="https://${OPENSHIFT_DOMAIN}:8443"
-            oc cluster up --server-loglevel=5 --public-hostname="${OPENSHIFT_DOMAIN}"
-            oc login "${K8S_AUTH_HOST}" -u developer -p developer --insecure-skip-tls-verify=true
-            export K8S_AUTH_API_KEY="$(oc whoami -t)"
-            # Set OpenShift's environment variables for future steps
-            echo "export OPENSHIFT_DOMAIN=${OPENSHIFT_DOMAIN}" >> $BASH_ENV
-            echo "export K8S_AUTH_HOST=${K8S_AUTH_HOST}" >> $BASH_ENV
-            echo "export K8S_AUTH_API_KEY=${K8S_AUTH_API_KEY}" >> $BASH_ENV
-            source $BASH_ENV
+      - *install_openshift_cluster
+      - *configure_openshift_cluster
+      - *run_openshift_cluster
 
       - run:
           name: Test the "hello" application bootstrapping
           command: bin/ci-bootstrap "hello" "Hello OpenShift! by Arnold"
 
+  # Test the bootstrap playbook on the "richie" application
+  # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
+  test-bootstrap-richie:
+
+    machine:
+      docker_layer_caching: true
+
+    working_directory: ~/fun
+
+    steps:
+      - checkout
+      - *attach_workspace
+      - *docker_load
+      - *ci_env
+      - *install_openshift_cluster
+      - *configure_openshift_cluster
+      - *run_openshift_cluster
+
       - run:
           name: Test the "richie" application bootstrapping
           command: bin/ci-bootstrap "richie" "Installation successful!"
 
+  # Test the bootstrap playbook on the "edxapp" application
+  # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
+  test-bootstrap-edxapp:
+
+    machine:
+      docker_layer_caching: true
+
+    working_directory: ~/fun
+
+    steps:
+      - checkout
+      - *attach_workspace
+      - *docker_load
+      - *ci_env
+      - *install_openshift_cluster
+      - *configure_openshift_cluster
+      - *run_openshift_cluster
+
       - run:
           name: Test the "edxapp" application bootstrapping
-          command: bin/ci-bootstrap "edxapp" "Welcome to Open edX Studio"
+          command: bin/ci-bootstrap "cms" "Welcome to Open edX Studio"
 
   # FIXME: we have deactivated plugins test coverage as the container user is
   # not allowed to write to /app/.coverage and CircleCI does not allow to mount
@@ -226,7 +270,19 @@ workflows:
           - lint-docker
           - lint-ansible
           - lint-plugins
-      - test-bootstrap:
+      - test-bootstrap-hello:
+          requires:
+          - lint-bash
+          - lint-docker
+          - lint-ansible
+          - lint-plugins
+      - test-bootstrap-richie:
+          requires:
+          - lint-bash
+          - lint-docker
+          - lint-ansible
+          - lint-plugins
+      - test-bootstrap-edxapp:
           requires:
           - lint-bash
           - lint-docker
