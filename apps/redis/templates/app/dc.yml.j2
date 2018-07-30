@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: redis
+    service: app
+    version: "{{ redis_app_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: redis-app
+  namespace: "{{ project_name }}"
+spec:
+  replicas: 1  # number of pods we want
+  # When upgrading, we don't want OpenShift to run several pods mounted on the same volume
+  # because Redis does not support that. Instead we need to make sure that the existing pod
+  # is switched off before the new one starts.
+  strategy:
+    type: Recreate
+  selector:
+    app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+        service: app
+        version: "{{ redis_app_image_tag }}"
+        deployment_stamp: "{{ deployment_stamp }}"
+        deploymentconfig: redis-app
+    spec:
+      containers:
+        - name: redis
+          image: "{{ redis_app_image_name }}:{{ redis_app_image_tag }}"
+          volumeMounts:
+            - mountPath: /data
+              name: redis-v-data
+      volumes:
+        - name: redis-v-data
+          persistentVolumeClaim:
+            claimName: redis-pvc-data

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-pvc-data
+  namespace: "{{ project_name }}"
+  labels:
+    app: redis
+    version: "{{ redis_app_image_tag }}"
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 2Gi
