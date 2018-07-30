@@ -6,7 +6,7 @@ metadata:
     service: richie
     version: "{{ richie_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
-  name: richie-richie-{{ deployment_stamp }}  # name of the service should be host name in nginx
+  name: richie-app-{{ deployment_stamp }}  # name of the service should be host name in nginx
   namespace: "{{ project_name }}"
 spec:
   ports:
@@ -16,5 +16,5 @@ spec:
     targetPort: 8000
   selector:
     app: richie
-    deploymentconfig: "richie-richie-{{ deployment_stamp }}"
+    deploymentconfig: "richie-app-{{ deployment_stamp }}"
   type: ClusterIP

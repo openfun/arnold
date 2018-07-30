@@ -6,20 +6,20 @@ metadata:
     service: richie
     version: "{{ richie_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
-  name: "richie-richie-{{ deployment_stamp }}"
+  name: "richie-app-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
   replicas: 1  # number of pods we want
   selector:
     app: richie
-    deploymentconfig: "richie-richie-{{ deployment_stamp }}"
+    deploymentconfig: "richie-app-{{ deployment_stamp }}"
   template:
     metadata:
       labels:
         app: richie
         service: richie
         version: "{{ richie_image_tag }}"
-        deploymentconfig: "richie-richie-{{ deployment_stamp }}"
+        deploymentconfig: "richie-app-{{ deployment_stamp }}"
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:

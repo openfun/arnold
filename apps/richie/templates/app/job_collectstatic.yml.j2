@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: "richie-richie-regenerate-indexes-{{ job_stamp }}"
+  name: "richie-app-collectstatic-{{ job_stamp }}"
   namespace: "{{ project_name }}"
   labels:
     app: richie
@@ -12,7 +12,7 @@ metadata:
 spec:
   template:
     metadata:
-      name: richie-richie-regenerate-indexes-{{ job_stamp }}
+      name: "richie-app-collectstatic-{{ job_stamp }}"
       labels:
         app: richie
         service: richie
@@ -21,25 +21,30 @@ spec:
         job_stamp: "{{ job_stamp }}"
     spec:
       containers:
-      - name: richie-regenerate-indexes
+      - name: richie-collectstatic
         env:
           - name: DJANGO_SETTINGS_MODULE
             value: richie.settings
           - name: DJANGO_CONFIGURATION
-            value: {{ richie_django_configuration }}
+            value: "{{ richie_django_configuration }}"
           - name: POSTGRES_DB
-            value: {{ richie_postgresql_database }}
+            value: "{{ richie_postgresql_database }}"
           - name: POSTGRES_HOST
             value: "richie-{{ richie_postgresql_host }}-{{ deployment_stamp }}"
           - name: POSTGRES_PORT
             value: "{{ richie_postgresql_port }}"
           - name: DJANGO_ALLOWED_HOSTS
             value: "{{ richie_host }}"
-          - name: ES_CLIENT
-            value: "richie-{{ richie_elasticsearch_host }}-{{ deployment_stamp }}"
         envFrom:
           - secretRef:
               name: richie-{{ secret_id }}
         image: "{{ richie_image_name }}:{{ richie_image_tag }}"
-        command: ["python", "manage.py", "regenerate_indexes"]
+        command: ["python", "manage.py", "collectstatic", "--noinput"]
+        volumeMounts:
+        - mountPath: /data/static
+          name: richie-v-static
+      volumes:
+      - name: richie-v-static
+        persistentVolumeClaim:
+          claimName: richie-pvc-static
       restartPolicy: Never
