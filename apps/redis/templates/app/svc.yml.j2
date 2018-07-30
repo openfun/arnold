@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: redis
+    service: app
+    version: "{{ redis_app_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  # name of the service should be host name in edxapp configuration
+  name: "{{ redis_app_host }}"
+  namespace: "{{ project_name }}"
+spec:
+  ports:
+  - name: "{{ redis_app_port }}-tcp"
+    port: {{ redis_app_port }}
+    protocol: TCP
+    targetPort: {{ redis_app_port }}
+  selector:
+    app: redis
+    deploymentconfig: "redis-app"
+  type: ClusterIP
