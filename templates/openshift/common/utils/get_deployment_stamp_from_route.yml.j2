@@ -6,7 +6,7 @@ metadata:
   # deployed stack by getting a route object. As the deployment_stamp is
   # commonly shared among objects of a stack, there is no need to get more than
   # one route to achieve this.
-  name: "{{ app | json_query('services[?host].name') | first }}-{{ prefix }}"
+  name: "{{ app.name }}-{{ app | json_query('services[?host].name') | first }}-{{ prefix }}"
   namespace: "{{ project_name }}"
   labels:
     env_type: {{ env_type }}
