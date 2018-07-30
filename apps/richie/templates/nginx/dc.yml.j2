@@ -6,20 +6,20 @@ metadata:
     service: nginx
     version: "{{ richie_nginx_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
-  name: nginx-{{ deployment_stamp }}
+  name: "richie-nginx-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
   replicas: 1
   selector:
     app: richie
-    deploymentconfig: nginx-{{ deployment_stamp }}
+    deploymentconfig: "richie-nginx-{{ deployment_stamp }}"
   template:
     metadata:
       labels:
         app: richie
         service: nginx
         version: "{{ richie_nginx_image_tag }}"
-        deploymentconfig: nginx-{{ deployment_stamp }}
+        deploymentconfig: "richie-nginx-{{ deployment_stamp }}"
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:

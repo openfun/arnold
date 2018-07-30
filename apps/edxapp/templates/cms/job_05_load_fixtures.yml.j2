@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: cms-load-fixtures-{{ job_stamp }}
+  name: edxapp-cms-load-fixtures-{{ job_stamp }}
   namespace: "{{ project_name }}"
   labels:
     app: edxapp
@@ -12,7 +12,7 @@ metadata:
 spec:
   template:
     metadata:
-      name: cms-load-fixtures-{{ job_stamp }}
+      name: edxapp-cms-load-fixtures-{{ job_stamp }}
       labels:
         app: edxapp
         service: cms
@@ -21,7 +21,7 @@ spec:
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:
-        - name: cms-load-fixtures-{{ job_stamp }}
+        - name: edxapp-cms-load-fixtures-{{ job_stamp }}
           image: "{{ edxapp_image_name }}:{{ edxapp_image_tag }}"
           env:
             - name: DJANGO_SETTINGS_MODULE

@@ -6,13 +6,13 @@ metadata:
     service: nginx
     version: "{{ edxapp_nginx_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
-  name: "nginx-{{ deployment_stamp }}"
+  name: "edxapp-nginx-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
   replicas: 1
   selector:
     app: edxapp
-    deploymentconfig: "nginx-{{ deployment_stamp }}"
+    deploymentconfig: "edxapp-nginx-{{ deployment_stamp }}"
   template:
     metadata:
       labels:
@@ -20,7 +20,7 @@ spec:
         service: nginx
         version: "{{ edxapp_nginx_image_tag }}"
         deployment_stamp: "{{ deployment_stamp }}"
-        deploymentconfig: "nginx-{{ deployment_stamp }}"
+        deploymentconfig: "edxapp-nginx-{{ deployment_stamp }}"
     spec:
       containers:
       - image: "{{ edxapp_nginx_image_name }}:{{ edxapp_nginx_image_tag }}"

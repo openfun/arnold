@@ -4,7 +4,7 @@ metadata:
   labels:
     app: hello
     deployment_stamp: "{{ deployment_stamp }}"
-  name: "hello-{{ deployment_stamp }}"  # name of the service should be host name in nginx
+  name: "hello-hello-{{ deployment_stamp }}"  # name of the service should be host name in nginx
   namespace: "{{ project_name }}"
 spec:
   ports:
@@ -13,5 +13,5 @@ spec:
     protocol: TCP
     targetPort: {{ hello_port }}
   selector:
-    deploymentconfig: "hello-{{ deployment_stamp }}"
+    deploymentconfig: "hello-hello-{{ deployment_stamp }}"
   type: ClusterIP

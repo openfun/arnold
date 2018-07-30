@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: "richie-regenerate-indexes-{{ job_stamp }}"
+  name: "richie-richie-regenerate-indexes-{{ job_stamp }}"
   namespace: "{{ project_name }}"
   labels:
     app: richie
@@ -12,7 +12,7 @@ metadata:
 spec:
   template:
     metadata:
-      name: richie-regenerate-indexes-{{ job_stamp }}
+      name: richie-richie-regenerate-indexes-{{ job_stamp }}
       labels:
         app: richie
         service: richie
@@ -30,13 +30,13 @@ spec:
           - name: POSTGRES_DB
             value: {{ richie_postgresql_database }}
           - name: POSTGRES_HOST
-            value: "{{ richie_postgresql_host }}-{{ deployment_stamp }}"
+            value: "richie-{{ richie_postgresql_host }}-{{ deployment_stamp }}"
           - name: POSTGRES_PORT
             value: "{{ richie_postgresql_port }}"
           - name: DJANGO_ALLOWED_HOSTS
             value: "{{ richie_host }}"
           - name: ES_CLIENT
-            value: "{{ richie_elasticsearch_host }}-{{ deployment_stamp }}"
+            value: "richie-{{ richie_elasticsearch_host }}-{{ deployment_stamp }}"
         envFrom:
           - secretRef:
               name: richie-{{ secret_id }}

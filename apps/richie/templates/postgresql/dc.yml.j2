@@ -6,20 +6,20 @@ metadata:
     service: postgresql
     version: "{{ richie_postgresql_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
-  name: "postgresql-{{ deployment_stamp }}"
+  name: "richie-postgresql-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
   replicas: 1
   selector:
     app: richie
-    deploymentconfig: "postgresql-{{ deployment_stamp }}"
+    deploymentconfig: "richie-postgresql-{{ deployment_stamp }}"
   template:
     metadata:
       labels:
         app: richie
         service: postgresql
         version: "{{ richie_postgresql_image_tag }}"
-        deploymentconfig: "postgresql-{{ deployment_stamp }}"
+        deploymentconfig: "richie-postgresql-{{ deployment_stamp }}"
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:

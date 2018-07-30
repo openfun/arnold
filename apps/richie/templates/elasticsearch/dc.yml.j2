@@ -6,20 +6,20 @@ metadata:
     service: elasticsearch
     version: "{{ richie_elasticsearch_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
-  name: "elasticsearch-{{ deployment_stamp }}"
+  name: "richie-elasticsearch-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
   replicas: 1
   selector:
     app: richie
-    deploymentconfig: "elasticsearch-{{ deployment_stamp }}"
+    deploymentconfig: "richie-elasticsearch-{{ deployment_stamp }}"
   template:
     metadata:
       labels:
         app: richie
         service: elasticsearch
         version: "{{ richie_elasticsearch_image_tag }}"
-        deploymentconfig: "elasticsearch-{{ deployment_stamp }}"
+        deploymentconfig: "richie-elasticsearch-{{ deployment_stamp }}"
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:

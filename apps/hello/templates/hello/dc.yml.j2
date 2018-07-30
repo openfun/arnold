@@ -4,17 +4,17 @@ metadata:
   labels:
     app: hello
     deployment_stamp: "{{ deployment_stamp }}"
-  name: "hello-{{ deployment_stamp }}"
+  name: "hello-hello-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
   replicas: 1  # number of pods we want
   selector:
-    deploymentconfig: "hello-{{ deployment_stamp }}"
+    deploymentconfig: "hello-hello-{{ deployment_stamp }}"
   template:
     metadata:
       labels:
         app: hello
-        deploymentconfig: "hello-{{ deployment_stamp }}"
+        deploymentconfig: "hello-hello-{{ deployment_stamp }}"
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:
