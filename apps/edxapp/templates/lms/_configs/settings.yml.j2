@@ -16,3 +16,9 @@ CELERY_BROKER_PORT: "{{ redis_app_port }}"
 # are set, you'll need to move the two following settings in edxapp secret
 CELERY_BROKER_USER: ""
 CELERY_BROKER_PASSWORD: ""
+
+# Celery queues
+HIGH_PRIORITY_QUEUE: "{{ edxapp_celery_lms_high_priority_queue }}"
+DEFAULT_PRIORITY_QUEUE: "{{ edxapp_celery_lms_default_priority_queue }}"
+LOW_PRIORITY_QUEUE: "{{ edxapp_celery_lms_low_priority_queue }}"
+HIGH_MEM_QUEUE: "{{ edxapp_celery_lms_high_mem_queue }}"

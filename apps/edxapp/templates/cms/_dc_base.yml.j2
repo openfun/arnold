@@ -1,0 +1,117 @@
+{#
+
+  LMS/CMS DCs base template used to create cms & lms wsgi servers + celery workers
+
+ #}
+
+{# The dc_name should be unique #}
+{%- set dc_name = "edxapp-%s-%s-%s" | format(service_variant, worker_type, deployment_stamp) -%}
+
+{# In case of a worker, we need to add the queue name to make the dc_name unique #}
+{%- if queue -%}
+  {% set dc_name = "%s-%s" | format(dc_name, (queue | regex_replace('\\.|_', '-'))) %}
+{%- endif -%}
+
+{#
+  The "command" macro is used to override target container's command, in edxapp
+  case, we override this command to run celery workers instead of the CMS/LMS
+  wsgi server.
+#}
+{%- macro command(service_variant, queue, concurrency=1) -%}
+  {%- if service_variant and queue %}
+        command:
+          - "/bin/bash"
+          - "-c"
+          - python manage.py {{ service_variant }} celery worker --loglevel=info --queues={{ queue }} --hostname={{ queue }}.%%h --concurrency={{ concurrency }}
+  {%- endif %}
+{%- endmacro -%}
+
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: edxapp
+    service: {{ service_variant }}
+    version: "{{ edxapp_image_tag }}"
+    worker_type: "{{ worker_type }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: "{{ dc_name }}"
+  namespace: "{{ project_name }}"
+spec:
+  replicas: 1  # number of pods we want
+  template:
+    metadata:
+      labels:
+        app: edxapp
+        service: {{ service_variant }}
+        version: "{{ edxapp_image_tag }}"
+        worker_type: "{{ worker_type }}"
+        deployment_stamp: "{{ deployment_stamp }}"
+        deploymentconfig: "{{ dc_name }}"
+    spec:
+      containers:
+      - name: {{ service_variant }}
+{{ command(service_variant, queue) }}
+        env:
+        - name: SERVICE_VARIANT
+          value: {{ service_variant }}
+        - name: DJANGO_SETTINGS_MODULE
+          value: {{ service_variant }}.envs.fun.docker_run
+        image: "{{ edxapp_image_name }}:{{ edxapp_image_tag }}"
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - mountPath: /config
+          name: edxapp-config
+        - mountPath: /edx/var/edxapp/media
+          name: edxapp-v-media
+        - mountPath: /edx/app/edxapp/staticfiles
+          name: edxapp-v-static
+        - mountPath: /edx/app/edxapp/data
+          name: edxapp-v-data
+      initContainers:
+        # This initContainer has nothing mounted on its "/config" directory. We
+        # copy the content of its "/config" directory (fun-platform default
+        # settings) to the "/tmp/config" directory (edxapp-config volume). Then,
+        # we copy service variant configMaps that may override default
+        # configuration (docker_run*.py and settings.yml) in that same
+        # "/tmp/config" directory. And finally, we also copy sensible
+        # credentials from edxapp secret (credentials.vault.yml). When this
+        # initContainer shuts down, the "edxapp-config" volume has been filled
+        # with all project settings that will be used to run the service variant
+        # container. Please refer to the documentation to better understand our
+        # settings generation mecanism.
+        - name: init-create-config
+          image: "{{ edxapp_image_name }}:{{ edxapp_image_tag }}"
+          imagePullPolicy: IfNotPresent
+          command:
+            - "/bin/bash"
+            - "-c"
+            - cp -r /config/* /tmp/config &&
+              cp -rL /tmp/configmap-{{ service_variant }}/* /tmp/config/{{ service_variant }}/ &&
+              cp /tmp/secret/credentials.vault.yml /tmp/config/{{ service_variant }}/secrets.yml
+          volumeMounts:
+            - mountPath: /tmp/config
+              name: edxapp-config
+            - mountPath: /tmp/configmap-{{ service_variant }}
+              name: edxapp-configmap-{{ service_variant }}
+            - mountPath: /tmp/secret
+              name: edxapp-secret
+      volumes:
+        - name: edxapp-configmap-{{ service_variant }}
+          configMap:
+            defaultMode: 420
+            name: edxapp-{{ service_variant }}-{{ deployment_stamp }}
+        - name: edxapp-config
+          emptyDir: {}  # volume that lives as long as the pod lives
+        - name: edxapp-secret
+          secret:
+            secretName: edxapp-{{ secret_id }}
+        - name: edxapp-v-media
+          persistentVolumeClaim:
+            claimName: edxapp-pvc-media
+        - name: edxapp-v-static
+          persistentVolumeClaim:
+            claimName: edxapp-pvc-static
+        - name: edxapp-v-data
+          persistentVolumeClaim:
+            claimName: edxapp-pvc-data

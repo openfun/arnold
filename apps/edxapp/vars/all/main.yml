@@ -6,7 +6,7 @@ edxapp_lms_host: "lms.{{ project_name}}.{{ domain_name }}"
 
 # -- edxapp (cms/lms)
 edxapp_image_name: "fundocker/edxapp"
-edxapp_image_tag: "ginkgo.1-1.0.4"
+edxapp_image_tag: "ginkgo.1-1.0.6"
 edxapp_django_port: 8000
 edxapp_sql_dump_url: "https://gist.github.com/jmaupetit/1f9d270d7d2106774fd94ba89a51ab78/raw/b0004f2825623d03de58710bf936db175e96bc90/edx-database-ginko.sql"
 
@@ -34,3 +34,13 @@ edxapp_nginx_image_name: "fundocker/openshift-nginx"
 edxapp_nginx_image_tag: "1.13"
 edxapp_nginx_cms_port: 8081
 edxapp_nginx_lms_port: 8071
+
+# -- celery/redis
+edxapp_celery_lms_high_priority_queue: "edx.lms.core.high"
+edxapp_celery_lms_default_priority_queue: "edx.lms.core.default"
+edxapp_celery_lms_low_priority_queue: "edx.lms.core.low"
+edxapp_celery_lms_high_mem_queue: "edx.lms.core.high_mem"
+
+edxapp_celery_cms_high_priority_queue: "edx.cms.core.high"
+edxapp_celery_cms_default_priority_queue: "edx.cms.core.default"
+edxapp_celery_cms_low_priority_queue: "edx.cms.core.low"

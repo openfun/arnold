@@ -1,5 +1,5 @@
 {% set service_variant = "cms" %}
-{% set worker_type = "wsgi" %}
-{% set queue = "" %}
+{% set worker_type = "queue" %}
+{% set queue = edxapp_celery_cms_high_priority_queue %}
 
 {% include "apps/edxapp/templates/cms/_dc_base.yml.j2" with context %}

@@ -14,10 +14,10 @@
 
 - name: Set OpenShift objects to manage
   set_fact:
-    deployments: "{{ templates | map('regex_search', '.*/dc.yml.j2$') | select('string') | list }}"
-    services: "{{ templates | map('regex_search', '.*/svc.yml.j2$') | select('string') | list }}"
-    jobs: "{{ templates | map('regex_search', '.*/job_.*.yml.j2$') | select('string') | list }}"
-    routes: "{{ templates | map('regex_search', '.*/route.yml.j2$') | select('string') | list }}"
+    deployments: "{{ templates | map('regex_search', '.*/dc.*\\.yml\\.j2$') | select('string') | list }}"
+    services: "{{ templates | map('regex_search', '.*/svc\\.yml\\.j2$') | select('string') | list }}"
+    jobs: "{{ templates | map('regex_search', '.*/job_.*\\.yml\\.j2$') | select('string') | list }}"
+    routes: "{{ templates | map('regex_search', '.*/route\\.yml\\.j2$') | select('string') | list }}"
   tags:
     - deploy
     - deployment
@@ -97,7 +97,7 @@
     ) == (
       deployments | flatten | length
     )
-  retries: 60
+  retries: 120
   delay: 5
 
 - name: Prepare jobs ordering
