@@ -170,54 +170,6 @@ jobs:
             echo "export K8S_AUTH_API_KEY=${K8S_AUTH_API_KEY}" >> $BASH_ENV
             source $BASH_ENV
 
-      # Create a bash 'ci-bootstrap' script on-the-fly to test applications
-      # bootstrapping without repeating ourselves.
-      #
-      # TODO: make it a CI sugar script to ease new developers enrolement (the
-      # UNIX redirection trick may not be obvious)
-      - run:
-          name: Create applications bootstraping routine
-          command: |
-            # Write to the 'bin/ci-bootstrap' file until the EOF signal is met
-            cat << EOF > bin/ci-bootstrap
-              #!/usr/bin/env/bash
-              #
-              # usage: ci-bootstrap [APP] [CONTENT]
-              #
-              # First script argument is the application's name. It defaults to
-              # 'hello'
-              app="\${1:-hello}"
-              # Second script argument is the message to look for in the
-              # application's HTTP response. If this message has been found, it
-              # means that the application is up and running, thus validating
-              # deployment. It defaults to the expected 'hello' application
-              # message.
-              content="\${2:-Hello OpenShift! by Arnold}"
-              # Run the bootstrap.yml playbook with the ansible vault password
-              # passed to stdin
-              echo "arnold" | docker run --rm -i \
-                  --env-file env.d/development \
-                  --env K8S_AUTH_API_KEY \
-                  --env K8S_AUTH_HOST \
-                  --env OPENSHIFT_DOMAIN \
-                  "arnold:\$(tr -d '\n' < VERSION)" \
-                  ansible-playbook bootstrap.yml --ask-vault-pass -e "env_type=ci" -e "apps_filter=\${app}"
-              # Wait for the application to respond
-              for try in \$(seq 5); do
-                echo "Testing \${app} application http response (\$try)"
-                curl -vLk "https://next.\${app}.ci-patient0.\${OPENSHIFT_DOMAIN}.nip.io/" 2> /tmp/\${app}.err > /tmp/\${app}.out
-                if grep "HTTP/1.1 200 OK" /tmp/\${app}.err && grep "\${content}" /tmp/\${app}.out; then
-                  exit 0
-                fi
-                sleep 10
-              done
-              exit 1
-            EOF
-            # Make it executable so that we can run it for each app
-            chmod +x bin/ci-bootstrap
-            # Check file's content
-            cat bin/ci-bootstrap
-
       - run:
           name: Test the "hello" application bootstrapping
           command: bin/ci-bootstrap "hello" "Hello OpenShift! by Arnold"
