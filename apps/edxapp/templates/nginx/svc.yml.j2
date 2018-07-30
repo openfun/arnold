@@ -6,7 +6,7 @@ metadata:
     service: nginx
     version: "{{ edxapp_nginx_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
-  name: nginx-{{ deployment_stamp }}
+  name: "edxapp-nginx-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
   ports:
@@ -20,5 +20,5 @@ spec:
       targetPort: {{ edxapp_nginx_lms_port }}
   selector:
     app: edxapp
-    deploymentconfig: nginx-{{ deployment_stamp }}
+    deploymentconfig: "edxapp-nginx-{{ deployment_stamp }}"
   type: ClusterIP

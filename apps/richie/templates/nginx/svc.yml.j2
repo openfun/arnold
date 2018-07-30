@@ -6,7 +6,7 @@ metadata:
     service: nginx
     version: "{{ richie_nginx_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
-  name: nginx-{{ deployment_stamp }}
+  name: "richie-nginx-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
   ports:
@@ -16,5 +16,5 @@ spec:
       targetPort: {{ richie_nginx_port }}
   selector:
     app: richie
-    deploymentconfig: nginx-{{ deployment_stamp }}
+    deploymentconfig: "richie-nginx-{{ deployment_stamp }}"
   type: ClusterIP

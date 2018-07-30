@@ -5,7 +5,7 @@ metadata:
     app: edxapp
     ednpoint: mysql
   # name of the endpoint should be the same as the corresponding service
-  name: mysql
+  name: "{{ edxapp_mysql_host }}"
   namespace: "{{ project_name }}"
 subsets:
   - addresses:

@@ -14,7 +14,7 @@ spec:
     targetPort: {{ aliases_port }}-tcp
   to:
     kind: Service
-    name: "redirect-{{ deployment_stamp }}"
+    name: "redirect-nginx-{{ deployment_stamp }}"
     weight: 100
   tls:
     termination: edge

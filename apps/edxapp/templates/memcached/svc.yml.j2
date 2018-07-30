@@ -6,7 +6,7 @@ metadata:
     service: memcached
     version: "{{ edxapp_memcached_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
-  name: "memcached-{{ deployment_stamp }}"  # name of the service should be host name in nginx
+  name: "edxapp-memcached-{{ deployment_stamp }}"  # name of the service should be host name in nginx
   namespace: "{{ project_name }}"
 spec:
   ports:
@@ -16,5 +16,5 @@ spec:
     targetPort: {{ edxapp_memcached_port }}
   selector:
     app: edxapp
-    deploymentconfig: "memcached-{{ deployment_stamp }}"
+    deploymentconfig: "edxapp-memcached-{{ deployment_stamp }}"
   type: ClusterIP

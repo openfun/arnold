@@ -6,7 +6,7 @@ metadata:
     service: lms
     version: "{{ edxapp_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
-  name: "lms-{{ deployment_stamp }}"  # name of the service should be host name in nginx
+  name: "edxapp-lms-{{ deployment_stamp }}"  # name of the service should be host name in nginx
   namespace: "{{ project_name }}"
 spec:
   ports:
@@ -16,5 +16,5 @@ spec:
     targetPort: {{ edxapp_django_port }}
   selector:
     app: edxapp
-    deploymentconfig: "lms-{{ deployment_stamp }}"
+    deploymentconfig: "edxapp-lms-{{ deployment_stamp }}"
   type: ClusterIP

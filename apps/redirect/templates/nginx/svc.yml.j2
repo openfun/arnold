@@ -4,7 +4,7 @@ metadata:
   labels:
     app: redirect
     deployment_stamp: "{{ deployment_stamp }}"
-  name: redirect-{{ deployment_stamp }}
+  name: "redirect-nginx-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
   ports:
@@ -13,5 +13,5 @@ spec:
       protocol: TCP
       targetPort: {{ aliases_port }}
   selector:
-    deploymentconfig: redirect-{{ deployment_stamp }}
+    deploymentconfig: "redirect-nginx-{{ deployment_stamp }}"
   type: ClusterIP

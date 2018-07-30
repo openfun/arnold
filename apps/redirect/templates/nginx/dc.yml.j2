@@ -4,17 +4,17 @@ metadata:
   labels:
     app: redirect
     deployment_stamp: "{{ deployment_stamp }}"
-  name: redirect-{{ deployment_stamp }}
+  name: redirect-nginx-{{ deployment_stamp }}
   namespace: "{{ project_name }}"
 spec:
   replicas: 1
   selector:
-    deploymentconfig: redirect-{{ deployment_stamp }}
+    deploymentconfig: redirect-nginx-{{ deployment_stamp }}
   template:
     metadata:
       labels:
         app: redirect
-        deploymentconfig: redirect-{{ deployment_stamp }}
+        deploymentconfig: redirect-nginx-{{ deployment_stamp }}
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:

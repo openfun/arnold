@@ -6,13 +6,13 @@ metadata:
     service: cms
     version: "{{ edxapp_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
-  name: cms-{{ deployment_stamp }}
+  name: edxapp-cms-{{ deployment_stamp }}
   namespace: "{{ project_name }}"
 spec:
   replicas: 1  # number of pods we want
   selector:
     app: edxapp
-    deploymentconfig: cms-{{ deployment_stamp }}
+    deploymentconfig: edxapp-cms-{{ deployment_stamp }}
   template:
     metadata:
       labels:
@@ -20,7 +20,7 @@ spec:
         service: cms
         version: "{{ edxapp_image_tag }}"
         deployment_stamp: "{{ deployment_stamp }}"
-        deploymentconfig: cms-{{ deployment_stamp }}
+        deploymentconfig: edxapp-cms-{{ deployment_stamp }}
     spec:
       containers:
       - env:

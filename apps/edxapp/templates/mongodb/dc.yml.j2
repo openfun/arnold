@@ -6,20 +6,20 @@ metadata:
     service: mongodb
     version: "{{ edxapp_mongodb_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
-  name: "mongodb-{{ deployment_stamp }}"
+  name: "edxapp-mongodb-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
   replicas: 1
   selector:
     app: edxapp
-    deploymentconfig: "mongodb-{{ deployment_stamp }}"
+    deploymentconfig: "edxapp-mongodb-{{ deployment_stamp }}"
   template:
     metadata:
       labels:
         app: edxapp
         service: mongodb
         version: "{{ edxapp_mongodb_image_tag }}"
-        deploymentconfig: "mongodb-{{ deployment_stamp }}"
+        deploymentconfig: "edxapp-mongodb-{{ deployment_stamp }}"
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:

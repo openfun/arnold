@@ -22,6 +22,6 @@ spec:
 {% if env_type in trashable_env_types %}
   selector:
     app: edxapp
-    deploymentconfig: "mysql-{{ deployment_stamp }}"
+    deploymentconfig: "edxapp-mysql-{{ deployment_stamp }}"
   type: ClusterIP
 {% endif%}

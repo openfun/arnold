@@ -6,13 +6,13 @@ metadata:
     service: mysql
     version: "{{ edxapp_mysql_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
-  name: "mysql-{{ deployment_stamp }}"
+  name: "edxapp-mysql-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
   replicas: 1
   selector:
     app: edxapp
-    deploymentconfig: "mysql-{{ deployment_stamp }}"
+    deploymentconfig: "edxapp-mysql-{{ deployment_stamp }}"
   template:
     metadata:
       labels:
@@ -20,7 +20,7 @@ spec:
         service: mysql
         version: "{{ edxapp_mysql_image_tag }}"
         deployment_stamp: "{{ deployment_stamp }}"
-        deploymentconfig: "mysql-{{ deployment_stamp }}"
+        deploymentconfig: "edxapp-mysql-{{ deployment_stamp }}"
     spec:
       containers:
         - image: "{{ edxapp_mysql_image_name }}:{{ edxapp_mysql_image_tag }}"

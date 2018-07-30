@@ -19,4 +19,4 @@ spec:
     targetPort: {{ item.0.port | default('8080') }}-tcp
   to:
     kind: Service
-    name: "{{ item.0.name }}-{{ deployment_stamp | default('null', true) }}"
+    name: "{{ app.name }}-{{ item.0.name }}-{{ deployment_stamp | default('null', true) }}"
