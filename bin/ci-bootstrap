@@ -1,17 +1,10 @@
 #!/usr/bin/env bash
 #
-# usage: ci-bootstrap [APP] [CONTENT]
+# usage: ci-bootstrap [APP]
 
 # First script argument is the application's name. It defaults to
 # 'hello'
 app="${1:-hello}"
-
-# Second script argument is the message to look for in the
-# application's HTTP response. If this message has been found, it
-# means that the application is up and running, thus validating
-# deployment. It defaults to the expected 'hello' application
-# message.
-content="${2:-Hello OpenShift! by Arnold}"
 
 # Run the bootstrap.yml playbook with the ansible vault password
 # passed to stdin
@@ -22,14 +15,3 @@ echo "arnold" | docker run --rm -i \
   --env OPENSHIFT_DOMAIN \
   "arnold:$(tr -d '\n' < VERSION)" \
     ansible-playbook bootstrap.yml --ask-vault-pass -e "env_type=ci" -e "apps_filter=${app}"
-
-# Wait for the application to respond
-for try in $(seq 5); do
-  echo "Testing ${app} application http response ($try)"
-  curl -vLk "https://next.${app}.ci-patient0.${OPENSHIFT_DOMAIN}.nip.io/" 2> "/tmp/${app}.err" > "/tmp/${app}.out"
-  if grep "HTTP/1.1 200 OK" "/tmp/${app}.err" && grep "${content}" "/tmp/${app}.out"; then
-    exit 0
-  fi
-  sleep 10
-done
-exit 1

@@ -180,7 +180,9 @@ jobs:
 
       - run:
           name: Test the "hello" application bootstrapping
-          command: bin/ci-bootstrap "hello" "Hello OpenShift! by Arnold"
+          command: |
+            bin/ci-bootstrap "hello"
+            bin/ci-test-service "hello" "Hello OpenShift! by Arnold"
 
   # Test the bootstrap playbook on the "richie" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
@@ -202,7 +204,9 @@ jobs:
 
       - run:
           name: Test the "richie" application bootstrapping
-          command: bin/ci-bootstrap "richie" "Installation successful!"
+          command: |
+            bin/ci-bootstrap "richie"
+            bin/ci-test-service "richie" "Installation successful!"
 
   # Test the bootstrap playbook on the "edxapp" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
@@ -224,7 +228,9 @@ jobs:
 
       - run:
           name: Test the "edxapp" application bootstrapping
-          command: bin/ci-bootstrap "cms" "Welcome to Open edX Studio"
+          command: |
+            bin/ci-bootstrap "edxapp"
+            bin/ci-test-service "cms" "Welcome to Open edX Studio"
 
   # FIXME: we have deactivated plugins test coverage as the container user is
   # not allowed to write to /app/.coverage and CircleCI does not allow to mount
