@@ -17,6 +17,9 @@ apps:
       - name: nginx
         host: "cms.{{ project_name}}.{{ domain_name }}"
         port: 8081
+  - name: redis
+    services:
+      - name: app
 
 ## _____ soon deprecated below _________________________________________________
 hello_host: "{{ project_name }}.{{ domain_name }}"

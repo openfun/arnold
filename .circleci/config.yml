@@ -227,9 +227,9 @@ jobs:
       - *run_openshift_cluster
 
       - run:
-          name: Test the "edxapp" application bootstrapping
+          name: Test the "edxapp" application bootstrapping (with redis enabled)
           command: |
-            bin/ci-bootstrap "edxapp"
+            bin/ci-bootstrap "edxapp,redis"
             bin/ci-test-service "cms" "Welcome to Open edX Studio"
 
   # FIXME: we have deactivated plugins test coverage as the container user is
