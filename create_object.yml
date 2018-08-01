@@ -36,6 +36,11 @@
     - name: Print job stamp
       debug: msg="Job stamp {{ job_stamp }}"
 
+    - name: Print compiled template
+      debug:
+        msg: "{{ lookup('template', object_template) }}"
+        verbosity: 2
+
     - name: Create object
       openshift_raw:
         definition: "{{ lookup('template', object_template) | from_yaml }}"
