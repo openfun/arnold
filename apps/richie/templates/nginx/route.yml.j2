@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Route
+metadata:
+  namespace: "{{ project_name }}"
+  name: "richie-nginx-{{ prefix }}"
+  labels:
+    env_type: "{{ env_type }}"
+    customer: "{{ customer }}"
+    app: "richie"
+    service: "nginx"
+    version: "{{ richie_nginx_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+    route_prefix: "{{ prefix }}"
+    route_target_service: "app"
+  annotations:
+    kubernetes.io/tls-acme: "true"
+spec:
+  host: "{{ richie_host | blue_green_host(prefix) }}"
+  tls:
+    termination: edge
+  port:
+    targetPort: "{{ richie_nginx_port }}-tcp"
+  to:
+    kind: Service
+    name: "richie-nginx-{{ deployment_stamp }}"

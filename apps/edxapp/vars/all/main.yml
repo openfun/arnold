@@ -44,3 +44,8 @@ edxapp_celery_lms_high_mem_queue: "edx.lms.core.high_mem"
 edxapp_celery_cms_high_priority_queue: "edx.cms.core.high"
 edxapp_celery_cms_default_priority_queue: "edx.cms.core.default"
 edxapp_celery_cms_low_priority_queue: "edx.cms.core.low"
+
+# FIXME: when deploying only edxapp (and not edxapp + redis), these variables
+# are required
+redis_app_host: "redis"
+redis_app_port: 6379

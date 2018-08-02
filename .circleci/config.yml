@@ -231,6 +231,7 @@ jobs:
           command: |
             bin/ci-bootstrap "edxapp,redis"
             bin/ci-test-service "cms" "Welcome to Open edX Studio"
+            bin/ci-test-service "lms" "It works! This is the default homepage for this Open edX instance."
 
   # FIXME: we have deactivated plugins test coverage as the container user is
   # not allowed to write to /app/.coverage and CircleCI does not allow to mount
