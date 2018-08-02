@@ -1,12 +1,13 @@
 ---
 # Patch routes of all services from a single app to the new deployment_stamp
 
-- name: "[{{ app.name }}] Patch route[{{ app.name }}-{{ prefix }}] with deployment_stamp[{{ deployment_stamp }}]"
+- name: "Patching routes with prefix {{ prefix }} for the {{ app.name }} application with deployment_stamp {{ deployment_stamp }}"
   openshift_raw:
     force: true
-    definition: "{{ lookup('template', 'apps/_common/templates/route/main.yml.j2') | from_yaml }}"
+    definition: "{{ lookup('template', route_template) | from_yaml }}"
     state: present
-  with_nested:
-    - "{{ app.services }}"
-    - "{{ prefix }}"
-  when: item.0.host is defined
+  loop: "{{ routes }}"
+  loop_control:
+    loop_var: route_template
+  when: routes | length > 0
+  tags: route

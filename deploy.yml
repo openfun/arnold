@@ -33,6 +33,7 @@
     - include_tasks: tasks/run_tasks_for_apps.yml
       vars:
         tasks:
+          - tasks/get_objects_for_app
           - tasks/create_app_config
           - tasks/manage_app
       tags:
@@ -44,6 +45,7 @@
       vars:
         prefix: "next"
         tasks:
+          - get_objects_for_app
           - deploy_get_stamp_from_route
           - deploy_patch_route
           - delete_app

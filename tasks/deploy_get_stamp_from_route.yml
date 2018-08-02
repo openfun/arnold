@@ -1,14 +1,40 @@
 ---
 # Get deployment_stamp from a route
 
-- name: Get deployment_stamp from route[{{ app.name }}-{{ prefix }}]
-  openshift_raw:
-    definition: "{{ lookup('template', 'templates/openshift/common/utils/get_deployment_stamp_from_route.yml.j2') | from_yaml }}"
+# An application can define several routes (e.g. two services with two
+# different routes). Our goal here is to get the deployment_stamp of a
+# deployed stack by getting a route object. As the deployment_stamp is
+# commonly shared among objects of a stack, there is no need to get more than
+# one route to achieve this.
+- name: Get deployment_stamp from {{ app.name }} application routes with prefix {{ prefix }}
+  set_fact:
+    route: |
+      {{
+        [
+          lookup(
+            'openshift',
+            api_version='v1',
+            namespace=project_name,
+            kind='Route',
+            label_selector='app=' + app.name + ',route_prefix=' + prefix
+          )
+        ] | flatten | first
+      }}
   register: app_route
+  when: routes | length > 0
+
+- name: Display selected route
+  debug:
+    msg: "{{ app_route | to_nice_yaml }}"
+    verbosity: 3
+  when: app_route is defined
 
 - name: set_fact app_route_deployment_stamp
   set_fact:
-    app_route_deployment_stamp: "{{ app_route.result.metadata.labels.deployment_stamp }}"
+    app_route_deployment_stamp: "{{ app_route.ansible_facts.route.metadata.labels.deployment_stamp | default(none) }}"
+  when: app_route.ansible_facts is defined
 
 - name: Print app_route_deployment_stamp
-  debug: msg="[{{ app.name }}] route[{{ app.name }}-{{ prefix }}] app_route_deployment_stamp[{{ app_route_deployment_stamp }}]"
+  debug:
+    msg: "[{{ app.name }}] route[{{ app.name }}-{{ prefix }}] app_route_deployment_stamp[{{ app_route_deployment_stamp }}]"
+  when: app_route_deployment_stamp is defined

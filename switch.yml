@@ -18,6 +18,7 @@
     - include_tasks: tasks/run_tasks_for_apps.yml
       vars:
         tasks:
+          - get_objects_for_app
           - switch_routes
       tags:
         - route
