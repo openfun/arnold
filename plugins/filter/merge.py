@@ -34,6 +34,9 @@ def merge_with_app(base, new):
 
     result = deepcopy(base)
 
+    if "services" not in new:
+        return result
+
     # Add or override services metadata
     for base_service in result["services"]:
         new_app_selected_services = [
