@@ -28,5 +28,3 @@ apps:
         port: "{{ edxapp_nginx_cms_port }}"
         # TODO: add edxapp LMS host here
   - name: redis
-    services:
-      - name: app

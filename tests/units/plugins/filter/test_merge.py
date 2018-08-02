@@ -133,6 +133,21 @@ class TestMergeWithAppFilter(unittest.TestCase):
             merge_with_app({"name": ""}, {"name": ""})
         self.assertEqual(cm.exception.message, "input apps name cannot be empty")
 
+    def test_submitted_apps_with_no_services_key(self):
+        """Submitted apps may have no defined services key"""
+
+        base = {
+            "name": "foo",
+            "services": [
+                {"name": "bar", "templates": ["bar/dc.yml", "bar/svc.yml"]},
+                {"name": "baz", "templates": ["baz/dc.yml", "baz/ep.yml"]},
+            ],
+        }
+
+        new = {"name": "foo"}
+
+        self.assertDictDeepEqual(merge_with_app(base, new), base)
+
     def test_services_merge_with_empty_new_services(self):
         """
             Test app services merge with no services or volumes for the new
