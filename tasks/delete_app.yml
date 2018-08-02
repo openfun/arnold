@@ -2,7 +2,7 @@
 # Delete objects for the targeted deployment_stamp
 - name: Set targetted deployment stamp
   set_fact:
-    targeted_deployment_stamp: "{{ app_route_deployment_stamp }}"
+    targeted_deployment_stamp: "{{ app_route_deployment_stamp | default(none) }}"
 
 # Set the deployment stamp value for this deployment
 #

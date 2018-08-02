@@ -20,6 +20,7 @@
     - include_tasks: tasks/run_tasks_for_apps.yml
       vars:
         tasks:
+          - get_objects_for_app
           - create_app_volumes
           - create_app_endpoints
           - create_static_services_routes

@@ -34,6 +34,12 @@ endpoint_mongodb_ip:     192.168.10.11
 endpoint_mysql_ip:       192.168.10.254
 endpoint_postgresql_ip:  192.168.0.1
 
+# Blue/Green deployment route prefixes
+blue_green_route_prefixes:
+  - "previous"
+  - "current"
+  - "next"
+
 # Following a blue-green deployment strategy, for each deployment, we create a
 # unique identifier (deployment_stamp) that will be used to create unique
 # OpenShift object names & tags and connect them. This identifier starts with a
