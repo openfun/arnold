@@ -1,0 +1,12 @@
+{% if ddtrace is defined and ddtrace %}
+apiVersion: v1
+kind: ImageStream
+metadata:
+  labels:
+    app: richie
+    service: richie
+    version: "{{ richie_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: "ddtrace-richie-{{ deployment_stamp }}"
+  namespace: "{{ project_name }}"
+{% endif %}
