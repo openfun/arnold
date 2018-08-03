@@ -6,14 +6,6 @@ project_description: "A minimal project with a hello-world app ({{ env_type }})"
 
 apps:
   - name: hello
-    services:
-      - name:       hello
-        host:       "hello.{{ project_name }}.{{ domain_name }}"
-
-## _____ soon deprecated below _________________________________________________
-hello_host: "{{ project_name }}.{{ domain_name }}"
-hello_port: "8080"
-hello_msg:  "Hello OpenShift! by Arnold"
 
 nginx_ports:
   - "{{ aliases_port }}"
