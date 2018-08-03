@@ -1,0 +1,8 @@
+# Application default configuration
+
+# -- route
+hello_host: "hello.{{ project_name }}.{{ domain_name }}"
+
+# -- misc
+hello_app_port: "8080"
+hello_app_msg: "Hello OpenShift! by Arnold"
