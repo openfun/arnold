@@ -1,0 +1,20 @@
+# Variables specific to the patient0 customer in development env_type
+
+apps:
+  - name: richie
+  - name: edxapp
+    services:
+      - name: cms
+        # We override default ConfigMaps for this customer/env_type
+        #
+        # Nota bene: file paths are not enforced, but the override mecanism
+        # implies that the file names are identical, e.g. docker_run.py.j2
+        configs:
+          - group_vars/customer/patient0/development/configs/edxapp/cms/docker_run.py.j2
+          - group_vars/customer/patient0/development/configs/edxapp/cms/settings.yml.j2
+      - name: lms
+        configs:
+          - group_vars/customer/patient0/development/configs/edxapp/lms/docker_run.py.j2
+          - group_vars/customer/patient0/development/configs/edxapp/lms/settings.yml.j2
+  - name: redis
+  - name: hello
