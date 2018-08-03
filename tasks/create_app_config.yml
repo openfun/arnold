@@ -1,34 +1,19 @@
 ---
 # Create ConfigMaps for an app
 
-# Make a raw list of configmap templates for an app
-- name: Select configMap templates
+# Select services with ConfigMaps
+- name: Set ConfigMaps for application {{ app.name }}
   set_fact:
-    service: "{{ item | regex_replace('apps/(.*)/templates/(.*)/_configs/(.*).j2', '\\2') }}"
-    filename: "{{ item | basename | regex_replace('.j2') }}"
-    content: "{{ lookup('template', item) }}"
-  register: raw_configmaps
-  with_items: "{{ app | json_query('services[*].configs[]') }}"
+    app_configmaps: "{{ app | json_query('services[?configs].{name: name, configs: configs}') }}"
 
-# ConfigMap data are first grouped by service:
+# Create the configmaps dictionnary:
 #
-# [
-#     "nginx", // the service name
-#     [        // a list of configmaps for this service
-#         {
-#             "content": "...",
-#             "filename": "cms.conf",
-#             "service": "nginx"
-#         },
-#         {
-#             "content": "...",
-#             "filename": "lms.conf",
-#             "service": "nginx"
-#         }
-#     ]
-# ]
+# - each key of this dictionnary is a service name
+# - the corresponding value is the ConfigMap for this service (a dictionnary):
+#     - each key of this dictionnary is a file name
+#     - the corresponding value is the file content (rendered template)
 #
-# And then updated as a dictionnary of files per services:
+# An example follows:
 #
 # {
 #   "nginx": {
@@ -39,13 +24,15 @@
 - name: Format configMaps
   set_fact:
     configmaps: |
-      {% set configmaps = {} %}
-      {% for service in raw_configmaps.results | map(attribute='ansible_facts') | groupby('service') %}
-      {% set _ = configmaps.update({service.0: {}}) %}
-      {% for cm in service.1 %}
-      {% set _ = configmaps.get(service.0).update({cm.filename: cm.content}) %}
-      {% endfor %}
-      {% endfor %}
+      {%- set configmaps = {} -%}
+      {%- for service in app_configmaps -%}
+        {%- set _ = configmaps.update({service.name: {}}) -%}
+        {%- for cm_path in service.configs -%}
+          {%- set content = lookup('template', cm_path) -%}
+          {%- set filename = cm_path | basename | regex_replace('.j2') -%}
+          {%- set _ = configmaps.get(service.name).update({filename: content}) -%}
+        {%- endfor -%}
+      {%- endfor -%}
       {{ configmaps }}
 
 - name: Display config maps
