@@ -1,2 +1,5 @@
 # Variables specific to the staging environment
 richie_django_configuration: Staging
+
+# Activate APM
+ddtrace: true
