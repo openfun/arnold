@@ -3,11 +3,5 @@
 project_display_name: "Patient 0 ({{ env_type }})"
 project_description: "A demo project with a typical installation ({{ env_type }})"
 
-richie_host: "richie.{{ project_name}}.{{ domain_name }}"
-
 apps:
   - name: richie
-    services:
-      - name: nginx
-        host: "{{ richie_host }}"
-        port: 8061
