@@ -1,0 +1,18 @@
+# Load application default variables if not already defined
+
+- name: Load default variables from {{ file }}
+  include_vars:
+    file: "{{ file }}"
+    name: defaults
+
+- name: Print loaded variables from {{ file }}
+  debug:
+    msg: "{{ defaults | to_nice_yaml }}"
+    verbosity: 3
+
+- name: Define missing variables with defaults
+  set_fact:
+    "{{ app_var.key }}": "{{ lookup('vars', app_var.key, default=app_var.value) }}"
+  loop: "{{ lookup('dict', defaults) }}"
+  loop_control:
+    loop_var: "app_var"

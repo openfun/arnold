@@ -125,7 +125,8 @@
     verbosity: 1
 
 - name: Include "all" type vars for applications
-  include_vars:
+  include_tasks: tasks/load_app_defaults.yml
+  vars:
     file: "{{ item.path }}"
   with_items: "{{ apps | json_query(\"[*].vars[?type=='all']\") | flatten }}"
 
