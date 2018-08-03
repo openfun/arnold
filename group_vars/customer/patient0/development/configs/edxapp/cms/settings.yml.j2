@@ -1,0 +1,23 @@
+# Settings for edxapp cms
+
+PLATFORM_NAME: "{{ project_display_name }}"
+
+SITE_NAME: "{{ project_display_name }}"
+
+LMS_BASE: "{{ edxapp_lms_host }}"
+CMS_BASE: "{{ edxapp_cms_host }}"
+
+# Celery Broker
+CELERY_BROKER_TRANSPORT: redis
+CELERY_BROKER_HOST: "{{ redis_app_host }}"
+CELERY_BROKER_VHOST: 0
+CELERY_BROKER_PORT: "{{ redis_app_port }}"
+# FIXME: for now, we haven't set a user/password to connect to redis. Once those
+# are set, you'll need to move the two following settings in edxapp secret
+CELERY_BROKER_USER: ""
+CELERY_BROKER_PASSWORD: ""
+
+# Celery queues
+HIGH_PRIORITY_QUEUE: "{{ edxapp_celery_cms_high_priority_queue }}"
+DEFAULT_PRIORITY_QUEUE: "{{ edxapp_celery_cms_default_priority_queue }}"
+LOW_PRIORITY_QUEUE: "{{ edxapp_celery_cms_low_priority_queue }}"
