@@ -8,6 +8,12 @@
     - "group_vars/customer/{{ customer }}/main.yml"
     - "group_vars/env_type/{{ env_type }}.yml"
 
+- name: Override specific vars given a customer and its env_type
+  include_vars:
+    file: "{{ item }}"
+  with_fileglob:
+    - "group_vars/customer/{{ customer }}/{{ env_type }}/*.yml"
+
 # The following tasks goal is to define the `apps` var that describes
 # applications to work on.
 #
@@ -122,12 +128,6 @@
   include_vars:
     file: "{{ item.path }}"
   with_items: "{{ apps | json_query(\"[*].vars[?type=='all']\") | flatten }}"
-
-- name: Override specific vars given a customer and its env_type
-  include_vars:
-    file: "{{ item }}"
-  with_fileglob:
-    - "group_vars/customer/{{ customer }}/{{ env_type }}/*.yml"
 
 - name: Print project details
   debug:
