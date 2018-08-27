@@ -9,7 +9,7 @@ to ease its infrastructure deployment.
 
 The current work mainly focuses on the [Open edX MOOC
 platform](https://open.edx.org/), but it can be considered as a generic tool to
-deploy your dockerized applications.
+deploy dockerized applications.
 
 ## Overview
 
@@ -19,24 +19,31 @@ module to make Ansible talk with OpenShift.
 
 As a DevOps using this project, you will need to adapt OpenShift object
 templates to suite your needs or constraints and run playbooks to push your
-changes to your OpenShift instance that orchestrates your OpenEdx services.
+changes to your OpenShift instance that orchestrates your services.
 
 ## Requirements
 
-* [Docker](https://docs.docker.com/engine/installation/): we use docker to
+- [Docker](https://docs.docker.com/engine/installation/): we use docker to
   develop and run Arnold. This is a strict requirement to use this project.
-* [OpenShift](https://docs.openshift.org/latest/welcome/index.html) (or
-  [MiniShift](https://docs.openshift.org/latest/minishift/getting-started/)): as
-  Arnold should talk with someone, you'll need a running OpenShift instance to
-  use this project. For development or demo purposes, please read our
-  [instructions to install MiniShift](./docs/installation/minishift.md) on your machine in a
-  few minutes.
+- [OpenShift's client](https://docs.openshift.org/latest/welcome/index.html)
+  (_aka_ `oc`): this CLI is used to communicate with the running OpenShift
+  instance you will use. Plus, it offers the possibility to run a minimal
+  cluster for development purpose (using a set of docker containers).
+
+> Even if we recommend to only use `oc` and docker to work locally with Arnold,
+> you might also consider using
+> [MiniShift](https://docs.openshift.org/latest/minishift/getting-started/) as a
+> relevant alternative to run an isolated OpenShift cluster within a VM (please
+> refer to our [instructions to install
+> MiniShift](./docs/installation/minishift.md)).
 
 ## Quick start
 
-> Disclaimer: this quick start guide has been written with development / testing
-> purpose in mind. If you are looking for more insights on how to use it in
-> production, please refer to our [documentation](./docs/index.md).
+**Disclaimer**: this quick start guide has been written with development /
+testing purpose in mind. If you are looking for more insights on how to use it
+in production, please refer to our [documentation](./docs/index.md).
+
+### Build Arnold
 
 First things first: you'll need to clone this repository to start playing with
 Arnold:
@@ -65,16 +72,76 @@ REPOSITORY          TAG                 IMAGE ID            CREATED             
 arnold              0.1.0-alpha         549baa2b861b        4 days ago          824MB
 ```
 
-Second requirement: you'll need to ensure that you have a working OpenShift
-instance that will be used to deploy your services. For development or testing
-purpose, we recommend you to install and start a MiniShift (see Arnold's
-[documentation](./docs/installation/minishift.md)).
+### Run a local OpenShift cluster
 
-Now that you have a working OpenShift, let's have fun (sic!) by creating a project for a customer
-in a particular environment with a new helper:
+You'll need to ensure that you have an OpenShift instance that will be used to
+deploy your services. For development or testing purpose, we recommend you to
+use the `oc cluster up` command to start a local minimalist cluster to work
+with (don't do it now, please read the next paragraph first).
 
-> When running this command, you'll be asked for a **vault password**. The
-> default value for this demo is: `arnold`.
+Before starting the cluster, make sure that your system meets the following
+requirements:
+
+1. Make sure that the `/etc/docker/daemon.json` file contains at list
+   `172.30.0.0/16` as insecure registry:
+
+```json
+{
+  "insecure-registries": ["172.30.0.0/16"]
+}
+```
+
+2. To run ElasticSearch (you'll probably have an application that will use it),
+   you will need to ensure that your kernel's vm.max_map_count parameter is at
+   least `262144`:
+
+```bash
+$ sudo sysctl -w vm/max_map_count=262144
+```
+
+Now that you've configured your system, you can safely start a cluster _via_:
+
+```bash
+# Substitute 192.168.1.10 with your local IP
+$ OPENSHIFT_DOMAIN="192.168.1.10"
+$ K8S_AUTH_HOST="https://${OPENSHIFT_DOMAIN}:8443"
+$ oc cluster up --public-hostname="${OPENSHIFT_DOMAIN}"
+```
+
+If everything goes well, you can start a web browser with the following address
+to access the web console: https://192.168.1.10:8443 (replace `192.168.1.10`
+with your local IP).
+
+You can log in the web console with `developer` as your username **and**
+password.
+
+> _nota bene_: you'll probably be asked to accept the connection even if it is
+> insecure (SSL certificate issue). Please do so.
+
+And finally you must also login from the CLI to be allowed to perform requests
+on the OpenShift cluster:
+
+```bash
+$ oc login --insecure-skip-tls-verify=true -u developer -p developer "${K8S_AUTH_HOST}"
+```
+
+As we are gentle people, we also provide a shortcut to automate running a new
+cluster and login to it (GNU/Linux only for now):
+
+```
+$ bin/dev
+```
+
+Please, note that **you do not need to run** `bin/dev` if you have already
+started a local cluster and logged in with `oc`.
+
+### Deploy!
+
+Now that you have a working OpenShift cluster, let's have fun (sic!) by creating
+a project for a customer in a particular environment with a new helper:
+
+_nota bene_: when running this command, you'll be asked for a **vault
+password**. The default value for this demo is: `arnold`.
 
 ```bash
 $ bin/bootstrap
@@ -83,43 +150,31 @@ $ bin/bootstrap
 Tadaaa! Arnold has created a new OpenShift project called `patient0-development`
 with a collection of services up and running.
 
-Note that the `edxapp-dbmigrate-init` job may take some time. When it has
-completed successfully, you can create a demo course and some users by running:
-
-```bash
-$ bin/ansible-playbook load_fixtures.yml
-```
-
-The following users will be created:
+When `edxapp`'s first deployment has completed successfully, we invite you to
+test the lms or studio application with the following credentials:
 
 | username | password | email               | is staff | is superuser |
-|---------:|:--------:|:-------------------:|:--------:|:------------:|
-| student  | student  | student@example.com | no       | no           |
-| teacher  | teacher  | teacher@example.com | no       | no           |
-| staff    | staff    | staff@example.com   | yes      | no           |
-| admin    | admin    | admin@example.com   | yes      | yes          |
+| :------- | :------- | :------------------ | :------: | :----------: |
+| student  | student  | student@example.com |    no    |      no      |
+| teacher  | teacher  | teacher@example.com |    no    |      no      |
+| staff    | staff    | staff@example.com   |   yes    |      no      |
+| admin    | admin    | admin@example.com   |   yes    |     yes      |
 
+_nota bene_: you will find URLs of the studio or lms services from the web
+console (Application > Routes). You should see a page like the screenshot below.
 
-You could also try deploying the same services for another customer and/or environment by
-overriding the default Ansible variables:
+![OpenShift routes](./docs/images/os-web-console-routes.png)
 
-```bash
-$ bin/bootstrap -e "env_type=staging customer=campus"
-```
+### Going further
 
-If you want to run a new deployment for this project, there is also a helper for
-that:
+By following this quick start, you only scratched the surface of Arnold's
+capabilities. We invite you to read the project's documentation (see below), to
+know more about Arnold's core features such as:
 
-```bash
-$ bin/deploy
-```
-
-As we are using a blue-green deployment strategy, you should now have two
-running versions of each service, congratulations! 🎉🎉🎉
-
-If everything goes well, maybe you are convinced by Arnold and you want to use
-it at home. In this case, we invite you to start reading the project's
-documentation (see below).
+- multiple client/environment configurations support
+- blue/green deployment strategy
+- application discovery (add your own applications easily)
+- ...
 
 ## Documentation
 
