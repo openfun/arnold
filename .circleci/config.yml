@@ -64,11 +64,8 @@ aliases:
         echo "export K8S_AUTH_API_KEY=${K8S_AUTH_API_KEY}" >> $BASH_ENV
         source $BASH_ENV
 
-ci_env:
-
 version: 2
 jobs:
-
   # Build Arnold's docker image
   build:
     # We use the machine executor, i.e. a VM, not a container
@@ -125,7 +122,6 @@ jobs:
       - *dind
       - run: bin/lint docker
 
-
   lint-plugins:
     <<: *defaults
 
@@ -159,11 +155,9 @@ jobs:
               "${ARNOLD_IMAGE}" \
               ansible --version
 
-
   # Test the bootstrap playbook on the "hello" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
   test-bootstrap-hello:
-
     machine:
       docker_layer_caching: true
 
@@ -187,7 +181,6 @@ jobs:
   # Test the bootstrap playbook on the "richie" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
   test-bootstrap-richie:
-
     machine:
       docker_layer_caching: true
 
@@ -211,7 +204,6 @@ jobs:
   # Test the bootstrap playbook on the "edxapp" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
   test-bootstrap-edxapp:
-
     machine:
       docker_layer_caching: true
 
@@ -273,31 +265,31 @@ workflows:
             - build
       - test-built:
           requires:
-          - lint-bash
-          - lint-docker
-          - lint-ansible
-          - lint-plugins
+            - lint-bash
+            - lint-docker
+            - lint-ansible
+            - lint-plugins
       - test-bootstrap-hello:
           requires:
-          - lint-bash
-          - lint-docker
-          - lint-ansible
-          - lint-plugins
+            - lint-bash
+            - lint-docker
+            - lint-ansible
+            - lint-plugins
       - test-bootstrap-richie:
           requires:
-          - lint-bash
-          - lint-docker
-          - lint-ansible
-          - lint-plugins
+            - lint-bash
+            - lint-docker
+            - lint-ansible
+            - lint-plugins
       - test-bootstrap-edxapp:
           requires:
-          - lint-bash
-          - lint-docker
-          - lint-ansible
-          - lint-plugins
+            - lint-bash
+            - lint-docker
+            - lint-ansible
+            - lint-plugins
       - test-plugins:
           requires:
-          - lint-bash
-          - lint-docker
-          - lint-ansible
-          - lint-plugins
+            - lint-bash
+            - lint-docker
+            - lint-ansible
+            - lint-plugins
