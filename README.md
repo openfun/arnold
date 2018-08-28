@@ -126,10 +126,11 @@ $ oc login --insecure-skip-tls-verify=true -u developer -p developer "${K8S_AUTH
 ```
 
 As we are gentle people, we also provide a shortcut to automate running a new
-cluster and login to it (GNU/Linux only for now):
+cluster and login to it:
 
-```
-$ bin/dev
+```bash
+# Substitute 192.168.1.10 with your local IP that has access to the internet
+$ bin/dev 192.168.1.10
 ```
 
 Please, note that **you do not need to run** `bin/dev` if you have already

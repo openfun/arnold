@@ -2,6 +2,13 @@
 #
 # Arnold's dev script
 #
+# Usage: bin/dev [LOCAL_IP]
+#
+#   LOCAL_IP: the IP address of your machine that is allowed to access the
+#             internet (optional). If not provided, the script will try to guess
+#             it from all IP addresses assigned to every interfaces
+#             (experimental).
+#
 # Before running this script, please make sure that your system met the
 # following requirements:
 #
@@ -19,21 +26,55 @@
 #
 set -eo pipefail
 
+# _get_local_ip: try to get a local IP that has access to the internet
+function _get_local_ip() {
+
+    # Print debug info in a subshell's stderr
+    (>&2 echo "Looking for a network interface with internet access...")
+
+    # List all interface all IP addressses
+    for ip in $(hostname -I); do
+
+        (>&2 echo -n "==> ${ip} ... ")
+
+        # Ping google from this interface to check internet access
+        ping -I "${ip}" -W 1 -c 1 www.google.com &> /dev/null
+
+        if [ $? -eq 0 ]; then
+            echo "${ip}"
+            (>&2 echo "yes")
+            return 0
+        fi
+
+        (>&2 echo "no")
+    done
+
+    (>&2 \
+        echo "Error: cannot find an interface that has access to the internet." \
+             "Please provide your local IP address as a script argument:" \
+             "bin/dev 192.168.1.100" \
+    )
+    exit 1
+}
+
 # Default dev credentials
 OC_USER="developer"
 OC_PASSWORD="developer"
 
+# Local IP address that will be used for the local OpenShift instance
+LOCAL_IP=${1:-$(_get_local_ip)}
 
 # _start_cluster: starts an OpenShift minimal cluster
 function _start_cluster() {
 
-    OPENSHIFT_DOMAIN=$(hostname -I | awk '{print $1}')
+    echo "Local IP address used for OpenShift: ${LOCAL_IP}"
+
+    OPENSHIFT_DOMAIN="${LOCAL_IP}"
     K8S_AUTH_HOST="https://${OPENSHIFT_DOMAIN}:8443"
 
     oc cluster up --server-loglevel=5 --public-hostname="${OPENSHIFT_DOMAIN}"
     oc login "${K8S_AUTH_HOST}" -u "${OC_USER}" -p "${OC_PASSWORD}" --insecure-skip-tls-verify=true
 }
-
 
 # Main entrypoint
 function main() {
