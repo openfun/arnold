@@ -16,3 +16,6 @@ env.d/*
 # Tests temporary files
 .coverage
 .pytest_cache
+
+# OpenShift
+openshift.local.clusterup
