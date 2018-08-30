@@ -57,7 +57,9 @@ spec:
           value: {{ service_variant }}
         - name: DJANGO_SETTINGS_MODULE
           value: {{ service_variant }}.envs.fun.docker_run
-        image: "{{ edxapp_image_name }}:{{ edxapp_image_tag }}"
+        # We point to a local registry image build for this "live" image (see
+        # ImageStream and BuildConfig templates)
+        image: "{{ internal_docker_registry }}/{{ project_name }}/edxapp-{{ service_variant }}:{{ edxapp_image_tag }}-live"
         imagePullPolicy: IfNotPresent
         volumeMounts:
         - mountPath: /config
