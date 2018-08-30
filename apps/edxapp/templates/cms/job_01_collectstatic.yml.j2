@@ -21,17 +21,17 @@ spec:
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:
-      - name: edxapp-cms-collectstatic-{{ job_stamp }}
-        image: "{{ edxapp_image_name }}:{{ edxapp_image_tag }}"
-        env:
-          - name: DJANGO_SETTINGS_MODULE
-            value: cms.envs.fun.docker_run
-        command: ["python", "manage.py", "cms", "collectstatic", "--noinput"]
-        volumeMounts:
-        - mountPath: /config
-          name: edxapp-config
-        - mountPath: /edx/app/edxapp/staticfiles
-          name: edxapp-v-static
+        - name: edxapp-cms-collectstatic-{{ job_stamp }}
+          image: "{{ edxapp_image_name }}:{{ edxapp_image_tag }}"
+          env:
+            - name: DJANGO_SETTINGS_MODULE
+              value: cms.envs.fun.docker_run
+          command: ["python", "manage.py", "cms", "collectstatic", "--noinput"]
+          volumeMounts:
+            - mountPath: /config
+              name: edxapp-config
+            - mountPath: /edx/app/edxapp/staticfiles
+              name: edxapp-v-static
       initContainers:
         # This initContainer has nothing mounted on its "/config" directory. We
         # copy the content of its "/config" directory (fun-platform default
@@ -44,6 +44,14 @@ spec:
         # with all project settings that will be used to run the service variant
         # container. Please refer to the documentation to better understand our
         # settings generation mecanism.
+        #
+        # FIXME: the last command of this initContainer aims at copying a
+        # webpack-stats.json file generated during the build in the STATIC_ROOT.
+        # As it cannot be collected and it is required to run this service, we
+        # are constrained to copy it from the image's STATIC_ROOT to the statics
+        # PVC. We've declared an issue in the edx-platform's bug tracker to
+        # better understand the role of this file and its location:
+        # https://openedx.atlassian.net/browse/OPEN-2411
         - name: init-create-config
           image: "{{ edxapp_image_name }}:{{ edxapp_image_tag }}"
           imagePullPolicy: IfNotPresent
@@ -52,7 +60,9 @@ spec:
             - "-c"
             - cp -r /config/* /tmp/config &&
               cp -rL /tmp/configmap-cms/* /tmp/config/cms/ &&
-              cp /tmp/secret/credentials.vault.yml /tmp/config/cms/secrets.yml
+              cp /tmp/secret/credentials.vault.yml /tmp/config/cms/secrets.yml &&
+              mkdir -p /tmp/staticfiles/studio &&
+              cp /edx/app/edxapp/staticfiles/studio/webpack-stats.json /tmp/staticfiles/studio/
           volumeMounts:
             - mountPath: /tmp/config
               name: edxapp-config
@@ -60,17 +70,19 @@ spec:
               name: edxapp-configmap-cms
             - mountPath: /tmp/secret
               name: edxapp-secret
+            - mountPath: /tmp/staticfiles
+              name: edxapp-v-static
       volumes:
-      - name: edxapp-configmap-cms
-        configMap:
-          defaultMode: 420
-          name: edxapp-cms-{{ deployment_stamp }}
-      - name: edxapp-config
-        emptyDir: {}  # volume that lives as long as the pod lives
-      - name: edxapp-secret
-        secret:
-          secretName: edxapp-{{ secret_id }}
-      - name: edxapp-v-static
-        persistentVolumeClaim:
-          claimName: edxapp-pvc-static
+        - name: edxapp-configmap-cms
+          configMap:
+            defaultMode: 420
+            name: edxapp-cms-{{ deployment_stamp }}
+        - name: edxapp-config
+          emptyDir: {} # volume that lives as long as the pod lives
+        - name: edxapp-secret
+          secret:
+            secretName: edxapp-{{ secret_id }}
+        - name: edxapp-v-static
+          persistentVolumeClaim:
+            claimName: edxapp-pvc-static
       restartPolicy: Never
