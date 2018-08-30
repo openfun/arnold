@@ -222,7 +222,7 @@ jobs:
           name: Test the "edxapp" application bootstrapping (with redis enabled)
           command: |
             bin/ci-bootstrap "edxapp,redis"
-            bin/ci-test-service "cms" "Welcome to Open edX Studio"
+            bin/ci-test-service "cms" "Welcome to Your Platform Studio"
             bin/ci-test-service "lms" "It works! This is the default homepage for this Open edX instance."
 
   # FIXME: we have deactivated plugins test coverage as the container user is
