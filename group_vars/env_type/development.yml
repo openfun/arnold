@@ -1,6 +1,12 @@
 # Variables specific to development environments
 domain_name: "{{ lookup('env', 'OPENSHIFT_DOMAIN') }}.nip.io"
 
+# OpenShift's internal docker registry server
+#
+# FIXME: use docker registry server IP address instead of the service name (i.e.
+# docker-registry.default.svc) to prevent oc cluster DNS issues
+internal_docker_registry: "172.30.1.1:5000"
+
 # Use development images in the development environment
 edxapp_image_tag: "hawthorn.1-1.0.0-dev"
 richie_image_tag: "0.1.0-alpha.3-alpine-dev"

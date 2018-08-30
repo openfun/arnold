@@ -1,0 +1,14 @@
+---
+# Create volumes for an app
+
+- name: Print app name
+  debug: msg="App name {{ app.name }}"
+  tags: stream
+
+- name: Make sure image streams exist
+  openshift_raw:
+    definition: "{{ lookup('template', item) | from_yaml }}"
+    state: present
+  with_items: "{{ streams }}"
+  when: streams is defined
+  tags: stream

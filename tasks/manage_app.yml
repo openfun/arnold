@@ -1,4 +1,3 @@
----
 # Task set to manage apps
 #
 # Args:
@@ -12,10 +11,12 @@
     definition: "{{ lookup('template', item) | from_yaml }}"
     state: "{{ deployment_state | default('present') }}"
   with_items:
+    - "{{ builds }}"
     - "{{ deployments }}"
     - "{{ services }}"
   tags:
     - deploy
+    - build
     - deployment
     - service
 
