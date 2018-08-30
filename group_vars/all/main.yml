@@ -62,6 +62,9 @@ job_stamp: null
 # docs/developer_guide/secrets.md
 secret_id: "1.0.0"
 
+# OpenShift's internal docker registry server
+internal_docker_registry: "docker-registry.default.svc:5000"
+
 # TODO: move the following settings to the redirect app
 # Ports
 aliases_port: 8999
