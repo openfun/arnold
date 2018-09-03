@@ -1,0 +1,35 @@
+{% if ddtrace is defined and ddtrace %}
+apiVersion: v1
+kind: BuildConfig
+metadata:
+  labels:
+    app: richie
+    service: richie
+    version: "{{ richie_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: "richie-{{ deployment_stamp }}"
+  namespace: "{{ project_name }}"
+spec:
+  successfulBuildsHistoryLimit: 5
+  failedBuildsHistoryLimit: 2
+  triggers:
+  - type: ImageChange
+  - type: ConfigChange
+  strategy:
+    type: Docker
+  source:
+    dockerfile: |-
+      FROM {{ richie_image_name }}:{{ richie_image_tag }}
+      # Switch back to the root user to install development dependencies
+      USER root:root
+
+      RUN pip install --no-cache-dir --prefix=/usr/local ddtrace
+      CMD ddtrace-run gunicorn -c /usr/local/etc/gunicorn/richie.py richie.wsgi:application
+
+      # Un-privileged user running the application
+      USER 10000
+  output:
+    to:
+      kind: ImageStreamTag
+      name: "ddtrace-richie-{{ deployment_stamp }}:{{ richie_image_tag }}"
+{% endif %}

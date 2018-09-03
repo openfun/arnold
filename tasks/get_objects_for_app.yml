@@ -6,6 +6,16 @@
     templates: "{{ app | json_query('services[*].templates[]') | list }}"
   tags: deploy
 
+- name: Set OpenShift datadog objects to manage
+  set_fact:
+    images: "{{ templates | map('regex_search', '.*/is.yml.j2$') | select('string') | list }}"
+    builds: "{{ templates | map('regex_search', '.*/bc.yml.j2$') | select('string') | list }}"
+  when: ddtrace
+  tags:
+    - deploy
+    - image
+    - build
+
 - name: Set OpenShift objects to manage
   set_fact:
     deployments: "{{ templates | map('regex_search', '.*/dc.*\\.yml\\.j2$') | select('string') | list }}"
@@ -18,6 +28,14 @@
     - service
     - job
     - route
+
+- name: Display OpenShift's build for this app
+  debug: msg="{{ builds | to_nice_yaml}}"
+  when: builds is defined
+  when: ddtrace
+  tags:
+    - deploy
+    - build
 
 - name: Display OpenShift's deployments for this app
   debug:

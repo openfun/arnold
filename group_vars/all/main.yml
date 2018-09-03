@@ -62,6 +62,12 @@ job_stamp: null
 # docs/developer_guide/secrets.md
 secret_id: "1.0.0"
 
+
+# ddtrace is set to true for enable the APM in all apps where the templates
+# include the possibility to have a ddtrace APM agent
+# defaul is set to False
+ddtrace: false
+
 # TODO: move the following settings to the redirect app
 # Ports
 aliases_port: 8999

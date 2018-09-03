@@ -20,8 +20,13 @@ spec:
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:
-        - name: richie
+        - name: "richie"
+{% if ddtrace is defined and ddtrace %}
+          image: "docker-registry.default.svc:5000/{{ project_name }}/ddtrace-richie-{{ deployment_stamp }}:{{ richie_image_tag }}"
+          #image: "ddtrace-richie-{{ deployment_stamp }}:{{ richie_image_tag }}"
+{% else %}
           image: "{{ richie_image_name }}:{{ richie_image_tag }}"
+{% endif %}
           imagePullPolicy: IfNotPresent
           env:
             - name: DJANGO_SETTINGS_MODULE
@@ -38,6 +43,18 @@ spec:
               value: "{{ richie_host }}"
             - name: ES_CLIENT
               value: "richie-{{ richie_elasticsearch_host }}-{{ deployment_stamp }}"
+{% if ddtrace is defined and ddtrace %}
+            - name: DATADOG_TRACE_AGENT_HOSTNAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: DD_AGENT_SERVICE_HOST
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: DD_AGENT_SERVICE_PORT
+              value: '8126'
+{% endif %}
           envFrom:
             - secretRef:
                 name: richie-{{ secret_id }}

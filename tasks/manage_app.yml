@@ -7,6 +7,19 @@
 #     - "absent":  all objects are deleted
 #   deployment_stamp: the stamp of the object we are going to create or delete
 
+- name: OpenShift datadog objects with deployment_stamp[{{ deployment_stamp }}] must be {{ deployment_state | default('present') }}
+  openshift_raw:
+    definition: "{{ lookup('template', item) | from_yaml }}"
+    state: "{{ deployment_state | default('present') }}"
+  with_items:
+    - "{{ images }}"
+    - "{{ builds }}"
+  when: ddtrace
+  tags:
+    - deploy
+    - image
+    - build
+
 - name: OpenShift objects with deployment_stamp[{{ deployment_stamp }}] must be {{ deployment_state | default('present') }}
   openshift_raw:
     definition: "{{ lookup('template', item) | from_yaml }}"
