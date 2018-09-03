@@ -38,7 +38,9 @@ spec:
         envFrom:
           - secretRef:
               name: richie-{{ secret_id }}
-        image: "{{ richie_image_name }}:{{ richie_image_tag }}"
+        # We point to a local registry image build for this "live" image (see
+        # ImageStream and BuildConfig templates)
+        image: "{{ internal_docker_registry }}/{{ project_name }}/richie:{{ richie_image_tag }}-live"
         command: ["python", "manage.py", "collectstatic", "--noinput"]
         volumeMounts:
         - mountPath: /data/static
