@@ -57,7 +57,7 @@ spec:
           value: {{ service_variant }}
         - name: DJANGO_SETTINGS_MODULE
           value: {{ service_variant }}.envs.fun.docker_run
-        image: "{{ edxapp_image_name }}:{{ edxapp_image_tag }}"
+        image: ""
         imagePullPolicy: IfNotPresent
         volumeMounts:
         - mountPath: /config
@@ -115,3 +115,12 @@ spec:
         - name: edxapp-v-data
           persistentVolumeClaim:
             claimName: edxapp-pvc-data
+  triggers:
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+        - "{{ service_variant }}"
+        from:
+          kind: ImageStreamTag
+          name: "augmented-{{ edxapp_image_name }}:{{ edxapp_image_tag }}"

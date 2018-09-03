@@ -1,0 +1,30 @@
+apiVersion: "v1"
+kind: "BuildConfig"
+metadata:
+  name: "edxapp-lms"
+  labels:
+    app: "edxapp"
+    service: "lms"
+spec:
+  strategy:
+    dockerStrategy:
+  source:
+    {% if edxapp_theme_url is defined and edxapp_theme_url %}
+    git:
+      uri: "{{ edxapp_theme_url }}"
+      ref: "{{ edxapp_theme_tag | default("master") }}"
+    sourceSecret:
+      name: "edxapp_theme_ssh_key"
+    {% endif %}
+    dockerfile: |-
+      FROM {{ edxapp_image_name }}:{{ edxapp_image_tag }}
+      USER 0
+      {% if edxapp_theme_url is defined and edxapp_theme_url %}
+      COPY . /edx/app/edxapp/edx-platform/themes/custom-theme
+      NO_PREREQ_INSTALL=1 DEFAULT_SITE_THEME="custom-theme" paver update_assets --settings={{ edxapp_build_settings }} --skip-collect 
+      {% endif %}
+      USER 10000
+  output:
+    to:
+      kind: "ImageStreamTag"
+      name: "augmented-{{ edxapp_image_name }}:{{ edxapp_image_tag }}"
