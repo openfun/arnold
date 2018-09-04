@@ -18,3 +18,7 @@ apps:
           - group_vars/customer/patient0/development/configs/edxapp/lms/settings.yml.j2
   - name: redis
   - name: hello
+
+# Install a custom theme for edxapp-lms
+edxapp_theme_url: "https://github.com/raccoongang/themes_for_themex.io"
+edxapp_theme_tag: "marvel-theme-ginkgo"
