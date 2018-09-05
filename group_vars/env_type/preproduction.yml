@@ -1,2 +1,5 @@
 # Variables specific to the pre-production environment
 richie_django_configuration: PreProduction
+
+# Enable APM in all apps where defined templates include this feature
+is_apm_enabled: true

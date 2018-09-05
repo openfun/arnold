@@ -1,3 +1,6 @@
 # Variables specific to the production environment
 richie_django_configuration: Production
 acme_env: live
+
+# Enable APM in all apps where defined templates include this feature
+is_apm_enabled: true
