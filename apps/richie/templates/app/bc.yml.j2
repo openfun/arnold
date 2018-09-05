@@ -29,7 +29,12 @@ spec:
   source:
     dockerfile: |-
       FROM {{ richie_image_name }}:{{ richie_image_tag }}
-      # Add new statements here
+      USER 0
+      {% if is_apm_enabled -%}
+      RUN pip install ddtrace
+      CMD ddtrace-run gunicorn -c /usr/local/etc/gunicorn/richie.py richie.wsgi:application
+      {% endif -%}
+      USER 10000
   triggers:
     - type: "ConfigChange"
   output:

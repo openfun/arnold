@@ -65,6 +65,12 @@ secret_id: "1.0.0"
 # OpenShift's internal docker registry server
 internal_docker_registry: "docker-registry.default.svc:5000"
 
+# Set is_apm_enabled to "true" to enable APM in all apps where defined templates
+# include this feature (default: "false")
+is_apm_enabled: false
+# APM agent port defaults to Datadog agent service port
+apm_agent_port: 8126
+
 # TODO: move the following settings to the redirect app
 # Ports
 aliases_port: 8999

@@ -40,6 +40,20 @@ spec:
               value: "{{ richie_host }}"
             - name: ES_CLIENT
               value: "richie-{{ richie_elasticsearch_host }}-{{ deployment_stamp }}"
+
+            {% if is_apm_enabled -%}
+            - name: DATADOG_TRACE_AGENT_HOSTNAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: DD_AGENT_SERVICE_HOST
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: DD_AGENT_SERVICE_PORT
+              value: "{{ apm_agent_port }}"
+            {%- endif %}
+
           envFrom:
             - secretRef:
                 name: richie-{{ secret_id }}
