@@ -11,10 +11,12 @@
     definition: "{{ lookup('template', item) | from_yaml }}"
     state: "{{ deployment_state | default('present') }}"
   with_items:
+    - "{{ endpoints }}"
     - "{{ deployments }}"
     - "{{ services }}"
   tags:
     - deploy
+    - endpoint
     - deployment
     - service
 

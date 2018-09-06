@@ -15,6 +15,7 @@
   loop:
     - ConfigMap
     - DeploymentConfig
+    - Endpoints
     - Job
     - Route
     - Service
