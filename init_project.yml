@@ -22,11 +22,9 @@
         tasks:
           - get_objects_for_app
           - create_app_volumes
-          - create_app_endpoints
           - create_static_services_routes
           - create_app_image_streams
       tags:
         - volume
-        - endpoint
         - route
         - stream

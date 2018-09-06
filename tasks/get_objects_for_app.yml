@@ -26,6 +26,7 @@
   set_fact:
     builds: "{{ templates | map('regex_search', '.*/bc.*\\.yml\\.j2$') | select('string') | list }}"
     deployments: "{{ templates | map('regex_search', '.*/dc.*\\.yml\\.j2$') | select('string') | list }}"
+    endpoints: "{{ templates | map('regex_search', '.*/ep.*\\.yml\\.j2$') | select('string') | list }}"
     services: "{{ templates | map('regex_search', '.*/svc\\.yml\\.j2$') | select('string') | list }}"
     streams: "{{ templates | map('regex_search', '.*/is.*\\.yml\\.j2$') | select('string') | list }}"
     jobs: "{{ templates | map('regex_search', '.*/job_.*\\.yml\\.j2$') | select('string') | list }}"
@@ -34,6 +35,7 @@
     - deploy
     - build
     - deployment
+    - endpoint
     - service
     - stream
     - job
@@ -49,11 +51,19 @@
 
 - name: Display OpenShift's deployments for this app
   debug:
-    msg: "{{ deployments | to_nice_yaml}}"
+    msg: "{{ deployments | to_nice_yaml }}"
   when: deployments
   tags:
     - deploy
     - deployment
+
+- name: Display OpenShift's endpoints for this app
+  debug:
+    msg: "{{ endpoints | to_nice_yaml }}"
+  when: deployments
+  tags:
+    - deploy
+    - endpoint
 
 - name: Display OpenShift's services for this app
   debug:
