@@ -32,7 +32,7 @@ trashable_env_types:
 # Endpoints IP
 endpoint_mongodb_ip:     192.168.10.11
 endpoint_mysql_ip:       192.168.10.254
-endpoint_postgresql_ip:  192.168.0.1
+endpoint_postgresql_ip:  192.168.10.21
 
 # Blue/Green deployment route prefixes
 blue_green_route_prefixes:
