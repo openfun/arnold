@@ -19,6 +19,23 @@ spec:
         deploymentconfig: "richie-elasticsearch-{{ deployment_stamp }}"
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
+
+      {% if env_type not in ("development", "ci") -%}
+      # Running ElasticSearch in a pod requires that the node running it has a
+      # custom kernel parameter (vm/max_map_count=262144). As it's a potential
+      # security issue and can lead to unexpected side effects, required changes
+      # have been made on a few nodes labelled with
+      # "node_with_max_map_count=true". Thus, we need to target those nodes for
+      # this deployment.
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node_with_max_map_count
+                    operator: Exists
+      {%- endif %}
+
       containers:
         - image: {{ richie_elasticsearch_image_name }}:{{ richie_elasticsearch_image_tag }}
           name: elasticsearch
