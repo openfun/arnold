@@ -4,12 +4,13 @@ metadata:
   labels:
     app: richie
     endpoint: postgresql
+    deployment_stamp: "{{ deployment_stamp }}"
   # name of the endpoint should be the same as the corresponding service
-  name: postgresql
+  name: "richie-postgresql-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 subsets:
   - addresses:
-    - ip: {{ endpoint_postgresql_ip }}
+    - ip: "{{ endpoint_postgresql_ip }}"
     ports:
     - port: 5432
       name: 5432-tcp

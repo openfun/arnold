@@ -1,3 +1,4 @@
+{% if env_type in trashable_env_types %}
 apiVersion: v1
 kind: DeploymentConfig
 metadata:
@@ -31,3 +32,4 @@ spec:
           envFrom:
             - secretRef:
                 name: richie-{{ secret_id }}
+{% endif%}
