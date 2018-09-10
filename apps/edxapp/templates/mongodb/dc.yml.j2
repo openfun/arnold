@@ -1,3 +1,4 @@
+{% if env_type in trashable_env_types %}
 apiVersion: v1
 kind: DeploymentConfig
 metadata:
@@ -25,9 +26,7 @@ spec:
           ports:
             - containerPort: "{{ edxapp_mongodb_port }}"
               protocol: TCP
-          env:
-            - name: MONGODB_DATABASE
-              value: "{{ edxapp_mongodb_database }}"
           envFrom:
             - secretRef:
                 name: "edxapp-{{ secret_id }}"
+{% endif %}

@@ -28,6 +28,9 @@ spec:
           env:
             - name: DJANGO_SETTINGS_MODULE
               value: cms.envs.fun.docker_run
+          envFrom:
+            - secretRef:
+                name: "edxapp-{{ secret_id }}"
           command:
             - "bash"
             - "-c"

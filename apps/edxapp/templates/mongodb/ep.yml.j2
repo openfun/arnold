@@ -4,12 +4,13 @@ metadata:
   labels:
     app: edxapp
     endpoint: mongodb
+    deployment_stamp: "{{ deployment_stamp }}"
   # name of the endpoint should be the same as the corresponding service
-  name: "{{ edxapp_mongodb_host }}"
+  name: "edxapp-mongo-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 subsets:
   - addresses:
-    - ip: {{ endpoint_mongodb_ip }}
+    - ip: "{{ endpoint_mongodb_ip }}"
     ports:
     - port: "{{ edxapp_mongodb_port }}"
       name: "{{ edxapp_mongodb_port}}-tcp"

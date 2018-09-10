@@ -1,3 +1,4 @@
+{% if env_type in trashable_env_types %}
 apiVersion: v1
 kind: DeploymentConfig
 metadata:
@@ -25,9 +26,7 @@ spec:
           ports:
             - containerPort: "{{ edxapp_mysql_port }}"
               protocol: TCP
-          env:
-            - name: MYSQL_DATABASE
-              value: "{{ edxapp_mysql_database }}"
           envFrom:
             - secretRef:
                 name: "edxapp-{{ secret_id }}"
+{% endif %}
