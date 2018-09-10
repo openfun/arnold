@@ -7,7 +7,7 @@ metadata:
     version: "{{ edxapp_mysql_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
   # name of the service should be database host name in settings
-  name: "{{ edxapp_mysql_host }}"
+  name: "edxapp-mysql-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
   ports:

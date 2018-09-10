@@ -6,7 +6,7 @@ edxapp_lms_host: "lms.{{ project_name}}.{{ domain_name }}"
 
 # -- edxapp (cms/lms)
 edxapp_image_name: "fundocker/edxapp"
-edxapp_image_tag: "hawthorn.1-1.0.4"
+edxapp_image_tag: "hawthorn.1-1.0.5"
 edxapp_django_port: 8000
 edxapp_sql_dump_url: "https://gist.githubusercontent.com/jmaupetit/76fe7db4a8314fe1fa10895edf14248e/raw/1fd2aab7d57273bbe4cf40603c119a1c8026cbc1/edx-database-hawthorn.sql"
 
@@ -27,16 +27,12 @@ edxapp_memcached_port: 11211
 # -- mongo
 edxapp_mongodb_image_name: "centos/mongodb-32-centos7"
 edxapp_mongodb_image_tag: "3.2"
-edxapp_mongodb_host: mongodb
 edxapp_mongodb_port: 27017
-edxapp_mongodb_database: edxapp
 
 # -- mysql
 edxapp_mysql_image_name: "centos/mysql-57-centos7"
 edxapp_mysql_image_tag: "5.7"
-edxapp_mysql_host: mysql
 edxapp_mysql_port: 3306
-edxapp_mysql_database: edxapp
 
 # -- nginx
 edxapp_nginx_image_name: "fundocker/openshift-nginx"
@@ -53,6 +49,17 @@ edxapp_celery_lms_high_mem_queue: "edx.lms.core.high_mem"
 edxapp_celery_cms_high_priority_queue: "edx.cms.core.high"
 edxapp_celery_cms_default_priority_queue: "edx.cms.core.default"
 edxapp_celery_cms_low_priority_queue: "edx.cms.core.low"
+
+# -- misc
+#
+# The following variables are defaults required to compile all edxapp templates.
+#
+# Service variant. Possible values are "cms" or "lms"
+service_variant: ""
+# Type of worker. Possible values are "queue" or "wsgi"
+worker_type: ""
+# Celery queue name. Possible values are listed above (edxapp_celery_*)
+queue: ""
 
 # FIXME: when deploying only edxapp (and not edxapp + redis and/or mailcatcher),
 # these variables are required

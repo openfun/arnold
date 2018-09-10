@@ -28,6 +28,9 @@ spec:
           env:
             - name: DJANGO_SETTINGS_MODULE
               value: lms.envs.fun.docker_run
+          envFrom:
+            - secretRef:
+                name: "edxapp-{{ secret_id }}"
           command: ["python", "manage.py", "lms", "collectstatic", "--noinput"]
           volumeMounts:
             - mountPath: /config

@@ -7,7 +7,7 @@ metadata:
     version: "{{ edxapp_mongodb_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
   # name of the service should be mongodb host name in settings
-  name: "{{ edxapp_mongodb_host }}"
+  name: "edxapp-mongo-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
   ports:

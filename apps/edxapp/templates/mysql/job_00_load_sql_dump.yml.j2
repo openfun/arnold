@@ -23,9 +23,6 @@ spec:
       containers:
         - name: mysql-load-sql-dump-{{ job_stamp }}
           image: "{{ edxapp_mysql_image_name }}:{{ edxapp_mysql_image_tag }}"
-          env:
-            - name: MYSQL_DATABASE
-              value: {{ edxapp_mysql_database }}
           envFrom:
             - secretRef:
                 name: edxapp-{{ secret_id }}
@@ -33,10 +30,10 @@ spec:
             - "bash"
             - "-c"
             - cd /tmp &&
-                curl -sL -o edx-database.sql "{{ edxapp_sql_dump_url }}" &&
-                mysql
-                  -u ${MYSQL_USER}
-                  -h ${MYSQL_SERVICE_HOST}
-                  --password=${MYSQL_PASSWORD}
-                  ${MYSQL_DATABASE} < edx-database.sql
+              curl -sL -o edx-database.sql "{{ edxapp_sql_dump_url }}" &&
+              mysql
+              -u ${MYSQL_USER}
+              -h "edxapp-mysql-{{ deployment_stamp }}"
+              --password=${MYSQL_PASSWORD}
+              ${MYSQL_DATABASE} < edx-database.sql
       restartPolicy: Never
