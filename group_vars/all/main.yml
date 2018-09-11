@@ -65,6 +65,15 @@ secret_id: "1.0.0"
 # OpenShift's internal docker registry server
 internal_docker_registry: "docker-registry.default.svc:5000"
 
+# ACME (Automated Certificate Management Environment) We use the letsencrypt
+# staging environment except in production (see:
+# https://letsencrypt.org/docs/staging-environment)
+acme_env: staging
+# If the openshift-acme role has been created globally (ClusterRole), we don't
+# need to create it for each project. Hence set "has_acme_cluster_role" to
+# "true"
+has_acme_cluster_role: false
+
 # TODO: move the following settings to the redirect app
 # Ports
 aliases_port: 8999
