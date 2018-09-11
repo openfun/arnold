@@ -1,0 +1,9 @@
+# ACME (Automated Certificate Management Environment)
+# We use the letsencrypt staging-environment except in production
+# https://letsencrypt.org/docs/staging-environment/
+acme_env: staging
+
+# If the openshift-acme role has been created globally (ClusterRole), we don't
+# need to create it for each project. Hence set "has_acme_cluster_role" to
+# "true"
+has_acme_cluster_role: false

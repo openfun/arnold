@@ -1,2 +1,7 @@
 # Variables specific to the pre-production environment
 richie_django_configuration: PreProduction
+
+# If the openshift-acme role has been created globally (ClusterRole), we don't
+# need to create it for each project. Hence set "has_acme_cluster_role" to
+# "true"
+has_acme_cluster_role: true
