@@ -6,6 +6,5 @@ mailcatcher_host: "mailcatcher.{{ project_name}}.{{ domain_name }}"
 # -- mailcatcher
 mailcatcher_image_name: "sj26/mailcatcher"
 mailcatcher_image_tag: "latest"
-mailcatcher_app_host: "mailcatcher"
 mailcatcher_sender_port: 1025
 mailcatcher_reader_port: 1080

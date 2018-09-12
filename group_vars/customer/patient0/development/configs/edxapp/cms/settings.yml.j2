@@ -21,3 +21,8 @@ CELERY_BROKER_PASSWORD: ""
 HIGH_PRIORITY_QUEUE: "{{ edxapp_celery_cms_high_priority_queue }}"
 DEFAULT_PRIORITY_QUEUE: "{{ edxapp_celery_cms_default_priority_queue }}"
 LOW_PRIORITY_QUEUE: "{{ edxapp_celery_cms_low_priority_queue }}"
+
+# Email
+EMAIL_BACKEND: "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST: "mailcatcher"
+EMAIL_PORT: "{{ mailcatcher_sender_port }}"

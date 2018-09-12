@@ -1,6 +1,7 @@
 # Variables specific to the patient0 customer in development env_type
 
 apps:
+  - name: mailcatcher
   - name: richie
   - name: edxapp
     services:
