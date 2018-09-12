@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Route
+metadata:
+  namespace: "{{ project_name }}"
+  name: "mailcatcher-{{ prefix }}"
+  labels:
+    env_type: "{{ env_type }}"
+    customer: "{{ customer }}"
+    app: "mailcatcher"
+    service: "app"
+    version: "{{ mailcatcher_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+    route_prefix: "{{ prefix }}"
+    route_target_service: "app"
+spec:
+  host: "{{ mailcatcher_host | blue_green_host(prefix) }}"
+  tls:
+    termination: edge
+  port:
+    targetPort: "{{ mailcatcher_reader_port }}-tcp"
+  to:
+    kind: Service
+    name: "{{ mailcatcher_app_host }}"
