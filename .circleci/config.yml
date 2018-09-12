@@ -178,6 +178,29 @@ jobs:
             bin/ci-bootstrap "hello"
             bin/ci-test-service "hello" "Hello OpenShift! by Arnold"
 
+  # Test the bootstrap playbook on the "mailcatcher" application
+  # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
+  test-bootstrap-mailcatcher:
+    machine:
+      docker_layer_caching: true
+
+    working_directory: ~/fun
+
+    steps:
+      - checkout
+      - *attach_workspace
+      - *docker_load
+      - *ci_env
+      - *install_openshift_cluster
+      - *configure_openshift_cluster
+      - *run_openshift_cluster
+
+      - run:
+          name: Test the "mailcatcher" application bootstrapping
+          command: |
+            bin/ci-bootstrap "mailcatcher"
+            bin/ci-test-service "mailcatcher" "MailCatcher"
+
   # Test the bootstrap playbook on the "richie" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
   test-bootstrap-richie:
@@ -282,6 +305,12 @@ workflows:
             - lint-ansible
             - lint-plugins
       - test-bootstrap-edxapp:
+          requires:
+            - lint-bash
+            - lint-docker
+            - lint-ansible
+            - lint-plugins
+      - test-bootstrap-mailcatcher:
           requires:
             - lint-bash
             - lint-docker
