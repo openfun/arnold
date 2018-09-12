@@ -6,7 +6,7 @@ edxapp_lms_host: "lms.{{ project_name}}.{{ domain_name }}"
 
 # -- edxapp (cms/lms)
 edxapp_image_name: "fundocker/edxapp"
-edxapp_image_tag: "hawthorn.1-1.0.0"
+edxapp_image_tag: "hawthorn.1-1.0.4"
 edxapp_django_port: 8000
 edxapp_sql_dump_url: "https://gist.githubusercontent.com/jmaupetit/76fe7db4a8314fe1fa10895edf14248e/raw/1fd2aab7d57273bbe4cf40603c119a1c8026cbc1/edx-database-hawthorn.sql"
 
@@ -54,7 +54,9 @@ edxapp_celery_cms_high_priority_queue: "edx.cms.core.high"
 edxapp_celery_cms_default_priority_queue: "edx.cms.core.default"
 edxapp_celery_cms_low_priority_queue: "edx.cms.core.low"
 
-# FIXME: when deploying only edxapp (and not edxapp + redis), these variables
-# are required
+# FIXME: when deploying only edxapp (and not edxapp + redis and/or mailcatcher),
+# these variables are required
 redis_app_host: "redis"
 redis_app_port: 6379
+
+mailcatcher_sender_port: 1025

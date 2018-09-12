@@ -25,3 +25,8 @@ HIGH_MEM_QUEUE: "{{ edxapp_celery_lms_high_mem_queue }}"
 
 # Use a custom theme
 DEFAULT_SITE_THEME: "custom-theme"
+
+# Email
+EMAIL_BACKEND: "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST: "mailcatcher"
+EMAIL_PORT: "{{ mailcatcher_sender_port }}"

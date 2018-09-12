@@ -20,4 +20,4 @@ spec:
     targetPort: "{{ mailcatcher_reader_port }}-tcp"
   to:
     kind: Service
-    name: "{{ mailcatcher_app_host }}"
+    name: "mailcatcher"

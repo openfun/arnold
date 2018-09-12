@@ -6,7 +6,7 @@ metadata:
     service: app
     version: "{{ mailcatcher_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
-  name: "{{ mailcatcher_app_host }}"
+  name: "mailcatcher"
   namespace: "{{ project_name }}"
 spec:
   ports:
