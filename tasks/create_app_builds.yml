@@ -1,0 +1,15 @@
+---
+# Create BuildConfigs for an app
+
+- name: Print app name
+  debug: msg="App name {{ app.name }}"
+  tags: build
+
+- name: Make sure build configs exist
+  openshift_raw:
+    definition: "{{ lookup('template', item) | from_yaml }}"
+    state: present
+    force: true
+  with_items: "{{ builds }}"
+  when: builds is defined
+  tags: build
