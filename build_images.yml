@@ -1,0 +1,25 @@
+---
+# This playbook creates an OpenShift project for a particular
+# customer/environment
+
+- hosts: local
+  gather_facts: False
+
+  tasks:
+    - name: Display playbook name
+      debug: msg="==== Starting build_images playbook ===="
+      tags: deploy
+
+    - import_tasks: tasks/set_vars.yml
+
+    - name: Display BuildConfigs to create
+      debug: msg="{{ apps | to_nice_yaml }}"
+      tags: deploy
+
+    - include_tasks: tasks/run_tasks_for_apps.yml
+      vars:
+        tasks:
+          - tasks/get_objects_for_app
+          - tasks/create_app_builds
+      tags:
+        - build

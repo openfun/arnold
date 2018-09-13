@@ -16,13 +16,12 @@ metadata:
   # References:
   #
   # 1. https://docs.okd.io/latest/dev_guide/builds/triggering_builds.html#config-change-triggers
-  name: "richie-{{ deployment_stamp }}"
+  name: "richie-{{ richie_image_tag }}"
   namespace: "{{ project_name }}"
   labels:
     app: "richie"
     service: "richie"
     version: "{{ richie_image_tag }}"
-    deployment_stamp: "{{ deployment_stamp }}"
 spec:
   strategy:
     type: Docker

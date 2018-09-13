@@ -2,4 +2,5 @@
 
 - import_playbook: delete_project.yml
 - import_playbook: init_project.yml
+- import_playbook: build_images.yml
 - import_playbook: deploy.yml
