@@ -7,7 +7,7 @@ CMS_BASE: "{{ edxapp_cms_host }}"
 
 # Celery Broker
 CELERY_BROKER_TRANSPORT: redis
-CELERY_BROKER_HOST: "{{ redis_app_host }}"
+CELERY_BROKER_HOST: redis
 CELERY_BROKER_VHOST: 0
 CELERY_BROKER_PORT: "{{ redis_app_port }}"
 # FIXME: for now, we haven't set a user/password to connect to redis. Once those

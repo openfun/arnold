@@ -56,7 +56,5 @@ edxapp_celery_cms_low_priority_queue: "edx.cms.core.low"
 
 # FIXME: when deploying only edxapp (and not edxapp + redis and/or mailcatcher),
 # these variables are required
-redis_app_host: "redis"
 redis_app_port: 6379
-
 mailcatcher_sender_port: 1025
