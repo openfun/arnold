@@ -16,6 +16,7 @@ spec:
   host: "{{ mailcatcher_host | blue_green_host(prefix) }}"
   tls:
     termination: edge
+    insecureEdgeTerminationPolicy: Redirect
   port:
     targetPort: "{{ mailcatcher_reader_port }}-tcp"
   to:

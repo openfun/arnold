@@ -18,6 +18,7 @@ spec:
   host: "{{ richie_host | blue_green_host(prefix) }}"
   tls:
     termination: edge
+    insecureEdgeTerminationPolicy: Redirect
   port:
     targetPort: "{{ richie_nginx_port }}-tcp"
   to:
