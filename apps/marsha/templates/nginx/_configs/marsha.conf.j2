@@ -1,0 +1,35 @@
+upstream marsha-backend {
+  server marsha-app-{{ deployment_stamp }}:{{ marsha_django_port }} fail_timeout=0;
+}
+
+server {
+  listen {{ marsha_nginx_port }};
+  server_name localhost;
+
+  client_max_body_size 100M;
+
+  rewrite ^(.*)/favicon.ico$ /static/images/favicon.ico last;
+
+  # Disables server version feedback on pages and in headers
+  server_tokens off;
+
+  location @proxy_to_marsha_app {
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Forwarded-Port $server_port;
+    proxy_set_header X-Forwarded-For $remote_addr;
+
+    proxy_set_header Host $http_host;
+
+    proxy_redirect off;
+    proxy_pass http://marsha-backend;
+  }
+
+  location / {
+    try_files $uri @proxy_to_marsha_app;
+  }
+
+  location ~ ^/static/(?P<file>.*) {
+    root /data/static/marsha;
+    try_files /$file =404;
+  }
+}
