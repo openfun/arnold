@@ -1,0 +1,45 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "marsha-app-dbmigrate-{{ job_stamp }}"
+  namespace: "{{ project_name }}"
+  labels:
+    app: marsha
+    service: marsha
+    version: "{{ marsha_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+    job_stamp: "{{ job_stamp }}"
+spec:
+  template:
+    metadata:
+      name: "marsha-app-dbmigrate-{{ job_stamp }}"
+      labels:
+        app: marsha
+        service: marsha
+        version: "{{ marsha_image_tag }}"
+        deployment_stamp: "{{ deployment_stamp }}"
+        job_stamp: "{{ job_stamp }}"
+    spec:
+      containers:
+      - name: marsha-dbmigrate
+        env:
+          - name: DJANGO_SETTINGS_MODULE
+            value: marsha.settings
+          - name: DJANGO_CONFIGURATION
+            value: "{{ marsha_django_configuration }}"
+          - name: POSTGRES_DB
+            value: "{{ marsha_postgresql_database }}"
+          - name: POSTGRES_HOST
+            value: "marsha-{{ marsha_postgresql_host }}-{{ deployment_stamp }}"
+          - name: POSTGRES_PORT
+            value: "{{ marsha_postgresql_port }}"
+          - name: DJANGO_ALLOWED_HOSTS
+            value: "{{ marsha_host }}"
+        envFrom:
+          - secretRef:
+              name: marsha-{{ secret_id }}
+        # We point to a local registry image build for this "live" image (see
+        # ImageStream and BuildConfig templates)
+        image: "{{ internal_docker_registry }}/{{ project_name }}/marsha:{{ marsha_image_tag }}-live"
+        command: ["python", "manage.py", "migrate"]
+      restartPolicy: Never

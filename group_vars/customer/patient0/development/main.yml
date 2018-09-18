@@ -2,6 +2,7 @@
 
 apps:
   - name: mailcatcher
+  - name: marsha
   - name: richie
   - name: edxapp
     services:

@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Route
+metadata:
+  namespace: "{{ project_name }}"
+  name: "marsha-nginx-{{ prefix }}"
+  labels:
+    env_type: "{{ env_type }}"
+    customer: "{{ customer }}"
+    app: "marsha"
+    service: "nginx"
+    version: "{{ marsha_nginx_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+    route_prefix: "{{ prefix }}"
+    route_target_service: "app"
+  annotations:
+    kubernetes.io/tls-acme: "true"
+spec:
+  host: "{{ marsha_host | blue_green_host(prefix) }}"
+  tls:
+    termination: edge
+  port:
+    targetPort: "{{ marsha_nginx_port }}-tcp"
+  to:
+    kind: Service
+    name: "marsha-nginx-{{ deployment_stamp }}"

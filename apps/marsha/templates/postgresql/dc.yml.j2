@@ -1,0 +1,35 @@
+{% if env_type in trashable_env_types %}
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: marsha
+    service: postgresql
+    version: "{{ marsha_postgresql_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: "marsha-postgresql-{{ deployment_stamp }}"
+  namespace: "{{ project_name }}"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: marsha
+        service: postgresql
+        version: "{{ marsha_postgresql_image_tag }}"
+        deploymentconfig: "marsha-postgresql-{{ deployment_stamp }}"
+        deployment_stamp: "{{ deployment_stamp }}"
+    spec:
+      containers:
+        - image: {{ marsha_postgresql_image_name }}:{{ marsha_postgresql_image_tag }}
+          name: postgresql
+          ports:
+            - containerPort: {{ marsha_postgresql_port }}
+              protocol: TCP
+          env:
+            - name: POSTGRESQL_DATABASE
+              value: "{{ marsha_postgresql_database }}"
+          envFrom:
+            - secretRef:
+                name: marsha-{{ secret_id }}
+{% endif %}
