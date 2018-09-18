@@ -1,6 +1,5 @@
----
 # URL
-domain_name: dev.openfun.fr
+domain_name: oc.openfun.fr
 
 # OpenShift routes_aliases exemple
 # openshift_routes_aliases:       # routes to be redirected
@@ -13,4 +12,4 @@ domain_name: dev.openfun.fr
 #       - alias_1
 #       - alias_2
 openshift_routes_aliases:
-    # No route aliases
+  # No route aliases
