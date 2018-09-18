@@ -17,6 +17,7 @@ spec:
   host: "{{ hello_host | blue_green_host(prefix) }}"
   tls:
     termination: edge
+    insecureEdgeTerminationPolicy: Redirect
   port:
     targetPort: "{{ hello_app_port }}-tcp"
   to:

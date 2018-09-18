@@ -18,6 +18,7 @@ spec:
   host: "{{ edxapp_cms_host | blue_green_host(prefix) }}"
   tls:
     termination: edge
+    insecureEdgeTerminationPolicy: Redirect
   port:
     targetPort: "{{ edxapp_nginx_cms_port }}-tcp"
   to:
