@@ -5,6 +5,11 @@ PLATFORM_NAME: "{{ project_display_name }}"
 LMS_BASE: "{{ edxapp_lms_host }}"
 CMS_BASE: "{{ edxapp_cms_host }}"
 
+ALLOWED_HOSTS:
+  - "previous.{{ edxapp_lms_host }}"
+  - "{{ edxapp_lms_host }}"
+  - "next.{{ edxapp_lms_host }}"
+
 # Celery Broker
 CELERY_BROKER_TRANSPORT: redis
 CELERY_BROKER_HOST: redis
