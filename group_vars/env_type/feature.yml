@@ -4,8 +4,3 @@ richie_django_configuration: "Feature"
 # Only in feature environment do we add the feature title to the hosts
 edxapp_cms_host: "{{ feature_title }}.cms.{{ project_name}}.{{ domain_name }}"
 edxapp_lms_host: "{{ feature_title }}.lms.{{ project_name}}.{{ domain_name }}"
-
-# If the openshift-acme role has been created globally (ClusterRole), we don't
-# need to create it for each project. Hence set "has_acme_cluster_role" to
-# "true"
-has_acme_cluster_role: true
