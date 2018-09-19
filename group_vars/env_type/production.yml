@@ -1,8 +1,3 @@
 # Variables specific to the production environment
 richie_django_configuration: Production
 acme_env: live
-
-# If the openshift-acme role has been created globally (ClusterRole), we don't
-# need to create it for each project. Hence set "has_acme_cluster_role" to
-# "true"
-has_acme_cluster_role: true
