@@ -32,3 +32,8 @@ DATABASE_PORT: {{ edxapp_mysql_port }}
 # Mongo
 MONGODB_HOST: "edxapp-mongo-{{ deployment_stamp }}"
 MONGODB_PORT: {{ edxapp_mongodb_port }}
+
+# Email
+EMAIL_BACKEND: "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST: "mailcatcher"
+EMAIL_PORT: {{ mailcatcher_sender_port }}
