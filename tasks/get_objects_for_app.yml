@@ -31,6 +31,7 @@
     streams: "{{ templates | map('regex_search', '.*/is.*\\.yml\\.j2$') | select('string') | list }}"
     jobs: "{{ templates | map('regex_search', '.*/job_.*\\.yml\\.j2$') | select('string') | list }}"
     routes: "{{ templates | map('regex_search', '.*/route.*\\.yml\\.j2$') | select('string') | list }}"
+    secrets: "{{ templates | map('regex_search', '.*/secret.*\\.yml\\.j2$') | select('string') | list }}"
   tags:
     - deploy
     - build
@@ -40,6 +41,7 @@
     - stream
     - job
     - route
+    - secret
 
 - name: Display OpenShift's builds for this app
   debug:
@@ -96,3 +98,11 @@
   tags:
     - deploy
     - route
+
+- name: Display OpenShift's secrets for this app
+  debug:
+    msg: "{{ secrets | to_nice_yaml }}"
+  when: secrets
+  tags:
+    - deploy
+    - secret
