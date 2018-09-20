@@ -37,7 +37,7 @@ spec:
             value: "{{ richie_host }}"
         envFrom:
           - secretRef:
-              name: richie-{{ secret_id }}
+              name: "{{ richie_secret_name }}"
         # We point to a local registry image build for this "live" image (see
         # ImageStream and BuildConfig templates)
         image: "{{ internal_docker_registry }}/{{ project_name }}/richie:{{ richie_image_tag }}-live"
