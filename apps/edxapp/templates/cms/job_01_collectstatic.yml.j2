@@ -28,9 +28,6 @@ spec:
           env:
             - name: DJANGO_SETTINGS_MODULE
               value: cms.envs.fun.docker_run
-          envFrom:
-            - secretRef:
-                name: "edxapp-{{ secret_id }}"
           command: ["python", "manage.py", "cms", "collectstatic", "--noinput"]
           volumeMounts:
             - mountPath: /config
@@ -44,9 +41,9 @@ spec:
         # we copy service variant configMaps that may override default
         # configuration (docker_run*.py and settings.yml) in that same
         # "/tmp/config" directory. And finally, we also copy sensible
-        # credentials from edxapp secret (credentials.vault.yml). When this
-        # initContainer shuts down, the "edxapp-config" volume has been filled
-        # with all project settings that will be used to run the service variant
+        # credentials from edxapp secret (secrets.yml). When this initContainer
+        # shuts down, the "edxapp-config" volume has been filled with all
+        # project settings that will be used to run the service variant
         # container. Please refer to the documentation to better understand our
         # settings generation mecanism.
         #
@@ -65,7 +62,7 @@ spec:
             - "-c"
             - cp -r /config/* /tmp/config &&
               cp -rL /tmp/configmap-cms/* /tmp/config/cms/ &&
-              cp /tmp/secret/credentials.vault.yml /tmp/config/cms/secrets.yml &&
+              cp /tmp/secret/secrets.yml /tmp/config/cms/secrets.yml &&
               mkdir -p /tmp/staticfiles/studio &&
               cp /edx/app/edxapp/staticfiles/studio/webpack-stats.json /tmp/staticfiles/studio/
           volumeMounts:
@@ -86,7 +83,7 @@ spec:
           emptyDir: {} # volume that lives as long as the pod lives
         - name: edxapp-secret
           secret:
-            secretName: edxapp-{{ secret_id }}
+            secretName: "{{ edxapp_secret_name }}"
         - name: edxapp-v-static
           persistentVolumeClaim:
             claimName: edxapp-pvc-static

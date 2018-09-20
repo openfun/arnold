@@ -28,5 +28,5 @@ spec:
               protocol: TCP
           envFrom:
             - secretRef:
-                name: "edxapp-{{ secret_id }}"
+                name: "{{ edxapp_mysql_secret_name }}"
 {% endif %}

@@ -25,7 +25,7 @@ spec:
           image: "{{ edxapp_mysql_image_name }}:{{ edxapp_mysql_image_tag }}"
           envFrom:
             - secretRef:
-                name: edxapp-{{ secret_id }}
+                name: "{{ edxapp_mysql_secret_name }}"
           command:
             - "bash"
             - "-c"

@@ -9,6 +9,7 @@ edxapp_image_name: "fundocker/edxapp"
 edxapp_image_tag: "hawthorn.1-1.0.6"
 edxapp_django_port: 8000
 edxapp_sql_dump_url: "https://gist.githubusercontent.com/jmaupetit/76fe7db4a8314fe1fa10895edf14248e/raw/1fd2aab7d57273bbe4cf40603c119a1c8026cbc1/edx-database-hawthorn.sql"
+edxapp_secret_name: "edxapp-{{ edxapp_vault_checksum }}"
 
 # Customize edxapp's LMS theme: the url is supposed to point to the git
 # repository and the tag to either a tag or a branch, e.g.:
@@ -28,11 +29,13 @@ edxapp_memcached_port: 11211
 edxapp_mongodb_image_name: "centos/mongodb-32-centos7"
 edxapp_mongodb_image_tag: "3.2"
 edxapp_mongodb_port: 27017
+edxapp_mongodb_secret_name: "edxapp-mongo-{{ edxapp_vault_checksum }}"
 
 # -- mysql
 edxapp_mysql_image_name: "centos/mysql-57-centos7"
 edxapp_mysql_image_tag: "5.7"
 edxapp_mysql_port: 3306
+edxapp_mysql_secret_name: "edxapp-mysql-{{ edxapp_vault_checksum }}"
 
 # -- nginx
 edxapp_nginx_image_name: "fundocker/openshift-nginx"
