@@ -124,6 +124,12 @@
     msg: "{{ apps | to_nice_yaml }}"
     verbosity: 1
 
+- name: Look for all applications vaults
+  include_tasks: tasks/get_vault_for_app.yml
+  loop: "{{ apps }}"
+  loop_control:
+    loop_var: "app"
+
 - name: Include "all" type vars for applications
   include_tasks: tasks/load_app_defaults.yml
   vars:
