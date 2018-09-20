@@ -42,7 +42,7 @@ spec:
               value: "richie-{{ richie_elasticsearch_host }}-{{ deployment_stamp }}"
           envFrom:
             - secretRef:
-                name: richie-{{ secret_id }}
+                name: "{{ richie_secret_name }}"
           volumeMounts:
             - name: richie-v-media
               mountPath: /data/media
