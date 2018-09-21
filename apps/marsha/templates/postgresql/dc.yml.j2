@@ -31,5 +31,5 @@ spec:
               value: "{{ marsha_postgresql_database }}"
           envFrom:
             - secretRef:
-                name: marsha-{{ secret_id }}
+                name: "{{ marsha_postgresql_secret_name }}"
 {% endif %}

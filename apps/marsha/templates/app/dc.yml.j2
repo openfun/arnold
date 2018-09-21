@@ -29,23 +29,27 @@ spec:
             - name: DJANGO_SETTINGS_MODULE
               value: marsha.settings
             - name: DJANGO_CONFIGURATION
-              value: {{ marsha_django_configuration }}
+              value: "{{ marsha_django_configuration }}"
             - name: POSTGRES_DB
-              value: {{ marsha_postgresql_database }}
+              value: "{{ marsha_postgresql_database }}"
             - name: POSTGRES_HOST
               value: "marsha-{{ marsha_postgresql_host }}-{{ deployment_stamp }}"
             - name: POSTGRES_PORT
               value: "{{ marsha_postgresql_port }}"
             - name: DJANGO_ALLOWED_HOSTS
               value: "{{ marsha_host | blue_green_host(prefix) }}"
+            - name: DJANGO_CLOUDFRONT_PRIVATE_KEY_PATH
+              value: "{{ marsha_cloudfront_private_key_path }}"
           envFrom:
             - secretRef:
-                name: marsha-{{ secret_id }}
+                name: "{{ marsha_secret_name }}"
           volumeMounts:
             - name: marsha-v-media
               mountPath: /data/media
             - name: marsha-v-static
               mountPath: /data/static
+            - mountPath: "{{ marsha_cloudfront_private_key_path | dirname }}"
+              name: marsha-cloudfront-private-key-secret
       volumes:
         - name: marsha-v-media
           persistentVolumeClaim:
@@ -53,3 +57,6 @@ spec:
         - name: marsha-v-static
           persistentVolumeClaim:
             claimName: marsha-pvc-static
+        - name: marsha-cloudfront-private-key-secret
+          secret:
+            secretName: "{{ marsha_cloudfront_private_key_secret_name }}"

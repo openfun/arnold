@@ -37,7 +37,7 @@ spec:
             value: "{{ marsha_host }}"
         envFrom:
           - secretRef:
-              name: marsha-{{ secret_id }}
+              name: "{{ marsha_secret_name }}"
         # We point to a local registry image build for this "live" image (see
         # ImageStream and BuildConfig templates)
         image: "{{ internal_docker_registry }}/{{ project_name }}/marsha:{{ marsha_image_tag }}-live"

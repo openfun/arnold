@@ -14,9 +14,13 @@ marsha_postgresql_image_tag: "9.6"
 marsha_postgresql_host: "postgresql"
 marsha_postgresql_port: 5432
 marsha_postgresql_database: "marsha"
+marsha_postgresql_secret_name: "marsha-postgresql-{{ marsha_vault_checksum }}"
 
 # -- marsha
 marsha_image_name: "fundocker/marsha"
-marsha_image_tag: "1.0.0-alpha.2-alpine"
+marsha_image_tag: "1.0.0-alpha.3-alpine"
 marsha_django_port: 8000
 marsha_django_configuration: "Development"
+marsha_secret_name: "marsha-{{ marsha_vault_checksum }}"
+marsha_cloudfront_private_key_secret_name: "marsha-sshkey-{{ marsha_vault_checksum }}"
+marsha_cloudfront_private_key_path: "/private/.ssh/aws/ssh-privatekey"
