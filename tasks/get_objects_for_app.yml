@@ -46,6 +46,7 @@
 - name: Display OpenShift's builds for this app
   debug:
     msg: "{{ builds | to_nice_yaml}}"
+    verbosity: 2
   when: builds
   tags:
     - deploy
@@ -54,6 +55,7 @@
 - name: Display OpenShift's deployments for this app
   debug:
     msg: "{{ deployments | to_nice_yaml }}"
+    verbosity: 2
   when: deployments
   tags:
     - deploy
@@ -62,6 +64,7 @@
 - name: Display OpenShift's endpoints for this app
   debug:
     msg: "{{ endpoints | to_nice_yaml }}"
+    verbosity: 2
   when: deployments
   tags:
     - deploy
@@ -70,6 +73,7 @@
 - name: Display OpenShift's services for this app
   debug:
     msg: "{{ services | to_nice_yaml }}"
+    verbosity: 2
   when: services
   tags:
     - deploy
@@ -78,6 +82,7 @@
 - name: Display OpenShift's image streams for this app
   debug:
     msg: "{{ streams | to_nice_yaml }}"
+    verbosity: 2
   when: streams
   tags:
     - deploy
@@ -86,6 +91,7 @@
 - name: Display OpenShift's jobs for this app
   debug:
     msg: "{{ jobs | to_nice_yaml }}"
+    verbosity: 2
   when: jobs
   tags:
     - deploy
@@ -94,6 +100,7 @@
 - name: Display OpenShift's routes for this app
   debug:
     msg: "{{ routes | to_nice_yaml }}"
+    verbosity: 2
   when: routes
   tags:
     - deploy
@@ -102,6 +109,7 @@
 - name: Display OpenShift's secrets for this app
   debug:
     msg: "{{ secrets | to_nice_yaml }}"
+    verbosity: 2
   when: secrets
   tags:
     - deploy
