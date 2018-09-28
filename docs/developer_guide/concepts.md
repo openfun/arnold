@@ -14,7 +14,7 @@ defined five different ones:
 * **feature**: one environment for each feature branch, the feature being
   described by its title (**e.g** `feat/99-change-background-color`),
 * **staging**: aggregating all features before a release,
-* **preproduction**: validating a release before going live,
+* **preprod**: validating a release before going live,
 * **production**: customer facing operations.
 
 In order to deploy our applications, we need to generate configuration files
@@ -35,7 +35,7 @@ The application name is generated using the following pattern:
 where:
 
 * `environment`: the name of the environment (development, feature, staging,
-  preproduction or production)
+  preprod or production)
 * `customer`: the one-word name of the customer site (fun, campus, corporate,
   ademe, etc.)
 * `application`: the one-word name of the application (lms, cms, etc.)
@@ -55,7 +55,7 @@ Here are some examples of valid urls on the `example.com` platform:
 
 * staging-campus-cms.example.com
 * staging-campus-lms.example.com
-* preproduction-fun-lms.example.com
+* preprod-fun-lms.example.com
 * feature-coporate-lms--change-background-color-on-contact-form.example.com
 
 All these development urls are protected by basic authentication. For this
