@@ -1,4 +1,4 @@
 .ansible/
 .git/
 .gitignore
-*.retry
+openshift.local.clusterup/
