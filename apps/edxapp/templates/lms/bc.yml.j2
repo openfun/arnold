@@ -30,6 +30,10 @@ spec:
     git:
       uri: "{{ edxapp_theme_url }}"
       ref: "{{ edxapp_theme_tag | default("master") }}"
+    {% if edxapp_theme_is_private -%}
+    sourceSecret:
+      name: "{{ edxapp_theme_git_private_key_secret_name }}"
+    {% endif -%}
     {% endif -%}
     dockerfile: |-
       FROM {{ edxapp_image_name }}:{{ edxapp_image_tag }}
