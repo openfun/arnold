@@ -8,7 +8,6 @@ domain_name: "{{ lookup('env', 'OPENSHIFT_DOMAIN') }}.nip.io"
 internal_docker_registry: "172.30.1.1:5000"
 
 # Use development images in the development environment
-edxapp_image_tag: "hawthorn.1-1.0.6-dev"
 richie_image_tag: "0.1.0-alpha.3-alpine-dev"
 marsha_image_tag: "1.0.0-alpha.2-alpine-dev"
 
