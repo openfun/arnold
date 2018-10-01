@@ -18,6 +18,21 @@ edxapp_secret_name: "edxapp-{{ edxapp_vault_checksum }}"
 #   edxapp_theme_tag: "marvel-theme-ginkgo"
 edxapp_theme_url: ""
 edxapp_theme_tag: ""
+# If your theme is versionned in a private git repository, switch this variable
+# to: "true"
+edxapp_theme_is_private: false
+# Access to private git repositories is driven by an SSH deployment key, you
+# should allow the public key in your forge (e.g. github or gitlab) and add the
+# SSH private key to your customer/environment edxapp's vault:
+#
+# # group_vars/customer/patient0/development/secrets/edxapp.vault.yml
+#
+# EDXAPP_THEME_GIT_PRIVATE_KEY: |
+#   -----BEGIN RSA PRIVATE KEY-----
+#   yourprivatekeyhere
+#   -----END RSA PRIVATE KEY-----
+edxapp_theme_git_private_key_secret_name: "edxapp-theme-git-sshkey-{{ edxapp_vault_checksum }}"
+# Settings required to build your theme
 edxapp_build_settings: "fun.docker_build_production"
 
 # -- memcached
