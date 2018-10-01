@@ -62,8 +62,7 @@ spec:
             - "-c"
             - cp -r /config/* /tmp/config &&
               cp -rL /tmp/configmap-lms/* /tmp/config/lms/ &&
-              cp /tmp/secret/secrets.yml /tmp/config/lms/secrets.yml &&
-              cp /edx/app/edxapp/staticfiles/webpack-stats.json /tmp/staticfiles/
+              cp /tmp/secret/secrets.yml /tmp/config/lms/secrets.yml
           volumeMounts:
             - mountPath: /tmp/config
               name: edxapp-config
@@ -71,8 +70,6 @@ spec:
               name: edxapp-configmap-lms
             - mountPath: /tmp/secret
               name: edxapp-secret
-            - mountPath: /tmp/staticfiles
-              name: edxapp-v-static
       volumes:
         - name: edxapp-configmap-lms
           configMap:
