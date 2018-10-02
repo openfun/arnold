@@ -28,15 +28,17 @@ spec:
           env:
             - name: DJANGO_SETTINGS_MODULE
               value: cms.envs.fun.docker_run
+          # We use Python requests to download the demo course to avoid installing curl in the
+          # image just for that
           command:
             - "bash"
             - "-c"
-            - curl -sL -o /tmp/demo_course.tgz {{ demo_course_url }} &&
-                cd /tmp &&
-                tar xzf /tmp/demo_course.tgz &&
-                cd - &&
-                python manage.py cms import /edx/app/edxapp/data /tmp/edx-demo-course* &&
-                python manage.py cms shell < /tmp/configmap-fixtures/create_demo_users.py
+            - python -c "import requests;open('/tmp/demo_course.tgz', 'wb').write(requests.get('{{ demo_course_url }}', allow_redirects=True).content)" &&
+              cd /tmp &&
+              tar xzf /tmp/demo_course.tgz &&
+              cd - &&
+              python manage.py cms import /edx/app/edxapp/data /tmp/edx-demo-course* &&
+              python manage.py cms shell < /tmp/configmap-fixtures/create_demo_users.py
 
           volumeMounts:
             - mountPath: /tmp/configmap-fixtures
@@ -85,7 +87,7 @@ spec:
             defaultMode: 420
             name: edxapp-cms-{{ deployment_stamp }}
         - name: edxapp-config
-          emptyDir: {}  # volume that lives as long as the pod lives
+          emptyDir: {} # volume that lives as long as the pod lives
         - name: edxapp-secret
           secret:
             secretName: "{{ edxapp_secret_name }}"
