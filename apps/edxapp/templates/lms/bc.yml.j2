@@ -44,7 +44,7 @@ spec:
         npm && \
         rm -rf /var/lib/apt/lists/*
       COPY . /edx/app/edxapp/edx-platform/themes/custom-theme
-      RUN PATH=${PWD}/node_modules/.bin:${PATH} NO_PREREQ_INSTALL=1 paver update_assets --settings={{ edxapp_build_settings }} --skip-collect
+      RUN NO_PREREQ_INSTALL=1 paver update_assets --settings={{ edxapp_build_settings }} --skip-collect
       {% endif -%}
       USER 10000
   triggers:
