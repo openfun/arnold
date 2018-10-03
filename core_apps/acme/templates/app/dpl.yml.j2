@@ -29,7 +29,7 @@ spec:
             fieldRef:
               fieldPath: status.podIP
         - name: OPENSHIFT_ACME_ACMEURL
-          value: "https://acme-staging.api.letsencrypt.org/directory"
+          value: "https://acme-{% if acme_env == 'live' %}v01{% else %}staging{% endif %}.api.letsencrypt.org/directory"
         - name: OPENSHIFT_ACME_LOGLEVEL
           value: "4"
         - name: OPENSHIFT_ACME_NAMESPACE
