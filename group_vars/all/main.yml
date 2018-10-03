@@ -59,7 +59,7 @@ job_stamp: null
 internal_docker_registry: "docker-registry.default.svc:5000"
 
 # ACME (Automated Certificate Management Environment) We use the letsencrypt
-# staging environment except in production (see:
+# staging environment except in (pre)production (see:
 # https://letsencrypt.org/docs/staging-environment)
 acme_env: staging
 # If the openshift-acme role has been created globally (ClusterRole), we don't
