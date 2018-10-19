@@ -5,7 +5,7 @@ Tests for the "deploy" plugin filter
 from ansible.compat.tests import unittest
 from ansible.errors import AnsibleFilterError
 
-from plugins.filter.deploy import blue_green_host
+from plugins.filter.deploy import blue_green_host, blue_green_hosts
 
 
 class TestBlueGreenHostFilter(unittest.TestCase):
@@ -45,3 +45,27 @@ class TestBlueGreenHostFilter(unittest.TestCase):
 
         self.assertEqual(blue_green_host(host, "previous"), "previous.{}".format(host))
         self.assertEqual(blue_green_host(host, "next"), "next.{}".format(host))
+
+
+class TestBlueGreenHostsFilter(unittest.TestCase):
+    """Tests for the ``blue_green_hosts`` filter"""
+
+    def test_with_empty_host(self):
+        """When the host is empty, the filter should raise an error"""
+
+        with self.assertRaises(AnsibleFilterError) as context_manager:
+            blue_green_hosts(None)
+        self.assertEqual(context_manager.exception.message, "host cannot be empty")
+
+        with self.assertRaises(AnsibleFilterError) as context_manager:
+            blue_green_hosts("")
+        self.assertEqual(context_manager.exception.message, "host cannot be empty")
+
+    def test_with_valid_base_host(self):
+        """Test the filter with a valid host"""
+
+        host = "foo.com"
+
+        self.assertEqual(
+            blue_green_hosts(host), ["previous.foo.com", "foo.com", "next.foo.com"]
+        )

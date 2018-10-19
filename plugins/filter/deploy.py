@@ -36,6 +36,26 @@ def blue_green_host(host, prefix=None):
     return "{}.{}".format(prefix, host) if prefix != "current" else host
 
 
+def blue_green_hosts(host):
+    """
+        Add next/current/previous prefix to the base host, and return that list
+        of possible hosts.
+
+        Example usage:
+
+            {{ "foo.bar.com" | blue_green_hosts }}
+            # Should return: previous.foo.bar.com, foo.bar.com, next.foo.bar.com
+    """
+
+    if not host:
+        raise AnsibleFilterError("host cannot be empty")
+
+    return [
+        "{}.{}".format(prefix, host) if prefix != "current" else host
+        for prefix in BLUE_GREEN_PREFIXES
+    ]
+
+
 # pylint: disable=no-self-use,too-few-public-methods
 class FilterModule(object):
     """Filters used for deployments"""
@@ -43,4 +63,7 @@ class FilterModule(object):
     def filters(self):
         """List plugin filters"""
 
-        return {"blue_green_host": blue_green_host}
+        return {
+            "blue_green_host": blue_green_host,
+            "blue_green_hosts": blue_green_hosts,
+        }
