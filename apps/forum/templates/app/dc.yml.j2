@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: forum
+    service: forum
+    version: "{{ forum_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: "forum-app-{{ deployment_stamp }}"
+  namespace: "{{ project_name }}"
+spec:
+  replicas: 1 # number of pods we want
+  template:
+    metadata:
+      labels:
+        app: forum
+        service: forum
+        version: "{{ forum_image_tag }}"
+        deploymentconfig: "forum-app-{{ deployment_stamp }}"
+        deployment_stamp: "{{ deployment_stamp }}"
+    spec:
+      containers:
+        - name: forum
+          # We point to a local registry image build for this "live" image (see
+          # ImageStream and BuildConfig templates)
+          image: "{{ internal_docker_registry }}/{{ project_name }}/forum:{{ forum_image_tag }}-live"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: "{{ forum_port }}"
+              protocol: TCP
+          envFrom:
+            - secretRef:
+                name: "{{ forum_secret_name }}"
+          env:
+            - name: SEARCH_SERVER
+              value: "http://forum-elasticsearch-{{ deployment_stamp }}:{{ forum_elasticsearch_port }}"
+          command:
+            - "/bin/bash"
+            - "-c"
+            - MONGOHQ_URL=mongodb://${MONGODB_USER}:${MONGODB_PASSWORD}@forum-mongo-{{ deployment_stamp }}:{{ forum_mongodb_port }}/${MONGODB_DATABASE} bundle exec puma

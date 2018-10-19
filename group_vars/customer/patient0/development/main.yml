@@ -3,6 +3,7 @@
 apps:
   - name: mailcatcher
   - name: marsha
+  - name: forum
   - name: richie
   - name: edxapp
     services:

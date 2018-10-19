@@ -1,0 +1,10 @@
+# Application default configuration
+
+# -- route
+forum_host: "forum.{{ project_name}}.{{ domain_name }}"
+
+# -- forum
+forum_image_name: "fundocker/forum"
+forum_image_tag: "1.0.0-beta.1"
+forum_port: 9292
+forum_secret_name: "forum-{{ forum_vault_checksum }}"
