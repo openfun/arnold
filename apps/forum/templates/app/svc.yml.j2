@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: forum
+    service: forum
+    version: "{{ forum_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: "forum-app-{{ deployment_stamp }}" # name of the service should be host name in nginx
+  namespace: "{{ project_name }}"
+spec:
+  ports:
+    - name: "{{ forum_port }}-tcp"
+      port: {{ forum_port }}
+      protocol: TCP
+      targetPort: {{ forum_port }}
+  selector:
+    app: forum
+    deploymentconfig: "forum-app-{{ deployment_stamp }}"
+  type: ClusterIP

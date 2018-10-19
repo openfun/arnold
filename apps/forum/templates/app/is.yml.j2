@@ -1,0 +1,8 @@
+apiVersion: "v1"
+kind: "ImageStream"
+metadata:
+  name: "forum"
+  namespace: "{{ project_name }}"
+  labels:
+    app: "forum"
+    service: "forum"

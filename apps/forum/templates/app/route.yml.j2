@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Route
+metadata:
+  namespace: "{{ project_name }}"
+  name: "forum-{{ prefix }}"
+  labels:
+    env_type: "{{ env_type }}"
+    customer: "{{ customer }}"
+    app: "forum"
+    service: "app"
+    version: "{{ forum_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+    route_prefix: "{{ prefix }}"
+    route_target_service: "app"
+spec:
+  host: "{{ forum_host | blue_green_host(prefix) }}"
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  port:
+    targetPort: "{{ forum_port }}-tcp"
+  to:
+    kind: Service
+    name: "forum-app-{{ deployment_stamp }}"

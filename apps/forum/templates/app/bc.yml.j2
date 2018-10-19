@@ -1,0 +1,37 @@
+apiVersion: "v1"
+kind: "BuildConfig"
+metadata:
+  # FIXME
+  #
+  # As mentionned in the official documentation [1]:
+  #
+  #   Configuration change triggers currently only work when creating a new
+  #   BuildConfig. In a future release, configuration change triggers will also
+  #   be able to launch a build whenever a BuildConfig is updated.
+  #
+  # Hence, we must force BuildConfig to always get created with a unique name.
+  # This is a temporary solution that needs to be improved as soon as OKD
+  # triggers a new build upon BC object update.
+  #
+  # References:
+  #
+  # 1. https://docs.okd.io/latest/dev_guide/builds/triggering_builds.html#config-change-triggers
+  name: "forum-{{ forum_image_tag }}"
+  namespace: "{{ project_name }}"
+  labels:
+    app: "forum"
+    service: "forum"
+    version: "{{ forum_image_tag }}"
+spec:
+  strategy:
+    type: Docker
+  source:
+    dockerfile: |-
+      FROM {{ forum_image_name }}:{{ forum_image_tag }}
+      # Add new statements here
+  triggers:
+    - type: "ConfigChange"
+  output:
+    to:
+      kind: "ImageStreamTag"
+      name: "forum:{{ forum_image_tag }}-live"
