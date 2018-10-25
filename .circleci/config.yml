@@ -224,6 +224,29 @@ jobs:
             bin/ci-bootstrap "richie"
             bin/ci-test-service "richie" "Installation successful!"
 
+  # Test the bootstrap playbook on the "forum" application
+  # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
+  test-bootstrap-forum:
+    machine:
+      docker_layer_caching: true
+
+    working_directory: ~/fun
+
+    steps:
+      - checkout
+      - *attach_workspace
+      - *docker_load
+      - *ci_env
+      - *install_openshift_cluster
+      - *configure_openshift_cluster
+      - *run_openshift_cluster
+
+      - run:
+          name: Test the "forum" application bootstrapping
+          command: |
+            bin/ci-bootstrap "forum"
+            bin/ci-test-service "forum" "collection" "/api/v1/threads?api_key=thisisafakeapikey"
+
   # Test the bootstrap playbook on the "edxapp" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
   test-bootstrap-edxapp:
@@ -340,6 +363,12 @@ workflows:
             - lint-ansible
             - lint-plugins
       - test-bootstrap-marsha:
+          requires:
+            - lint-bash
+            - lint-docker
+            - lint-ansible
+            - lint-plugins
+      - test-bootstrap-forum:
           requires:
             - lint-bash
             - lint-docker
