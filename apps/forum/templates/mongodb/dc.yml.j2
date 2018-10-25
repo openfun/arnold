@@ -1,0 +1,32 @@
+{% if env_type in trashable_env_types %}
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: forum
+    service: mongodb
+    version: "{{ forum_mongodb_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: "forum-mongodb-{{ deployment_stamp }}"
+  namespace: "{{ project_name }}"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: forum
+        service: mongodb
+        version: "{{ forum_mongodb_image_tag }}"
+        deploymentconfig: "forum-mongodb-{{ deployment_stamp }}"
+        deployment_stamp: "{{ deployment_stamp }}"
+    spec:
+      containers:
+        - image: "{{ forum_mongodb_image_name }}:{{ forum_mongodb_image_tag }}"
+          name: mongodb
+          ports:
+            - containerPort: "{{ forum_mongodb_port }}"
+              protocol: TCP
+          envFrom:
+            - secretRef:
+                name: "{{ forum_mongodb_secret_name }}"
+{% endif %}
