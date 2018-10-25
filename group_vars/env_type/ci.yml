@@ -15,3 +15,4 @@ apps:
   - name: richie
   - name: edxapp
   - name: redis
+  - name: forum
