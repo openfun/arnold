@@ -1,0 +1,36 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: forum-elasticsearch-init-index-{{ job_stamp }}
+  namespace: "{{ project_name }}"
+  labels:
+    app: forum
+    service: app
+    version: "{{ forum_image_tag }}"
+    job_stamp: "{{ job_stamp }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+spec:
+  template:
+    metadata:
+      name: elasticsearch-init-index-{{ job_stamp }}
+      labels:
+        app: forum
+        service: app
+        version: "{{ forum_image_tag }}"
+        job_stamp: "{{ job_stamp }}"
+        deployment_stamp: "{{ deployment_stamp }}"
+    spec:
+      containers:
+        - name: elasticsearch-init-index-{{ job_stamp }}
+          image: "{{ forum_image_name }}:{{ forum_image_tag }}"
+          envFrom:
+            - secretRef:
+                name: "{{ forum_secret_name }}"
+          env:
+            - name: SEARCH_SERVER
+              value: "http://forum-elasticsearch-{{ deployment_stamp }}:{{ forum_elasticsearch_port }}"
+          command:
+            - "/bin/bash"
+            - "-c"
+            - MONGOHQ_URL=mongodb://${MONGODB_USER}:${MONGODB_PASSWORD}@forum-mongo-{{ deployment_stamp }}:{{ forum_mongodb_port }}/${MONGODB_DATABASE} bin/rake search:initialize
+      restartPolicy: Never
