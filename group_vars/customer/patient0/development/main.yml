@@ -25,3 +25,8 @@ apps:
 # Install a custom theme for edxapp-lms
 edxapp_theme_url: "https://github.com/raccoongang/themes_for_themex.io"
 edxapp_theme_tag: "marvel-theme-ginkgo"
+
+# While deploying edxapp separately from the forum, those vars are required to
+# compile custom configMaps
+forum_host: "forum.{{ project_name}}.{{ domain_name }}"
+forum_port: 9292

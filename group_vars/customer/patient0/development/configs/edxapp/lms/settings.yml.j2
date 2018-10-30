@@ -41,3 +41,7 @@ MONGODB_PORT: {{ edxapp_mongodb_port }}
 EMAIL_BACKEND: "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST: "mailcatcher"
 EMAIL_PORT: {{ mailcatcher_sender_port }}
+
+# Activate comments service
+# Don't forget to add the COMMENTS_SERVICE_KEY setting in the secrets
+COMMENTS_SERVICE_URL: "https://{{ forum_host }}:{{ forum_port }}"
