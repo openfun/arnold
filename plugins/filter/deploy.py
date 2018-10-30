@@ -50,10 +50,12 @@ def blue_green_hosts(host):
     if not host:
         raise AnsibleFilterError("host cannot be empty")
 
-    return [
-        "{}.{}".format(prefix, host) if prefix != "current" else host
-        for prefix in BLUE_GREEN_PREFIXES
-    ]
+    return ",".join(
+        [
+            "{}.{}".format(prefix, host) if prefix != "current" else host
+            for prefix in BLUE_GREEN_PREFIXES
+        ]
+    )
 
 
 # pylint: disable=no-self-use,too-few-public-methods
