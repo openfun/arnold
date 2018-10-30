@@ -9,3 +9,4 @@
 5.  [Handling secrets](./secrets.md)
 6.  [Hello customer](./hello.md)
 7.  [Continous_Integration](./continous_integration.md)
+8.  [Frequently Asked Questions (FAQ)](./faq.md)
