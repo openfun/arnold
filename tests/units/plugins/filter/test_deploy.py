@@ -67,5 +67,5 @@ class TestBlueGreenHostsFilter(unittest.TestCase):
         host = "foo.com"
 
         self.assertEqual(
-            blue_green_hosts(host), ["previous.foo.com", "foo.com", "next.foo.com"]
+            blue_green_hosts(host), "previous.foo.com,foo.com,next.foo.com"
         )
