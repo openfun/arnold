@@ -26,9 +26,27 @@ spec:
   strategy:
     type: Docker
   source:
+    {% if edxapp_theme_url is defined and edxapp_theme_url -%}
+    git:
+      uri: "{{ edxapp_theme_url }}"
+      ref: "{{ edxapp_theme_tag | default("master") }}"
+    {% if edxapp_theme_is_private -%}
+    sourceSecret:
+      name: "{{ edxapp_theme_git_private_key_secret_name }}"
+    {% endif -%}
+    {% endif -%}
     dockerfile: |-
       FROM {{ edxapp_image_name }}:{{ edxapp_image_tag }}
-      # Add new statements here
+      USER 0
+      {% if edxapp_theme_url is defined and edxapp_theme_url -%}
+      RUN apt-get update && \
+        apt-get install -y \
+        npm && \
+        rm -rf /var/lib/apt/lists/*
+      COPY . /edx/app/edxapp/edx-platform/themes/custom-theme
+      RUN NO_PREREQ_INSTALL=1 paver update_assets --settings={{ edxapp_build_settings }} --skip-collect
+      {% endif -%}
+      USER 10000
   triggers:
     - type: "ConfigChange"
   output:
