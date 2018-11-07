@@ -18,11 +18,13 @@ FROM debian:stretch
 
 WORKDIR /app
 
-COPY ./requirements/apt-packages.txt /app/requirements/
-
 # hadolint ignore=DL3015,DL3008
 RUN apt-get update && \
-    xargs -a /app/requirements/apt-packages.txt apt-get install -y && \
+    apt-get install -y \
+    curl \
+    python-pip \
+    shellcheck \
+    unzip && \
     rm -rf /var/lib/apt/lists/*
 
 # Install OpenShift client
