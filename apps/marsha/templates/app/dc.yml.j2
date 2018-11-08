@@ -24,7 +24,7 @@ spec:
           # We point to a local registry image build for this "live" image (see
           # ImageStream and BuildConfig templates)
           image: "{{ internal_docker_registry }}/{{ project_name }}/marsha:{{ marsha_image_tag }}-live"
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           env:
             - name: DJANGO_SETTINGS_MODULE
               value: marsha.settings

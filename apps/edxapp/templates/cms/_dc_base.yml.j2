@@ -60,7 +60,7 @@ spec:
         # We point to a local registry image build for this "live" image (see
         # ImageStream and BuildConfig templates)
         image: "{{ internal_docker_registry }}/{{ project_name }}/edxapp-{{ service_variant }}:{{ edxapp_image_tag }}-live"
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         volumeMounts:
         - mountPath: /config
           name: edxapp-config
@@ -84,7 +84,7 @@ spec:
         # settings generation mecanism.
         - name: init-create-config
           image: "{{ edxapp_image_name }}:{{ edxapp_image_tag }}"
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           command:
             - "/bin/bash"
             - "-c"
