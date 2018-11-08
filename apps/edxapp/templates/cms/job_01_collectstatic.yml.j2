@@ -56,7 +56,7 @@ spec:
         # https://openedx.atlassian.net/browse/OPEN-2411
         - name: init-create-config
           image: "{{ edxapp_image_name }}:{{ edxapp_image_tag }}"
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           command:
             - "/bin/bash"
             - "-c"

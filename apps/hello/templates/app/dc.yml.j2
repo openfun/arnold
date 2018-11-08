@@ -7,7 +7,7 @@ metadata:
   name: "hello-app-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
-  replicas: 1  # number of pods we want
+  replicas: 1 # number of pods we want
   template:
     metadata:
       labels:
@@ -16,26 +16,26 @@ spec:
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:
-      - name: hello-openshift
-        image: openshift/hello-openshift
-        ports:
-        - containerPort: 8080
-          protocol: TCP
-        env:
-          - name: RESPONSE
-            value: "{{ hello_app_msg }} - {{ deployment_stamp }}"
-        resources: {}
-        volumeMounts:
-        - name: tmp
-          mountPath: "/tmp"
-        terminationMessagePath: "/dev/termination-log"
-        imagePullPolicy: IfNotPresent
-        capabilities: {}
-        securityContext:
+        - name: hello-openshift
+          image: openshift/hello-openshift
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env:
+            - name: RESPONSE
+              value: "{{ hello_app_msg }} - {{ deployment_stamp }}"
+          resources: {}
+          volumeMounts:
+            - name: tmp
+              mountPath: "/tmp"
+          terminationMessagePath: "/dev/termination-log"
+          imagePullPolicy: Always
           capabilities: {}
-          privileged: false
+          securityContext:
+            capabilities: {}
+            privileged: false
       volumes:
-      - name: tmp
-        emptyDir: {}
+        - name: tmp
+          emptyDir: {}
       restartPolicy: Always
       dnsPolicy: ClusterFirst

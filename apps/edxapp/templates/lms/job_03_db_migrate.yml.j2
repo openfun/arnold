@@ -21,22 +21,22 @@ spec:
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:
-      - name: edxapp-lms-dbmigrate-{{ job_stamp }}
-        # We point to a local registry image build for this "live" image (see
-        # ImageStream and BuildConfig templates)
-        image: "{{ internal_docker_registry }}/{{ project_name }}/edxapp-lms:{{ edxapp_image_tag }}-live"
-        env:
-          - name: DJANGO_SETTINGS_MODULE
-            value: lms.envs.fun.docker_run
-        command:
-          - "/bin/bash"
-          - "-c"
-          - DJANGO_SETTINGS_MODULE=lms.envs.fun.docker_run python manage.py lms migrate
-        volumeMounts:
-        - mountPath: /config
-          name: edxapp-config
-        - mountPath: /edx/var/edxapp/media
-          name: edxapp-v-media
+        - name: edxapp-lms-dbmigrate-{{ job_stamp }}
+          # We point to a local registry image build for this "live" image (see
+          # ImageStream and BuildConfig templates)
+          image: "{{ internal_docker_registry }}/{{ project_name }}/edxapp-lms:{{ edxapp_image_tag }}-live"
+          env:
+            - name: DJANGO_SETTINGS_MODULE
+              value: lms.envs.fun.docker_run
+          command:
+            - "/bin/bash"
+            - "-c"
+            - DJANGO_SETTINGS_MODULE=lms.envs.fun.docker_run python manage.py lms migrate
+          volumeMounts:
+            - mountPath: /config
+              name: edxapp-config
+            - mountPath: /edx/var/edxapp/media
+              name: edxapp-v-media
       initContainers:
         # This initContainer has nothing mounted on its "/config" directory. We
         # copy the content of its "/config" directory (fun-platform default
@@ -51,7 +51,7 @@ spec:
         # settings generation mecanism.
         - name: init-create-config
           image: "{{ edxapp_image_name }}:{{ edxapp_image_tag }}"
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           command:
             - "/bin/bash"
             - "-c"
@@ -66,16 +66,16 @@ spec:
             - mountPath: /tmp/secret
               name: edxapp-secret
       volumes:
-      - name: edxapp-configmap-lms
-        configMap:
-          defaultMode: 420
-          name: edxapp-lms-{{ deployment_stamp }}
-      - name: edxapp-config
-        emptyDir: {}  # volume that lives as long as the pod lives
-      - name: edxapp-secret
-        secret:
-          secretName: "{{ edxapp_secret_name }}"
-      - name: edxapp-v-media
-        persistentVolumeClaim:
-          claimName: edxapp-pvc-media
+        - name: edxapp-configmap-lms
+          configMap:
+            defaultMode: 420
+            name: edxapp-lms-{{ deployment_stamp }}
+        - name: edxapp-config
+          emptyDir: {} # volume that lives as long as the pod lives
+        - name: edxapp-secret
+          secret:
+            secretName: "{{ edxapp_secret_name }}"
+        - name: edxapp-v-media
+          persistentVolumeClaim:
+            claimName: edxapp-pvc-media
       restartPolicy: Never
