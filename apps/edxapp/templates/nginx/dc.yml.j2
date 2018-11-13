@@ -20,28 +20,38 @@ spec:
         deploymentconfig: "edxapp-nginx-{{ deployment_stamp }}"
     spec:
       containers:
-      - image: "{{ edxapp_nginx_image_name }}:{{ edxapp_nginx_image_tag }}"
-        name: nginx
-        ports:
-        - containerPort: 80
-          protocol: TCP
-        volumeMounts:
-        - mountPath: /etc/nginx/conf.d
-          name: edxapp-v-nginx
-          readOnly: true
-        - mountPath: /data/media
-          name: edxapp-v-media
-          readOnly: true
-        - mountPath: /data/static
-          name: edxapp-v-static
-          readOnly: true
+        - image: "{{ edxapp_nginx_image_name }}:{{ edxapp_nginx_image_tag }}"
+          name: nginx
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /etc/nginx/conf.d
+              name: edxapp-v-nginx
+              readOnly: true
+            - mountPath: /data/media
+              name: edxapp-v-media
+              readOnly: true
+            - mountPath: /data/static
+              name: edxapp-v-static
+              readOnly: true
+            {% if activate_http_basic_auth -%}
+            - mountPath: "{{ http_basic_auth_user_file | dirname }}"
+              name: edxapp-htpasswd
+            {% endif %}
+
       volumes:
-      - name: edxapp-v-nginx
-        configMap:
-          name: "edxapp-nginx-{{ deployment_stamp }}"
-      - name: edxapp-v-static
-        persistentVolumeClaim:
-          claimName: edxapp-pvc-static
-      - name: edxapp-v-media
-        persistentVolumeClaim:
-          claimName: edxapp-pvc-media
+        - name: edxapp-v-nginx
+          configMap:
+            name: "edxapp-nginx-{{ deployment_stamp }}"
+        - name: edxapp-v-static
+          persistentVolumeClaim:
+            claimName: edxapp-pvc-static
+        - name: edxapp-v-media
+          persistentVolumeClaim:
+            claimName: edxapp-pvc-media
+        {% if activate_http_basic_auth -%}
+        - name: edxapp-htpasswd
+          secret:
+            secretName: "{{ edxapp_nginx_htpasswd_secret_name }}"
+        {% endif %}

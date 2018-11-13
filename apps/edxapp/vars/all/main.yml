@@ -57,6 +57,7 @@ edxapp_nginx_image_name: "fundocker/openshift-nginx"
 edxapp_nginx_image_tag: "1.13"
 edxapp_nginx_cms_port: 8081
 edxapp_nginx_lms_port: 8071
+edxapp_nginx_htpasswd_secret_name: "edxapp-htpasswd"
 
 # -- celery/redis
 edxapp_celery_lms_high_priority_queue: "edx.lms.core.high"
