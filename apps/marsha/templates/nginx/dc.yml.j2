@@ -20,28 +20,38 @@ spec:
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:
-      - image: "{{ marsha_nginx_image_name }}:{{ marsha_nginx_image_tag }}"
-        name: nginx
-        ports:
-        - containerPort: 80
-          protocol: TCP
-        volumeMounts:
-        - mountPath: /etc/nginx/conf.d
-          name: marsha-v-nginx
-          readOnly: true
-        - mountPath: /data/media/marsha
-          name: marsha-v-media
-          readOnly: true
-        - mountPath: /data/static/marsha
-          name: marsha-v-static
-          readOnly: true
+        - image: "{{ marsha_nginx_image_name }}:{{ marsha_nginx_image_tag }}"
+          name: nginx
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /etc/nginx/conf.d
+              name: marsha-v-nginx
+              readOnly: true
+            - mountPath: /data/media/marsha
+              name: marsha-v-media
+              readOnly: true
+            - mountPath: /data/static/marsha
+              name: marsha-v-static
+              readOnly: true
+            {% if activate_http_basic_auth -%}
+            - mountPath: "{{ http_basic_auth_user_file | dirname }}"
+              name: marsha-htpasswd
+            {% endif %}
+
       volumes:
-      - name: marsha-v-nginx
-        configMap:
-          name: marsha-nginx-{{ deployment_stamp }}
-      - name: marsha-v-media
-        persistentVolumeClaim:
-          claimName: marsha-pvc-media
-      - name: marsha-v-static
-        persistentVolumeClaim:
-          claimName: marsha-pvc-static
+        - name: marsha-v-nginx
+          configMap:
+            name: marsha-nginx-{{ deployment_stamp }}
+        - name: marsha-v-media
+          persistentVolumeClaim:
+            claimName: marsha-pvc-media
+        - name: marsha-v-static
+          persistentVolumeClaim:
+            claimName: marsha-pvc-static
+        {% if activate_http_basic_auth -%}
+        - name: marsha-htpasswd
+          secret:
+            secretName: "{{ marsha_nginx_htpasswd_secret_name }}"
+        {% endif %}
