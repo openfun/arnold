@@ -20,28 +20,38 @@ spec:
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:
-      - image: "{{ richie_nginx_image_name }}:{{ richie_nginx_image_tag }}"
-        name: nginx
-        ports:
-        - containerPort: 80
-          protocol: TCP
-        volumeMounts:
-        - mountPath: /etc/nginx/conf.d
-          name: richie-v-nginx
-          readOnly: true
-        - mountPath: /data/media/richie
-          name: richie-v-media
-          readOnly: true
-        - mountPath: /data/static/richie
-          name: richie-v-static
-          readOnly: true
+        - image: "{{ richie_nginx_image_name }}:{{ richie_nginx_image_tag }}"
+          name: nginx
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /etc/nginx/conf.d
+              name: richie-v-nginx
+              readOnly: true
+            - mountPath: /data/media/richie
+              name: richie-v-media
+              readOnly: true
+            - mountPath: /data/static/richie
+              name: richie-v-static
+              readOnly: true
+            {% if activate_http_basic_auth -%}
+            - mountPath: "{{ http_basic_auth_user_file | dirname }}"
+              name: richie-htpasswd
+            {% endif %}
+
       volumes:
-      - name: richie-v-nginx
-        configMap:
-          name: richie-nginx-{{ deployment_stamp }}
-      - name: richie-v-media
-        persistentVolumeClaim:
-          claimName: richie-pvc-media
-      - name: richie-v-static
-        persistentVolumeClaim:
-          claimName: richie-pvc-static
+        - name: richie-v-nginx
+          configMap:
+            name: richie-nginx-{{ deployment_stamp }}
+        - name: richie-v-media
+          persistentVolumeClaim:
+            claimName: richie-pvc-media
+        - name: richie-v-static
+          persistentVolumeClaim:
+            claimName: richie-pvc-static
+        {% if activate_http_basic_auth -%}
+        - name: richie-htpasswd
+          secret:
+            secretName: "{{ richie_nginx_htpasswd_secret_name }}"
+        {% endif %}
