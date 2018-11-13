@@ -4,6 +4,7 @@ ansible-lint==3.4.22
 deepmerge==0.0.4
 jmespath==0.9.3
 openshift==0.4.4
+passlib==1.7.1
 
 # Quality
 flake8

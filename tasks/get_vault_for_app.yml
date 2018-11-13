@@ -3,7 +3,7 @@
 # group_vars for an environent and a customer.
 - name: Get expected vault file for application
   stat:
-    path: "group_vars/customer/{{ customer }}/{{ env_type }}/secrets/{{ app.name }}.vault.yml"
+    path: "{{ vault_path }}/{{ app.name }}.vault.yml"
   register: app_vault
 
 # If the vault exists for this app, store its checksum (sha1).
@@ -18,4 +18,23 @@
   set_fact:
     "{{ app.name }}_vault": "{{ app_vault }}"
     "{{ app.name }}_vault_checksum": "{{ app_vault_checksum }}"
+  # Only set those variables when the vault file exists and is a regular file
   when: app_vault.stat.exists and app_vault.stat.isreg
+
+- name: Set htpasswd target file name for app
+  set_fact:
+    app_htpasswd_file_path: "{{ vault_path }}/htpasswd/{{ app.name }}/{{ http_basic_auth_user_file | basename }}"
+  tags: htpasswd
+
+- name: Test htpasswd target file for app
+  stat:
+    path: "{{ app_htpasswd_file_path }}"
+  register: app_htpasswd_file
+  tags: htpasswd
+
+- name: Set application htpasswd variable
+  set_fact:
+    "{{ app.name }}_htpasswd": "{{ app_htpasswd_file.stat.path }}"
+  # Only set this variable when the htpasswd file exists and is a regular file
+  when: activate_http_basic_auth and app_htpasswd_file.stat.exists and app_htpasswd_file.stat.isreg
+  tags: htpasswd

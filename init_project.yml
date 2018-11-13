@@ -1,6 +1,6 @@
----
-
 - import_playbook: create_project.yml
+- import_playbook: create_htpasswds.yml
+  when: activate_http_basic_auth
 - import_playbook: create_secrets.yml
 - import_playbook: create_acme.yml
 
@@ -13,7 +13,6 @@
       tags: deploy
 
     - import_tasks: tasks/set_vars.yml
-
 
     - import_tasks: tasks/create_route_aliases.yml
 

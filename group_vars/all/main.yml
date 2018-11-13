@@ -67,6 +67,19 @@ acme_env: staging
 # "true"
 has_acme_cluster_role: false
 
+# Expected vault path
+vault_path: "group_vars/customer/{{ customer }}/{{ env_type }}/secrets"
+
+# Protect public services behind HTTP basic authentication
+activate_http_basic_auth: false
+# The message that will be displayed by the client browser
+http_basic_auth_message: "Restricted Area"
+# htpasswd absolute or relative path (relative to nginx configuration)
+http_basic_auth_user_file: "/etc/nginx/conf/htpasswd"
+http_basic_auth_users:
+  - "admin"
+  - "{{ customer }}-admin"
+
 # TODO: move the following settings to the redirect app
 # Ports
 aliases_port: 8999
