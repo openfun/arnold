@@ -7,6 +7,7 @@ marsha_host: "marsha.{{ project_name}}.{{ domain_name }}"
 marsha_nginx_image_name: "fundocker/openshift-nginx"
 marsha_nginx_image_tag: "1.13"
 marsha_nginx_port: 8061
+marsha_nginx_htpasswd_secret_name: "marsha-htpasswd"
 
 # -- postgresql
 marsha_postgresql_image_name: "centos/postgresql-96-centos7"
