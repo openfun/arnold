@@ -1,0 +1,43 @@
+---
+# Create vault for an app
+
+- name: Print app name
+  debug: msg="App name {{ app.name }}"
+  tags: vault
+
+- name: Retrieve database vault file
+  stat:
+    path: "group_vars/customer/{{ customer }}/{{ env_type }}/secrets/databases.vault.yml"
+  register: databases_vault
+
+- name: Check if databases vault exists
+  fail:
+    msg: "database vault does not exists"
+  when: databases_vault.stat.exists == False
+
+- name: Import databases variable
+  include_vars:
+    file: "{{ databases_vault.stat.path }}"
+
+- name: Set vault destination path variable
+  set_fact:
+    vault_destination_path: "group_vars/customer/{{ customer }}/{{ env_type }}/secrets/{{ app.name }}.vault.yml"
+
+- name: Retrieve template file
+  stat:
+    path: "apps/{{ app.name }}/vars/vault/main.yml.j2"
+  register: vault_template
+  no_log: true
+
+- name: Check if template file exists
+  fail:
+    msg: "file {{ vault_template.stat.path }} does not exists"
+  when: vault_template.stat.exists == False
+
+- name: Create application vault
+  template:
+    src: "{{ vault_template.stat.path }}"
+    dest: "{{ vault_destination_path }}"
+
+- name: Encrypt newly created vault file
+  command: ansible-vault encrypt {{ vault_destination_path }}
