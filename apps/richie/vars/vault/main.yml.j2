@@ -1,0 +1,12 @@
+# customer: {{ customer }}
+# env_type: {{ env_type }}
+
+# postgresql
+{% set postgresql_credentials = databases.postgresql | json_query("[?release=='" ~ richie_postgresql_version ~ "'].databases | [0][?application=='richie'].{user: user, password: password} | [0]") %}
+
+POSTGRESQL_USER: {{ postgresql_credentials.user }}
+POSTGRESQL_PASSWORD: {{ postgresql_credentials.password }}
+
+# richie
+DJANGO_SECRET_KEY: {{ lookup('password', '/dev/null length=30') }}
+# DJANGO_SENTRY_DSN: https://super:richie@sentry.io/foo
