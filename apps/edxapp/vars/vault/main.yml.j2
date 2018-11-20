@@ -1,0 +1,37 @@
+# secret: edxapp
+# customer: {{ customer }}
+# env_type: {{ env_type }}
+
+# Mysql
+{% set mysql_credentials = databases.mysql | json_query("[?release=='" ~ edxapp_mysql_version ~ "'].databases | [0][?application=='edxapp'].{user: user, password: password, name: name} | [0]") %}
+MYSQL_ROOT_PASSWORD: ""
+MYSQL_ALLOW_EMPTY_PASSWORD: yes
+MYSQL_DATABASE: {{ mysql_credentials.name }}
+MYSQL_USER: {{ mysql_credentials.user }}
+MYSQL_PASSWORD: {{ mysql_credentials.password }}
+
+# MongoDB
+{% set mongodb_credentials = databases.mongodb | json_query("[?release=='" ~ edxapp_mongodb_version ~ "'].databases | [0][?application=='edxapp'].{user: user, password: password, name: name} | [0]") %}
+MONGODB_ADMIN_PASSWORD: password
+MONGODB_USER: {{ mongodb_credentials.user }}
+MONGODB_PASSWORD: {{ mongodb_credentials.password }}
+MONGODB_DATABASE: {{ mongodb_credentials.name }}
+
+# Celery broker (redis)
+CELERY_BROKER_USER: ""
+CELERY_BROKER_PASSWORD: ""
+
+{% raw %}
+# secrets.yml that will be mounted to every pod running edxapp
+SECRETS_FILE:
+  CELERY_BROKER_USER: "{{ CELERY_BROKER_USER }}"
+  CELERY_BROKER_PASSWORD: "{{ CELERY_BROKER_PASSWORD }}"
+  # FIXME: this COMMENTS_SERVICE_KEY should match the "forum" service API_KEY
+  COMMENTS_SERVICE_KEY: "thisisafakeapikey"
+  DATABASE_NAME: "{{ MYSQL_DATABASE }}"
+  DATABASE_USER: "{{ MYSQL_USER }}"
+  DATABASE_PASSWORD: "{{ MYSQL_PASSWORD }}"
+  MONGODB_NAME: "{{ MONGODB_DATABASE }}"
+  MONGODB_USER: "{{ MONGODB_USER }}"
+  MONGODB_PASSWORD: "{{ MONGODB_PASSWORD }}"
+{% endraw %}
