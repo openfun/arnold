@@ -12,6 +12,8 @@ metadata:
     deployment_stamp: "{{ deployment_stamp }}"
     route_prefix: "{{ prefix }}"
     route_target_service: "app"
+  annotations:
+    kubernetes.io/tls-acme: "true"
 spec:
   host: "{{ forum_host | blue_green_host(prefix) }}"
   tls:
