@@ -1,0 +1,15 @@
+# secret: forum
+# customer: {{ customer }}
+# env_type: {{ env_type }}
+
+# MongoDB
+{% set mongodb_credentials = databases.mongodb | json_query("[?release=='" ~ forum_mongodb_version ~ "'].databases | [0][?application=='forum'].{user: user, password: password, name: name} | [0]") %}
+MONGODB_ADMIN_PASSWORD: password
+MONGODB_USER: {{ mongodb_credentials.user }}
+MONGODB_PASSWORD: {{ mongodb_credentials. password }}
+MONGODB_DATABASE: {{ mongodb_credentials.name }}
+
+# Forum
+# Nota bene: the forum API_KEY should match the following edxapp lms settings:
+# COMMENTS_SERVICE_KEY
+API_KEY: "thisisafakeapikey"
