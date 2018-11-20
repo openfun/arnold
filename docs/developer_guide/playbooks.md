@@ -230,3 +230,18 @@ $ docker run --rm -it \
     ansible-playbook create_object.yml -e "customer=eugene env_type=staging" \
         -e "object_template=templates/openshift/edxapp/job/import_demo_course.yml.j2"
 ```
+
+## `create_vaults.yml`
+
+This playbook will be used to create the vault files needed by an application. It will read the databases vault
+and creates the vault application based on its template (`app/{app.name}/vars/vault/main.yml.j2`).
+
+Note that this playbook requires the databases.vault.yml vault as input to generate applications vaults. We expect this vault to be in `groups_vars/customers/{{ customer }}/{{ env_type }}/secrets/databases.vault.yml`.
+
+### Usage
+
+You don't need to be connected to an OpenShift instance to run this playbook.
+
+```bash
+$ bin/run ansible-playbook create_vaults.yml --ask-vault-pass
+```
