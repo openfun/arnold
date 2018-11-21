@@ -8,6 +8,9 @@
   vars:
     load_fixtures_template: "apps/edxapp/job/load_fixtures.yml.j2"
 
+  pre_tasks:
+    - import_tasks: tasks/validate_customer_name.yml
+
   tasks:
 
     - import_tasks: tasks/set_vars.yml

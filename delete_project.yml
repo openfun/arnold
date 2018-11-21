@@ -5,6 +5,9 @@
 - hosts: local
   gather_facts: False
 
+  pre_tasks:
+    - import_tasks: tasks/validate_customer_name.yml
+
   tasks:
     - name: Display playbook name
       debug: msg="==== Starting delete_project playbook ===="
