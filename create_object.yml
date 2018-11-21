@@ -16,6 +16,9 @@
   vars:
     object_template: ""
 
+  pre_tasks:
+    - import_tasks: tasks/validate_customer_name.yml
+
   tasks:
     - name: Display playbook name
       debug: msg="==== Starting create_object playbook ===="

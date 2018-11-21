@@ -1,0 +1,4 @@
+- name: Check that customer name is maximum 6 characters long
+  fail:
+    msg: "Customer name length can not be higher than 6 characters. Current length is {{ customer | length }}."
+  when: customer | length > 6

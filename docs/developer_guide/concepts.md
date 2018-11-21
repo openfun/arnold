@@ -36,8 +36,11 @@ where:
 
 * `environment`: the name of the environment (development, feature, staging,
   preprod or production)
-* `customer`: the one-word name of the customer site (fun, campus, corporate,
-  ademe, etc.)
+* `customer`: the one-word name of the customer site (_e.g._ `ucsd`, `hvrd`,
+  `uca`). We enforce this name to at most 6 characters, because it is used in a
+  strict database user & name pattern that must also include the environment and
+  targeted application name within 16 characters (yes MySQL we are looking at
+  you 😉).
 * `application`: the one-word name of the application (lms, cms, etc.)
 * `feature_title`: the slugified title of the feature. Only applicable when the
   `environment` is equal to `feature`.
