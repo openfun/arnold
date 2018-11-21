@@ -12,5 +12,5 @@ isort
 pylint
 
 # Tests
-pytest
+pytest<4
 pytest-coverage
