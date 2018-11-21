@@ -151,7 +151,7 @@ password**. The default value for this demo is: `arnold`.
 $ bin/bootstrap
 ```
 
-Tadaaa! Arnold has created a new OpenShift project called `patient0-development`
+Tadaaa! Arnold has created a new OpenShift project called `eugene-development`
 with a collection of services up and running.
 
 When `edxapp`'s first deployment has completed successfully, we invite you to

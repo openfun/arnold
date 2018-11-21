@@ -18,7 +18,7 @@ path="${3:-"/"}"
 # Wait for the application to respond
 for try in $(seq 5); do
   echo "Testing ${service} application http response ($try)"
-  curl -vLk --header "Accept: text/html" "https://next.${service}.ci-patient0.${OPENSHIFT_DOMAIN}.nip.io${path}" 2> "/tmp/${service}.err" > "/tmp/${service}.out"
+  curl -vLk --header "Accept: text/html" "https://next.${service}.ci-eugene.${OPENSHIFT_DOMAIN}.nip.io${path}" 2> "/tmp/${service}.err" > "/tmp/${service}.out"
   if grep "HTTP/1.1 200 OK" "/tmp/${service}.err" && grep "${content}" "/tmp/${service}.out"; then
     exit 0
   fi

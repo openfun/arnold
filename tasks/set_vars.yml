@@ -25,11 +25,11 @@
 # `apps` with `available_apps` definitions. This is useful to had metadata to
 # services that cannot be guessed while scanning the `apps` directory.
 #
-# Example: let's say that for your patient0 customer, you have defined a
+# Example: let's say that for your eugene customer, you have defined a
 # particular "host" for the "postgresql" service of the "richie" application,
 # e.g.:
 #
-#     # group_vars/customer/patient0.yml
+#     # group_vars/customer/eugene.yml
 #     apps:
 #       - name: "richie"
 #         services:

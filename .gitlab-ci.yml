@@ -68,7 +68,7 @@ deploy:patient-zero:production:
         -e K8S_AUTH_API_KEY
         -e INSECURE_SKIP_TLS_VERIFY=1
         ${ARNOLD_IMAGE}
-        ansible-playbook deploy.yml -e "customer=patient0 env_type=production"
+        ansible-playbook deploy.yml -e "customer=eugene env_type=production"
   dependencies:
     - build:image
     - test:image

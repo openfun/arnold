@@ -16,7 +16,7 @@ being versioned in Arnold's repository (see usage in the next sections). In
 plain text, the `credentials.vault.yml` file looks like:
 
 ```yaml
-# customer: patient0
+# customer: eugene
 # env_type: staging
 
 # centos/postgresql-96-centos7 image environment
