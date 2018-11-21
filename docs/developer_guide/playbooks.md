@@ -9,32 +9,32 @@ order they are supposed to be used.
 > override Ansible variables definition (_e.g._ `ansible-playbook my_playbook.yml -e "my_var=my_value"` to define `my_var` with the `my_value`
 > value in executed playbook). Hence, every time you see the `-e` option for a
 > playbook invocation, it means that we will override default values. You must
-> know that default values for `customer` and `env_type` are `patient0` and
-> `development` respectively. **In all cases, the `-e "customer=foo env_type=bar"` option is not required if you want to work with `patient0` in
+> know that default values for `customer` and `env_type` are `eugene` and
+> `development` respectively. **In all cases, the `-e "customer=foo env_type=bar"` option is not required if you want to work with `eugene` in
 > `development`**.
 
 ## `delete_project.yml`
 
 This playbook deletes a project with all OpenShift objects for a customer
-(default: `patient0`) in a particular environment (default: `development`).
+(default: `eugene`) in a particular environment (default: `development`).
 
 ### Usage
 
 ```bash
 # development
-$ bin/ansible-playbook delete_project.yml -e "customer=patient0 env_type=staging"
+$ bin/ansible-playbook delete_project.yml -e "customer=eugene env_type=staging"
 
 # native command for production
 $ docker run --rm -it \
     --env-file env.d/production \
     arnold \
-    ansible-playbook delete_project.yml -e "customer=patient0 env_type=staging"
+    ansible-playbook delete_project.yml -e "customer=eugene env_type=staging"
 ```
 
 ## `bootstrap.yml`
 
 This playbook is a "meta" playbook that creates a new project with all required
-OpenShift objects for a customer (default: `patient0`) in a particular
+OpenShift objects for a customer (default: `eugene`) in a particular
 environment (default: `development`).
 It executes sequentially the following playbooks:
 
@@ -49,19 +49,19 @@ It executes sequentially the following playbooks:
 $ bin/bootstrap
 
 # development
-$ bin/ansible-playbook bootstrap.yml -e "customer=patient0 env_type=staging"
+$ bin/ansible-playbook bootstrap.yml -e "customer=eugene env_type=staging"
 
 # native command for production
 $ docker run --rm -it \
     --env-file env.d/production \
     arnold \
-    ansible-playbook bootstrap.yml -e "customer=patient0 env_type=staging"
+    ansible-playbook bootstrap.yml -e "customer=eugene env_type=staging"
 ```
 
 ## `init_project.yml`
 
 This playbook is a "meta" playbook that creates a new project with all required
-OpenShift objects for a customer (default: `patient0`) in a particular
+OpenShift objects for a customer (default: `eugene`) in a particular
 environment (default: `development`).
 It executes sequentially the following playbooks:
 
@@ -76,13 +76,13 @@ It executes sequentially the following playbooks:
 $ bin/init
 
 # development
-$ bin/ansible-playbook init_project.yml -e "customer=patient0 env_type=staging"
+$ bin/ansible-playbook init_project.yml -e "customer=eugene env_type=staging"
 
 # native command for production
 $ docker run --rm -it \
     --env-file env.d/production \
     arnold \
-    ansible-playbook init_project.yml -e "customer=patient0 env_type=staging"
+    ansible-playbook init_project.yml -e "customer=eugene env_type=staging"
 ```
 
 ## `deploy.yml`
@@ -95,13 +95,13 @@ to initiate a blue/green deployment strategy.
 
 ```bash
 # development
-$ bin/ansible-playbook deploy.yml -e "customer=patient0 env_type=staging"
+$ bin/ansible-playbook deploy.yml -e "customer=eugene env_type=staging"
 
 # native command for production
 $ docker run --rm -it \
     --env-file env.d/production \
     arnold \
-    ansible-playbook deploy.yml -e "customer=patient0 env_type=staging"
+    ansible-playbook deploy.yml -e "customer=eugene env_type=staging"
 ```
 
 ## `switch.yml`
@@ -115,16 +115,16 @@ The `switch.yml` playbook moves:
 
 ```bash
 # sugar development
-$ bin/switch -e "customer=patient0 env_type=staging"
+$ bin/switch -e "customer=eugene env_type=staging"
 
 # development
-$ bin/ansible-playbook switch.yml -e "customer=patient0 env_type=staging"
+$ bin/ansible-playbook switch.yml -e "customer=eugene env_type=staging"
 
 # native command for production
 $ docker run --rm -it \
     --env-file env.d/production \
     arnold \
-    ansible-playbook switch.yml -e "customer=patient0 env_type=staging"
+    ansible-playbook switch.yml -e "customer=eugene env_type=staging"
 ```
 
 ## `create_project.yml`
@@ -136,13 +136,13 @@ following pattern: `{{ env_type }}-{{ customer }}`
 
 ```bash
 # development
-$ bin/ansible-playbook create_project.yml -e "customer=patient0 env_type=staging"
+$ bin/ansible-playbook create_project.yml -e "customer=eugene env_type=staging"
 
 # native command for production
 $ docker run --rm -it \
     --env-file env.d/production \
     arnold \
-    ansible-playbook create_project.yml -e "customer=patient0 env_type=staging"
+    ansible-playbook create_project.yml -e "customer=eugene env_type=staging"
 ```
 
 ## `create_secrets.yml`
@@ -157,13 +157,13 @@ that Ansible can decrypt vaulted credentials and push secrets to OpenShift.
 
 ```bash
 # development
-$ bin/ansible-playbook create_secrets.yml --ask-vault-pass -e "customer=patient0 env_type=staging"
+$ bin/ansible-playbook create_secrets.yml --ask-vault-pass -e "customer=eugene env_type=staging"
 
 # native command for production
 $ docker run --rm -it \
     --env-file env.d/production \
     arnold \
-    ansible-playbook create_secrets.yml --ask-vault-pass -e "customer=patient0 env_type=staging"
+    ansible-playbook create_secrets.yml --ask-vault-pass -e "customer=eugene env_type=staging"
 ```
 
 ## `create_acme.yml`
@@ -177,13 +177,13 @@ automatically renewed by the service running to OpenShift.
 
 ```bash
 # development
-$ bin/ansible-playbook create_acme.yml -e "customer=patient0 env_type=staging"
+$ bin/ansible-playbook create_acme.yml -e "customer=eugene env_type=staging"
 
 # native command for production
 $ docker run --rm -it \
     --env-file env.d/production \
     arnold \
-    ansible-playbook create_acme.yml -e "customer=patient0 env_type=staging"
+    ansible-playbook create_acme.yml -e "customer=eugene env_type=staging"
 ```
 
 ## `create_object.yml`
@@ -195,13 +195,13 @@ object we are working on.
 
 ```bash
 # development
-$ bin/ansible-playbook create_object.yml -e "customer=patient0 env_type=staging" \
+$ bin/ansible-playbook create_object.yml -e "customer=eugene env_type=staging" \
         -e "object_template=templates/openshift/edxapp/job/import_demo_course.yml.j2"
 
 # native command for production
 $ docker run --rm -it \
     --env-file env.d/production \
     arnold \
-    ansible-playbook create_object.yml -e "customer=patient0 env_type=staging" \
+    ansible-playbook create_object.yml -e "customer=eugene env_type=staging" \
         -e "object_template=templates/openshift/edxapp/job/import_demo_course.yml.j2"
 ```

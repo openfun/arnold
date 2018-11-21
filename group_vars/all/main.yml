@@ -1,6 +1,6 @@
 ---
 env_type: development  # default to be overriden on command line
-customer: patient0  # default to be overriden on command line
+customer: eugene  # default to be overriden on command line
 project_name: "{{ env_type }}-{{ customer }}"
 
 # Openshift applications list for the project

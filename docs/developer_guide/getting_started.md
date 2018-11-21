@@ -16,7 +16,7 @@ particular environment with a new helper:
 $ bin/bootstrap
 ```
 
-Tadaaa! Arnold has created a new OpenShift project called `patient0-development`
+Tadaaa! Arnold has created a new OpenShift project called `eugene-development`
 with a collection of services up and running. You can change the customer /
 environment to deploy by overriding default environment variables:
 
@@ -53,11 +53,11 @@ $ docker run --rm -it \
     --env-file env.d/production \
     --env K8S_AUTH_API_KEY=$(oc whoami -t) \
     arnold \
-    ansible-playbook bootstrap.yml -e "env_type=production customer=patient0"
+    ansible-playbook bootstrap.yml -e "env_type=production customer=eugene"
 ```
 
 This command will run the `bootstrap.yml` Ansible playbook with the
-`-e "env_type=production customer=patient0"` argument that defines Ansible vars
+`-e "env_type=production customer=eugene"` argument that defines Ansible vars
 for this run.
 
 Another more complexe example to use `ansible-vault` follows:
@@ -69,7 +69,7 @@ $ docker run --rm -it \
     --env-file env.d/production \
     arnold \
     ansible-vault decrypt --ask-vault-pass \
-        group_vars/secret/patient0/development/edxapp/credentials.vault.yml
+        group_vars/secret/eugene/development/edxapp/credentials.vault.yml
 ```
 
 This command runs `ansible-vault` to decrypt credentials stored in a vaulted

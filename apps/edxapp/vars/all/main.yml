@@ -25,7 +25,7 @@ edxapp_theme_is_private: false
 # should allow the public key in your forge (e.g. github or gitlab) and add the
 # SSH private key to your customer/environment edxapp's vault:
 #
-# # group_vars/customer/patient0/development/secrets/edxapp.vault.yml
+# # group_vars/customer/eugene/development/secrets/edxapp.vault.yml
 #
 # EDXAPP_THEME_GIT_PRIVATE_KEY: |
 #   -----BEGIN RSA PRIVATE KEY-----

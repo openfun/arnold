@@ -26,7 +26,7 @@ function _set_namespace_for_deployment_stamp() {
     namespace=$(oc get -o jsonpath="{.items[0].metadata.namespace}" --no-headers pods -l deployment_stamp="$1")
 
     # Use bash pattern substitution (variable/pattern/string) to remove either
-    # the env_type or customer from the namespace (e.g. development-patient0)
+    # the env_type or customer from the namespace (e.g. development-eugene)
     env_type=${namespace/-*/}
     customer=${namespace/*-/}
 }
