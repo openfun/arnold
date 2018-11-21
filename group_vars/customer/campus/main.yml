@@ -1,7 +1,0 @@
-# Variables specific to the campus customer
-project_display_name: "FUN Campus ({{ env_type }})"
-project_description: "SPOC for universities ({{ env_type }})"
-
-# Images
-edxapp_image: fundocker/edxapp
-edxapp_tag: eucalyptus-funwb-1.0.0
