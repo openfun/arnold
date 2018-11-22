@@ -5,6 +5,7 @@ Merge Jinja filters
 from copy import deepcopy
 
 from ansible.errors import AnsibleFilterError
+from ansible.utils.encrypt import random_password
 
 
 # pylint: disable=invalid-name,too-many-branches
@@ -70,6 +71,61 @@ def merge_with_app(base, new):
     return result
 
 
+def merge_with_database(base, database, app_name, customer, environment):
+    """
+        Merge a database information with a database structure already existent.
+        If database already exist the new one is ignored.
+    """
+
+    if not isinstance(base, dict) or not isinstance(database, dict):
+        raise AnsibleFilterError("input database is empty")
+
+    if "engine" not in database:
+        raise AnsibleFilterError("input database should define an 'engine' key")
+
+    if "release" not in database:
+        raise AnsibleFilterError("input database should define a 'release' key")
+
+    result = deepcopy(base)
+
+    database_name = "_".join([environment[0], customer, app_name])
+    new_database = {
+        "application": app_name,
+        "password": random_password(),
+        "name": database_name,
+        "user": database_name,
+    }
+
+    engine = database.get("engine")
+
+    if engine not in result:
+        # Create a new entry for this database engine
+        result[database.get("engine")] = [
+            {"release": database.get("release"), "databases": [new_database]}
+        ]
+
+        return result
+
+    # Loop over defined engines and look for existing releases
+    for defined_engine in result[engine]:
+        if defined_engine.get("release", None) == database.get("release"):
+            # Target release already exists
+            for defined_database in defined_engine.get("databases"):
+                if defined_database.get("application") == app_name:
+                    # Target database already exist: abort
+                    break
+            else:
+                # Add a new entry for targeted database engine and release
+                defined_engine.get("databases").append(new_database)
+        else:
+            # Add a new release and database for targeted database engine
+            result[engine].append(
+                {"release": database.get("release"), "databases": [new_database]}
+            )
+
+    return result
+
+
 # pylint: disable=no-self-use,too-few-public-methods
 class FilterModule(object):
     """Filters used to deep merge python objects"""
@@ -77,4 +133,7 @@ class FilterModule(object):
     def filters(self):
         """List plugin filters"""
 
-        return {"merge_with_app": merge_with_app}
+        return {
+            "merge_with_app": merge_with_app,
+            "merge_with_database": merge_with_database,
+        }

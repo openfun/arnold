@@ -1,0 +1,39 @@
+---
+
+- hosts: local
+  gather_facts: False
+
+  tasks:
+    - name: Display playbook name
+      debug: msg="==== Starting create_databases_vault playbook ===="
+
+    - import_tasks: tasks/set_vars.yml
+
+    - name: Set databases vault destination path
+      set_fact:
+        databases_vault_path: "group_vars/customer/{{ customer }}/{{ env_type }}/secrets/databases.vault.yml"
+
+    - name: Check databases vault file
+      stat:
+        path: "{{ databases_vault_path }}"
+      register: databases_vault
+
+    - name: Import databases vault
+      include_vars:
+        file: "{{ databases_vault.stat.path }}"
+      when: databases_vault.stat.exists == True
+
+    - include_tasks: tasks/run_tasks_for_apps.yml
+      vars:
+        tasks:
+          - tasks/create_app_database_vault
+
+    - name: Save databases vault
+      template:
+        src: "templates/databases.vault.yml.j2"
+        dest: "{{ databases_vault_path }}"
+      when: databases is defined
+
+    - name: Encrypt databases vault
+      command: ansible-vault encrypt {{ databases_vault_path }}
+      when: databases is defined
