@@ -18,6 +18,7 @@ spec:
   host: "{{ marsha_host | blue_green_host(prefix) }}"
   tls:
     termination: edge
+    insecureEdgeTerminationPolicy: Redirect
   port:
     targetPort: "{{ marsha_nginx_port }}-tcp"
   to:
