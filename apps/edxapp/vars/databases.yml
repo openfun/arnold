@@ -1,0 +1,5 @@
+databases:
+  - engine: "mysql"
+    release: "5.7"
+  - engine: "mongodb"
+    release: "3.2"

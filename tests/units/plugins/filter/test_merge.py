@@ -3,10 +3,11 @@ Tests for the "merge" plugin filter
 """
 from copy import deepcopy
 
+import mock
 from ansible.compat.tests import unittest
 from ansible.errors import AnsibleFilterError
 
-from plugins.filter.merge import merge_with_app
+from plugins.filter.merge import merge_with_app, merge_with_database
 
 
 # pylint: disable=invalid-name
@@ -361,3 +362,224 @@ class TestMergeWithAppFilter(unittest.TestCase):
         }
 
         self.assertDictDeepEqual(merge_with_app(base, new), expected)
+
+
+class TestMergeWithDatabaseFilter(unittest.TestCase):
+    """Tests for the ``merge_with_database`` filter"""
+
+    @mock.patch("plugins.filter.merge.random_password", return_value="foo")
+    # pylint: disable=unused-argument
+    def test_database_merge_with_no_existing_databases(self, random_password_mock):
+        """Test when no database is already configured"""
+
+        base = {}
+        database = {"engine": "mongodb", "release": "3.2"}
+        expected = {
+            "mongodb": [
+                {
+                    "release": "3.2",
+                    "databases": [
+                        {
+                            "application": "edxapp",
+                            "name": "d_eugene_edxapp",
+                            "password": "foo",
+                            "user": "d_eugene_edxapp",
+                        }
+                    ],
+                }
+            ]
+        }
+
+        self.assertEquals(
+            merge_with_database(base, database, "edxapp", "eugene", "development"),
+            expected,
+        )
+
+    @mock.patch("plugins.filter.merge.random_password", return_value="foo")
+    # pylint: disable=unused-argument,bad-continuation
+    def test_database_merge_with_existing_databases_different(
+        self, random_password_mock
+    ):
+        """Test with databases already configured but not the same one"""
+
+        base = {
+            "postgresql": [
+                {
+                    "release": "9.6",
+                    "databases": [
+                        {
+                            "application": "edxapp",
+                            "name": "d_eugene_edxapp",
+                            "password": "foo",
+                            "user": "d_eugene_edxapp",
+                        }
+                    ],
+                }
+            ]
+        }
+        database = {"engine": "mongodb", "release": "3.2"}
+        expected = {
+            "postgresql": [
+                {
+                    "release": "9.6",
+                    "databases": [
+                        {
+                            "application": "edxapp",
+                            "name": "d_eugene_edxapp",
+                            "password": "foo",
+                            "user": "d_eugene_edxapp",
+                        }
+                    ],
+                }
+            ],
+            "mongodb": [
+                {
+                    "release": "3.2",
+                    "databases": [
+                        {
+                            "application": "edxapp",
+                            "name": "d_eugene_edxapp",
+                            "password": "foo",
+                            "user": "d_eugene_edxapp",
+                        }
+                    ],
+                }
+            ],
+        }
+
+        self.assertEquals(
+            merge_with_database(base, database, "edxapp", "eugene", "development"),
+            expected,
+        )
+
+    def test_database_merge_with_same_database_configured(self):
+        """test with same database version already configured"""
+        base = {
+            "postgresql": [
+                {
+                    "release": "9.6",
+                    "databases": [
+                        {
+                            "application": "edxapp",
+                            "name": "d_eugene_edxapp",
+                            "password": "foo",
+                            "user": "d_eugene_edxapp",
+                        }
+                    ],
+                }
+            ]
+        }
+        database = {"engine": "postgresql", "release": "9.6"}
+        expected = {
+            "postgresql": [
+                {
+                    "release": "9.6",
+                    "databases": [
+                        {
+                            "application": "edxapp",
+                            "name": "d_eugene_edxapp",
+                            "password": "foo",
+                            "user": "d_eugene_edxapp",
+                        }
+                    ],
+                }
+            ]
+        }
+
+        self.assertEquals(
+            merge_with_database(base, database, "edxapp", "eugene", "development"),
+            expected,
+        )
+
+    @mock.patch("plugins.filter.merge.random_password", return_value="foo")
+    # pylint: disable=unused-argument,bad-continuation
+    def test_database_merge_with_same_database_and_different_release(
+        self, random_password_mock
+    ):
+        """Test with an existing engine configured but not the same release"""
+
+        base = {
+            "postgresql": [
+                {
+                    "release": "9.6",
+                    "databases": [
+                        {
+                            "application": "edxapp",
+                            "name": "d_eugene_edxapp",
+                            "password": "bar",
+                            "user": "d_eugene_edxapp",
+                        }
+                    ],
+                }
+            ]
+        }
+        database = {"engine": "postgresql", "release": "10.0"}
+        expected = {
+            "postgresql": [
+                {
+                    "release": "9.6",
+                    "databases": [
+                        {
+                            "application": "edxapp",
+                            "name": "d_eugene_edxapp",
+                            "password": "bar",
+                            "user": "d_eugene_edxapp",
+                        }
+                    ],
+                },
+                {
+                    "release": "10.0",
+                    "databases": [
+                        {
+                            "application": "edxapp",
+                            "name": "d_eugene_edxapp",
+                            "password": "foo",
+                            "user": "d_eugene_edxapp",
+                        }
+                    ],
+                },
+            ]
+        }
+
+        self.assertEquals(
+            merge_with_database(base, database, "edxapp", "eugene", "development"),
+            expected,
+        )
+
+    @mock.patch("plugins.filter.merge.random_password", return_value="foo")
+    # pylint: disable=unused-argument
+    def test_database_merge_with_other_environments(self, random_password_mock):
+        """Merge database in production various environments"""
+
+        environments = (
+            # (environment, env_code) environment and its first letter as environment code
+            ("production", "p"),
+            ("staging", "s"),
+            ("development", "d"),
+            ("testing", "t"),
+            ("foo", "f"),
+        )
+
+        for environment, env_code in environments:
+            base = {}
+            database = {"engine": "postgresql", "release": "10.0"}
+            expected = {
+                "postgresql": [
+                    {
+                        "release": "10.0",
+                        "databases": [
+                            {
+                                "application": "edxapp",
+                                "name": env_code + "_eugene_edxapp",
+                                "password": "foo",
+                                "user": env_code + "_eugene_edxapp",
+                            }
+                        ],
+                    }
+                ]
+            }
+
+            self.assertEquals(
+                merge_with_database(base, database, "edxapp", "eugene", environment),
+                expected,
+            )

@@ -1,0 +1,19 @@
+---
+# create the database variable for an app
+
+- name: Get application's databases configuration file
+  stat:
+    path: "apps/{{ app.name }}/vars/databases.yml"
+  register: database_conf
+
+- name: Import application's databases configuration
+  include_vars:
+    file: "{{ database_conf.stat.path }}"
+    name: "{{app.name}}_databases"
+  when: database_conf.stat.exists == True
+
+- name: Append database to databases vault
+  set_fact:
+    databases: "{{ databases | default({}) | merge_with_database(item, app.name, customer, env_type) }}"
+  loop: "{{ lookup('vars', app.name + '_databases').databases }}"
+  when: database_conf.stat.exists == True
