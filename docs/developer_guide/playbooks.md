@@ -13,6 +13,31 @@ order they are supposed to be used.
 > `development` respectively. **In all cases, the `-e "customer=foo env_type=bar"` option is not required if you want to work with `eugene` in
 > `development`**.
 
+## `create_databases_vault.yml`
+
+This playbook will generate credentials for the databases required by active applications.
+Every application should describe its own required databases. To do so, create a `databases.yml` file in the `apps/{{ app.name }}/vars` directory with the following content:
+
+```yaml
+databases:
+  - engine: "mysql"
+    release: "5.7"
+  - engine: "mongodb"
+    release: "3.2"
+```
+
+_nota bene_: `engine` and `release` are mandatories parameters.
+
+Please note that this playbook works in "append" mode, _i.e._ existing `databases` vault will never be erased nor existing databases credentials modified. If you add a new application that requires databases, you can safely run this playbook again and new databases credentials will be configured.
+
+### Usage
+
+You don't need to be connected to your OpenShift instance to run this playbook.
+
+```bash
+$ bin/run ansible-playbook create_databases_vault.yml --ask-vault-pass
+```
+
 ## `delete_project.yml`
 
 This playbook deletes a project with all OpenShift objects for a customer
