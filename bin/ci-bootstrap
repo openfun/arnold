@@ -9,9 +9,11 @@ app="${1:-hello}"
 # Run the bootstrap.yml playbook with the ansible vault password
 # passed to stdin
 echo "arnold" | docker run --rm -i \
+  -u "$(id -u)" \
   --env-file env.d/ci \
   --env K8S_AUTH_API_KEY \
   --env K8S_AUTH_HOST \
   --env OPENSHIFT_DOMAIN \
+  -v "$HOME/.kube:/home/arnold/.kube" \
   "arnold:$(tr -d '\n' < VERSION)" \
     ansible-playbook bootstrap.yml --ask-vault-pass -e "env_type=ci" -e "apps_filter=${app}"

@@ -143,12 +143,6 @@ jobs:
       - *docker_load
       - *ci_env
       - run:
-          name: Test oc client installation
-          command: |
-            docker run --rm \
-              "${ARNOLD_IMAGE}" \
-              oc version
-      - run:
           name: Test ansible installation
           command: |
             docker run --rm \
