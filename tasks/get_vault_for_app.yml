@@ -21,10 +21,7 @@
   # Only set those variables when the vault file exists and is a regular file
   when: app_vault.stat.exists and app_vault.stat.isreg
 
-- name: Set htpasswd target file name for app
-  set_fact:
-    app_htpasswd_file_path: "{{ vault_path }}/htpasswd/{{ app.name }}/{{ http_basic_auth_user_file | basename }}"
-  tags: htpasswd
+- include_tasks: tasks/set_htpasswd_path_for_app.yml
 
 - name: Test htpasswd target file for app
   stat:
