@@ -86,6 +86,7 @@ function _docker_run() {
         --env K8S_AUTH_HOST \
         --env OPENSHIFT_DOMAIN \
         -v "$PWD:/app" \
+        -v "$HOME/.kube:/home/arnold/.kube" \
         "arnold:$(tr -d '\n' < VERSION)" \
         "${args[@]}"
 }
