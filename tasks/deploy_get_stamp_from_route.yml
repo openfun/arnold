@@ -21,7 +21,7 @@
         ] | flatten | first
       }}
   register: app_route
-  when: routes | length > 0
+  when: routes | length > 0 and app.settings.is_blue_green_compatible | default(True) == True
 
 - name: Display selected route
   debug:

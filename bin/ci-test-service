@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # usage: ci-test-service [SERVICE] [CONTENT] [PATH]
-
+set -x
 # First script argument is the application's service name. It defaults to
 # 'hello'
 service="${1:-hello}"
@@ -15,10 +15,24 @@ content="${2:-Hello OpenShift! by Arnold}"
 # Third script argument is the url path. It defaults to: "/"
 path="${3:-"/"}"
 
+# fourth script argument is the prefix used in the url. It defaults to "next"
+prefix="${4:-"next"}"
+
+# passing an empty string as prefix argument does not work, the default value (next) will
+# be assign to prefix. But we can detect how many arguments was used.
+# if exactly 4 arguments are used and prefix equals the default value then we consider that we want to use an empty string
+if [[ $# -eq 4 && "$prefix" == "next" ]]; then
+  prefix=""
+fi
+
+if [[ -n "$prefix" ]]; then
+  prefix="${prefix}."
+fi
+
 # Wait for the application to respond
 for try in $(seq 5); do
   echo "Testing ${service} application http response ($try)"
-  curl -vLk --header "Accept: text/html" "https://next.${service}.ci-eugene.${OPENSHIFT_DOMAIN}.nip.io${path}" 2> "/tmp/${service}.err" > "/tmp/${service}.out"
+  curl -vLk --header "Accept: text/html" "https://${prefix}${service}.ci-eugene.${OPENSHIFT_DOMAIN}.nip.io${path}" 2> "/tmp/${service}.err" > "/tmp/${service}.out"
   if grep "HTTP/1.1 200 OK" "/tmp/${service}.err" && grep "${content}" "/tmp/${service}.out"; then
     exit 0
   fi
