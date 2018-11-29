@@ -8,6 +8,7 @@ from __future__ import absolute_import, division, print_function
 import os
 import re
 
+import yaml
 from ansible.plugins.lookup import LookupBase
 
 # pylint: disable=invalid-name
@@ -137,6 +138,7 @@ class LookupModule(LookupBase):
 
         app_volumes_dir = "_volumes"
         service_config_dir = "_configs"
+        settings_file = "settings.yml"
         apps = []
         app = None
 
@@ -160,7 +162,7 @@ class LookupModule(LookupBase):
                 if root == os.path.join(apps_path, tail):
                     if app is not None:
                         apps.append(app)
-                    app = {"name": tail, "services": [], "vars": []}
+                    app = {"name": tail, "services": [], "vars": [], "settings": {}}
                     continue
 
                 # ./apps/foo/_volumes directory
@@ -185,6 +187,15 @@ class LookupModule(LookupBase):
                     app["services"][idx].update({"configs": configs})
                     continue
 
+                # ./apps/foo/vars/settings.yml
+                if (
+                    root == os.path.join(apps_path, app["name"], "vars")
+                    and settings_file in files
+                ):
+                    with open(os.path.join(root, settings_file), "r") as stream:
+                        app["settings"].update(yaml.load(stream))
+                        continue
+
                 # ./apps/foo/vars/all
                 #
                 # For now we only accept "all" type vars, but this can evolve soon.
@@ -202,6 +213,7 @@ class LookupModule(LookupBase):
                                     "path": os.path.join(root, file_),
                                 }
                             )
+
             apps.append(app)
 
         return apps
