@@ -5,7 +5,6 @@ metadata:
     app: redis
     service: app
     version: "{{ redis_app_image_tag }}"
-    deployment_stamp: "{{ deployment_stamp }}"
   name: redis-app
   namespace: "{{ project_name }}"
 spec:
@@ -21,7 +20,6 @@ spec:
         app: redis
         service: app
         version: "{{ redis_app_image_tag }}"
-        deployment_stamp: "{{ deployment_stamp }}"
         deploymentconfig: redis-app
     spec:
       containers:

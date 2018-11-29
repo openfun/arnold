@@ -2,18 +2,16 @@ apiVersion: v1
 kind: Route
 metadata:
   namespace: "{{ project_name }}"
-  name: "mailcatcher-{{ prefix }}"
+  name: "mailcatcher"
   labels:
     env_type: "{{ env_type }}"
     customer: "{{ customer }}"
     app: "mailcatcher"
     service: "app"
     version: "{{ mailcatcher_image_tag }}"
-    deployment_stamp: "{{ deployment_stamp }}"
-    route_prefix: "{{ prefix }}"
     route_target_service: "app"
 spec:
-  host: "{{ mailcatcher_host | blue_green_host(prefix) }}"
+  host: "{{ mailcatcher_host }}"
   tls:
     termination: edge
     insecureEdgeTerminationPolicy: Redirect

@@ -193,7 +193,7 @@ jobs:
           name: Test the "mailcatcher" application bootstrapping
           command: |
             bin/ci-bootstrap "mailcatcher"
-            bin/ci-test-service "mailcatcher" "MailCatcher"
+            bin/ci-test-service "mailcatcher" "MailCatcher" "/" ""
 
   # Test the bootstrap playbook on the "richie" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.

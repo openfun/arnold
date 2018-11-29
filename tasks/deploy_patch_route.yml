@@ -9,5 +9,17 @@
   loop: "{{ routes }}"
   loop_control:
     loop_var: route_template
-  when: routes | length > 0
+  when: routes | length > 0 and app.settings.is_blue_green_compatible | default(True) == True
+  tags: route
+
+
+- name: "Patching routes for the {{ app.name }} application"
+  openshift_raw:
+    force: true
+    definition: "{{ lookup('template', route_template) | from_yaml }}"
+    state: present
+  loop: "{{ routes }}"
+  loop_control:
+    loop_var: route_template
+  when: routes | length > 0 and app.settings.is_blue_green_compatible | default(True) == False
   tags: route
