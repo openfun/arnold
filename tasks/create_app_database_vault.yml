@@ -12,8 +12,9 @@
     name: "{{app.name}}_databases"
   when: database_conf.stat.exists == True
 
+# Select the environment matching the current env_type: environments | json_query(\"[?name=='\" ~ env_type ~ \"'] | [0]\")
 - name: Append database to databases vault
   set_fact:
-    databases: "{{ databases | default({}) | merge_with_database(item, app.name, customer, env_type) }}"
+    databases: "{{ databases | default({}) | merge_with_database(item, app.name, customer, environments | json_query(\"[?name=='\" ~ env_type ~ \"'] | [0]\")) }}"
   loop: "{{ lookup('vars', app.name + '_databases').databases }}"
   when: database_conf.stat.exists == True

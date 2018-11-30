@@ -80,15 +80,24 @@ def merge_with_database(base, database, app_name, customer, environment):
     if not isinstance(base, dict) or not isinstance(database, dict):
         raise AnsibleFilterError("input database is empty")
 
+    if not isinstance(environment, dict):
+        raise AnsibleFilterError("input environment must be a dictionnary")
+
     if "engine" not in database:
         raise AnsibleFilterError("input database should define an 'engine' key")
 
     if "release" not in database:
         raise AnsibleFilterError("input database should define a 'release' key")
 
+    if "code" not in environment:
+        raise AnsibleFilterError("environment dict should define a 'code' key")
+
+    if "name" not in environment:
+        raise AnsibleFilterError("environment dict should define a 'name' key")
+
     result = deepcopy(base)
 
-    database_name = "_".join([environment[0], customer, app_name])
+    database_name = "_".join([environment.get("code"), customer, app_name])
     new_database = {
         "application": app_name,
         "password": random_password(),
