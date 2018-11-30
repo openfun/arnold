@@ -13,6 +13,11 @@
       debug: msg="==== Starting deploy playbook ===="
       tags: deploy
 
+    - name: Check if apps_filter is defined
+      fail:
+        msg: "Deploy playbook must be used with apps_filter defined"
+      when: apps_filter is not defined
+
     - import_tasks: tasks/set_vars.yml
 
     # Set the deployment stamp value for this deployment
