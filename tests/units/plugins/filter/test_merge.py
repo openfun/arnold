@@ -391,7 +391,9 @@ class TestMergeWithDatabaseFilter(unittest.TestCase):
         }
 
         self.assertEquals(
-            merge_with_database(base, database, "edxapp", "eugene", "development"),
+            merge_with_database(
+                base, database, "edxapp", "eugene", {"name": "development", "code": "d"}
+            ),
             expected,
         )
 
@@ -448,7 +450,9 @@ class TestMergeWithDatabaseFilter(unittest.TestCase):
         }
 
         self.assertEquals(
-            merge_with_database(base, database, "edxapp", "eugene", "development"),
+            merge_with_database(
+                base, database, "edxapp", "eugene", {"name": "development", "code": "d"}
+            ),
             expected,
         )
 
@@ -487,7 +491,9 @@ class TestMergeWithDatabaseFilter(unittest.TestCase):
         }
 
         self.assertEquals(
-            merge_with_database(base, database, "edxapp", "eugene", "development"),
+            merge_with_database(
+                base, database, "edxapp", "eugene", {"name": "development", "code": "d"}
+            ),
             expected,
         )
 
@@ -542,7 +548,9 @@ class TestMergeWithDatabaseFilter(unittest.TestCase):
         }
 
         self.assertEquals(
-            merge_with_database(base, database, "edxapp", "eugene", "development"),
+            merge_with_database(
+                base, database, "edxapp", "eugene", {"name": "development", "code": "d"}
+            ),
             expected,
         )
 
@@ -556,8 +564,10 @@ class TestMergeWithDatabaseFilter(unittest.TestCase):
             ("production", "p"),
             ("staging", "s"),
             ("development", "d"),
-            ("testing", "t"),
-            ("foo", "f"),
+            ("preprod", "t"),
+            ("ci", "c"),
+            ("feature", "f"),
+            ("random", "a"),
         )
 
         for environment, env_code in environments:
@@ -580,6 +590,12 @@ class TestMergeWithDatabaseFilter(unittest.TestCase):
             }
 
             self.assertEquals(
-                merge_with_database(base, database, "edxapp", "eugene", environment),
+                merge_with_database(
+                    base,
+                    database,
+                    "edxapp",
+                    "eugene",
+                    {"name": environment, "code": env_code},
+                ),
                 expected,
             )
