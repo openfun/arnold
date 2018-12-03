@@ -26,3 +26,7 @@ marsha_django_configuration: "Development"
 marsha_secret_name: "marsha-{{ marsha_vault_checksum | default('undefined_marsha_vault_checksum') }}"
 marsha_cloudfront_private_key_secret_name: "marsha-sshkey-{{ marsha_vault_checksum | default('undefined_marsha_vault_checksum') }}"
 marsha_cloudfront_private_key_path: "/private/.ssh/aws/ssh-privatekey"
+
+# -- volumes
+marsha_media_volume_size: 2Gi
+marsha_static_volume_size: 2Gi
