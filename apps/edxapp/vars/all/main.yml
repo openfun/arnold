@@ -35,6 +35,11 @@ edxapp_theme_git_private_key_secret_name: "edxapp-theme-git-sshkey-{{ edxapp_vau
 # Settings required to build your theme
 edxapp_build_settings: "fun.docker_build_production"
 
+# -- volumes size
+edxapp_data_volume_size: 2Gi
+edxapp_media_volume_size: 2Gi
+edxapp_static_volume_size: 2Gi
+
 # -- memcached
 edxapp_memcached_image_name: memcached
 edxapp_memcached_image_tag: latest
