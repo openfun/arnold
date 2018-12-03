@@ -3,3 +3,6 @@
 redis_app_image_name: redis
 redis_app_image_tag: 4
 redis_app_port: 6379
+
+# -- volume size
+redis_data_volume_size: 2Gi
