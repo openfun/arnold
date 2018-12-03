@@ -59,7 +59,7 @@ def blue_green_hosts(host):
 
 
 # pylint: disable=no-self-use,too-few-public-methods
-class FilterModule(object):
+class FilterModule():
     """Filters used for deployments"""
 
     def filters(self):

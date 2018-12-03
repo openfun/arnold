@@ -14,15 +14,13 @@
 # - K8S_AUTH_API_KEY: OpenShift user's API token (required to run oc commands)
 # - K8S_AUTH_HOST: OpenShift's console url (e.g. https://openshift.startup.com:8443)
 
-FROM debian:stretch
+FROM python:3.6
 
 WORKDIR /app
 
 # hadolint ignore=DL3015,DL3008
 RUN apt-get update && \
     apt-get install -y \
-    curl \
-    python-pip \
     shellcheck \
     unzip && \
     rm -rf /var/lib/apt/lists/*

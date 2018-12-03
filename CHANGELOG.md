@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Migrate docker image to python 3.6
+
 ## [1.1.0] - 2019-01-25
 
 ### Added
