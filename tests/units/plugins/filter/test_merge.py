@@ -2,8 +2,8 @@
 Tests for the "merge" plugin filter
 """
 from copy import deepcopy
+from unittest.mock import patch
 
-import mock
 from ansible.compat.tests import unittest
 from ansible.errors import AnsibleFilterError
 
@@ -17,7 +17,7 @@ def deep_sort_dict(d):
         is not modified)
     """
     res = {}
-    for k, v in d.iteritems():
+    for k, v in d.items():
         if isinstance(v, (list, tuple)):
             l = []  # noqa: E741
             for i in v:
@@ -25,7 +25,8 @@ def deep_sort_dict(d):
                     l.append(deep_sort_dict(i))
                 else:
                     l.append(deepcopy(i))
-            res[k] = sorted(l)
+                    l.sort()
+            res[k] = l
         elif isinstance(v, dict):
             res[k] = deep_sort_dict(v)
         else:
@@ -370,7 +371,7 @@ class TestMergeWithAppFilter(unittest.TestCase):
 class TestMergeWithDatabaseFilter(unittest.TestCase):
     """Tests for the ``merge_with_database`` filter"""
 
-    @mock.patch("plugins.filter.merge.random_password", return_value="foo")
+    @patch("plugins.filter.merge.random_password", return_value="foo")
     # pylint: disable=unused-argument
     def test_database_merge_with_no_existing_databases(self, random_password_mock):
         """Test when no database is already configured"""
@@ -400,7 +401,7 @@ class TestMergeWithDatabaseFilter(unittest.TestCase):
             expected,
         )
 
-    @mock.patch("plugins.filter.merge.random_password", return_value="foo")
+    @patch("plugins.filter.merge.random_password", return_value="foo")
     # pylint: disable=unused-argument,bad-continuation
     def test_database_merge_with_existing_databases_different(
         self, random_password_mock
@@ -500,7 +501,7 @@ class TestMergeWithDatabaseFilter(unittest.TestCase):
             expected,
         )
 
-    @mock.patch("plugins.filter.merge.random_password", return_value="foo")
+    @patch("plugins.filter.merge.random_password", return_value="foo")
     # pylint: disable=unused-argument,bad-continuation
     def test_database_merge_with_same_database_and_different_release(
         self, random_password_mock
@@ -557,7 +558,7 @@ class TestMergeWithDatabaseFilter(unittest.TestCase):
             expected,
         )
 
-    @mock.patch("plugins.filter.merge.random_password", return_value="foo")
+    @patch("plugins.filter.merge.random_password", return_value="foo")
     # pylint: disable=unused-argument
     def test_database_merge_with_other_environments(self, random_password_mock):
         """Merge database in production various environments"""

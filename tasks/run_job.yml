@@ -19,6 +19,9 @@
     msg: "{{ lookup('openshift', api_version='v1', namespace=project_name, kind='Job', resource_name=submitted_job.result.metadata.name) }}"
     verbosity: 2
   register: job
-  until: lookup('openshift', api_version='v1', namespace=project_name, kind='Job', resource_name=submitted_job.result.metadata.name).status.succeeded > 0
+  until: lookup('openshift', api_version='v1', namespace=project_name, kind='Job', resource_name=submitted_job.result.metadata.name).status.succeeded is not none
   retries: 360
   delay: 5
+  tags:
+    - deploy
+    - job
