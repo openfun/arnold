@@ -30,3 +30,6 @@ edxapp_theme_tag: "marvel-theme-ginkgo"
 # compile custom configMaps
 forum_host: "forum.{{ project_name}}.{{ domain_name }}"
 forum_port: 9292
+
+# increase edxapp data volume size
+edxapp_data_volume_size: 4Gi
