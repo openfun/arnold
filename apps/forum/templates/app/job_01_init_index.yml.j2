@@ -32,5 +32,5 @@ spec:
           command:
             - "/bin/bash"
             - "-c"
-            - MONGOHQ_URL=mongodb://${MONGODB_USER}:${MONGODB_PASSWORD}@forum-mongo-{{ deployment_stamp }}:{{ forum_mongodb_port }}/${MONGODB_DATABASE} bin/rake search:initialize
+            - MONGOHQ_URL=mongodb://${MONGODB_USER}:${MONGODB_PASSWORD_URLENCODED}@forum-mongo-{{ deployment_stamp }}:{{ forum_mongodb_port }}/${MONGODB_DATABASE} bin/rake search:initialize
       restartPolicy: Never
