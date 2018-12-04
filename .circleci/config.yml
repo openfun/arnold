@@ -308,69 +308,175 @@ jobs:
               "${ARNOLD_IMAGE}" \
               python -m pytest --no-cov
 
+  # ---- DockerHub publication job ----
+  hub:
+    # We use the machine executor, i.e. a VM, not a container
+    machine:
+      # Cache docker layers so that we strongly speed up this job execution
+      docker_layer_caching: true
+
+      working_directory: ~/fun
+
+    steps:
+      - checkout
+      - *attach_workspace
+      - *docker_load
+      - *ci_env
+      # Login to DockerHub to Publish new images
+      #
+      # Nota bene: you'll need to define the following secrets environment vars
+      # in CircleCI interface:
+      #
+      #   - DOCKER_USER
+      #   - DOCKER_PASS
+      - run:
+          name: Login to DockerHub
+          command: echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+
+      # Tag docker images with the same pattern used in Git (Semantic Versioning)
+      #
+      # Git tag: v1.0.1
+      # Docker tag: 1.0.1
+      - run:
+          name: Tag images
+          command: |
+            docker images fundocker/arnold
+            DOCKER_TAG=$(echo ${CIRCLE_TAG} | sed 's/^v//')
+            echo "DOCKER_TAG: ${DOCKER_TAG} (from Git tag: ${CIRCLE_TAG})"
+            docker tag ${ARNOLD_IMAGE} fundocker/arnold:${DOCKER_TAG}
+            docker tag ${ARNOLD_IMAGE} fundocker/arnold:latest
+            docker images "fundocker/arnold:${DOCKER_TAG}*"
+
+      - run:
+          name: Publish images
+          command: |
+            DOCKER_TAG=$(echo ${CIRCLE_TAG} | sed 's/^v//')
+            echo "DOCKER_TAG: ${DOCKER_TAG} (from Git tag: ${CIRCLE_TAG})"
+            docker push fundocker/arnold:${DOCKER_TAG}
+            docker push fundocker/arnold:latest
+
 workflows:
   version: 2
 
   arnold:
     jobs:
-      - build
+      - build:
+          filters:
+            tags:
+              only: /.*/
       - lint-ansible:
           requires:
             - build
+          filters:
+            tags:
+              only: /.*/
       - lint-bash:
           requires:
             - build
+          filters:
+            tags:
+              only: /.*/
       - lint-docker:
           requires:
             - build
+          filters:
+            tags:
+              only: /.*/
       - lint-plugins:
           requires:
             - build
+          filters:
+            tags:
+              only: /.*/
       - test-built:
           requires:
             - lint-bash
             - lint-docker
             - lint-ansible
             - lint-plugins
+          filters:
+            tags:
+              only: /.*/
       - test-bootstrap-hello:
           requires:
             - lint-bash
             - lint-docker
             - lint-ansible
             - lint-plugins
+          filters:
+            tags:
+              only: /.*/
       - test-bootstrap-richie:
           requires:
             - lint-bash
             - lint-docker
             - lint-ansible
             - lint-plugins
+          filters:
+            tags:
+              only: /.*/
       - test-bootstrap-edxapp:
           requires:
             - lint-bash
             - lint-docker
             - lint-ansible
             - lint-plugins
+          filters:
+            tags:
+              only: /.*/
       - test-bootstrap-mailcatcher:
           requires:
             - lint-bash
             - lint-docker
             - lint-ansible
             - lint-plugins
+          filters:
+            tags:
+              only: /.*/
       - test-bootstrap-marsha:
           requires:
             - lint-bash
             - lint-docker
             - lint-ansible
             - lint-plugins
+          filters:
+            tags:
+              only: /.*/
       - test-bootstrap-forum:
           requires:
             - lint-bash
             - lint-docker
             - lint-ansible
             - lint-plugins
+          filters:
+            tags:
+              only: /.*/
       - test-plugins:
           requires:
             - lint-bash
             - lint-docker
             - lint-ansible
             - lint-plugins
+          filters:
+            tags:
+              only: /.*/
+
+      # DockerHub publication.
+      #
+      # Publish docker images only if all build, lint and test jobs succeed and
+      # it has been tagged with a tag starting with the letter v
+      - hub:
+          requires:
+            - test-built
+            - test-plugins
+            - test-bootstrap-hello
+            - test-bootstrap-richie
+            - test-bootstrap-edxapp
+            - test-bootstrap-mailcatcher
+            - test-bootstrap-marsha
+            - test-bootstrap-forum
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/
