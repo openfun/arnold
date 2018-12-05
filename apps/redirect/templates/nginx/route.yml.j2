@@ -3,7 +3,6 @@ apiVersion: v1
 metadata:
   labels:
     app: alias-{{ item }}
-    deployment_stamp: "{{ deployment_stamp }}"
   name: alias-{{ item }}
   namespace: "{{ project_name }}"
   annotations:

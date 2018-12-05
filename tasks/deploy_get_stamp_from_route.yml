@@ -3,10 +3,10 @@
 
 # An application can define several routes (e.g. two services with two
 # different routes). Our goal here is to get the deployment_stamp of a
-# deployed stack by getting a route object. As the deployment_stamp is
-# commonly shared among objects of a stack, there is no need to get more than
-# one route to achieve this.
-- name: Get deployment_stamp from {{ app.name }} application routes with prefix {{ prefix }}
+# deployed stack by getting a route object. We first retrieve a route and
+# then the service targeted by this route. TThis service will be labelled with the
+# deploy_stamp we are looking for.
+- name: Get route for application {{ app.name }} with prefix {{ prefix }}
   set_fact:
     route: |
       {{
@@ -29,10 +29,36 @@
     verbosity: 3
   when: app_route is defined
 
-- name: set_fact app_route_deployment_stamp
+- name: Get targeted service
   set_fact:
-    app_route_deployment_stamp: "{{ app_route.ansible_facts.route.metadata.labels.deployment_stamp | default(none) }}"
+    targeted_service: |
+      {{
+        lookup(
+          'openshift',
+          api_version='v1',
+          namespace=project_name,
+          kind='Service',
+          resource_name=app_route.ansible_facts.route.spec.to.name
+        )
+      }}
   when: app_route.ansible_facts is defined
+
+- name: Display targeted service
+  debug:
+    msg: "{{ targeted_service | to_nice_yaml }}"
+    verbosity: 3
+  when: targeted_service is defined
+
+# app_deployment_stamp must be defined otherwise all script dependending on this one will fail
+- name: Initialize app_deployment_stamp
+  set_fact:
+    app_deployment_stamp: ""
+
+- name: set_fact app_deployment_stamp
+  set_fact:
+    app_route_deployment_stamp: "{{ targeted_service.metadata.labels.deployment_stamp | default(none) }}"
+  with:
+  when: targeted_service is defined and targeted_service | length >  0
 
 - name: Print app_route_deployment_stamp
   debug:
