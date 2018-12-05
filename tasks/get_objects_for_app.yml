@@ -5,6 +5,13 @@
     raw_templates: "{{ app | json_query('services[*].templates[]') | list }}"
   tags: deploy
 
+# force prefix initialization. If prefix is not set, in the next step the first template
+# rendered will fail if it uses the prefix variable in it.
+- name: set Prefix
+  set_fact:
+    prefix: "next"
+  when: prefix is not defined
+
 # Remove empty rendered templates (e.g. inactivated for an env_type)
 - name: Ignore empty rendered templates
   set_fact:
