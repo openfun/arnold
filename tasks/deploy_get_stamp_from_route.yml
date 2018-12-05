@@ -56,11 +56,11 @@
 
 - name: set_fact app_deployment_stamp
   set_fact:
-    app_route_deployment_stamp: "{{ targeted_service.metadata.labels.deployment_stamp | default(none) }}"
+    app_deployment_stamp: "{{ targeted_service.metadata.labels.deployment_stamp | default(none) }}"
   with:
   when: targeted_service is defined and targeted_service | length >  0
 
-- name: Print app_route_deployment_stamp
+- name: Print app_deployment_stamp
   debug:
-    msg: "[{{ app.name }}] route[{{ app.name }}-{{ prefix }}] app_route_deployment_stamp[{{ app_route_deployment_stamp }}]"
-  when: app_route_deployment_stamp is defined
+    msg: "[{{ app.name }}] app_deployment_stamp[{{ app_deployment_stamp }}]"
+  when: app_deployment_stamp is defined
