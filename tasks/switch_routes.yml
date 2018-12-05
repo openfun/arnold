@@ -6,9 +6,9 @@
     prefix: "previous"
   tags: switch
 
-- name: Save previous_app_route_deployment_stamp
+- name: Save previous_app_deployment_stamp
   set_fact:
-    previous_app_route_deployment_stamp: "{{ app_route_deployment_stamp }}"
+    previous_app_deployment_stamp: "{{ app_deployment_stamp }}"
 
 - include_tasks: switch_route.yml
   vars:
@@ -26,4 +26,4 @@
 
 - include_tasks: delete_app.yml
   vars:
-    app_route_deployment_stamp: "{{ previous_app_route_deployment_stamp }}"
+    app_deployment_stamp: "{{ previous_app_deployment_stamp }}"

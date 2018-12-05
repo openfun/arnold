@@ -13,7 +13,7 @@
 - include_tasks: deploy_patch_route.yml
   vars:
     prefix: "{{ prefix_route_dest }}"
-    deployment_stamp: "{{ app_route_deployment_stamp }}"
+    deployment_stamp: "{{ app_deployment_stamp }}"
   tags: switch
 
 - include_tasks: deploy_patch_route.yml
