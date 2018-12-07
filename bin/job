@@ -53,7 +53,7 @@ function main() {
     echo "deployment stamp: $deployment_stamp"
     echo "job             : $job_template"
 
-    _docker_run ansible-playbook create_object.yml \
+    _docker_run ansible-playbook create_object.yml --ask-vault-pass \
         -e "customer=$customer" \
         -e "env_type=$env_type" \
         -e "object_template=$job_template" \
