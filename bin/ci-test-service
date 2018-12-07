@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
-# usage: ci-test-service [SERVICE] [CONTENT] [PATH]
-set -x
+# usage: ci-test-service [SERVICE] [CONTENT] [PATH] [PREFIX]
+
 # First script argument is the application's service name. It defaults to
 # 'hello'
 service="${1:-hello}"
@@ -15,18 +15,16 @@ content="${2:-Hello OpenShift! by Arnold}"
 # Third script argument is the url path. It defaults to: "/"
 path="${3:-"/"}"
 
-# fourth script argument is the prefix used in the url. It defaults to "next"
-prefix="${4:-"next"}"
+# Fourth script argument is the prefix used in the url. It defaults to "current".
+prefix="${4:-"current"}"
 
-# passing an empty string as prefix argument does not work, the default value (next) will
-# be assign to prefix. But we can detect how many arguments was used.
-# if exactly 4 arguments are used and prefix equals the default value then we consider that we want to use an empty string
-if [[ $# -eq 4 && "$prefix" == "next" ]]; then
-  prefix=""
-fi
-
-if [[ -n "$prefix" ]]; then
+# Current URL has by definition no prefix, while next and previous URLs are
+# sub-domains. Hence, we add the sub-domain dot for next and previous prefixes
+# and remove the current prefix for the current URL.
+if [[ "${prefix}" != "current" ]]; then
   prefix="${prefix}."
+else
+  prefix=""
 fi
 
 # Wait for the application to respond
