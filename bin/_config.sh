@@ -77,15 +77,23 @@ function _docker_run() {
         i=$(( i+1 ))
     done
 
-    [[ "$USE_TTY" == "false" ]] && TTY_OPTION="" || TTY_OPTION="-t"
+    # Use docker tty option
+    [[ "${USE_TTY}" == "false" ]] && TTY_OPTION="" || TTY_OPTION="-t"
 
+    # Mount sources as a volume
+    [[ "${MOUNT_SRC}" == "false" ]] && SRC_VOLUME_OPTION="" || SRC_VOLUME_OPTION="-v $PWD:/app"
+
+    # If we wrap the SRC_VOLUME_OPTION with double quotes, this will break the
+    # command, hence, we should ignore this rule here:
+    #
+    # shellcheck disable=SC2086
     docker run --rm -i ${TTY_OPTION} \
         -u "$(id -u)" \
         --env-file "$env_file" \
         --env K8S_AUTH_API_KEY \
         --env K8S_AUTH_HOST \
         --env OPENSHIFT_DOMAIN \
-        -v "$PWD:/app" \
+        ${SRC_VOLUME_OPTION} \
         -v "$HOME/.kube:/home/arnold/.kube" \
         "arnold:$(tr -d '\n' < VERSION)" \
         "${args[@]}"

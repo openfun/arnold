@@ -169,8 +169,18 @@ jobs:
       - run:
           name: Test the "hello" application bootstrapping
           command: |
+            # Bootstrap app
             bin/ci-bootstrap "hello"
+            # Test service deployed with the next route
             bin/ci-test-service "hello" "Hello OpenShift! by Arnold" "/" "next"
+
+      - run:
+          name: Test the "hello" application switch
+          command: |
+            # Switch next route to current
+            bin/ci-switch "hello"
+            # Test service switched to the current route
+            bin/ci-test-service "hello" "Hello OpenShift! by Arnold"
 
   # Test the bootstrap playbook on the "mailcatcher" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
@@ -193,7 +203,7 @@ jobs:
           name: Test the "mailcatcher" application bootstrapping
           command: |
             bin/ci-bootstrap "mailcatcher"
-            bin/ci-test-service "mailcatcher" "MailCatcher" "/"
+            bin/ci-test-service "mailcatcher" "MailCatcher"
 
   # Test the bootstrap playbook on the "richie" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
@@ -215,8 +225,18 @@ jobs:
       - run:
           name: Test the "richie" application bootstrapping
           command: |
+            # Bootstrap app
             bin/ci-bootstrap "richie"
+            # Test service deployed with the next route
             bin/ci-test-service "richie" "Installation successful!" "/" "next"
+
+      - run:
+          name: Test the "richie" application switch
+          command: |
+            # Switch next route to current
+            bin/ci-switch "richie"
+            # Test service switched to the current route
+            bin/ci-test-service "richie" "Installation successful!"
 
   # Test the bootstrap playbook on the "forum" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
@@ -238,8 +258,18 @@ jobs:
       - run:
           name: Test the "forum" application bootstrapping
           command: |
+            # Bootstrap app
             bin/ci-bootstrap "forum"
+            # Test service deployed with the next route
             bin/ci-test-service "forum" "collection" "/api/v1/threads?api_key=thisisafakeapikey" "next"
+
+      - run:
+          name: Test the "forum" application switch
+          command: |
+            # Switch next route to current
+            bin/ci-switch "forum"
+            # Test service switched to the current route
+            bin/ci-test-service "forum" "collection" "/api/v1/threads?api_key=thisisafakeapikey"
 
   # Test the bootstrap playbook on the "edxapp" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
@@ -261,9 +291,20 @@ jobs:
       - run:
           name: Test the "edxapp" application bootstrapping (with redis enabled)
           command: |
+            # Bootstrap app
             bin/ci-bootstrap "edxapp,redis"
+            # Test services deployed with the next route
             bin/ci-test-service "cms" "Welcome to Your Platform Studio" "/" "next"
             bin/ci-test-service "lms" "It works! This is the default homepage for this Open edX instance." "/" "next"
+
+      - run:
+          name: Test the "edxapp" application switch
+          command: |
+            # Switch next route to current
+            bin/ci-switch "edxapp"
+            # Test service switched to the current route
+            bin/ci-test-service "cms" "Welcome to Your Platform Studio"
+            bin/ci-test-service "lms" "It works! This is the default homepage for this Open edX instance."
 
   # Test the bootstrap playbook on the "marsha" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
@@ -285,8 +326,18 @@ jobs:
       - run:
           name: Test the "marsha" application bootstrapping
           command: |
+            # Bootstrap app
             bin/ci-bootstrap "marsha"
+            # Test services deployed with the next route
             bin/ci-test-service "marsha" "Api Root" "/api/" "next"
+
+      - run:
+          name: Test the "marsha" application switch
+          command: |
+            # Switch next route to current
+            bin/ci-switch "marsha"
+            # Test service switched to the current route
+            bin/ci-test-service "marsha" "Api Root" "/api/"
 
   # FIXME: we have deactivated plugins test coverage as the container user is
   # not allowed to write to /app/.coverage and CircleCI does not allow to mount
