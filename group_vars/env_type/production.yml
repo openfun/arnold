@@ -1,3 +1,9 @@
 # Variables specific to the production environment
 richie_django_configuration: Production
 acme_env: live
+
+# Endpoints IP
+# In production these variables must be set.
+# endpoint_mongodb_ip:     null
+# endpoint_mysql_ip:       null
+# endpoint_postgresql_ip:  null

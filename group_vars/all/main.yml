@@ -58,11 +58,6 @@ trashable_env_types:
   - "development"
   - "feature"
 
-# Endpoints IP
-endpoint_mongodb_ip:     192.168.10.11
-endpoint_mysql_ip:       192.168.10.254
-endpoint_postgresql_ip:  192.168.10.21
-
 # Blue/Green deployment route prefixes
 blue_green_route_prefixes:
   - "previous"
@@ -114,3 +109,14 @@ http_basic_auth_users:
 aliases_port: 8999
 nginx_ports:
   - "{{ aliases_port }}"
+
+# Endpoints IP
+# These endpoints are used when you don't run your databases inside an OpenShift cluster
+# but you have dedicated external resource to manage your databases.
+# In trashable environments these endpoints will not be used because everything will
+# run inside OpenShift pods. in Production and Pre-production environments you should consider using a dedicated cluster
+# for your databases.
+# Endpoint IPs are initialized at "null" by default and you SHOULD overwrite them in the corresponding environment where you will use them.
+endpoint_mongodb_ip:     null
+endpoint_mysql_ip:       null
+endpoint_postgresql_ip:  null
