@@ -1,3 +1,4 @@
+{% if endpoint_mysql_ip | ipaddr != false %}
 apiVersion: v1
 kind: Endpoints
 metadata:
@@ -14,3 +15,4 @@ subsets:
     ports:
     - port: "{{ edxapp_mysql_port }}"
       name: "{{ edxapp_mysql_port }}-tcp"
+{% endif %}
