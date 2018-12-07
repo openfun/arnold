@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# usage: ci-bootstrap [APP]
+# usage: ci-switch [APP]
 
 # First script argument is the application's name. It defaults to 'hello'
 app="${1:-hello}"
@@ -8,6 +8,6 @@ app="${1:-hello}"
 # shellcheck source=bin/_config.sh
 source "$(dirname "${BASH_SOURCE[0]}")/_config.sh"
 
-# Run the bootstrap.yml playbook with the ansible vault password passed to stdin
+# Run the switch.yml playbook
 echo "arnold" | USE_TTY="false" MOUNT_SRC="false" _docker_run --env-file="env.d/ci" \
-  ansible-playbook bootstrap.yml --ask-vault-pass -e "env_type=ci" -e "apps_filter=${app}"
+  ansible-playbook switch.yml --ask-vault-pass -e "env_type=ci" -e "apps_filter=${app}"
