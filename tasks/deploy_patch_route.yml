@@ -1,9 +1,7 @@
----
 # Patch routes of all services from a single app to the new deployment_stamp
 
 - name: "Patching routes with prefix {{ prefix }} for the {{ app.name }} application with deployment_stamp {{ deployment_stamp }}"
   openshift_raw:
-    force: true
     definition: "{{ lookup('template', route_template) | from_yaml }}"
     state: present
   loop: "{{ routes }}"
@@ -11,7 +9,6 @@
     loop_var: route_template
   when: routes | length > 0 and app.settings.is_blue_green_compatible | default(True) == True
   tags: route
-
 
 - name: "Patching routes for the {{ app.name }} application"
   openshift_raw:

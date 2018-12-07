@@ -1,4 +1,3 @@
----
 # Delete objects for the targeted deployment_stamp
 - name: Set targetted deployment stamp
   set_fact:
@@ -17,7 +16,6 @@
     - DeploymentConfig
     - Endpoints
     - Job
-    - Route
     - Service
   tags: deploy
 
