@@ -107,6 +107,10 @@ spec:
               name: edxapp-configmap-{{ service_variant }}
             - mountPath: /tmp/secret
               name: edxapp-secret
+{% if TX_TOKEN is defined %}
+            - mountPath: /edx/app/edxapp/edx-platform/conf/locale
+              name: edxapp-v-locale
+{% endif %}
       volumes:
         - name: edxapp-configmap-{{ service_variant }}
           configMap:
@@ -126,3 +130,8 @@ spec:
         - name: edxapp-v-data
           persistentVolumeClaim:
             claimName: edxapp-pvc-data
+{% if TX_TOKEN is defined %}
+        - name: edxapp-v-locale
+          persistentVolumeClaim:
+            claimName: edxapp-pvc-locale
+{% endif %}

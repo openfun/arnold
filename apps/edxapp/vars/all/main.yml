@@ -12,6 +12,12 @@ edxapp_django_port: 8000
 edxapp_sql_dump_url: "https://gist.githubusercontent.com/jmaupetit/76fe7db4a8314fe1fa10895edf14248e/raw/1fd2aab7d57273bbe4cf40603c119a1c8026cbc1/edx-database-hawthorn.sql"
 edxapp_secret_name: "edxapp-{{ edxapp_vault_checksum | default('undefined_edxapp_vault_checksum') }}"
 
+# i18n
+edxapp_i18n_languages:
+  - en
+  - fr
+edxapp_tx_secret_name: "edxapp-tx-{{ edxapp_vault_checksum | default('undefined_edxapp_vault_checksum') }}"
+
 # Customize edxapp's LMS theme: the url is supposed to point to the git
 # repository and the tag to either a tag or a branch, e.g.:
 #
@@ -40,6 +46,7 @@ edxapp_build_settings: "fun.docker_build_production"
 edxapp_data_volume_size: 2Gi
 edxapp_media_volume_size: 2Gi
 edxapp_static_volume_size: 2Gi
+edxapp_locale_volume_size: 200Mi
 
 # -- memcached
 edxapp_memcached_image_name: memcached
