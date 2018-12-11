@@ -1,0 +1,54 @@
+{% if TX_TOKEN is defined %}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: edxapp-cms-internationalization-{{ job_stamp }}
+  namespace: "{{ project_name }}"
+  labels:
+    app: edxapp
+    service: cms
+    version: "{{ edxapp_image_tag }}"
+    job_stamp: "{{ job_stamp }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+spec:
+  template:
+    metadata:
+      name: edxapp-cms-internationalization-{{ job_stamp }}
+      labels:
+        app: edxapp
+        service: cms
+        version: "{{ edxapp_image_tag }}"
+        job_stamp: "{{ job_stamp }}"
+        deployment_stamp: "{{ deployment_stamp }}"
+    spec:
+      containers:
+        - name: edxapp-cms-internationalization-{{ job_stamp }}
+          # We point to a local registry image build for this "live" image (see
+          # ImageStream and BuildConfig templates)
+          image: "{{ internal_docker_registry }}/{{ project_name }}/edxapp-cms:{{ edxapp_image_tag }}-live"
+          env:
+            - name: DJANGO_SETTINGS_MODULE
+              value: cms.envs.fun.docker_run
+          envFrom:
+            - secretRef:
+                name: "{{ edxapp_tx_secret_name }}"
+          command:
+            - "bash"
+            - "-c"
+            - pip install -I --prefix /tmp transifex-client &&
+              cp -R .tx /tmp &&
+{% for lang in edxapp_i18n_languages %}
+              HOME="/tmp" PYTHONPATH=/tmp/lib/python2.7/site-packages/ /tmp/bin/tx --root /tmp pull -l {{ lang }} &&
+              cp -Rf /tmp/conf/locale/{{ lang }} conf/locale/
+{% endfor %}
+              python manage.py cms compilemessages {{ edxapp_i18n_languages | join(" -l ") }}
+              python manage.py cms compilejsi18n
+          volumeMounts:
+            - mountPath: /edx/app/edxapp/edx-platform/conf/locale
+              name: edxapp-v-locale
+      volumes:
+        - name: edxapp-v-locale
+          persistentVolumeClaim:
+            claimName: edxapp-pvc-locale
+      restartPolicy: Never
+{% endif %}
