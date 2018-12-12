@@ -17,7 +17,7 @@
     object_template: ""
 
   pre_tasks:
-    - import_tasks: tasks/validate_customer_name.yml
+    - import_tasks: tasks/validate_configuration.yml
 
   tasks:
     - name: Display playbook name
