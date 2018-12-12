@@ -2,3 +2,8 @@
   fail:
     msg: "Customer name length can not be higher than 6 characters. Current length is {{ customer | length }}."
   when: customer | length > 6
+
+- name: check if env_type is a valid environment
+  fail:
+    msg: "defined env_type {{ env_type }} is not a defined environment"
+  when: environments | json_query("[?name=='"~ env_type ~"'] | [0]") is none
