@@ -9,6 +9,9 @@ ALLOWED_HOSTS:
   - "previous.{{ edxapp_lms_host }}"
   - "{{ edxapp_lms_host }}"
   - "next.{{ edxapp_lms_host }}"
+  - "previous.{{ edxapp_preview_host }}"
+  - "{{ edxapp_preview_host }}"
+  - "next.{{ edxapp_preview_host }}"
 
 # Celery Broker
 CELERY_BROKER_TRANSPORT: redis

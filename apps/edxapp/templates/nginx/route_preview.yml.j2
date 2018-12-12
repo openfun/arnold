@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Route
+metadata:
+  namespace: "{{ project_name }}"
+  name: "edxapp-nginx-preview-{{ prefix }}"
+  labels:
+    env_type: "{{ env_type }}"
+    customer: "{{ customer }}"
+    app: "edxapp"
+    service: "nginx"
+    version: "{{ edxapp_nginx_image_tag }}"
+    route_prefix: "{{ prefix }}"
+    route_target_service: "lms"
+  annotations:
+    kubernetes.io/tls-acme: "true"
+spec:
+  host: "{{ edxapp_preview_host | blue_green_host(prefix) }}"
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  port:
+    targetPort: "{{ edxapp_nginx_lms_port }}-tcp"
+  to:
+    kind: Service
+    name: "edxapp-nginx-{{ deployment_stamp }}"
