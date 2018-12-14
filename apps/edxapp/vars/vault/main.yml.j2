@@ -39,3 +39,12 @@ SECRETS_FILE:
   MONGODB_NAME: "{{ mongodb_credentials.name }}"
   MONGODB_USER: "{{ mongodb_credentials.user }}"
   MONGODB_PASSWORD: "{{ mongodb_credentials.password }}"
+
+# If you need to git-clone a private theme via SSH, uncomment the following key
+# and add the content of your ssh private key in the following format:
+#
+# EDXAPP_THEME_GIT_PRIVATE_KEY: | -----BEGIN RSA PRIVATE KEY-----
+#   MIIJKAIBAAKCAgEAxY2VSZZRsjde+Hdpx1ixXhJV0MVCWkhTI76mMq9TRnXuihcY
+#   [...]
+#   PpOyoKHbpoVxFDv4S9kj2RmmRDkWdTOncKNcVj4+ZkPGIhI8Hfcb04GpBW1PFfNn -----END
+#   RSA PRIVATE KEY-----
