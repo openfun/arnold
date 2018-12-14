@@ -21,17 +21,21 @@ MONGODB_DATABASE: {{ mongodb_credentials.name }}
 CELERY_BROKER_USER: ""
 CELERY_BROKER_PASSWORD: ""
 
-{% raw %}
 # secrets.yml that will be mounted to every pod running edxapp
 SECRETS_FILE:
-  CELERY_BROKER_USER: "{{ CELERY_BROKER_USER }}"
-  CELERY_BROKER_PASSWORD: "{{ CELERY_BROKER_PASSWORD }}"
+  # Celery
+  CELERY_BROKER_USER: ""
+  CELERY_BROKER_PASSWORD: ""
+
   # FIXME: this COMMENTS_SERVICE_KEY should match the "forum" service API_KEY
   COMMENTS_SERVICE_KEY: "thisisafakeapikey"
-  DATABASE_NAME: "{{ MYSQL_DATABASE }}"
-  DATABASE_USER: "{{ MYSQL_USER }}"
-  DATABASE_PASSWORD: "{{ MYSQL_PASSWORD }}"
-  MONGODB_NAME: "{{ MONGODB_DATABASE }}"
-  MONGODB_USER: "{{ MONGODB_USER }}"
-  MONGODB_PASSWORD: "{{ MONGODB_PASSWORD }}"
-{% endraw %}
+
+  # MYSQL
+  DATABASE_NAME: "{{ mysql_credentials.name }}"
+  DATABASE_USER: "{{ mysql_credentials.user }}"
+  DATABASE_PASSWORD: "{{ mysql_credentials.password }}"
+
+  # MongoDB
+  MONGODB_NAME: "{{ mongodb_credentials.name }}"
+  MONGODB_USER: "{{ mongodb_credentials.user }}"
+  MONGODB_PASSWORD: "{{ mongodb_credentials.password }}"
