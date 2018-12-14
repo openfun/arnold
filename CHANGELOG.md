@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.0.0-alpha.2] - 2018-12-14
+
+### Added
+
+- Studio preview route for edxapp
+- Validation pre-task (check environment name)
+
+### Fixed
+
+- Namespace application vault variables to avoid cross-application collisions
+- Add missing optional EDXAPP_THEME_GIT_PRIVATE_KEY variable in edxapp vault
+  template
+
 ## [1.0.0-alpha.1] - 2018-12-10
 
 ### Added
@@ -15,4 +28,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Official Docker image is available at: https://hub.docker.com/r/fundocker/arnold/
 
 [unreleased]: https://github.com/openfun/arnold/compare/v1.0.0-alpha.1...master
+[1.0.0-alpha.2]: https://github.com/openfun/arnold/compare/v1.0.0-alpha.1...v1.0.0-alpha.2
 [1.0.0-alpha.1]: https://github.com/openfun/arnold/compare/f9238a2...v1.0.0-alpha.1
