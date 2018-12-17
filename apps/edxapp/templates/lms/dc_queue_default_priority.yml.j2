@@ -1,5 +1,5 @@
 {% set service_variant = "lms" %}
 {% set worker_type = "queue" %}
-{% set queue = edxapp_celery_lms_default_priority_queue %}
+{% set celery_worker = edxapp_celery_lms_default_priority_worker %}
 
 {% include "apps/edxapp/templates/cms/_dc_base.yml.j2" with context %}

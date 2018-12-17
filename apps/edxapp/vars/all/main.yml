@@ -60,7 +60,6 @@ edxapp_mysql_image_tag: "5.7"
 edxapp_mysql_port: 3306
 edxapp_mysql_secret_name: "edxapp-mysql-{{ edxapp_vault_checksum | default('undefined_edxapp_vault_checksum') }}"
 
-
 # -- nginx
 edxapp_nginx_image_name: "fundocker/openshift-nginx"
 edxapp_nginx_image_tag: "1.13"
@@ -69,14 +68,56 @@ edxapp_nginx_lms_port: 8071
 edxapp_nginx_htpasswd_secret_name: "edxapp-htpasswd"
 
 # -- celery/redis
-edxapp_celery_lms_high_priority_queue: "edx.lms.core.high"
-edxapp_celery_lms_default_priority_queue: "edx.lms.core.default"
-edxapp_celery_lms_low_priority_queue: "edx.lms.core.low"
-edxapp_celery_lms_high_mem_queue: "edx.lms.core.high_mem"
 
-edxapp_celery_cms_high_priority_queue: "edx.cms.core.high"
-edxapp_celery_cms_default_priority_queue: "edx.cms.core.default"
-edxapp_celery_cms_low_priority_queue: "edx.cms.core.low"
+# LMS queues
+edxapp_celery_lms_high_priority_queue: &lms_high "edx.lms.core.high"
+edxapp_celery_lms_default_priority_queue: &lms_default "edx.lms.core.default"
+edxapp_celery_lms_low_priority_queue: &lms_low "edx.lms.core.low"
+edxapp_celery_lms_high_mem_queue: &lms_high_mem "edx.lms.core.high_mem"
+
+# CMS queues
+edxapp_celery_cms_high_priority_queue: &cms_high "edx.cms.core.high"
+edxapp_celery_cms_default_priority_queue: &cms_default "edx.cms.core.default"
+edxapp_celery_cms_low_priority_queue: &cms_low "edx.cms.core.low"
+
+# LMS workers
+edxapp_celery_lms_high_priority_worker:
+  name: "lms-high"
+  queues: [*lms_high]
+  replicas: 0
+edxapp_celery_lms_default_priority_worker:
+  name: "lms-default"
+  queues:
+    - *lms_high
+    - *lms_default
+    - *lms_low
+    - *lms_high_mem
+  replicas: 1
+edxapp_celery_lms_low_priority_worker:
+  name: "lms-low"
+  queues: [*lms_low]
+  replicas: 0
+edxapp_celery_lms_high_mem_worker:
+  name: "lms-high-mem"
+  queues: [*lms_high_mem]
+  replicas: 0
+
+# CMS workers
+edxapp_celery_cms_high_priority_worker:
+  name: "cms-high"
+  queues: [*cms_high]
+  replicas: 0
+edxapp_celery_cms_default_priority_worker:
+  name: "cms-default"
+  queues:
+    - *cms_high
+    - *cms_default
+    - *cms_low
+  replicas: 1
+edxapp_celery_cms_low_priority_worker:
+  name: "cms-low"
+  queues: [*cms_low]
+  replicas: 0
 
 # -- misc
 #

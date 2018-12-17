@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Edxapp Celery workers are now configurable (number of replicas and queues to
+  consume)
+
 ### Fixed
 
 - Pods deployment wait loop is now more robust by relying on the number of pod
