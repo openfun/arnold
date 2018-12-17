@@ -29,6 +29,16 @@
     pod_label_selector: "{{ pod_label_selector }},deployment_stamp={{ deployment_stamp }}"
   when: app.settings.is_blue_green_compatible | default(True) == True
 
+- name: Render deployment templates to prepare expected running pods calculation
+  set_fact:
+    tpl: "{{ lookup('template', item) | from_yaml }}"
+  with_items: "{{ deployments }}"
+  register: rendered_deployment_templates
+
+- name: Calculate expected running pods given their replicas
+  set_fact:
+    expected_running_pods: "{{ rendered_deployment_templates.results | json_query('[*].ansible_facts.tpl.spec.replicas') | sum }}"
+
 - name: Wait for pods to be running
   debug:
     msg: |
@@ -57,7 +67,7 @@
         )
       ] | flatten | json_query('[?status.phase==`Running`].metadata.name') | length
     ) == (
-      deployments | flatten | length
+      expected_running_pods | int
     )
   retries: 120
   delay: 5
