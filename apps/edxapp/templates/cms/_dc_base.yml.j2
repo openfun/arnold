@@ -6,10 +6,17 @@
 
 {# The dc_name should be unique #}
 {%- set dc_name = "edxapp-%s-%s-%s" | format(service_variant, worker_type, deployment_stamp) -%}
+{%- set replicas = 1 -%}
 
-{# In case of a worker, we need to add the queue name to make the dc_name unique #}
-{%- if queue -%}
-  {% set dc_name = "%s-%s" | format(dc_name, (queue | regex_replace('\\.|_', '-'))) %}
+{#
+  In case of a worker, we need to:
+    1. patch attached queue names to make them specific to this deployment
+    2. add the worker name (with the deployment_stamp) to make the dc_name unique
+#}
+{%- if celery_worker is defined -%}
+  {%- set queues = celery_worker.queues | map('regex_replace', '$', '-%s' | format(deployment_stamp)) -%}
+  {%- set dc_name = "edxapp-%s-%s" | format(celery_worker.name, deployment_stamp) -%}
+  {%- set replicas = celery_worker.replicas -%}
 {%- endif -%}
 
 {#
@@ -17,12 +24,12 @@
   case, we override this command to run celery workers instead of the CMS/LMS
   wsgi server.
 #}
-{%- macro command(service_variant, queue, concurrency=1) -%}
-  {%- if service_variant and queue %}
+{%- macro command(service_variant, celery_worker, concurrency=1) -%}
+  {%- if service_variant and celery_worker is defined %}
         command:
           - "/bin/bash"
           - "-c"
-          - python manage.py {{ service_variant }} celery worker --loglevel=info --queues={{ queue }} --hostname={{ queue }}.%%h --concurrency={{ concurrency }}
+          - python manage.py {{ service_variant }} celery worker --loglevel=info --queues={{ queues | join(',') }} --hostname={{ celery_worker.name }}.%%h --concurrency={{ concurrency }}
   {%- endif %}
 {%- endmacro -%}
 
@@ -38,7 +45,9 @@ metadata:
   name: "{{ dc_name }}"
   namespace: "{{ project_name }}"
 spec:
-  replicas: 1  # number of pods we want
+  # We want to deploy every target DC even if replicas has been set to zero to
+  # be able to scale up/down worker for a deployed stack.
+  replicas: {{ replicas }} # number of pods we want
   template:
     metadata:
       labels:
@@ -51,7 +60,7 @@ spec:
     spec:
       containers:
       - name: {{ service_variant }}
-{{ command(service_variant, queue) }}
+{{ command(service_variant, celery_worker) }}
         env:
         - name: SERVICE_VARIANT
           value: {{ service_variant }}
