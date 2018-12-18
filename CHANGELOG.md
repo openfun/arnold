@@ -10,13 +10,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - Edxapp Celery workers are now configurable (number of replicas and queues to
-  consume)
+  consume) (#207)
 
 ### Fixed
 
 - Pods deployment wait loop is now more robust by relying on the number of pod
-  replicas instead of the number of deployments
-- Add missing ask-vault-pass option in bin/built_images script #210
+  replicas instead of the number of deployments (#207)
+- Add missing ask-vault-pass option in bin/built_images script (#210)
+- Prevent htpasswd file overriding when running the create htpasswd playbook
+  multiple times (#211)
 
 ## [1.0.0-alpha.2] - 2018-12-14
 
