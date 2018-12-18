@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Pods deployment wait loop is now more robust by relying on the number of pod
   replicas instead of the number of deployments
+- Add missing ask-vault-pass option in bin/built_images script #210
 
 ## [1.0.0-alpha.2] - 2018-12-14
 
