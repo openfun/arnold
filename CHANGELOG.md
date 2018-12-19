@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Implement support for pre and post-deployment jobs
+
 ### Fixed
 
 - Edxapp Celery workers DC names are now more explicit (worker vs wsgi)

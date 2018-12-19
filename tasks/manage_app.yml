@@ -12,13 +12,47 @@
     state: "{{ deployment_state | default('present') }}"
   with_items:
     - "{{ endpoints }}"
-    - "{{ deployments }}"
     - "{{ services }}"
   tags:
     - deploy
     - endpoint
-    - deployment
     - service
+
+- name: Prepare jobs ordering & filtering
+  set_fact:
+    template: "{{ item }}"
+    basename: "{{ item | basename }}"
+    job_type: "{{ lookup('template', item) | from_yaml | json_query('metadata.labels.job_type') | default('post', true) }}"
+  register: jobs_basename
+  with_items: "{{ jobs | flatten }}"
+  tags:
+    - deploy
+    - job
+
+- name: Sort jobs alphabetically according to their basename
+  set_fact:
+    jobs: "{{ jobs_basename.results | sort(attribute='ansible_facts.basename') | map(attribute='ansible_facts') | list }}"
+  tags:
+    - deploy
+    - job
+
+- name: Run pre-deployment jobs
+  include_tasks: tasks/run_job.yml
+  loop: "{{ jobs | selectattr('job_type', 'eq', 'pre') | map(attribute='template') | list }}"
+  loop_control:
+    loop_var: job_template
+  tags:
+    - deploy
+    - job
+
+- name: OpenShift deployments with deployment_stamp[{{ deployment_stamp }}] must be {{ deployment_state | default('present') }}
+  openshift_raw:
+    definition: "{{ lookup('template', item) | from_yaml }}"
+    state: "{{ deployment_state | default('present') }}"
+  with_items: "{{ deployments }}"
+  tags:
+    - deploy
+    - deployment
 
 - name: Define pod label selector
   set_fact:
@@ -72,26 +106,9 @@
   retries: 120
   delay: 5
 
-- name: Prepare jobs ordering
-  set_fact:
-    template: "{{ item }}"
-    basename: "{{ item | basename }}"
-  register: jobs_basename
-  with_items: "{{ jobs | flatten }}"
-  tags:
-    - deploy
-    - job
-
-- name: Sort jobs alphabetically according to their basename
-  set_fact:
-    jobs: "{{ jobs_basename.results | sort(attribute='ansible_facts.basename') | map(attribute='ansible_facts.template') | list }}"
-  tags:
-    - deploy
-    - job
-
-- name: Run jobs
+- name: Run post-deployment jobs
   include_tasks: tasks/run_job.yml
-  loop: "{{ jobs }}"
+  loop: "{{ jobs | selectattr('job_type', 'eq', 'post') | map(attribute='template') | list }}"
   loop_control:
     loop_var: job_template
   tags:
