@@ -1,4 +1,4 @@
-{% if TX_TOKEN is defined %}
+{% if EDXAPP_VAULT.TX_TOKEN is defined %}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -40,10 +40,10 @@ spec:
             - pip install -I --prefix /tmp transifex-client &&
               cp -R .tx /tmp &&
 {% for lang in edxapp_i18n_languages %}
-              HOME="/tmp" PYTHONPATH=/tmp/lib/python2.7/site-packages/ /tmp/bin/tx --root /tmp pull -l {{ lang }} &&
-              cp -Rf /tmp/conf/locale/{{ lang }} conf/locale/
+              HOME="/tmp" PYTHONPATH=/tmp/lib/python2.7/site-packages/ /tmp/bin/tx --root /tmp pull --mode=reviewed -l {{ lang }} &&
+              cp -Rf /tmp/conf/locale/{{ lang }} conf/locale/ &&
+              python manage.py cms compilemessages -l {{ lang }} &&
 {% endfor %}
-              python manage.py cms compilemessages {{ edxapp_i18n_languages | join(" -l ") }}
               python manage.py cms compilejsi18n
           volumeMounts:
             - mountPath: /edx/app/edxapp/edx-platform/conf/locale
