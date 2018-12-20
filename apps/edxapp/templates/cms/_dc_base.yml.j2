@@ -79,6 +79,10 @@ spec:
           name: edxapp-v-static
         - mountPath: /edx/app/edxapp/data
           name: edxapp-v-data
+{% if EDXAPP_VAULT.TX_TOKEN is defined %}
+        - mountPath: /edx/app/edxapp/edx-platform/conf/locale
+          name: edxapp-v-locale
+{% endif %}
       initContainers:
         # This initContainer has nothing mounted on its "/config" directory. We
         # copy the content of its "/config" directory (fun-platform default
@@ -107,10 +111,6 @@ spec:
               name: edxapp-configmap-{{ service_variant }}
             - mountPath: /tmp/secret
               name: edxapp-secret
-{% if TX_TOKEN is defined %}
-            - mountPath: /edx/app/edxapp/edx-platform/conf/locale
-              name: edxapp-v-locale
-{% endif %}
       volumes:
         - name: edxapp-configmap-{{ service_variant }}
           configMap:
@@ -130,7 +130,7 @@ spec:
         - name: edxapp-v-data
           persistentVolumeClaim:
             claimName: edxapp-pvc-data
-{% if TX_TOKEN is defined %}
+{% if EDXAPP_VAULT.TX_TOKEN is defined %}
         - name: edxapp-v-locale
           persistentVolumeClaim:
             claimName: edxapp-pvc-locale
