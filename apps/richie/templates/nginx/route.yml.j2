@@ -13,6 +13,8 @@ metadata:
     route_target_service: "app"
   annotations:
     kubernetes.io/tls-acme: "true"
+    haproxy.router.openshift.io/disable_cookies: "true"
+    haproxy.router.openshift.io/balance: "roundrobin"
 spec:
   host: "{{ richie_host | blue_green_host(prefix) }}"
   tls:
