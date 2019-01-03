@@ -14,7 +14,7 @@
 #}
 {%- if celery_worker is defined -%}
   {%- set queues = celery_worker.queues | map('regex_replace', '$', '-%s' | format(deployment_stamp)) -%}
-  {%- set dc_name = "edxapp-worker-%s-%s" | format(celery_worker.name, deployment_stamp) -%}
+  {%- set dc_name = "edxapp-%s-worker-%s" | format(celery_worker.name, deployment_stamp) -%}
   {%- set replicas = celery_worker.replicas -%}
 {%- endif -%}
 
