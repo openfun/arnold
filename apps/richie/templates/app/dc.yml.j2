@@ -19,6 +19,19 @@ spec:
         deploymentconfig: "richie-app-{{ deployment_stamp }}"
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
+      # Prefer running pods on different nodes for redundancy
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: deploymentconfig
+                  operator: In
+                  values:
+                  - "richie-app-{{ deployment_stamp }}"
+              topologyKey: kubernetes.io/hostname
       containers:
         - name: richie
           # We point to a local registry image build for this "live" image (see
