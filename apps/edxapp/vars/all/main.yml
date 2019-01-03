@@ -9,6 +9,8 @@ edxapp_preview_host: "preview.{{ project_name}}.{{ domain_name }}"
 edxapp_image_name: "fundocker/edxapp"
 edxapp_image_tag: "hawthorn.1-2.3.0"
 edxapp_django_port: 8000
+edxapp_lms_replicas: 1
+edxapp_cms_replicas: 1
 edxapp_sql_dump_url: "https://gist.githubusercontent.com/jmaupetit/76fe7db4a8314fe1fa10895edf14248e/raw/1fd2aab7d57273bbe4cf40603c119a1c8026cbc1/edx-database-hawthorn.sql"
 edxapp_secret_name: "edxapp-{{ edxapp_vault_checksum | default('undefined_edxapp_vault_checksum') }}"
 
@@ -72,6 +74,7 @@ edxapp_nginx_image_name: "fundocker/openshift-nginx"
 edxapp_nginx_image_tag: "1.13"
 edxapp_nginx_cms_port: 8081
 edxapp_nginx_lms_port: 8071
+edxapp_nginx_replicas: 1
 edxapp_nginx_htpasswd_secret_name: "edxapp-htpasswd"
 
 # -- celery/redis

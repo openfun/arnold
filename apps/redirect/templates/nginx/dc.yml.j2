@@ -7,7 +7,7 @@ metadata:
   name: redirect-nginx-{{ deployment_stamp }}
   namespace: "{{ project_name }}"
 spec:
-  replicas: 1
+  replicas: {{ redirect_nginx_replicas }}
   template:
     metadata:
       labels:
@@ -16,7 +16,7 @@ spec:
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:
-        - image: "{{ nginx_image }}:{{ nginx_tag }}"
+        - image: "{{ redirect_nginx_image_name }}:{{ redirect_nginx_image_tag }}"
           name: nginx
           ports:
             - containerPort: 80

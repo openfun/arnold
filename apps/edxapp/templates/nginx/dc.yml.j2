@@ -9,7 +9,7 @@ metadata:
   name: "edxapp-nginx-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
-  replicas: 1
+  replicas: {{ edxapp_nginx_replicas }}
   template:
     metadata:
       labels:
