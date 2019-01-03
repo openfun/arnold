@@ -390,7 +390,7 @@ class TestMergeWithDatabaseFilter(unittest.TestCase):
             ]
         }
 
-        self.assertEquals(
+        self.assertEqual(
             merge_with_database(
                 base, database, "edxapp", "eugene", {"name": "development", "code": "d"}
             ),
@@ -449,7 +449,7 @@ class TestMergeWithDatabaseFilter(unittest.TestCase):
             ],
         }
 
-        self.assertEquals(
+        self.assertEqual(
             merge_with_database(
                 base, database, "edxapp", "eugene", {"name": "development", "code": "d"}
             ),
@@ -490,7 +490,7 @@ class TestMergeWithDatabaseFilter(unittest.TestCase):
             ]
         }
 
-        self.assertEquals(
+        self.assertEqual(
             merge_with_database(
                 base, database, "edxapp", "eugene", {"name": "development", "code": "d"}
             ),
@@ -547,7 +547,7 @@ class TestMergeWithDatabaseFilter(unittest.TestCase):
             ]
         }
 
-        self.assertEquals(
+        self.assertEqual(
             merge_with_database(
                 base, database, "edxapp", "eugene", {"name": "development", "code": "d"}
             ),
@@ -589,7 +589,7 @@ class TestMergeWithDatabaseFilter(unittest.TestCase):
                 ]
             }
 
-            self.assertEquals(
+            self.assertEqual(
                 merge_with_database(
                     base,
                     database,
