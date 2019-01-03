@@ -1,4 +1,5 @@
 {% set service_variant = "cms" %}
 {% set worker_type = "wsgi" %}
+{% set replicas = edxapp_cms_replicas %}
 
 {% include "apps/edxapp/templates/cms/_dc_base.yml.j2" with context %}

@@ -6,7 +6,6 @@
 
 {# The dc_name should be unique #}
 {%- set dc_name = "edxapp-%s-%s-%s" | format(service_variant, worker_type, deployment_stamp) -%}
-{%- set replicas = 1 -%}
 
 {#
   In case of a worker, we need to:
@@ -47,7 +46,7 @@ metadata:
 spec:
   # We want to deploy every target DC even if replicas has been set to zero to
   # be able to scale up/down worker for a deployed stack.
-  replicas: {{ replicas }} # number of pods we want
+  replicas: {{ replicas | default(1) }} # number of pods we want
   template:
     metadata:
       labels:

@@ -9,7 +9,7 @@ metadata:
   name: "marsha-app-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
-  replicas: 1 # number of pods we want
+  replicas: {{ marsha_app_replicas }}
   template:
     metadata:
       labels:
