@@ -57,6 +57,19 @@ spec:
         deployment_stamp: "{{ deployment_stamp }}"
         deploymentconfig: "{{ dc_name }}"
     spec:
+      # Prefer running pods on different nodes for redundancy
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: deploymentconfig
+                  operator: In
+                  values:
+                  - "{{ dc_name }}"
+              topologyKey: kubernetes.io/hostname
       containers:
       - name: {{ service_variant }}
 {{ command(service_variant, celery_worker) }}

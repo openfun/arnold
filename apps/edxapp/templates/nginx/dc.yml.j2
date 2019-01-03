@@ -19,6 +19,19 @@ spec:
         deployment_stamp: "{{ deployment_stamp }}"
         deploymentconfig: "edxapp-nginx-{{ deployment_stamp }}"
     spec:
+      # Prefer running pods on different nodes for redundancy
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: deploymentconfig
+                  operator: In
+                  values:
+                  - "edxapp-nginx-{{ deployment_stamp }}"
+              topologyKey: kubernetes.io/hostname
       containers:
         - image: "{{ edxapp_nginx_image_name }}:{{ edxapp_nginx_image_tag }}"
           name: nginx

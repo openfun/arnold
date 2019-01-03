@@ -19,6 +19,19 @@ spec:
         deploymentconfig: "marsha-nginx-{{ deployment_stamp }}"
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
+      # Prefer running pods on different nodes for redundancy
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: deploymentconfig
+                  operator: In
+                  values:
+                  - "marsha-nginx-{{ deployment_stamp }}"
+              topologyKey: kubernetes.io/hostname
       containers:
         - image: "{{ marsha_nginx_image_name }}:{{ marsha_nginx_image_tag }}"
           name: nginx
