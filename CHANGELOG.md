@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.0.0-alpha.5] - 2019-01-04
+
+### Added
+
+- Allow configuring several replicas for stateless applications and nginx pods
+- Spread replicas on all OpenShift nodes for optimal redundancy
+- Don't rely on cookies to route requests but use round robin assignment
+
+### Fixed
+
+- Rename edxapp celery worker pods for coherence with wsgi pods
+- Remove use of deprecated assertEquals that were breaking CI tests
+
 ## [1.0.0-alpha.4] - 2018-12-21
 
 ### Added
