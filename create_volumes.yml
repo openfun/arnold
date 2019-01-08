@@ -1,0 +1,20 @@
+---
+- hosts: local
+  gather_facts: False
+
+  pre_tasks:
+    - import_tasks: tasks/validate_configuration.yml
+
+  tasks:
+    - name: Display playbook name
+      debug: msg="==== Starting create_volumes playbook ===="
+      tags: volume
+
+    - import_tasks: tasks/set_vars.yml
+
+    - include_tasks: tasks/run_tasks_for_apps.yml
+      vars:
+        tasks:
+          - tasks/create_app_volumes
+      tags:
+        - volume

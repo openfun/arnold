@@ -1,4 +1,5 @@
 - import_playbook: create_project.yml
+- import_playbook: create_volumes.yml
 - import_playbook: create_htpasswds.yml
   when: activate_http_basic_auth
 - import_playbook: create_secrets.yml
@@ -23,7 +24,6 @@
       vars:
         tasks:
           - get_objects_for_app
-          - create_app_volumes
           - create_static_services_routes
           - create_app_image_streams
       tags:
