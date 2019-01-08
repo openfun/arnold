@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- Add app namespace in front of the DJANGO_CLOUDFRONT_PRIVATE_KEY variable where missing
+
 ## [1.0.0-alpha.5] - 2019-01-04
 
 ### Added
