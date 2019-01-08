@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Add a new create_volumes playbook to create volumes on an existing project
+
 ### Fixed
 
 - Add app namespace in front of the DJANGO_CLOUDFRONT_PRIVATE_KEY variable where missing
