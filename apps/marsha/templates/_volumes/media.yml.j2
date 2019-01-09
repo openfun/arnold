@@ -9,7 +9,8 @@ metadata:
     deployment_stamp: "{{ deployment_stamp }}"
 spec:
   accessModes:
-  - ReadWriteMany
+    - ReadWriteMany
   resources:
     requests:
       storage: {{ marsha_media_volume_size }}
+  persistentVolumeReclaimPolicy: "{{ pv_reclaim_policy }}"

@@ -12,7 +12,7 @@ project_name: "{{ env_type }}-{{ customer }}"
 # 2. an environment code should be unique among all environments.
 #
 # You should note that the environment code will be used to generate database
-# credentials with the following pattern: 
+# credentials with the following pattern:
 #
 # {{ environment.code }}_{{ customer }}_{{ app.name }}
 #
@@ -82,6 +82,20 @@ job_stamp: null
 # OpenShift's internal docker registry server
 internal_docker_registry: "docker-registry.default.svc:5000"
 
+# Persistant volumes reclaim policy
+#
+# By default, Kubernetes deletes a PV when a PVC is deleted by a user, leading
+# to irreversible data loss. In some cases (_e.g._ environments), we want to
+# keep a volume even if the corresponding PVC has been deleted.
+#
+# The default reclaim policy (that must be changed at least for production
+# environment) is "Delete". Possible values are: "Retain”, “Recycle”, and
+# “Delete”.
+#
+# Documentation:
+# https://kubernetes.io/docs/tasks/administer-cluster/change-pv-reclaim-policy/#why-change-reclaim-policy-of-a-persistentvolume
+pv_reclaim_policy: "Delete"
+
 # ACME (Automated Certificate Management Environment) We use the letsencrypt
 # staging environment except in (pre)production (see:
 # https://letsencrypt.org/docs/staging-environment)
@@ -111,12 +125,14 @@ nginx_ports:
   - "{{ aliases_port }}"
 
 # Endpoints IP
-# These endpoints are used when you don't run your databases inside an OpenShift cluster
-# but you have dedicated external resource to manage your databases.
-# In trashable environments these endpoints will not be used because everything will
-# run inside OpenShift pods. in Production and Pre-production environments you should consider using a dedicated cluster
-# for your databases.
-# Endpoint IPs are initialized at "null" by default and you SHOULD overwrite them in the corresponding environment where you will use them.
+#
+# These endpoints are used when you don't run your databases inside an OpenShift
+# cluster but you have dedicated external resource to manage your databases. In
+# trashable environments these endpoints will not be used because everything
+# will run inside OpenShift pods. In Production and Pre-production environments
+# you should consider using a dedicated cluster for your databases. Endpoint IPs
+# are initialized at "null" by default and you SHOULD overwrite them in the
+# corresponding environment where you will use them.
 endpoint_mongodb_ip:     null
 endpoint_mysql_ip:       null
 endpoint_postgresql_ip:  null

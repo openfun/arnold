@@ -13,3 +13,4 @@ spec:
   resources:
     requests:
       storage: {{ edxapp_locale_volume_size }}
+  persistentVolumeReclaimPolicy: "{{ pv_reclaim_policy }}"

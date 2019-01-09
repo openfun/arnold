@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - Add a new create_volumes playbook to create volumes on an existing project
+- Make PV reclaim policy configurable for all volumes
 
 ### Fixed
 

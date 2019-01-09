@@ -8,7 +8,8 @@ metadata:
     version: "{{ redis_app_image_tag }}"
 spec:
   accessModes:
-  - ReadWriteMany
+    - ReadWriteMany
   resources:
     requests:
       storage: {{ redis_data_volume_size }}
+  persistentVolumeReclaimPolicy: "{{ pv_reclaim_policy }}"

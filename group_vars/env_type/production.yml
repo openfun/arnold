@@ -7,3 +7,6 @@ acme_env: live
 # endpoint_mongodb_ip:     null
 # endpoint_mysql_ip:       null
 # endpoint_postgresql_ip:  null
+
+# Keep volumes event if a PVC has been deleted to prevent data loss.
+pv_reclaim_policy: "Retain"
