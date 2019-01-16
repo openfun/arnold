@@ -46,6 +46,9 @@ spec:
       COPY . /edx/app/edxapp/edx-platform/themes/custom-theme
       RUN NO_PREREQ_INSTALL=1 paver update_assets --settings={{ edxapp_build_settings }} --skip-collect
       {% endif -%}
+      {% if edxapp_extra_dependencies is defined and edxapp_extra_dependencies | length -%}
+      RUN pip install {{ edxapp_extra_dependencies | join(" ") }}
+      {% endif -%}
       USER 10000
   triggers:
     - type: "ConfigChange"
