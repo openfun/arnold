@@ -7,8 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
 - Add a new check in the CI to ensure that the CHANGELOG has been modified in a
   submitted pull request.
+- Add support for extra dependencies installation in edxapp Docker image that
+  will be deployed.
 
 ## [1.0.0-alpha.6] - 2019-01-09
 
