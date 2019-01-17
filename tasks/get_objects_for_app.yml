@@ -34,7 +34,7 @@
     builds: "{{ templates | map('regex_search', '.*/bc.*\\.yml\\.j2$') | select('string') | list }}"
     deployments: "{{ templates | map('regex_search', '.*/dc.*\\.yml\\.j2$') | select('string') | list }}"
     endpoints: "{{ templates | map('regex_search', '.*/ep.*\\.yml\\.j2$') | select('string') | list }}"
-    services: "{{ templates | map('regex_search', '.*/svc\\.yml\\.j2$') | select('string') | list }}"
+    services: "{{ templates | map('regex_search', '.*/svc.*\\.yml\\.j2$') | select('string') | list }}"
     streams: "{{ templates | map('regex_search', '.*/is.*\\.yml\\.j2$') | select('string') | list }}"
     jobs: "{{ templates | map('regex_search', '.*/job_.*\\.yml\\.j2$') | select('string') | list }}"
     routes: "{{ templates | map('regex_search', '.*/route.*\\.yml\\.j2$') | select('string') | list }}"
