@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Allow to define multiple Service objects.
+
 ## [1.0.0-alpha.7] - 2019-01-17
 
 ### Added
