@@ -211,6 +211,7 @@ class TestMergeWithAppFilter(unittest.TestCase):
                     "name": "bar",
                     "configs": ["bar.conf"],
                     "templates": ["bar/dc.yml", "bar/svc.yml"],
+                    "environment_variables": "/foo/_env.yml.j2",
                 },
                 {
                     "name": "baz",
@@ -230,6 +231,7 @@ class TestMergeWithAppFilter(unittest.TestCase):
                     "name": "bar",
                     "configs": ["bar2.conf"],
                     "templates": ["bar/dc.yml", "bar/ep.yml"],
+                    "environment_variables": "/bar/_env.yml.j2",
                 },
                 {
                     "name": "fun",
@@ -247,6 +249,7 @@ class TestMergeWithAppFilter(unittest.TestCase):
                     "name": "bar",
                     "configs": ["bar.conf", "bar2.conf"],
                     "templates": ["bar/dc.yml", "bar/svc.yml", "bar/ep.yml"],
+                    "environment_variables": "/bar/_env.yml.j2",
                 },
                 {
                     "name": "baz",
