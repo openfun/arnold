@@ -47,11 +47,14 @@ def merge_with_app(base, new):
         if len(new_app_selected_services) != 1:
             continue
         new_service = new_app_selected_services[0]
-        for k in ("configs", "templates"):
+        for k in ("configs", "templates", "environment_variables"):
             if new_service.get(k) is None:
                 continue
-            # Use the list(set()) trick to remove duplicated items
-            base_service[k] = sorted(list(set(new_service[k] + base_service[k])))
+            if isinstance(new_service[k], list):
+                # Use the list(set()) trick to remove duplicated items
+                base_service[k] = sorted(list(set(new_service[k] + base_service[k])))
+            elif isinstance(new_service[k], str):
+                base_service[k] = new_service[k]
 
         # Add service missing keys (could be meta, such as host, etc.)
         for k, v in new_service.iteritems():

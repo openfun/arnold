@@ -139,6 +139,7 @@ class LookupModule(LookupBase):
         app_volumes_dir = "_volumes"
         service_config_dir = "_configs"
         settings_file = "settings.yml"
+        environment_variables_file = "_env.yml.j2"
         apps = []
         app = None
 
@@ -162,7 +163,13 @@ class LookupModule(LookupBase):
                 if root == os.path.join(apps_path, tail):
                     if app is not None:
                         apps.append(app)
-                    app = {"name": tail, "services": [], "vars": [], "settings": {}}
+                    app = {
+                        "name": tail,
+                        "services": [],
+                        "vars": [],
+                        "settings": {},
+                        "environment_variables": None,
+                    }
                     continue
 
                 # ./apps/foo/_volumes directory
@@ -175,8 +182,21 @@ class LookupModule(LookupBase):
                 if app is not None and root == os.path.join(
                     apps_path, app["name"], "templates", tail
                 ):
-                    templates = [os.path.join(root, f) for f in files]
-                    app["services"].append({"name": tail, "templates": templates})
+                    templates = []
+                    environment_variables = None
+                    for f in files:
+                        if f == environment_variables_file:
+                            environment_variables = os.path.join(root, f)
+                        else:
+                            templates.append(os.path.join(root, f))
+
+                    app["services"].append(
+                        {
+                            "name": tail,
+                            "templates": templates,
+                            "environment_variables": environment_variables,
+                        }
+                    )
                     continue
 
                 # ./apps/foo/templates/bar/_configs directory
