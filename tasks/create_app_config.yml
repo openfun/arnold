@@ -1,6 +1,14 @@
 ---
 # Create ConfigMaps for an app
 
+# First we create ConfigMaps dedicated to be used as a volume in a DeploymentContfig [1]
+# Then we will deal with ConfigMaps dedicated to be used as environment variables [2]
+#
+# [1] https://docs.okd.io/latest/dev_guide/configmaps.html#configmaps-use-case-consuming-in-volumes
+# [2] https://docs.okd.io/latest/dev_guide/configmaps.html#configmaps-use-case-consuming-in-env-vars
+
+################# ConfigMaps used in a volume #######################
+
 # Select services with ConfigMaps
 - name: Set ConfigMaps for application {{ app.name }}
   set_fact:
@@ -55,3 +63,26 @@
           deployment_stamp: "{{ deployment_stamp }}"
       data: "{{ item.value }}"
   with_dict: "{{ configmaps }}"
+
+################# ConfigMaps used to populate environment variables #######################
+
+# Select services with ConfigMaps
+- name: Set environment variables ConfigMaps for application {{ app.name }}
+  set_fact:
+    app_configmaps: "{{ app | json_query('services[?environment_variables].{name: name, environment_variables: environment_variables}') }}"
+
+- name: Create environment variables ConfigMaps
+  openshift_raw:
+    state: present
+    name: "{{ app.name }}-{{ item.name }}-dotenv-{{ deployment_stamp }}"
+    namespace: "{{ project_name }}"
+    definition:
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        labels:
+          app: "{{ app.name }}"
+          service: "{{ item.name }}"
+          deployment_stamp: "{{ deployment_stamp }}"
+      data: "{{ lookup('template', item.environment_variables) | from_yaml }}"
+  loop: "{{ app_configmaps }}"
