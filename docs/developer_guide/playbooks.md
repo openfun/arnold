@@ -132,9 +132,9 @@ $ docker run --rm -it \
 ## `switch.yml`
 
 The `switch.yml` playbook moves:
-1. the *current* stack to the *previous* route
-2. the *next* stack to the *current* route.
 
+1. the _current_ stack to the _previous_ route
+2. the _next_ stack to the _current_ route.
 
 ### Usage
 
@@ -244,4 +244,15 @@ You don't need to be connected to an OpenShift instance to run this playbook.
 
 ```bash
 $ bin/run ansible-playbook create_vaults.yml --ask-vault-pass
+```
+
+## `create_routes.yml`
+
+This playbook creates routes for all active applications and redirections (if
+any).
+
+### Usage
+
+```bash
+$ bin/run ansible-playbook create_routes.yml
 ```

@@ -4,6 +4,7 @@
   when: activate_http_basic_auth
 - import_playbook: create_secrets.yml
 - import_playbook: create_acme.yml
+- import_playbook: create_routes.yml
 
 - hosts: local
   gather_facts: False
@@ -18,15 +19,11 @@
 
     - import_tasks: tasks/set_vars.yml
 
-    - import_tasks: tasks/create_route_aliases.yml
-
     - include_tasks: tasks/run_tasks_for_apps.yml
       vars:
         tasks:
           - get_objects_for_app
-          - create_static_services_routes
           - create_app_image_streams
       tags:
         - volume
-        - route
         - stream
