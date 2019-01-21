@@ -86,13 +86,18 @@ $ docker run --rm -it \
 ## `init_project.yml`
 
 This playbook is a "meta" playbook that creates a new project with all required
-OpenShift objects for a customer (default: `eugene`) in a particular
-environment (default: `development`).
+OpenShift objects for a customer (default: `eugene`) in a particular environment
+(default: `development`).
+
 It executes sequentially the following playbooks:
 
 - `create_project.yml`
+- `create_volumes.yml`
+- `create_htpasswds.yml` (when `activate_http_basic_auth` is true)
 - `create_secrets.yml`
 - `create_acme.yml`
+- `create_routes.yml`
+- `create_image_streams.yml`
 
 ### Usage
 
@@ -255,4 +260,14 @@ any).
 
 ```bash
 $ bin/run ansible-playbook create_routes.yml
+```
+
+## `create_image_streams.yml`
+
+This playbook creates image streams for all active applications.
+
+### Usage
+
+```bash
+$ bin/run ansible-playbook create_image_streams.yml
 ```

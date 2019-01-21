@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - Allow to define multiple Service objects.
+- Make the `init_project` playbook composable by externalizing some tasks in two
+  new playbooks: `create_routes` and `create_image_streams`.
 
 ## [1.0.0-alpha.7] - 2019-01-17
 
