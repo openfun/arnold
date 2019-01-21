@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.0.0-alpha.8] - 2019-01-21
+
 ### Added
 
 - Allow to define multiple Service objects.
@@ -92,7 +94,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - First Arnold's public release
 - Official Docker image is available at: https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v1.0.0-alpha.7...master
+[unreleased]: https://github.com/openfun/arnold/compare/v1.0.0-alpha.8...master
+[1.0.0-alpha.8]: https://github.com/openfun/arnold/compare/v1.0.0-alpha.7...v1.0.0-alpha.8
 [1.0.0-alpha.7]: https://github.com/openfun/arnold/compare/v1.0.0-alpha.6...v1.0.0-alpha.7
 [1.0.0-alpha.6]: https://github.com/openfun/arnold/compare/v1.0.0-alpha.5...v1.0.0-alpha.6
 [1.0.0-alpha.5]: https://github.com/openfun/arnold/compare/v1.0.0-alpha.4...v1.0.0-alpha.5
