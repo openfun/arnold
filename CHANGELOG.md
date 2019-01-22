@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.0.0] - 2019-01-22
+
 ### Added
 
 - Allow to force route substitution (delete & create) using the force_route
@@ -104,7 +106,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - First Arnold's public release
 - Official Docker image is available at: https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v1.0.0-alpha.8...master
+[unreleased]: https://github.com/openfun/arnold/compare/v1.0.0...master
+[1.0.0]: https://github.com/openfun/arnold/compare/v1.0.0-alpha.8...v1.0.0
 [1.0.0-alpha.8]: https://github.com/openfun/arnold/compare/v1.0.0-alpha.7...v1.0.0-alpha.8
 [1.0.0-alpha.7]: https://github.com/openfun/arnold/compare/v1.0.0-alpha.6...v1.0.0-alpha.7
 [1.0.0-alpha.6]: https://github.com/openfun/arnold/compare/v1.0.0-alpha.5...v1.0.0-alpha.6
