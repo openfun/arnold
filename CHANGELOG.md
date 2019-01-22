@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- The redirect application deployment was failing due to a side effect in route
+  objects creation refactoring (#233).
+
 ## [1.0.0-alpha.8] - 2019-01-21
 
 ### Added
