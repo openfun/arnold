@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Allow to force route substitution (delete & create) using the force_route
+  variable.
+
 ### Fixed
 
 - The redirect application deployment was failing due to a side effect in route

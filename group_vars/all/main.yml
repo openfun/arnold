@@ -12,7 +12,7 @@ project_name: "{{ env_type }}-{{ customer }}"
 # 2. an environment code should be unique among all environments.
 #
 # You should note that the environment code will be used to generate database
-# credentials with the following pattern: 
+# credentials with the following pattern:
 #
 # {{ environment.code }}_{{ customer }}_{{ app.name }}
 #
@@ -109,6 +109,10 @@ http_basic_auth_users:
 aliases_port: 8999
 nginx_ports:
   - "{{ aliases_port }}"
+
+# Should we force Route object substitution (delete/create) when it already
+# exists?
+force_route: false
 
 # Endpoints IP
 # These endpoints are used when you don't run your databases inside an OpenShift cluster

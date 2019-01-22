@@ -9,9 +9,9 @@
   vars:
     routes_aliases: []
 
-- name: Make sure all redirected routes exist or force recreation
+- name: Make sure all redirected routes exist
   openshift_raw:
-    force: true
+    force: "{{ force_route | bool }}"
     definition: "{{ lookup('template', 'apps/redirect/templates/nginx/_route.yml.j2') | from_yaml }}"
     state: present
   with_items: "{{ routes_aliases }}"
