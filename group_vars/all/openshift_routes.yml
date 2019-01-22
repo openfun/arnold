@@ -1,12 +1,16 @@
 # URL
 domain_name: oc.openfun.fr
 
-# OpenShift routes_aliases exemple
-# openshift_routes_aliases:       # routes to be redirected
-#   - route: www.maindomain.tld   # main domain this route must be existe
-#     aliases:                    # aliases to create for redirection to the main route
+# OpenShift routes_aliases example
+#
+# openshift_routes_aliases:
+#   # main domain to redirect to (this route must exist)
+#   - route: www.maindomain.tld
+#     # aliases that will redirect to the previous 'route' definition
+#     aliases:
 #       - maindomain.tld
 #       - main-domain.tld
+#
 #   - route: main_route
 #     aliases:
 #       - alias_1
