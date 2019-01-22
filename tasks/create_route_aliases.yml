@@ -12,7 +12,7 @@
 - name: Make sure all redirected routes exist or force recreation
   openshift_raw:
     force: true
-    definition: "{{ lookup('template', 'apps/redirect/templates/nginx/route.yml.j2') | from_yaml }}"
+    definition: "{{ lookup('template', 'apps/redirect/templates/nginx/_route.yml.j2') | from_yaml }}"
     state: present
   with_items: "{{ routes_aliases }}"
   when: routes_aliases is defined
