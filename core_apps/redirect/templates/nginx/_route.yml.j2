@@ -2,7 +2,9 @@ kind: Route
 apiVersion: v1
 metadata:
   labels:
-    app: alias-{{ item }}
+    app: redirect
+    service: nginx
+    version: "{{ edxapp_nginx_image_tag }}"
   name: alias-{{ item }}
   namespace: "{{ project_name }}"
   annotations:
@@ -10,10 +12,10 @@ metadata:
 spec:
   host: {{ item }}
   port:
-    targetPort: {{ aliases_port }}-tcp
+    targetPort: "{{ aliases_port }}-tcp"
   to:
     kind: Service
-    name: "redirect-nginx-{{ deployment_stamp }}"
+    name: "redirect-nginx"
     weight: 100
   tls:
     termination: edge
