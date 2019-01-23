@@ -1,0 +1,61 @@
+---
+# This playbook creates the redirection core app objects.
+
+- hosts: local
+  gather_facts: False
+
+  pre_tasks:
+    - import_tasks: tasks/validate_configuration.yml
+
+  tasks:
+    - name: Display playbook name
+      debug: msg="==== Starting create_redirect playbook ===="
+      tags: deploy
+
+    - import_tasks: tasks/set_vars.yml
+
+    - name: Lookup available core applications
+      set_fact: core_apps="{{ [ lookup('apps', 'core_apps/') ] | flatten }}"
+
+    - name: Print core_apps
+      debug:
+        msg: "{{ core_apps }}"
+        verbosity: 2
+
+    - name: Set app to point to the redirect app
+      set_fact:
+        app: '{{ core_apps | json_query("[?name==''redirect''] | [0]") }}'
+
+    # Regexp: we ignore templates whose basename starts with an underscore
+    - name: Set redirect_templates
+      set_fact:
+        redirect_templates: '{{ app | json_query("services[0].templates[]") | map("regex_search", ".*\/(?!_)[a-z_]+\.yml\.j2$") | select("string") | list }}'
+
+    - name: Print redirect_templates
+      debug:
+        msg: "{{ redirect_templates }}"
+        verbosity: 2
+
+    - name: Include "all" type vars for redirect app
+      include_tasks: tasks/load_app_defaults.yml
+      vars:
+        file: "{{ item.path }}"
+      with_items: '{{ core_apps | json_query("[?name==''redirect''].vars[] | [?type==''all'']") }}'
+
+    - name: Print "all" type var files
+      debug:
+        msg: '{{ core_apps | json_query("[?name==''redirect''].vars[] | [?type==''all'']") }}'
+        verbosity: 3
+
+    - import_tasks: tasks/create_app_config.yml
+
+    - name: Create all redirect OpenShift objects
+      openshift_raw:
+        force: true
+        namespace: "{{ project_name }}"
+        definition: "{{ lookup('template', item) | from_yaml }}"
+        state: present
+      with_items:
+        - "{{ redirect_templates }}"
+
+    - import_tasks: tasks/create_redirection_routes.yml
