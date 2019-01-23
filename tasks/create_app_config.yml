@@ -51,7 +51,7 @@
 - name: Create the config maps in OpenShift
   openshift_raw:
     state: present
-    name: "{{ app.name }}-{{ item.key }}-{{ deployment_stamp }}"
+    name: "{{ app.name }}-{{ item.key }}{{ deployment_stamp is none | ternary('', '-') }}{{ deployment_stamp }}"
     namespace: "{{ project_name }}"
     definition:
       apiVersion: v1
@@ -74,7 +74,7 @@
 - name: Create environment variables ConfigMaps
   openshift_raw:
     state: present
-    name: "{{ app.name }}-{{ item.name }}-dotenv-{{ deployment_stamp }}"
+    name: "{{ app.name }}-{{ item.name }}-dotenv{{ deployment_stamp is none | ternary('', '-') }}{{ deployment_stamp }}"
     namespace: "{{ project_name }}"
     definition:
       apiVersion: v1
