@@ -4,5 +4,6 @@
   when: activate_http_basic_auth
 - import_playbook: create_secrets.yml
 - import_playbook: create_acme.yml
+- import_playbook: create_redirect.yml
 - import_playbook: create_routes.yml
 - import_playbook: create_image_streams.yml
