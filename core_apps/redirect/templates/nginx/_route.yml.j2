@@ -12,7 +12,7 @@ metadata:
 spec:
   host: {{ item }}
   port:
-    targetPort: "{{ aliases_port }}-tcp"
+    targetPort: "{{ redirect_nginx_port }}-tcp"
   to:
     kind: Service
     name: "redirect-nginx"

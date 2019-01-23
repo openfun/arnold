@@ -13,7 +13,7 @@ map $http_host $new_http_host {
 }
 
 server {
-  listen {{ aliases_port }};
+  listen {{ redirect_nginx_port }};
   server_name localhost;
 
   rewrite ^ https://$new_http_host$request_uri permanent;

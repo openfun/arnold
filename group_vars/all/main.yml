@@ -104,12 +104,6 @@ http_basic_auth_users:
   - "admin"
   - "{{ customer }}-admin"
 
-# TODO: move the following settings to the redirect app
-# Ports
-aliases_port: 8999
-nginx_ports:
-  - "{{ aliases_port }}"
-
 # Should we force Route object substitution (delete/create) when it already
 # exists?
 force_route: false
