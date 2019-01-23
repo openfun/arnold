@@ -1,12 +1,13 @@
 # {{ ansible_managed }}
-# Nginx configuration to redirect aliased routes to their main route
+# Nginx configuration to handle redirections defined in the 'redirections'
+# variable
 
 map_hash_bucket_size 128;
 map $http_host $new_http_host {
-{% if openshift_routes_aliases is iterable %}
-{% for main_route in openshift_routes_aliases %}
-{% for alias in main_route.aliases %}
-  {{ alias }} {{ main_route.route }};
+{% if redirections is iterable %}
+{% for redirection in redirections %}
+{% for uri in redirection.from %}
+  {{ uri }} {{ redirection.to }};
 {% endfor %}
 {% endfor %}
 {% endif %}
