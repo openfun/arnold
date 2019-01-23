@@ -11,7 +11,7 @@
 
     - import_tasks: tasks/set_vars.yml
 
-    - import_tasks: tasks/create_route_aliases.yml
+    - import_tasks: tasks/create_redirection_routes.yml
 
     - include_tasks: tasks/run_tasks_for_apps.yml
       vars:

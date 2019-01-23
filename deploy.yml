@@ -60,8 +60,3 @@
       tags:
         - route
         - deploy
-
-    - import_tasks: tasks/create_route_aliases.yml
-      tags:
-        - route
-        - deploy
