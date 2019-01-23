@@ -39,7 +39,7 @@ For exemple, if you want to redirect `domain.tld` and `main-domain.tld` to
 
 ```yml
 # OpenShift redirected_routes exemple
-# openshift_routes_aliases:       # routes to be redirected
+# redirections:       # routes to be redirected
 #   - route: www.maindomain.tld   # main domain this route must be existe
 #     aliases:                    # aliases to create for redirection to the main route
 #       - maindomain.tld
@@ -48,7 +48,7 @@ For exemple, if you want to redirect `domain.tld` and `main-domain.tld` to
 #     aliases:
 #       - alias_1
 #       - alias_2
-openshift_routes_aliases:
+redirections:
   - route: www.maindomain.tld
     aliases:
       - maindomain.tld

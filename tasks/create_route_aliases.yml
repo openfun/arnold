@@ -4,7 +4,7 @@
 - name: Build a list of all aliases
   set_fact:
     routes_aliases: "{{ routes_aliases }} + [ '{{ item }}']"
-  with_items: "{{ openshift_routes_aliases | json_query('[*].aliases') }}"
+  with_items: "{{ redirections | json_query('[*].aliases') }}"
   when: item is not none and item != ""
   vars:
     routes_aliases: []
