@@ -9,10 +9,10 @@ metadata:
   namespace: "{{ project_name }}"
 spec:
   ports:
-    - name: "{{ aliases_port }}-tcp"
-      port: {{ aliases_port }}
+    - name: "{{ redirect_nginx_port }}-tcp"
+      port: {{ redirect_nginx_port }}
       protocol: TCP
-      targetPort: {{ aliases_port }}
+      targetPort: {{ redirect_nginx_port }}
   selector:
     app: redirect
     deploymentconfig: "redirect-nginx"

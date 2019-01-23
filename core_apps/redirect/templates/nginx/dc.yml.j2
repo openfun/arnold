@@ -35,7 +35,7 @@ spec:
         - image: "{{ redirect_nginx_image_name }}:{{ redirect_nginx_image_tag }}"
           name: nginx
           ports:
-            - containerPort: 80
+            - containerPort: {{ redirect_nginx_port }}
               protocol: TCP
           volumeMounts:
             - mountPath: /etc/nginx/conf.d
