@@ -3,8 +3,10 @@ kind: DeploymentConfig
 metadata:
   labels:
     app: redirect
-    deployment_stamp: "{{ deployment_stamp }}"
-  name: redirect-nginx-{{ deployment_stamp }}
+    service: nginx
+    version: "{{ redirect_nginx_image_tag }}"
+    deploymentconfig: redirect-nginx
+  name: redirect-nginx
   namespace: "{{ project_name }}"
 spec:
   replicas: {{ redirect_nginx_replicas }}
@@ -12,22 +14,23 @@ spec:
     metadata:
       labels:
         app: redirect
-        deploymentconfig: redirect-nginx-{{ deployment_stamp }}
-        deployment_stamp: "{{ deployment_stamp }}"
+        service: nginx
+        version: "{{ redirect_nginx_image_tag }}"
+        deploymentconfig: redirect-nginx
     spec:
       # Prefer running pods on different nodes for redundancy
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: deploymentconfig
-                  operator: In
-                  values:
-                  - "redirect-nginx-{{ deployment_stamp }}"
-              topologyKey: kubernetes.io/hostname
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: deploymentconfig
+                      operator: In
+                      values:
+                        - "redirect-nginx"
+                topologyKey: kubernetes.io/hostname
       containers:
         - image: "{{ redirect_nginx_image_name }}:{{ redirect_nginx_image_tag }}"
           name: nginx
@@ -41,4 +44,4 @@ spec:
       volumes:
         - name: redirect-v-nginx
           configMap:
-            name: redirect-nginx-{{ deployment_stamp }}
+            name: redirect-nginx

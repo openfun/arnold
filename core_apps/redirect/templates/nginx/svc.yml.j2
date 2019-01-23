@@ -3,15 +3,17 @@ kind: Service
 metadata:
   labels:
     app: redirect
-    deployment_stamp: "{{ deployment_stamp }}"
-  name: "redirect-nginx-{{ deployment_stamp }}"
+    service: nginx
+    version: "{{ redirect_nginx_image_tag }}"
+  name: "redirect-nginx"
   namespace: "{{ project_name }}"
 spec:
   ports:
-    - name: {{ aliases_port }}-tcp
+    - name: "{{ aliases_port }}-tcp"
       port: {{ aliases_port }}
       protocol: TCP
       targetPort: {{ aliases_port }}
   selector:
-    deploymentconfig: "redirect-nginx-{{ deployment_stamp }}"
+    app: redirect
+    deploymentconfig: "redirect-nginx"
   type: ClusterIP
