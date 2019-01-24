@@ -6,6 +6,7 @@ metadata:
     service: nginx
     version: "{{ redirect_nginx_image_tag }}"
     deploymentconfig: redirect-nginx
+    deployment_stamp: "{{ deployment_stamp }}"
   name: redirect-nginx
   namespace: "{{ project_name }}"
 spec:
@@ -17,6 +18,7 @@ spec:
         service: nginx
         version: "{{ redirect_nginx_image_tag }}"
         deploymentconfig: redirect-nginx
+        deployment_stamp: "{{ deployment_stamp }}"
     spec:
       # Prefer running pods on different nodes for redundancy
       affinity:
@@ -44,4 +46,4 @@ spec:
       volumes:
         - name: redirect-v-nginx
           configMap:
-            name: redirect-nginx
+            name: "redirect-nginx-{{ deployment_stamp }}"
