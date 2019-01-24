@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Create ConfigMaps to be consumed in environment variables in a DeploymentConfig.
 - Add learning locker in the list of supported applications.
 - Activate and configure learning locker for the eugene customer in development & CI environments.
+- ConfigMap generation is now compatible with non-blue-green core applications.
+- The redirect application is now part of Arnold's core features, with it's own
+  life cycle.
 
 ## [1.0.0] - 2019-01-22
 
