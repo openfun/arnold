@@ -5,12 +5,13 @@ metadata:
     app: redirect
     service: nginx
     version: "{{ redirect_nginx_image_tag }}"
-  name: "redirect-{{ redirection_from }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: "redirect-{{ redirection_from | default('N/A') }}"
   namespace: "{{ project_name }}"
   annotations:
     kubernetes.io/tls-acme: "true"
 spec:
-  host: "{{ redirection_from }}"
+  host: "{{ redirection_from | default('N/A') }}"
   port:
     targetPort: "{{ redirect_nginx_port }}-tcp"
   to:

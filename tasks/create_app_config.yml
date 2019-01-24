@@ -60,7 +60,7 @@
         labels:
           app: "{{ app.name }}"
           service: "{{ item.key }}"
-          deployment_stamp: "{{ deployment_stamp }}"
+          deployment_stamp: "{{ deployment_stamp | default('N/A') }}"
       data: "{{ item.value }}"
   with_dict: "{{ configmaps }}"
 
@@ -83,6 +83,6 @@
         labels:
           app: "{{ app.name }}"
           service: "{{ item.name }}"
-          deployment_stamp: "{{ deployment_stamp }}"
+          deployment_stamp: "{{ deployment_stamp | default('N/A') }}"
       data: "{{ lookup('template', item.environment_variables) | from_yaml }}"
   loop: "{{ app_configmaps }}"
