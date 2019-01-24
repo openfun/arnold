@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: learninglocker
+    service: xapi
+    version: "{{ learninglocker_xapi_image_tag }}"
+  name: "learninglocker-xapi"
+  namespace: "{{ project_name }}"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: learninglocker
+        service: xapi
+        version: "{{ learninglocker_xapi_image_tag }}"
+        deploymentconfig: "learninglocker-xapi"
+    spec:
+      containers:
+        - image: "{{ learninglocker_xapi_image_name }}:{{ learninglocker_xapi_image_tag }}"
+          imagePullPolicy: Always
+          name: nginx
+          ports:
+            - containerPort: "{{ learninglocker_xapi_port }}"
+              protocol: TCP
+          envFrom:
+            - secretRef:
+                name: "{{ learninglocker_xapi_secret_name }}"
+            - configMapRef:
+                name: "learninglocker-xapi-dotenv-{{ deployment_stamp }}"
+          volumeMounts:
+            - name: learninglocker-xapi-storage
+              mountPath: /app/storage
+      volumes:
+        - name: learninglocker-xapi-storage
+          emptyDir: {}

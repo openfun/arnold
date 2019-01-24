@@ -1,0 +1,38 @@
+{%- set dc_name = "learninglocker-%s" | format(service_variant) -%}
+
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: learninglocker
+    service: "{{ service_variant }}"
+    version: "{{ learninglocker_image_tag }}"
+  name: "{{ dc_name }}"
+  namespace: "{{ project_name }}"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: learninglocker
+        service: "{{ service_variant }}"
+        version: "{{ learninglocker_image_tag }}"
+        deploymentconfig: "{{ dc_name }}"
+    spec:
+      containers:
+        - name: "{{ service_variant }}"
+          # We point to a local registry image build for this "live" image (see
+          # ImageStream and BuildConfig templates)
+          image: "{{ learninglocker_image_name }}:{{ learninglocker_image_tag }}"
+          imagePullPolicy: Always
+{% if learninglocker_port %}
+          ports:
+            - containerPort: "{{ learninglocker_port }}"
+              protocol: TCP
+{% endif %}
+          command: ["node", "{{ learninglocker_command }}"]
+          envFrom:
+            - secretRef:
+                name: "{{ learninglocker_secret_name }}"
+            - configMapRef:
+                name: "learninglocker-app-dotenv-{{ deployment_stamp }}"
