@@ -1,0 +1,12 @@
+{#
+  An exhaustive list of learning locker environment variables is available at:
+  http://docs.learninglocker.net/guides-configuring/#learning-locker-application
+#}
+API_PORT: "{{ learninglocker_api_port }}"
+UI_PORT: "{{ learninglocker_ui_port }}"
+LOG_MIN_LEVEL: info
+LOG_DIR: /tmp
+NODE_ENV: production
+WINSTON_CLOUDWATCH_ENABLED: false
+FS_REPO: local
+QUEUE_PROVIDER: REDIS

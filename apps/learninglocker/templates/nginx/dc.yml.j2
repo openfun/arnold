@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: learninglocker
+    service: nginx
+    version: "{{ learninglocker_nginx_image_tag }}"
+  name: "learninglocker-nginx"
+  namespace: "{{ project_name }}"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: learninglocker
+        service: nginx
+        version: "{{ learninglocker_nginx_image_tag }}"
+        deploymentconfig: "learninglocker-nginx"
+    spec:
+      containers:
+        - image: "{{ learninglocker_nginx_image_name }}:{{ learninglocker_nginx_image_tag }}"
+          imagePullPolicy: Always
+          name: nginx
+          ports:
+            - containerPort: {{ learninglocker_nginx_port }}
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /etc/nginx/conf.d
+              name: learninglocker-v-nginx
+              readOnly: true
+
+      volumes:
+        - name: learninglocker-v-nginx
+          configMap:
+            name: "learninglocker-nginx-{{ deployment_stamp }}"

@@ -1,0 +1,31 @@
+{% if env_type in trashable_env_types %}
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: learninglocker
+    service: mongodb
+    version: "{{ learninglocker_mongodb_image_tag }}"
+  name: "learninglocker-mongodb"
+  namespace: "{{ project_name }}"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: learninglocker
+        service: mongodb
+        version: "{{ learninglocker_mongodb_image_tag }}"
+        deploymentconfig: "learninglocker-mongodb"
+    spec:
+      containers:
+        - image: "{{ learninglocker_mongodb_image_name }}:{{ learninglocker_mongodb_image_tag }}"
+          imagePullPolicy: Always
+          name: mongodb
+          ports:
+            - containerPort: "{{ learninglocker_mongodb_port }}"
+              protocol: TCP
+          envFrom:
+            - secretRef:
+                name: "{{ learninglocker_mongodb_secret_name }}"
+{% endif %}

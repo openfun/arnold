@@ -1,0 +1,21 @@
+# MongoDB
+{% set mongodb_credentials = databases.mongodb | json_query("[?release=='" ~ learninglocker_mongodb_version ~ "'].databases | [0][?application=='learninglocker'].{user: user, password: password, name: name} | [0]") %}
+MONGODB_ADMIN_PASSWORD: "{{ lookup('password', '/dev/null length=24') }}"
+MONGODB_USER: {{ mongodb_credentials.user }}
+MONGODB_PASSWORD: {{ mongodb_credentials.password }}
+MONGODB_DATABASE: {{ mongodb_credentials.name }}
+MONGODB_PATH: mongodb://{{ mongodb_credentials.user }}:{{ mongodb_credentials.password }}@{{ learninglocker_mongodb_host }}:{{ learninglocker_mongodb_port }}/{{ mongodb_credentials.name }}
+
+# secrets variable injected in a secret object
+SECRETS:
+  SITE_URL:
+  APP_SECRET: {{ lookup('password', '/dev/null length=30') }}
+  MONGODB_PATH: mongodb://{{ mongodb_credentials.user }}:{{ mongodb_credentials.password }}@{{ learninglocker_mongodb_host }}:{{ learninglocker_mongodb_port }}/{{ mongodb_credentials.name }}
+  REDIS_HOST: redis
+  REDIS_PORT: {{ redis_app_port }}
+  REDIS_PREFIX: LEARNINGLOCKER
+  SMTP_HOST: mailcatcher
+  SMTP_PORT: {{ mailcatcher_sender_port }}
+  SMTP_SECURED: false
+  SMTP_USER:
+  SMTP_PASS:

@@ -1,0 +1,5 @@
+is_blue_green_compatible: False
+
+databases:
+  - engine: "mongodb"
+    release: "3.2"
