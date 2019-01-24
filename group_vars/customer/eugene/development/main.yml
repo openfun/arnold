@@ -5,6 +5,7 @@ apps:
   - name: marsha
   - name: forum
   - name: richie
+  - name: learninglocker
   - name: edxapp
     services:
       - name: cms

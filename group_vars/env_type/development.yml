@@ -18,3 +18,4 @@ apps:
   - name: edxapp
   - name: redis
   - name: hello
+  - name: learninglocker

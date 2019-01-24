@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - Create ConfigMaps to be consumed in environment variables in a DeploymentConfig.
+- Add learning locker in the list of supported applications.
+- Activate and configure learning locker for the eugene customer in development & CI environments.
 
 ## [1.0.0] - 2019-01-22
 
