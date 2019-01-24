@@ -16,3 +16,4 @@ apps:
   - name: edxapp
   - name: redis
   - name: forum
+  - name: learninglocker
