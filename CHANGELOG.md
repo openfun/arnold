@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.2.0] - 2019-01-28
+
 ### Added
 
 - Migrate docker image to python 3.6
@@ -121,7 +123,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - First Arnold's public release
 - Official Docker image is available at: https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v1.1.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v1.2.0...master
+[1.2.0]: https://github.com/openfun/arnold/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/openfun/arnold/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/openfun/arnold/compare/v1.0.0-alpha.8...v1.0.0
 [1.0.0-alpha.8]: https://github.com/openfun/arnold/compare/v1.0.0-alpha.7...v1.0.0-alpha.8
