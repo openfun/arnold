@@ -21,7 +21,7 @@ marsha_postgresql_secret_name: "marsha-postgresql-{{ marsha_vault_checksum | def
 
 # -- marsha
 marsha_image_name: "fundocker/marsha"
-marsha_image_tag: "1.0.0-alpha.3-alpine"
+marsha_image_tag: "2.1.0"
 marsha_django_port: 8000
 marsha_app_replicas: 1
 marsha_django_configuration: "Development"

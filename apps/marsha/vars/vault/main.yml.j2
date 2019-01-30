@@ -12,19 +12,25 @@ DJANGO_SECRET_KEY: {{ lookup('password', '/dev/null length=30') }}
 # DJANGO_SENTRY_DSN: https://super:marsha@sentry.io/foo
 
 # FIXME uncomment this block and replace with your AWS credentials.
-# You can refer to the marsha documentation to know what are this variables: 
+# You can refer to Marsha's documentation to know what are these variables:
 # https://github.com/openfun/marsha/blob/master/docs/env.md#amazon-web-services-related-settings
 # AWS
 # DJANGO_AWS_ACCESS_KEY_ID: yourAwsAccessKeyId
 # DJANGO_AWS_SECRET_ACCESS_KEY: yourAwsSecretAccessKey
 
 # FIXME uncomment this block and replace with your cloudfront credentials
-# You can refer to the marsha documentation to know what are this variables: 
+# You can refer to Marsha's documentation to know what are these variables:
 # https://github.com/openfun/marsha/blob/master/docs/env.md#django_cloudfront_access_key_id
 # CloudFront User (has to be a root user, cannot be an IAM user)
 # DJANGO_CLOUDFRONT_ACCESS_KEY_ID: YourCloudfrontAccessKeyId
 # DJANGO_CLOUDFRONT_URL: https://yourCloudfrontUrl
-# DJANGO_CLOUDFRONT_PRIVATE_KEY: 
+# DJANGO_CLOUDFRONT_PRIVATE_KEY:
 
 # JWT Token
 DJANGO_JWT_SIGNING_KEY: {{ lookup('password', '/dev/null length=30') }}
+
+# Learning Locker variables
+# DJANGO_LRS_AUTH_TOKEN is the token provided by a LRS to authenticate requests
+# DJANGO_LRS_AUTH_TOKEN=Basic ThisIsABasicAuth
+# DJANGO_LRS_URL is the endpoint used to send xAPI statements
+# DJANGO_LRS_URL=https://lrs.tld
