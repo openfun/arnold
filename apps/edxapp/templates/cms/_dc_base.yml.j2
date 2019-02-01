@@ -7,6 +7,9 @@
 {# The dc_name should be unique #}
 {%- set dc_name = "edxapp-%s-%s-%s" | format(service_variant, worker_type, deployment_stamp) -%}
 
+{# Set the expected target current host for this DC #}
+{%- set host = (service_variant == "cms") | ternary(edxapp_cms_host, edxapp_lms_host) -%}
+
 {#
   In case of a worker, we need to:
     1. patch attached queue names to make them specific to this deployment
@@ -82,6 +85,44 @@ spec:
         # ImageStream and BuildConfig templates)
         image: "{{ internal_docker_registry }}/{{ project_name }}/edxapp-{{ service_variant }}:{{ edxapp_image_tag }}-live"
         imagePullPolicy: Always
+{% if celery_worker is defined %}
+        livenessProbe:
+          exec:
+            command:
+              - "/bin/bash"
+              - "-c"
+              - "python manage.py {{ service_variant }} celery inspect ping -d celery@{{ celery_worker.name }}.%$(hostname)"
+          initialDelaySeconds: 120
+          periodSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+              - "/bin/bash"
+              - "-c"
+              - "python manage.py {{ service_variant }} celery inspect ping -d celery@{{ celery_worker.name }}.%$(hostname)"
+          initialDelaySeconds: 60
+          periodSeconds: 3
+{% else %}
+        # Pod probes that only apply for wsgi services
+        livenessProbe:
+          httpGet:
+            path: /heartbeat
+            port: {{ edxapp_django_port }}
+            httpHeaders:
+              - name: Host
+                value: "{{ host }}"
+          initialDelaySeconds: 120
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /heartbeat
+            port: {{ edxapp_django_port }}
+            httpHeaders:
+              - name: Host
+                value: "{{ host }}"
+          initialDelaySeconds: 60
+          periodSeconds: 3
+{% endif %}
         volumeMounts:
         - mountPath: /config
           name: edxapp-config
