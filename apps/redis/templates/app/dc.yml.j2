@@ -25,6 +25,22 @@ spec:
       containers:
         - name: redis
           image: "{{ redis_app_image_name }}:{{ redis_app_image_tag }}"
+          livenessProbe:
+            exec:
+              command:
+                - "/bin/bash"
+                - "-c"
+                - "redis-cli ping"
+            initialDelaySeconds: 120
+            periodSeconds: 5
+          readinessProbe:
+            exec:
+              command:
+                - "/bin/bash"
+                - "-c"
+                - "redis-cli ping"
+            initialDelaySeconds: 60
+            periodSeconds: 3
           volumeMounts:
             - mountPath: /data
               name: redis-v-data
