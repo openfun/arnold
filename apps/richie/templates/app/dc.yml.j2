@@ -36,6 +36,24 @@ spec:
         - name: richie
           image: "{{ richie_image_name }}:{{ richie_image_tag }}"
           imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /__heartbeat__
+              port: {{ richie_django_port }}
+              httpHeaders:
+                - name: Host
+                  value: "{{ richie_host }}"
+            initialDelaySeconds: 60
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /__lbheartbeat__
+              port: {{ richie_django_port }}
+              httpHeaders:
+                - name: Host
+                  value: "{{ richie_host }}"
+            initialDelaySeconds: 5
+            periodSeconds: 3
           env:
             - name: DJANGO_SETTINGS_MODULE
               value: settings
