@@ -38,6 +38,24 @@ spec:
           # ImageStream and BuildConfig templates)
           image: "{{ internal_docker_registry }}/{{ project_name }}/forum:{{ forum_image_tag }}-live"
           imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /heartbeat
+              port: {{ forum_port }}
+              httpHeaders:
+                - name: Host
+                  value: "{{ forum_host }}"
+            initialDelaySeconds: 60
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /heartbeat
+              port: {{ forum_port }}
+              httpHeaders:
+                - name: Host
+                  value: "{{ forum_host }}"
+            initialDelaySeconds: 5
+            periodSeconds: 3
           ports:
             - containerPort: "{{ forum_port }}"
               protocol: TCP
