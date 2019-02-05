@@ -456,19 +456,32 @@ jobs:
           name: Tag images
           command: |
             docker images fundocker/arnold
-            DOCKER_TAG=$(echo ${CIRCLE_TAG} | sed 's/^v//')
-            echo "DOCKER_TAG: ${DOCKER_TAG} (from Git tag: ${CIRCLE_TAG})"
+            DOCKER_TAG=$([[ -z "$CIRCLE_TAG" ]] && echo $CIRCLE_BRANCH || echo ${CIRCLE_TAG} | sed 's/^v//')
+            RELEASE_TYPE=$([[ -z "$CIRCLE_TAG" ]] && echo "branch" || echo "tag ")
+            # Display either:
+            # - DOCKER_TAG: master (Git branch)
+            # or
+            # - DOCKER_TAG: 1.1.2 (Git tag v1.1.2)
+            echo "DOCKER_TAG: ${DOCKER_TAG} (Git ${RELEASE_TYPE}${CIRCLE_TAG})"
             docker tag ${ARNOLD_IMAGE} fundocker/arnold:${DOCKER_TAG}
-            docker tag ${ARNOLD_IMAGE} fundocker/arnold:latest
-            docker images "fundocker/arnold:${DOCKER_TAG}*"
-
+            if [[ -n "$CIRCLE_TAG" ]]; then
+              docker tag ${ARNOLD_IMAGE} fundocker/arnold:latest
+            fi
+            docker images | grep -E "^fundocker/arnold\s*(${DOCKER_TAG}.*|latest|master)"
       - run:
           name: Publish images
           command: |
-            DOCKER_TAG=$(echo ${CIRCLE_TAG} | sed 's/^v//')
-            echo "DOCKER_TAG: ${DOCKER_TAG} (from Git tag: ${CIRCLE_TAG})"
+            DOCKER_TAG=$([[ -z "$CIRCLE_TAG" ]] && echo $CIRCLE_BRANCH || echo ${CIRCLE_TAG} | sed 's/^v//')
+            RELEASE_TYPE=$([[ -z "$CIRCLE_TAG" ]] && echo "branch" || echo "tag ")
+            # Display either:
+            # - DOCKER_TAG: master (Git branch)
+            # or
+            # - DOCKER_TAG: 1.1.2 (Git tag v1.1.2)
+            echo "DOCKER_TAG: ${DOCKER_TAG} (Git ${RELEASE_TYPE}${CIRCLE_TAG})"
             docker push fundocker/arnold:${DOCKER_TAG}
-            docker push fundocker/arnold:latest
+            if [[ -n "$CIRCLE_TAG" ]]; then
+              docker push fundocker/arnold:latest
+            fi
 
 workflows:
   version: 2
@@ -619,6 +632,6 @@ workflows:
             - test-redirect
           filters:
             branches:
-              ignore: /.*/
+              only: master
             tags:
               only: /^v.*/
