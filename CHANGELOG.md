@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- Publish a Docker image to DockerHub for the master branch
+
 ## [1.3.0] - 2019-01-31
 
 ### Added
