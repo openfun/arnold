@@ -24,7 +24,7 @@ spec:
       - name: richie-dbmigrate
         env:
           - name: DJANGO_SETTINGS_MODULE
-            value: richie.settings
+            value: settings
           - name: DJANGO_CONFIGURATION
             value: "{{ richie_django_configuration }}"
           - name: POSTGRES_DB
@@ -41,5 +41,9 @@ spec:
         # We point to a local registry image build for this "live" image (see
         # ImageStream and BuildConfig templates)
         image: "{{ internal_docker_registry }}/{{ project_name }}/richie:{{ richie_image_tag }}-live"
-        command: ["python", "manage.py", "migrate"]
+        command:
+          - "bash"
+          - "-c"
+          - cd sandbox &&
+            python manage.py migrate
       restartPolicy: Never

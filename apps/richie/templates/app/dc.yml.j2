@@ -40,7 +40,7 @@ spec:
           imagePullPolicy: Always
           env:
             - name: DJANGO_SETTINGS_MODULE
-              value: richie.settings
+              value: settings
             - name: DJANGO_CONFIGURATION
               value: "{{ richie_django_configuration }}"
             - name: POSTGRES_DB
