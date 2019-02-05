@@ -7,7 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
 - Publish a Docker image to DockerHub for the master branch
+- The `apps_filter` variable definition is now required to run the `switch.yml`
+  and `deploy.yml` playbooks (if multiple apps are active)
 
 ## [1.3.0] - 2019-01-31
 

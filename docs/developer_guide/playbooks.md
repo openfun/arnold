@@ -141,20 +141,26 @@ The `switch.yml` playbook moves:
 1. the _current_ stack to the _previous_ route
 2. the _next_ stack to the _current_ route.
 
+_nota bene_: the `apps_filter` environment variable definition is required to
+ensure that you are switching a blue-green compatible application that has been
+recently deployed to the next stack.
+
 ### Usage
 
 ```bash
 # sugar development
-$ bin/switch -e "customer=eugene env_type=staging"
+$ bin/switch -e "customer=eugene env_type=staging apps_filter=richie"
 
 # development
-$ bin/ansible-playbook switch.yml -e "customer=eugene env_type=staging"
+$ bin/ansible-playbook switch.yml \
+    -e "customer=eugene env_type=staging apps_filter=richie"
 
 # native command for production
 $ docker run --rm -it \
     --env-file env.d/production \
     arnold \
-    ansible-playbook switch.yml -e "customer=eugene env_type=staging"
+    ansible-playbook switch.yml \
+        -e "customer=eugene env_type=staging apps_filter=richie"
 ```
 
 ## `create_project.yml`
