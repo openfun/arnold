@@ -7,10 +7,6 @@ domain_name: "{{ lookup('env', 'OPENSHIFT_DOMAIN') }}.nip.io"
 # docker-registry.default.svc) to prevent oc cluster DNS issues
 internal_docker_registry: "172.30.1.1:5000"
 
-# Use development images in the development environment
-richie_image_tag: "0.1.0-alpha.3-alpine-dev"
-marsha_image_tag: "1.0.0-alpha.2-alpine-dev"
-
 apps:
   - name: mailcatcher
   - name: marsha
