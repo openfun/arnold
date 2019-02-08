@@ -22,6 +22,10 @@ HIGH_PRIORITY_QUEUE: "{{ edxapp_celery_cms_high_priority_queue }}-{{ deployment_
 DEFAULT_PRIORITY_QUEUE: "{{ edxapp_celery_cms_default_priority_queue }}-{{ deployment_stamp }}"
 LOW_PRIORITY_QUEUE: "{{ edxapp_celery_cms_low_priority_queue }}-{{ deployment_stamp }}"
 
+# Memcached
+MEMCACHED_HOST: "edxapp-memcached-{{ deployment_stamp }}"
+MEMCACHED_PORT: {{ edxapp_memcached_port }}
+
 # MySQL
 DATABASE_HOST: "edxapp-mysql-{{ deployment_stamp }}"
 DATABASE_PORT: {{ edxapp_mysql_port }}
