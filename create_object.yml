@@ -45,7 +45,7 @@
         verbosity: 2
 
     - name: Create object
-      openshift_raw:
+      k8s:
         definition: "{{ lookup('template', object_template) | from_yaml }}"
         state: present
         force: true

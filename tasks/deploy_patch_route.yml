@@ -1,7 +1,7 @@
 # Patch routes of all services from a single app to the new deployment_stamp
 
 - name: "Patching routes with prefix {{ prefix }} for the {{ app.name }} application with deployment_stamp {{ deployment_stamp }}"
-  openshift_raw:
+  k8s:
     force: "{{ force_route | bool }}"
     definition: "{{ lookup('template', route_template) | from_yaml }}"
     state: present
@@ -12,7 +12,7 @@
   tags: route
 
 - name: "Patching routes for the {{ app.name }} application"
-  openshift_raw:
+  k8s:
     force: "{{ force_route | bool }}"
     definition: "{{ lookup('template', route_template) | from_yaml }}"
     state: present

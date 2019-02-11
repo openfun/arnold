@@ -37,7 +37,7 @@
     - import_tasks: tasks/create_app_config.yml
 
     - name: Create redirect deployments
-      openshift_raw:
+      k8s:
         force: true
         namespace: "{{ project_name }}"
         definition: "{{ lookup('template', deployment) | from_yaml }}"
@@ -49,28 +49,21 @@
     # Check if the nginx service already exists and recreate it only if not
     # (parts of an OpenShift Service definition are immutable).
     - name: Check if the redirect nginx service already exists
-      set_fact:
-        redirect_nginx_service: |
-          {{
-            [
-              lookup(
-                'openshift',
-                api_version='v1',
-                namespace=project_name,
-                kind='Service',
-                resource_name='redirect-nginx'
-              )
-            ] | flatten
-          }}
+      k8s_facts:
+        api_version: "v1"
+        namespace: "{{ project_name }}"
+        kind: "Service"
+        name: "redirect-nginx"
+      register: redirect_nginx_service
 
     - name: Create redirect services
-      openshift_raw:
+      k8s:
         namespace: "{{ project_name }}"
         definition: "{{ lookup('template', service) | from_yaml }}"
         state: present
       loop: "{{ services }}"
       loop_control:
         loop_var: service
-      when: redirect_nginx_service | length == 0
+      when: redirect_nginx_service.resources | length == 0
 
     - import_tasks: tasks/create_redirection_routes.yml

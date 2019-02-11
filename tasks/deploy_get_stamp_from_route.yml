@@ -7,47 +7,24 @@
 # then the service targeted by this route. TThis service will be labelled with the
 # deploy_stamp we are looking for.
 - name: Get route for application {{ app.name }} with prefix {{ prefix }}
-  set_fact:
-    route: |
-      {{
-        [
-          lookup(
-            'openshift',
-            api_version='v1',
-            namespace=project_name,
-            kind='Route',
-            label_selector='app=' + app.name + ',route_prefix=' + prefix
-          )
-        ] | flatten | first
-      }}
+  k8s_facts:
+    api_version: "v1"
+    namespace: "{{ project_name }}"
+    kind: "Route"
+    label_selectors:
+      - app={{ app.name }}
+      - route_prefix={{ prefix }}
   register: app_route
   when: routes | length > 0 and app.settings.is_blue_green_compatible | default(True) == True
 
-- name: Display selected route
-  debug:
-    msg: "{{ app_route | to_nice_yaml }}"
-    verbosity: 3
-  when: app_route is defined
-
 - name: Get targeted service
-  set_fact:
-    targeted_service: |
-      {{
-        lookup(
-          'openshift',
-          api_version='v1',
-          namespace=project_name,
-          kind='Service',
-          resource_name=app_route.ansible_facts.route.spec.to.name
-        )
-      }}
-  when: app_route.ansible_facts is defined
-
-- name: Display targeted service
-  debug:
-    msg: "{{ targeted_service | to_nice_yaml }}"
-    verbosity: 3
-  when: targeted_service is defined
+  k8s_facts:
+    api_version: "v1"
+    namespace: "{{ project_name }}"
+    kind: "Service"
+    name: "{{ ( app_route.resources | first ).spec.to.name }}"
+  register: targeted_service
+  when: app_route.resources is defined
 
 # app_deployment_stamp must be defined otherwise all script dependending on this one will fail
 - name: Initialize app_deployment_stamp
@@ -56,9 +33,8 @@
 
 - name: set_fact app_deployment_stamp
   set_fact:
-    app_deployment_stamp: "{{ targeted_service.metadata.labels.deployment_stamp | default(none) }}"
-  with:
-  when: targeted_service is defined and targeted_service | length >  0
+    app_deployment_stamp: "{{ (targeted_service.resources | first ).metadata.labels.deployment_stamp | default(none) }}"
+  when: targeted_service.resources is defined and targeted_service.resources | length == 1
 
 - name: Print app_deployment_stamp
   debug:

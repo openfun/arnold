@@ -68,7 +68,7 @@
         verbosity: 2
 
     - name: Create all openshift-acme OpenShift objects
-      openshift_raw:
+      k8s:
         force: true
         namespace: "{{ project_name }}"
         definition: "{{ lookup('template', item) | from_yaml }}"
@@ -77,7 +77,7 @@
       when: env_type not in ('development', 'ci')
 
     - name: Add role to serviceaccount
-      openshift_raw:
+      k8s:
         force: true
         state: present
         definition: "{{ lookup('template', rb_template) | from_yaml }}"

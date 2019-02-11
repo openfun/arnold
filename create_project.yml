@@ -16,12 +16,13 @@
     - import_tasks: tasks/set_vars.yml
 
     - name: Make sure the project exists in OpenShift and is up-to-date
-      openshift_raw:
+      k8s:
         api_version: v1
         kind: Project
         name: "{{ project_name }}"
-        description: "{{ project_description|default(project_display_name)|default(project_name) }}"
-        display_name: "{{ project_display_name|default(project_name) }}"
+        resource_definition:
+          description: "{{ project_description|default(project_display_name)|default(project_name) }}"
+          display_name: "{{ project_display_name|default(project_name) }}"
         state: present
       register: new_project
       until: new_project.result is defined and new_project.result.status is success

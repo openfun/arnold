@@ -9,7 +9,16 @@
 # to each item fetched by the k8s API.
 - name: Lookup OpenShift objects to delete with deployment_stamp={{ targeted_deployment_stamp }} for app {{ app.name }}
   set_fact:
-    obj: "{{ lookup('openshift', api_version='v1', namespace=project_name, kind=item, label_selector='app=' + app.name + ',deployment_stamp=' + targeted_deployment_stamp) | zip_longest([{'kind': item}], fillvalue={'kind': item}) | list }}"
+    obj: |
+      {{
+        lookup(
+          'k8s',
+          api_version='v1',
+          namespace=project_name,
+          kind=item,
+          label_selector='app=' + app.name + ',deployment_stamp=' + targeted_deployment_stamp
+        ) | zip_longest([{'kind': item}], fillvalue={'kind': item}) | list
+      }}
   register: raw_selected_objects
   loop:
     - ConfigMap
@@ -45,7 +54,7 @@
     verbosity: 3
 
 - name: Delete OpenShift objects with deployment_stamp[{{ targeted_deployment_stamp }}] for app [{{ app.name }}]
-  openshift_raw:
+  k8s:
     namespace: "{{ project_name }}"
     kind: "{{ item.kind }}"
     name: "{{ item.metadata.name }}"

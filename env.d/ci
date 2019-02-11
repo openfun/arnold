@@ -1,8 +1,9 @@
 # ---- Ansible settings ----
-ANSIBLE_RETRY_FILES_SAVE_PATH=
+# ANSIBLE_RETRY_FILES_SAVE_PATH=
 
 # ---- OpenShift ----
-# Allow connecting to OpenShift without checking the SSL certificate:
-#   1 for yes
-#   0 for no
-INSECURE_SKIP_TLS_VERIFY=1
+# Whether or not to verify the API server's SSL certificates:
+#   whatever is a value for yes
+#   empty for no
+# Bug: https://github.com/ansible/ansible/pull/51836
+K8S_AUTH_VERIFY_SSL=

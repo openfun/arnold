@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Upgrade Ansible to version 2.7.7
+- Upgrade OpenShift to version 0.8.4
+- Switch from the `openshift_raw` to the `k8s` module
+- Use the `k8s_facts` module instead of the `k8s` lookup
+
 ## [1.4.0] - 2019-02-11
 
 ### Added

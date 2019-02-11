@@ -19,7 +19,7 @@
       debug: msg="Object template {{ load_fixtures_template }}"
 
     - name: Import demo course and create demo users
-      openshift_raw:
+      k8s:
         definition: "{{ lookup('template', load_fixtures_template) | from_yaml }}"
         state: present
         force: true

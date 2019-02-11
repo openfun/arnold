@@ -49,7 +49,7 @@
     verbosity: 3
 
 - name: Create the config maps in OpenShift
-  openshift_raw:
+  k8s:
     state: present
     name: "{{ app.name }}-{{ item.key }}{{ deployment_stamp is none | ternary('', '-') }}{{ deployment_stamp }}"
     namespace: "{{ project_name }}"
@@ -72,7 +72,7 @@
     app_configmaps: "{{ app | json_query('services[?environment_variables].{name: name, environment_variables: environment_variables}') }}"
 
 - name: Create environment variables ConfigMaps
-  openshift_raw:
+  k8s:
     state: present
     name: "{{ app.name }}-{{ item.name }}-dotenv{{ deployment_stamp is none | ternary('', '-') }}{{ deployment_stamp }}"
     namespace: "{{ project_name }}"

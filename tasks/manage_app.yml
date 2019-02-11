@@ -7,7 +7,7 @@
 #   deployment_stamp: the stamp of the object we are going to create or delete
 
 - name: OpenShift objects with deployment_stamp[{{ deployment_stamp }}] must be {{ deployment_state | default('present') }}
-  openshift_raw:
+  k8s:
     definition: "{{ lookup('template', item) | from_yaml }}"
     state: "{{ deployment_state | default('present') }}"
   with_items:
@@ -46,22 +46,13 @@
     - job
 
 - name: OpenShift deployments with deployment_stamp[{{ deployment_stamp }}] must be {{ deployment_state | default('present') }}
-  openshift_raw:
+  k8s:
     definition: "{{ lookup('template', item) | from_yaml }}"
     state: "{{ deployment_state | default('present') }}"
   with_items: "{{ deployments }}"
   tags:
     - deploy
     - deployment
-
-- name: Define pod label selector
-  set_fact:
-    pod_label_selector: "app={{ app.name }}"
-
-- name: Add deployment_stamp to label selector
-  set_fact:
-    pod_label_selector: "{{ pod_label_selector }},deployment_stamp={{ deployment_stamp }}"
-  when: app.settings.is_blue_green_compatible | default(True) == True
 
 - name: Render deployment templates to prepare expected running pods calculation
   set_fact:
@@ -73,36 +64,23 @@
   set_fact:
     expected_running_pods: "{{ rendered_deployment_templates.results | json_query('[*].ansible_facts.tpl.spec.replicas') | sum }}"
 
+- name: Define pod label selector
+  set_fact:
+    pod_label_selector: "app={{ app.name }}"
+
+- name: Add deployment_stamp to label selector
+  set_fact:
+    pod_label_selector: "{{ pod_label_selector }},deployment_stamp={{ deployment_stamp }}"
+  when: app.settings.is_blue_green_compatible | default(True) == True
+
 - name: Wait for pods to be running
-  debug:
-    msg: |
-      {{
-        lookup(
-          'openshift',
-          api_version='v1',
-          namespace=project_name,
-          kind='Pod',
-          label_selector=pod_label_selector
-        )
-      }}
-    verbosity: 2
+  k8s_facts:
+    api_version: "v1"
+    namespace: "{{ project_name }}"
+    kind: "Pod"
+    label_selectors: ["{{ pod_label_selector }}"]
   register: pods
-  # Note that we force the lookup result to be a list, else, in case of a single
-  # service app, returned result is a dict leading to an unexpected length.
-  until: |
-    (
-      [
-        lookup(
-          'openshift',
-          api_version='v1',
-          namespace=project_name,
-          kind='Pod',
-          label_selector=pod_label_selector
-        )
-      ] | flatten | json_query('[?status.phase==`Running`].metadata.name') | length
-    ) == (
-      expected_running_pods | int
-    )
+  until: ( pods.resources | length ) == ( expected_running_pods | int )
   retries: 120
   delay: 5
 
