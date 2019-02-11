@@ -7,12 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-### [1.4.0] - 2019-02-11
+## [1.4.0] - 2019-02-11
+
+### Added
 
 - Publish a Docker image to DockerHub for the master branch
 - The `apps_filter` variable definition is now required to run the `switch.yml`
   and `deploy.yml` playbooks (if multiple apps are active)
-- Upgraded Richie to its latest release (1.0.0-beta.1)
+- Upgrade Richie to its latest release (`1.0.0-beta.1`)
 - Upgrade default `edxapp` image to `hawthorn.1-2.6.0`
 - Add default `memcached` configuration for `edxapp`
 
