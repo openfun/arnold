@@ -15,9 +15,20 @@
 
     - import_tasks: tasks/set_vars.yml
 
+    # We must check if the project exists first. Without this condition, k8s
+    # will try to delete a missing project and returns a 403 ¯\_(ツ)_/¯
+    - name: Check if project exists
+      k8s_facts:
+        api_version: v1
+        kind: Project
+        field_selectors:
+          - metadata.name={{ project_name }}
+      register: project
+
     - name: Delete the project
-      openshift_raw:
+      k8s:
         api_version: v1
         kind: Project
         name: "{{ project_name }}"
         state: absent
+      when: project.resources | length > 0

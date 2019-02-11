@@ -7,7 +7,7 @@
   when: redirections is not none and redirections is iterable
 
 - name: Make sure all redirected routes exist
-  openshift_raw:
+  k8s:
     force: "{{ force_route | bool }}"
     definition: "{{ lookup('template', 'core_apps/redirect/templates/nginx/_redirected_route.yml.j2') | from_yaml }}"
     state: present

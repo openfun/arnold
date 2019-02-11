@@ -6,7 +6,7 @@
   tags: build
 
 - name: Make sure build configs exist
-  openshift_raw:
+  k8s:
     definition: "{{ lookup('template', item) | from_yaml }}"
     state: present
     force: true

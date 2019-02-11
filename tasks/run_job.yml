@@ -6,7 +6,7 @@
     msg: "Submitting job: {{ job_template }} [deployment_stamp: {{ deployment_stamp }} // job_stamp: {{ job_stamp }}]"
 
 - name: Submit job
-  openshift_raw:
+  k8s:
     definition: "{{ lookup('template', job_template) | from_yaml }}"
     state: "present"
   register: submitted_job
@@ -15,11 +15,15 @@
     - job
 
 - name: Wait for job completion
-  debug:
-    msg: "{{ lookup('openshift', api_version='v1', namespace=project_name, kind='Job', resource_name=submitted_job.result.metadata.name) }}"
-    verbosity: 2
-  register: job
-  until: lookup('openshift', api_version='v1', namespace=project_name, kind='Job', resource_name=submitted_job.result.metadata.name).status.succeeded is not none
+  k8s_facts:
+    api_version: "v1"
+    namespace: "{{ project_name }}"
+    kind: "Job"
+    name: "{{ submitted_job.result.metadata.name }}"
+  register: jobs
+  until: >
+    ( jobs.resources | first ).status.succeeded is defined and
+    ( jobs.resources | first ).status.succeeded == 1
   retries: 360
   delay: 5
   tags:
