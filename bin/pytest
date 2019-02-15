@@ -8,4 +8,4 @@ source "$(dirname "${BASH_SOURCE[0]}")/_config.sh"
 # nota bene: we run `python -m pytest` instead of the `pytest` command to add
 # the current working directory to the PYTHONPATH. By doing so, we are able to
 # import local plugins in tests.
-_docker_run python -m pytest "$@"
+_docker_run -tm python -m pytest "$@"

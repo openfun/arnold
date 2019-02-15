@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Upgrade OpenShift to version 0.8.4
 - Switch from the `openshift_raw` to the `k8s` module
 - Use the `k8s_facts` module instead of the `k8s` lookup
+- Make our `docker run` wrapper rock-solid
 
 ## [1.4.0] - 2019-02-11
 
