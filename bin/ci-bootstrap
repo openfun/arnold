@@ -9,5 +9,4 @@ app="${1:-hello}"
 source "$(dirname "${BASH_SOURCE[0]}")/_config.sh"
 
 # Run the bootstrap.yml playbook with the ansible vault password passed to stdin
-echo "arnold" | USE_TTY="false" MOUNT_SRC="false" _docker_run --env-file="env.d/ci" \
-  ansible-playbook bootstrap.yml --ask-vault-pass -e "env_type=ci" -e "apps_filter=${app}"
+echo "arnold" | _ci_ansible_playbook bootstrap.yml -e "apps_filter=${app}"

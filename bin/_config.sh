@@ -42,59 +42,102 @@ function _set_openshift_env() {
 #
 # usage: _docker_run [OPTIONS] [COMMAND]
 #
-#   OPTIONS: docker run options
-#    --env-file: file to set environment variables (_e.g._ env.d/production)
+#   OPTIONS:
+#     -e [ENV_FILE] file to set environment variables (_e.g._ env.d/production)
+#     -m            mount sources as a volume
+#     -t            allocate a pseudo-TTY while running command
+#     -v            verbose mode
+#   COMMAND:
+#     Any command to be run in Arnold container (_e.g._ ansible-playbook deploy.yml)
 #
-#   COMMAND: command to be run in Arnold container (_e.g._ ansible-playbook deploy.yml)
+# example:
+#
+# The following example will run the `ls` command in Arnold's container with
+# local sources mounted as a volume in the container (-m option) and allocating
+# a TTY, thus allowing to use bash pipes with docker commands. The verbose mode
+# (-v option) will display the command to execute prior to execute it.
+#
+#   $ _docker_run -mtv -e env.d/production ls
 #
 # purpose:
 #
 # This utility improves the developer experience by dynamically setting
-# environment variables required to run ansible playbooks and play with
-# an OpenShift instance from Arnold's container (see Dockerfile).
+# environment variables required to run ansible playbooks and play with an
+# OpenShift instance from Arnold's container (see Dockerfile).
 function _docker_run() {
 
     local env_file="env.d/development"
-    local args
-    local i=1
+    local src_volume_option=""
+    local tty_option=""
+    local verbose=0
 
-    while [[ "$#" -ge "1" ]]; do
-        local key="$1"
-        shift
-
-        case "$key" in
-            --env-file=*)
-                env_file="${key#*=}"
-                ;;
-            --env-file)
-                env_file="$1"
-                shift
-                ;;
-            *)
-                args[i]=$key
-                ;;
+    # Parse options
+    while getopts "e:mtv" opt; do
+        case ${opt} in
+            e)
+                env_file="${OPTARG}";;
+            m)
+                src_volume_option="-v ${PWD}:/app";;
+            t)
+                tty_option="-t";;
+            v)
+                verbose=1;;
+            \?)
+                echo "Invalid option '-${OPTARG}'" 1>&2
+                exit 1;;
         esac
-        i=$(( i+1 ))
     done
+    shift $((OPTIND -1))
 
-    # Use docker tty option
-    [[ "${USE_TTY}" == "false" ]] && TTY_OPTION="" || TTY_OPTION="-t"
+    # The command to run in a docker container
+    local cmd
+    cmd=( "$@" )
 
-    # Mount sources as a volume
-    [[ "${MOUNT_SRC}" == "false" ]] && SRC_VOLUME_OPTION="" || SRC_VOLUME_OPTION="-v $PWD:/app"
-
-    # If we wrap the SRC_VOLUME_OPTION with double quotes, this will break the
-    # command, hence, we should ignore this rule here:
-    #
-    # shellcheck disable=SC2086
-    docker run --rm -i ${TTY_OPTION} \
-        -u "$(id -u)" \
-        --env-file "$env_file" \
+    # The whole docker-run-wrapped command
+    local run
+    run="docker run --rm -i ${tty_option} \
+        -u $(id -u) \
+        --env-file ${env_file} \
         --env K8S_AUTH_API_KEY \
         --env K8S_AUTH_HOST \
         --env OPENSHIFT_DOMAIN \
-        ${SRC_VOLUME_OPTION} \
-        -v "$HOME/.kube:/home/arnold/.kube" \
-        "arnold:$(tr -d '\n' < VERSION)" \
-        "${args[@]}"
+        ${src_volume_option} \
+        -v ${HOME}/.kube:/home/arnold/.kube \
+        arnold:$(tr -d '\n' < VERSION) \
+        ${cmd[*]}"
+
+    if [[ verbose -eq 1 ]]; then
+        echo -e "\\033[0;33m🚀 command:\\n ${run}\\033[0m" | sed -e 's/[[:space:]]\+/ /g'
+    fi
+    eval "${run}"
+}
+
+# _ansible_playbook: wrap docker run ansible-playbook command
+#
+# usage: _ansible_playbook [OPTIONS] [ARGS]
+#
+#   OPTIONS: Any valid ansible-playbook option
+#
+#   ARGS: Any valid ansible-playbook argument
+#
+# This commands is executed in a docker container that mounts the local
+# directory as a volume and creates a pseudo-TTY. The vault password is always
+# prompted.
+function _ansible_playbook(){
+    _docker_run -mt ansible-playbook --ask-vault-pass "$@"
+}
+
+# _ci_ansible_playbook: wrap docker run ansible-playbook command for the CI
+#
+# usage: _ansible_playbook [OPTIONS] [ARGS]
+#
+#   OPTIONS: Any valid ansible-playbook option
+#
+#   ARGS: Any valid ansible-playbook argument
+#
+# This commands is executed in a docker container that loads env.d/ci file
+# environment variable definitions. Ansible env_type is forced to "ci". The
+# vault password is always prompted.
+function _ci_ansible_playbook(){
+    _docker_run -e "env.d/ci" ansible-playbook --ask-vault-pass -e "env_type=ci" "$@"
 }
