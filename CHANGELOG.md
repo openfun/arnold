@@ -15,6 +15,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Use the `k8s_facts` module instead of the `k8s` lookup
 - Make our `docker run` wrapper rock-solid
 
+### Fixed
+
+- Fix broken `edxapp`'s MySQL pod secrets due to a recent update in the `latest`
+  image.
+
 ## [1.4.0] - 2019-02-11
 
 ### Added
