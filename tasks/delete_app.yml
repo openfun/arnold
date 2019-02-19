@@ -3,60 +3,18 @@
   set_fact:
     targeted_deployment_stamp: "{{ app_deployment_stamp | default(none) }}"
 
-# Set the deployment stamp value for this deployment
-#
-# NB: we use the zip_longest filter with the fillvalue trick to add object kind
-# to each item fetched by the k8s API.
-- name: Lookup OpenShift objects to delete with deployment_stamp={{ targeted_deployment_stamp }} for app {{ app.name }}
-  set_fact:
-    obj: |
-      {{
-        lookup(
-          'k8s',
-          api_version='v1',
-          namespace=project_name,
-          kind=item,
-          label_selector='app=' + app.name + ',deployment_stamp=' + targeted_deployment_stamp
-        ) | zip_longest([{'kind': item}], fillvalue={'kind': item}) | list
-      }}
-  register: raw_selected_objects
+- name: Iterate over objects to delete with deployment_stamp {{ targeted_deployment_stamp }} for app {{ app.name }}
+  include_tasks: tasks/delete_app_objects_kind.yml
   loop:
-    - ConfigMap
-    - DeploymentConfig
     - Endpoints
-    - Job
     - Service
+    - ConfigMap
+    - Job
+    - DeploymentConfig
+    # Manually handle deletion cascade as the k8s module won't
+    # https://github.com/ansible/ansible/issues/42302
+    - ReplicationController
+    - Pod
+  loop_control:
+    loop_var: kind
   tags: deploy
-
-- name: Display raw_selected_objects to delete
-  debug:
-    msg: "{{ raw_selected_objects | json_query('results[*].ansible_facts.obj') | list | to_nice_yaml }}"
-    verbosity: 3
-
-# Fetched OpenShift objects have no "kind" key, but this will be required when
-# we will make a new query to delete them. In the following task, we are making
-# a new list of fully qualified objects.
-- name: Add missing 'kind' key to OpenShift objects
-  set_fact:
-    obj: "{{ item.0 | combine(item.1) }}"
-  register: selected_objects_with_kind
-  with_items: "{{ raw_selected_objects | json_query('results[*].ansible_facts.obj') }}"
-  when: item.0.kind is defined and item.0.metadata is defined
-  tags: deploy
-
-- name: Set selected objects to delete
-  set_fact:
-    selected_objects: "{{ selected_objects_with_kind | json_query('results[*].ansible_facts.obj') | list }}"
-
-- name: Display selected_objects to delete
-  debug:
-    msg: "{{ selected_objects | to_nice_yaml }}"
-    verbosity: 3
-
-- name: Delete OpenShift objects with deployment_stamp[{{ targeted_deployment_stamp }}] for app [{{ app.name }}]
-  k8s:
-    namespace: "{{ project_name }}"
-    kind: "{{ item.kind }}"
-    name: "{{ item.metadata.name }}"
-    state: "absent"
-  loop: "{{ selected_objects }}"
