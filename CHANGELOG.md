@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Switch from the `openshift_raw` to the `k8s` module
 - Use the `k8s_facts` module instead of the `k8s` lookup
 - Make our `docker run` wrapper rock-solid
+- Refactor CI tools to have only one script: `bin/ci-ansible-playbook`
+- Refactor and test `delete_app` tasks in the CI
 
 ### Fixed
 

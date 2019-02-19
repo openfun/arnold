@@ -1,12 +1,18 @@
 #!/usr/bin/env bash
 #
-# usage: ci-bootstrap [APP]
+# usage: ci-ansible-playbook [PLAYBOOK] [APP]
+
+if [[ -z $2 ]]; then
+    echo "usage: ci-ansible-playbook [PLAYBOOK] [APP]"
+    exit 1
+fi
 
 # First script argument is the application's name. It defaults to 'hello'
-app="${1:-hello}"
+playbook="${1}"
+app="${2}"
 
 # shellcheck source=bin/_config.sh
 source "$(dirname "${BASH_SOURCE[0]}")/_config.sh"
 
 # Run the bootstrap.yml playbook with the ansible vault password passed to stdin
-echo "arnold" | _ci_ansible_playbook bootstrap.yml -e "apps_filter=${app}"
+echo "arnold" | _ci_ansible_playbook "${playbook}" -e "apps_filter=${app}"
