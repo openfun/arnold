@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.5.0] - 2019-02-20
+
 ### Added
 
 - Upgrade Ansible to version 2.7.7
@@ -155,7 +157,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - First Arnold's public release
 - Official Docker image is available at: https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v1.4.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v1.5.0...master
+[1.5.0]: https://github.com/openfun/arnold/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/openfun/arnold/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/openfun/arnold/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/openfun/arnold/compare/v1.1.0...v1.2.0
