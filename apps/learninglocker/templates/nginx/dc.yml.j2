@@ -24,6 +24,18 @@ spec:
           ports:
             - containerPort: {{ learninglocker_nginx_port }}
               protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: "{{ learninglocker_nginx_healthcheck_endpoint }}"
+              port: {{ learninglocker_nginx_healthcheck_port }}
+            initialDelaySeconds: 60
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: "{{ learninglocker_nginx_healthcheck_endpoint }}"
+              port: {{ learninglocker_nginx_healthcheck_port }}
+            initialDelaySeconds: 5
+            periodSeconds: 3
           volumeMounts:
             - mountPath: /etc/nginx/conf.d
               name: learninglocker-v-nginx

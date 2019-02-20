@@ -14,6 +14,10 @@ spec:
       port: {{ richie_nginx_port }}
       protocol: TCP
       targetPort: {{ richie_nginx_port }}
+    - name: "{{ richie_nginx_healthcheck_port }}-tcp"
+      port: {{ richie_nginx_healthcheck_port }}
+      protocol: TCP
+      targetPort: {{ richie_nginx_healthcheck_port }}
   selector:
     app: richie
     deploymentconfig: "richie-nginx-{{ deployment_stamp }}"

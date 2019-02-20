@@ -9,6 +9,8 @@ richie_nginx_image_tag: "1.13"
 richie_nginx_port: 8061
 richie_nginx_replicas: 1
 richie_nginx_htpasswd_secret_name: "richie-htpasswd"
+richie_nginx_healthcheck_port: 5000
+richie_nginx_healthcheck_endpoint: "/__healthcheck__"
 
 # -- elasticsearch
 richie_elasticsearch_image_name: "fundocker/openshift-elasticsearch"
