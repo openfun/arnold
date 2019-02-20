@@ -53,6 +53,18 @@ spec:
               name: marsha-htpasswd
             {% endif %}
 
+          livenessProbe:
+            httpGet:
+              path: "{{ marsha_nginx_healthcheck_endpoint }}"
+              port: {{ marsha_nginx_healthcheck_port }}
+            initialDelaySeconds: 60
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: "{{ marsha_nginx_healthcheck_endpoint }}"
+              port: {{ marsha_nginx_healthcheck_port }}
+            initialDelaySeconds: 5
+            periodSeconds: 3
       volumes:
         - name: marsha-v-nginx
           configMap:

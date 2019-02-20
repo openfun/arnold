@@ -39,6 +39,18 @@ spec:
           ports:
             - containerPort: {{ redirect_nginx_port }}
               protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: "{{ redirect_nginx_healthcheck_endpoint }}"
+              port: {{ redirect_nginx_healthcheck_port }}
+            initialDelaySeconds: 60
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: "{{ redirect_nginx_healthcheck_endpoint }}"
+              port: {{ redirect_nginx_healthcheck_port }}
+            initialDelaySeconds: 5
+            periodSeconds: 3
           volumeMounts:
             - mountPath: /etc/nginx/conf.d
               name: redirect-v-nginx

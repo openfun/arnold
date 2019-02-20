@@ -1,0 +1,9 @@
+server {
+  listen {{ richie_nginx_healthcheck_port }};
+  server_name localhost;
+
+  location {{ richie_nginx_healthcheck_endpoint }} {
+    add_header Content-Type text/plain;
+    return 200 "OK";
+  }
+}
