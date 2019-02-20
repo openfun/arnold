@@ -1,0 +1,9 @@
+server {
+  listen {{ redirect_nginx_healthcheck_port }};
+  server_name localhost;
+
+  location {{ redirect_nginx_healthcheck_endpoint }} {
+    add_header Content-Type text/plain;
+    return 200 "OK";
+  }
+}

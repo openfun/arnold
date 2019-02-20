@@ -92,6 +92,8 @@ edxapp_nginx_cms_port: 8081
 edxapp_nginx_lms_port: 8071
 edxapp_nginx_replicas: 1
 edxapp_nginx_htpasswd_secret_name: "edxapp-htpasswd"
+edxapp_nginx_healthcheck_port: 5000
+edxapp_nginx_healthcheck_endpoint: "/__healthcheck__"
 
 # -- celery/redis
 

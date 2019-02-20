@@ -9,6 +9,8 @@ marsha_nginx_image_tag: "1.13"
 marsha_nginx_port: 8061
 marsha_nginx_replicas: 1
 marsha_nginx_htpasswd_secret_name: "marsha-htpasswd"
+marsha_nginx_healthcheck_port: 5000
+marsha_nginx_healthcheck_endpoint: "/__healthcheck__"
 
 # -- postgresql
 marsha_postgresql_version: "9.6"

@@ -13,6 +13,10 @@ spec:
       port: {{ learninglocker_nginx_port }}
       protocol: TCP
       targetPort: {{ learninglocker_nginx_port }}
+    - name: "{{ learninglocker_nginx_healthcheck_port }}-tcp"
+      port: {{ learninglocker_nginx_healthcheck_port }}
+      protocol: TCP
+      targetPort: {{ learninglocker_nginx_healthcheck_port }}
   selector:
     app: learninglocker
     deploymentconfig: "learninglocker-nginx"
