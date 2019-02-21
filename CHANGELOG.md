@@ -7,9 +7,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- We now perform health checks to every service pods by implementing and
+  defining `livenessProbe` and `readinessProbe` (except for Learninglocker
+  applications).
+
 ### Fixed
 
-* Remove obsolete GitLab CI configuration
+- Remove obsolete GitLab CI configuration
 
 ## [1.5.0] - 2019-02-20
 
