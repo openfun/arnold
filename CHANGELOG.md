@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-### Fixed
+### Added
 
-* Remove obsolete GitLab CI configuration
+- Make local docker image build closest to CI conditions
+
+### Removed
+
+- Obsolete GitLab CI configuration
 
 ## [1.5.0] - 2019-02-20
 

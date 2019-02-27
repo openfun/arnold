@@ -1,3 +1,7 @@
 #!/usr/bin/env bash
 
-docker build -t "arnold:$(tr -d '\n' < VERSION)" .
+# Ensure we have the latest base image to fit with the CI
+docker pull python:3.6
+
+# Build without cache to ensure we are close to CI conditions
+docker build --no-cache -t "arnold:$(tr -d '\n' < VERSION)" .
