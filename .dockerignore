@@ -2,3 +2,5 @@
 .git/
 .gitignore
 openshift.local.clusterup/
+group_vars/customer/*
+!group_vars/customer/eugene
