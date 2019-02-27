@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Obsolete GitLab CI configuration
 
+## Fixed
+
+- Improve DC pods selectors in DC deployment wait loop
+
 ## [1.5.0] - 2019-02-20
 
 ### Added
