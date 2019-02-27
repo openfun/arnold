@@ -20,10 +20,10 @@
     namespace: "{{ project_name }}"
     kind: "Job"
     name: "{{ submitted_job.result.metadata.name }}"
-  register: jobs
+  register: running_job
   until: >
-    ( jobs.resources | first ).status.succeeded is defined and
-    ( jobs.resources | first ).status.succeeded == 1
+    ( running_job.resources | first ).status.succeeded is defined and
+    ( running_job.resources | first ).status.succeeded == 1
   retries: 360
   delay: 5
   tags:
