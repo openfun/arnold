@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- create a volume for learning locker. This volume will be mounted in the storage repository.
+
 ## [1.5.1] - 2019-02-27
 
 ### Added

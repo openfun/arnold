@@ -21,8 +21,6 @@ spec:
     spec:
       containers:
         - name: "{{ service_variant }}"
-          # We point to a local registry image build for this "live" image (see
-          # ImageStream and BuildConfig templates)
           image: "{{ learninglocker_image_name }}:{{ learninglocker_image_tag }}"
           imagePullPolicy: Always
 {% if learninglocker_port %}
@@ -36,3 +34,10 @@ spec:
                 name: "{{ learninglocker_secret_name }}"
             - configMapRef:
                 name: "learninglocker-app-dotenv-{{ deployment_stamp }}"
+          volumeMounts:
+            - name: learninglocker-v-storage
+              mountPath: /app/storage
+      volumes:
+        - name: learninglocker-v-storage
+          persistentVolumeClaim:
+            claimName: learninglocker-pvc-storage

@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "learninglocker-job-storage"
+  namespace: "{{ project_name }}"
+  labels:
+    app: learninglocker
+    service: learninglocker
+    version: "{{ learninglocker_image_tag }}"
+spec:
+  template:
+    metadata:
+      name: "learninglocker-job-storage"
+      labels:
+        app: learninglocker
+        service: learninglocker
+        version: "{{ learninglocker_image_tag }}"
+    spec:
+      containers:
+      - name: learninglocker-job-storage
+        image: "busybox:1.30"
+        command: ["mkdir", "-p", "/data/tmp", "/data/downloads", "/data/logos", "/data/storage", "/data/tests"]
+        volumeMounts:
+        - name: learninglocker-v-storage
+          mountPath: /data
+      volumes:
+      - name: learninglocker-v-storage
+        persistentVolumeClaim:
+          claimName: learninglocker-pvc-storage
+      restartPolicy: Never
