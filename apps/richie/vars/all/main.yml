@@ -16,18 +16,19 @@ richie_elasticsearch_image_tag: "6.2.4"
 richie_elasticsearch_host: "elasticsearch"
 richie_elasticsearch_port: 9200
 
-# -- postgresql
+# -- databases (defaults to postgresql)
 richie_postgresql_version: "9.6"
-richie_postgresql_image_name: "centos/postgresql-96-centos7"
-richie_postgresql_image_tag: "9.6"
-richie_postgresql_host: "postgresql"
-richie_postgresql_port: 5432
-richie_postgresql_database: "richie"
-richie_postgresql_secret_name: "richie-postgresql-{{ richie_vault_checksum | default('undefined_richie_vault_checksum') }}"
+richie_database_engine: "django.db.backends.postgresql_psycopg2"
+richie_database_image_name: "centos/postgresql-96-centos7"
+richie_database_image_tag: "9.6"
+richie_database_host: "postgresql"
+richie_database_port: 5432
+richie_database_name: "richie"
+richie_database_secret_name: "richie-database-{{ richie_vault_checksum | default('undefined_richie_vault_checksum') }}"
 
 # -- richie
 richie_image_name: "fundocker/richie"
-richie_image_tag: "1.0.0-beta.1"
+richie_image_tag: "master"
 richie_django_port: 8000
 richie_app_replicas: 1
 richie_django_configuration: "Development"

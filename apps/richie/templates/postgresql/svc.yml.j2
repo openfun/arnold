@@ -4,17 +4,17 @@ metadata:
   labels:
     app: richie
     service: postgresql
-    version: "{{ richie_postgresql_image_tag }}"
+    version: "{{ richie_database_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
   # name of the service should be database host name in settings
   name: "richie-postgresql-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
   ports:
-    - name: "{{ richie_postgresql_port }}-tcp"
-      port: "{{ richie_postgresql_port }}"
+    - name: "{{ richie_database_port }}-tcp"
+      port: "{{ richie_database_port }}"
       protocol: TCP
-      targetPort: {{ richie_postgresql_port }}
+      targetPort: {{ richie_database_port }}
 # As commented in the ad hoc endpoint, the endpoint name points to this service
 # so that it does not rely on a deployment configuration when the "env_type" is
 # not trashable. In this case, we use a PostgreSQL cluster outside of
