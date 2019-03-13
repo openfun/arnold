@@ -36,7 +36,7 @@ spec:
         - image: "{{ richie_nginx_image_name }}:{{ richie_nginx_image_tag }}"
           name: nginx
           ports:
-            - containerPort: 80
+            - containerPort: {{ richie_nginx_port }}
               protocol: TCP
           volumeMounts:
             - mountPath: /etc/nginx/conf.d
