@@ -52,7 +52,7 @@
 
 - name: Display OpenShift's builds for this app
   debug:
-    msg: "{{ builds | to_nice_yaml}}"
+    msg: "{{ builds | to_nice_yaml }}"
     verbosity: 2
   when: builds
   tags:

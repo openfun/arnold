@@ -34,7 +34,7 @@
     configmaps: |
       {%- set configmaps = {} -%}
       {%- for service in app_configmaps -%}
-        {%- set _ = configmaps.update({service.name: {}}) -%}
+        {%- set _ = configmaps.update({ service.name: {} }) -%}
         {%- for cm_path in service.configs -%}
           {%- set content = lookup('template', cm_path) -%}
           {%- set filename = cm_path | basename | regex_replace('.j2') -%}

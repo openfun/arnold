@@ -19,13 +19,13 @@
 
     - name: Set app to point to the redirect app
       set_fact:
-        app: '{{ core_apps | json_query("[?name==''redirect''] | [0]") }}'
+        app: '{{ core_apps | json_query("[?name==`redirect`] | [0]") }}'
 
     - name: Include "all" type vars for redirect app
       include_tasks: tasks/load_app_defaults.yml
       vars:
         file: "{{ item.path }}"
-      with_items: '{{ app | json_query("vars[?type==''all'']") }}'
+      with_items: '{{ app | json_query("vars[?type==`all`]") }}'
 
     - import_tasks: tasks/get_objects_for_app.yml
 
