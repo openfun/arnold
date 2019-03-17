@@ -1,5 +1,4 @@
 ---
-
 - hosts: local
   gather_facts: False
 
@@ -21,7 +20,7 @@
     - name: Import databases vault
       include_vars:
         file: "{{ databases_vault.stat.path }}"
-      when: databases_vault.stat.exists == True
+      when: databases_vault.stat.exists
 
     - include_tasks: tasks/run_tasks_for_apps.yml
       vars:

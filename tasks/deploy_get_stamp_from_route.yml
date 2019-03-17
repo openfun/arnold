@@ -15,7 +15,7 @@
       - app={{ app.name }}
       - route_prefix={{ prefix }}
   register: app_route
-  when: routes | length > 0 and app.settings.is_blue_green_compatible | default(True) == True
+  when: routes | length > 0 and app.settings.is_blue_green_compatible | default(True)
 
 - name: Get targeted service
   k8s_facts:

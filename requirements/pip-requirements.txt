@@ -1,18 +1,18 @@
 # Core
-ansible==2.7.7
-ansible-lint==3.5.1
-deepmerge==0.0.4
-jmespath==0.9.3
-openshift==0.8.4
+ansible==2.7.9
+ansible-lint==4.1.0
+deepmerge==0.0.5
+jmespath==0.9.4
+openshift==0.8.6
 passlib==1.7.1
 PyYAML==3.13
 netaddr==0.7.19
 
 # Quality
-flake8
-isort
-pylint
+flake8==3.7.7
+isort==4.3.15
+pylint==2.3.1
 
 # Tests
-pytest<4
-pytest-cov
+pytest==4.3.1
+pytest-cov==2.6.1
