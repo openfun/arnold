@@ -25,8 +25,8 @@ RUN apt-get update && \
     unzip && \
     rm -rf /var/lib/apt/lists/*
 
-COPY ./requirements/pip-requirements.txt /app/requirements/
-RUN pip install -r /app/requirements/pip-requirements.txt
+COPY ./requirements.txt /app/
+RUN pip install -r /app/requirements.txt
 
 # Install more ansible_lint_rules
 ENV ANSIBLE_LINT_RULES_DIR="/tmp/_ansible_lint_rules"
