@@ -12,7 +12,6 @@
     - import_tasks: tasks/validate_configuration.yml
 
   tasks:
-
     - import_tasks: tasks/set_vars.yml
 
     - name: Print Object template
@@ -22,4 +21,4 @@
       k8s:
         definition: "{{ lookup('template', load_fixtures_template) | from_yaml }}"
         state: present
-        force: true
+        force: True

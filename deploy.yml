@@ -35,7 +35,8 @@
       tags: deploy
 
     - name: Display apps to deploy
-      debug: msg="{{ apps | to_nice_yaml }}"
+      debug:
+        var: apps
       tags: deploy
 
     - include_tasks: tasks/run_tasks_for_apps.yml
