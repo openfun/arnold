@@ -24,6 +24,9 @@ metadata:
     version: "{{ marsha_image_tag }}"
 spec:
   strategy:
+    dockerStrategy:
+      forcePull: true
+      noCache: true
     type: Docker
   source:
     dockerfile: |-
