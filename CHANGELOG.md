@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Supplementary `ansible-lint` rules are now provided by the
   [lean-delivery/ansible-lint-rules](https://github.com/lean-delivery/ansible-lint-rules)
   maintained project
+- Marsha and richie BuildConfig force to pull the latest available docker image
 
 ## [1.6.0] - 2019-03-18
 
