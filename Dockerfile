@@ -32,7 +32,7 @@ RUN pip install -r /app/requirements.txt
 ENV ANSIBLE_LINT_RULES_DIR="/tmp/_ansible_lint_rules"
 
 RUN mkdir -p "${ANSIBLE_LINT_RULES_DIR}" && \
-    curl -sLo /tmp/ansible-lint-rules.zip https://github.com/tsukinowasha/ansible-lint-rules/archive/master.zip && \
+    curl -sLo /tmp/ansible-lint-rules.zip https://github.com/lean-delivery/ansible-lint-rules/archive/1.2.0.zip && \
     unzip -j /tmp/ansible-lint-rules.zip  '*/rules/*' -d "${ANSIBLE_LINT_RULES_DIR}" && \
     rm -rf "/tmp/ansible-lint-rules.zip"
 

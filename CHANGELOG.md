@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Python dependencies have been upgraded thanks to pyup bot.
 - `pip` requirements file has been moved to `requirements.txt` at the project's
   root
+- Supplementary `ansible-lint` rules are now provided by the
+  [lean-delivery/ansible-lint-rules](https://github.com/lean-delivery/ansible-lint-rules)
+  maintained project
 
 ## [1.6.0] - 2019-03-18
 
