@@ -26,7 +26,7 @@
 
     - name: Set acme_templates
       set_fact:
-        acme_templates: "{{ core_apps | json_query(\"[?name=='acme'].services[0].templates[]\") | list }}"
+        acme_templates: '{{ core_apps | json_query("[?name==`acme`].services[0].templates[]") | list }}'
 
     - name: Print acme_templates
       debug:
@@ -69,7 +69,7 @@
 
     - name: Create all openshift-acme OpenShift objects
       k8s:
-        force: true
+        force: True
         namespace: "{{ project_name }}"
         definition: "{{ lookup('template', item) | from_yaml }}"
       with_items:
@@ -78,10 +78,10 @@
 
     - name: Add role to serviceaccount
       k8s:
-        force: true
+        force: True
         state: present
         definition: "{{ lookup('template', rb_template) | from_yaml }}"
-      ignore_errors: true
+      ignore_errors: True
       when: env_type not in ('development', 'ci')
       # The rolebinding is created but openshift_raw fail see this issue
       # https://github.com/ansible/ansible/issues/36845

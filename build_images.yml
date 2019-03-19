@@ -15,10 +15,6 @@
 
     - import_tasks: tasks/set_vars.yml
 
-    - name: Display BuildConfigs to create
-      debug: msg="{{ apps | to_nice_yaml }}"
-      tags: deploy
-
     - include_tasks: tasks/run_tasks_for_apps.yml
       vars:
         tasks:

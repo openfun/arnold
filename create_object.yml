@@ -48,4 +48,4 @@
       k8s:
         definition: "{{ lookup('template', object_template) | from_yaml }}"
         state: present
-        force: true
+        force: True

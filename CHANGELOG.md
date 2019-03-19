@@ -19,6 +19,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - CircleCI docker cache has been inactivated to prevent job failures from cache
   issues
 
+### Security
+
+- Upgrade PyYAML to 5.1 (see https://nvd.nist.gov/vuln/detail/CVE-2017-18342)
+
 ## [1.6.0] - 2019-03-18
 
 ### Added

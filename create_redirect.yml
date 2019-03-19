@@ -38,7 +38,7 @@
 
     - name: Create redirect deployments
       k8s:
-        force: true
+        force: True
         namespace: "{{ project_name }}"
         definition: "{{ lookup('template', deployment) | from_yaml }}"
         state: present

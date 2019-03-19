@@ -5,7 +5,7 @@ deepmerge==0.0.5
 jmespath==0.9.4
 openshift==0.8.6
 passlib==1.7.1
-PyYAML==3.13
+PyYAML==5.1
 netaddr==0.7.19
 
 # Quality
