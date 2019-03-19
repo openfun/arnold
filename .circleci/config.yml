@@ -11,7 +11,7 @@ aliases:
   # Activate Docker in Docker (aka dind)
   - &dind
     setup_remote_docker:
-      docker_layer_caching: true
+      docker_layer_caching: false
 
   - &ci_env
     run:
@@ -70,8 +70,8 @@ jobs:
   build:
     # We use the machine executor, i.e. a VM, not a container
     machine:
-      # Cache docker layers so that we strongly speed up this job execution
-      docker_layer_caching: true
+      # Prevent cache-related issues
+      docker_layer_caching: false
 
     working_directory: ~/fun
 
@@ -163,7 +163,7 @@ jobs:
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
   test-bootstrap-hello:
     machine:
-      docker_layer_caching: true
+      docker_layer_caching: false
 
     working_directory: ~/fun
 
@@ -195,7 +195,7 @@ jobs:
   # Test the redirect application
   test-redirect:
     machine:
-      docker_layer_caching: true
+      docker_layer_caching: false
 
     working_directory: ~/fun
 
@@ -226,7 +226,7 @@ jobs:
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
   test-bootstrap-mailcatcher:
     machine:
-      docker_layer_caching: true
+      docker_layer_caching: false
 
     working_directory: ~/fun
 
@@ -249,7 +249,7 @@ jobs:
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
   test-bootstrap-richie:
     machine:
-      docker_layer_caching: true
+      docker_layer_caching: false
 
     working_directory: ~/fun
 
@@ -282,7 +282,7 @@ jobs:
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
   test-bootstrap-forum:
     machine:
-      docker_layer_caching: true
+      docker_layer_caching: false
 
     working_directory: ~/fun
 
@@ -315,7 +315,7 @@ jobs:
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
   test-bootstrap-edxapp:
     machine:
-      docker_layer_caching: true
+      docker_layer_caching: false
 
     working_directory: ~/fun
 
@@ -350,7 +350,7 @@ jobs:
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
   test-bootstrap-marsha:
     machine:
-      docker_layer_caching: true
+      docker_layer_caching: false
 
     working_directory: ~/fun
 
@@ -384,7 +384,7 @@ jobs:
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
   test-bootstrap-learninglocker:
     machine:
-      docker_layer_caching: true
+      docker_layer_caching: false
 
     working_directory: ~/fun
 
@@ -407,7 +407,7 @@ jobs:
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
   test-delete-app:
     machine:
-      docker_layer_caching: true
+      docker_layer_caching: false
 
     working_directory: ~/fun
 
@@ -472,8 +472,8 @@ jobs:
   hub:
     # We use the machine executor, i.e. a VM, not a container
     machine:
-      # Cache docker layers so that we strongly speed up this job execution
-      docker_layer_caching: true
+      # Prevent cache-related issues
+      docker_layer_caching: false
       working_directory: ~/fun
 
     steps:

@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   [lean-delivery/ansible-lint-rules](https://github.com/lean-delivery/ansible-lint-rules)
   maintained project
 - Marsha and richie BuildConfig force to pull the latest available docker image
+- CircleCI docker cache has been inactivated to prevent job failures from cache
+  issues
 
 ## [1.6.0] - 2019-03-18
 
