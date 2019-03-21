@@ -85,7 +85,7 @@
 
 - name: Add meta-data to available applications
   set_fact:
-    _app: "{{ available_apps | json_query(\"[?name=='\" + item.name + \"']\") | first | merge_with_app(item) }}"
+    _app: '{{ available_apps | json_query("[?name==`" + item.name + "`]") | first | merge_with_app(item) }}'
   register: merged_apps
   with_items: "{{ apps | default(available_apps) }}"
 
@@ -124,17 +124,16 @@
     msg: "{{ apps | to_nice_yaml }}"
     verbosity: 1
 
-- name: Look for all applications vaults
-  include_tasks: tasks/get_vault_for_app.yml
-  loop: "{{ apps }}"
-  loop_control:
-    loop_var: "app"
+- include_tasks: tasks/run_tasks_for_apps.yml
+  vars:
+    tasks:
+      - tasks/set_vault_for_app
 
 - name: Include "all" type vars for applications
   include_tasks: tasks/load_app_defaults.yml
   vars:
     file: "{{ item.path }}"
-  with_items: "{{ apps | json_query(\"[*].vars[?type=='all']\") | flatten }}"
+  with_items: '{{ apps | json_query("[*].vars[?type==`all`]") | flatten }}'
 
 - name: Print project details
   debug:

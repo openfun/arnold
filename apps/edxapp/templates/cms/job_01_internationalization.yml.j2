@@ -1,4 +1,4 @@
-{% if EDXAPP_VAULT.TX_TOKEN is defined %}
+{% if edxapp_should_update_i18n %}
 apiVersion: batch/v1
 kind: Job
 metadata:

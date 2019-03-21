@@ -121,10 +121,9 @@ function _docker_run() {
 #   ARGS: Any valid ansible-playbook argument
 #
 # This commands is executed in a docker container that mounts the local
-# directory as a volume and creates a pseudo-TTY. The vault password is always
-# prompted.
+# directory as a volume and creates a pseudo-TTY.
 function _ansible_playbook(){
-    _docker_run -mt ansible-playbook --ask-vault-pass "$@"
+    _docker_run -mt ansible-playbook "$@"
 }
 
 # _ci_ansible_playbook: wrap docker run ansible-playbook command for the CI
