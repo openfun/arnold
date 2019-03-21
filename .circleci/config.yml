@@ -278,6 +278,18 @@ jobs:
             # Test service switched to the current route
             bin/ci-test-service "richie" "Installation successful!"
 
+      - run:
+          name: Test extra dependencies installation
+          command: |
+            # Switch project
+            oc project ci-eugene
+            # Select Richie's service pods
+            cmd="oc get pods -l app=richie,service=richie --field-selector 'status.phase=Running' -o name | sed 's/^pods\///'"
+            # Run command to debug output (eventually)
+            eval "${cmd}"
+            # Check extra dependencies installation
+            oc exec $(eval "${cmd}") -- python -c "import factory"
+
   # Test the bootstrap playbook on the "forum" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
   test-bootstrap-forum:

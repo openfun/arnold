@@ -33,6 +33,21 @@ richie_django_port: 8000
 richie_app_replicas: 1
 richie_django_configuration: "Development"
 richie_secret_name: "richie-{{ richie_vault_checksum | default('undefined_richie_vault_checksum') }}"
+# Customize richie Docker image by installing extra dependencies for a
+# customer/environment. This var is expected to be a list of dependencies
+# following the pip requirement specifier (see example below).
+#
+# NOTA BENE:
+#
+# This is only intended for side packages not directly related to richie and
+# specific to a customer/environment or to the way you handle operations (e.g.
+# log handlers, monitoring agents, etc.).
+richie_extra_dependencies:
+  []
+  # Example values:
+  # - "graypy==0.3.1"
+  # - "raven>=6.0.0"
+  # - "requests"
 
 # -- volumes
 richie_media_volume_size: 2Gi
