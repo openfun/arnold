@@ -1,33 +1,16 @@
 # Get objects for an application
 
-- name: Set templates list for this app
+# Secrets require loading application vaults to be rendered. They are treated
+# separately and should not be included here.
+- name: Set templates list for this app (except secrets)
   set_fact:
-    raw_templates: "{{ app | json_query('services[*].templates[]') | list }}"
+    raw_templates: "{{ \
+      app | json_query('services[*].templates[]') | list | \
+      map('regex_search', '.*/(?!.*secret).*\\.yml\\.j2$') | select('string') | list \
+      }}"
   tags: deploy
 
-# force prefix initialization. If prefix is not set, in the next step the first template
-# rendered will fail if it uses the prefix variable in it.
-- name: set Prefix
-  set_fact:
-    prefix: "next"
-  when: prefix is not defined
-
-# Remove empty rendered templates (e.g. inactivated for an env_type)
-- name: Ignore empty rendered templates
-  set_fact:
-    # FIXME: we've defined "prefix" to be able to render all templates, this
-    # variable should be called url_prefix instead and must default to "next"
-    # See: https://github.com/openfun/arnold/issues/118
-    prefix: "next"
-    path: "{{ item }}"
-  register: filtered_templates
-  with_items: "{{ raw_templates }}"
-  when: lookup('template', item) | length > 1
-  tags: deploy
-
-- name: Update templates list for this app
-  set_fact:
-    templates: "{{ filtered_templates | json_query('results[*].ansible_facts.path') | list }}"
+- include_tasks: tasks/filter_empty_templates_for_app.yml
 
 - name: Set OpenShift objects to manage
   set_fact:
@@ -38,7 +21,6 @@
     streams: "{{ templates | map('regex_search', '.*/is.*\\.yml\\.j2$') | select('string') | list }}"
     jobs: "{{ templates | map('regex_search', '.*/job_.*\\.yml\\.j2$') | select('string') | list }}"
     routes: "{{ templates | map('regex_search', '.*/route.*\\.yml\\.j2$') | select('string') | list }}"
-    secrets: "{{ templates | map('regex_search', '.*/secret.*\\.yml\\.j2$') | select('string') | list }}"
   tags:
     - deploy
     - build
@@ -48,7 +30,6 @@
     - stream
     - job
     - route
-    - secret
 
 - name: Display OpenShift's builds for this app
   debug:
@@ -112,12 +93,3 @@
   tags:
     - deploy
     - route
-
-- name: Display OpenShift's secrets for this app
-  debug:
-    msg: "{{ secrets | to_nice_yaml }}"
-    verbosity: 2
-  when: secrets
-  tags:
-    - deploy
-    - secret

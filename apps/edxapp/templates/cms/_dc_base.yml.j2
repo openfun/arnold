@@ -91,7 +91,7 @@ spec:
           name: edxapp-v-static
         - mountPath: /edx/app/edxapp/data
           name: edxapp-v-data
-{% if EDXAPP_VAULT.TX_TOKEN is defined %}
+{% if edxapp_should_update_i18n %}
         - mountPath: /edx/app/edxapp/edx-platform/conf/locale
           name: edxapp-v-locale
 {% endif %}
@@ -142,7 +142,7 @@ spec:
         - name: edxapp-v-data
           persistentVolumeClaim:
             claimName: edxapp-pvc-data
-{% if EDXAPP_VAULT.TX_TOKEN is defined %}
+{% if edxapp_should_update_i18n %}
         - name: edxapp-v-locale
           persistentVolumeClaim:
             claimName: edxapp-pvc-locale

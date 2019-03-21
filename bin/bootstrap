@@ -8,4 +8,4 @@ source "$(dirname "${BASH_SOURCE[0]}")/_config.sh"
 _set_openshift_env
 
 # Run ansible-playbook
-_ansible_playbook bootstrap.yml "$@"
+_ansible_playbook --ask-vault-pass bootstrap.yml "$@"

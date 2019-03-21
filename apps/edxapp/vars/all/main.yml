@@ -15,6 +15,8 @@ edxapp_sql_dump_url: "https://gist.githubusercontent.com/jmaupetit/76fe7db4a8314
 edxapp_secret_name: "edxapp-{{ edxapp_vault_checksum | default('undefined_edxapp_vault_checksum') }}"
 
 # i18n
+# Should we download and compile latest translations?
+edxapp_should_update_i18n: false
 edxapp_i18n_languages:
   - en
   - fr

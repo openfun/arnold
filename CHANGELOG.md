@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Marsha and richie BuildConfig force to pull the latest available docker image
 - CircleCI docker cache has been inactivated to prevent job failures from cache
   issues
+- Ansible vaults password is now required only when needed, _i.e._ when creating
+  secrets (_e.g._ when using the `init_project` or `bootstrap` playbooks)
 
 ### Security
 

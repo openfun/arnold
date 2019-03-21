@@ -1,25 +1,4 @@
-# Check that a vault exists for an application, we expect it to be named
-# "{{ application name }}.vault.yml" be stored in the "secrets" directory from
-# group_vars for an environent and a customer.
-- name: Get expected vault file for application
-  stat:
-    path: "{{ vault_path }}/{{ app.name }}.vault.yml"
-  register: app_vault
-
-# If the vault exists for this app, store its checksum (sha1).
-- name: Set application vault file checksum
-  set_fact:
-    app_vault_checksum: "{{ (app_vault.stat.exists and app_vault.stat.isreg) | ternary(app_vault.stat.checksum, '') }}"
-
-# Set dynamic vars for this application's vault, i.e. richie_vault and
-# richie_vault_checksum for the "richie" application name. This is useful if you
-# want to refer to the application vault's checksum in your application defaults.
-- name: Set application vault variables
-  set_fact:
-    "{{ app.name }}_vault": "{{ app_vault }}"
-    "{{ app.name }}_vault_checksum": "{{ app_vault_checksum }}"
-  # Only set those variables when the vault file exists and is a regular file
-  when: app_vault.stat is defined and app_vault.stat.exists and app_vault.stat.isreg
+- include_tasks: tasks/set_vault_for_app.yml
 
 # Vault variables are loaded namespaced, i.e. injected in a variable named:
 # {{ app.name }}_VAULT, e.g. EDXAPP_VAULT for the edxapp application. To access

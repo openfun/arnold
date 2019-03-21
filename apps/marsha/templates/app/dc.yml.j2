@@ -23,15 +23,15 @@ spec:
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: deploymentconfig
-                  operator: In
-                  values:
-                  - "marsha-app-{{ deployment_stamp }}"
-              topologyKey: kubernetes.io/hostname
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: deploymentconfig
+                      operator: In
+                      values:
+                        - "marsha-app-{{ deployment_stamp }}"
+                topologyKey: kubernetes.io/hostname
       containers:
         - name: marsha
           # We point to a local registry image build for this "live" image (see
@@ -61,7 +61,7 @@ spec:
               mountPath: /data/media
             - name: marsha-v-static
               mountPath: /data/static
-{% if MARSHA_VAULT.DJANGO_CLOUDFRONT_PRIVATE_KEY is defined %}
+{% if marsha_should_sign_requests %}
             - mountPath: "{{ marsha_cloudfront_private_key_path | dirname }}"
               name: marsha-cloudfront-private-key-secret
 {% endif %}
@@ -72,7 +72,7 @@ spec:
         - name: marsha-v-static
           persistentVolumeClaim:
             claimName: marsha-pvc-static
-{% if MARSHA_VAULT.DJANGO_CLOUDFRONT_PRIVATE_KEY is defined %}
+{% if marsha_should_sign_requests %}
         - name: marsha-cloudfront-private-key-secret
           secret:
             secretName: "{{ marsha_cloudfront_private_key_secret_name }}"
