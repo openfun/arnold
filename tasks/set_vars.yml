@@ -74,12 +74,12 @@
 
 - name: Display available applications (available_apps)
   debug:
-    msg: "{{ available_apps | to_nice_yaml }}"
+    var: available_apps
     verbosity: 3
 
 - name: Display defined applications (apps)
   debug:
-    msg: "{{ apps | to_nice_yaml }}"
+    var: apps
     verbosity: 3
   when: apps is defined
 
@@ -95,7 +95,7 @@
 
 - name: Display enriched applications definitions (apps)
   debug:
-    msg: "{{ apps | to_nice_yaml }}"
+    var: apps
     verbosity: 2
 
 # If the playbook is invoqued with the apps_filter extra var, we restrict apps
@@ -121,7 +121,7 @@
 
 - name: Display selected applications (apps)
   debug:
-    msg: "{{ apps | to_nice_yaml }}"
+    var: apps
     verbosity: 1
 
 - include_tasks: tasks/run_tasks_for_apps.yml
