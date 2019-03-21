@@ -7,7 +7,7 @@
 
 - name: Print loaded variables from {{ file }}
   debug:
-    msg: "{{ defaults | to_nice_yaml }}"
+    var: defaults
     verbosity: 3
 
 - name: Define missing variables with defaults

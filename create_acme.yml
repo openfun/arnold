@@ -21,7 +21,7 @@
 
     - name: Print core_apps
       debug:
-        msg: "{{ core_apps }}"
+        var: core_apps
         verbosity: 2
 
     - name: Set acme_templates
@@ -30,7 +30,7 @@
 
     - name: Print acme_templates
       debug:
-        msg: "{{ acme_templates | to_nice_yaml  }}"
+        var: acme_templates
         verbosity: 2
 
     - name: Set rolebinding template
@@ -39,7 +39,7 @@
 
     - name: Print rb_template
       debug:
-        msg: "{{ rb_template | to_nice_yaml }}"
+        var: rb_template
         verbosity: 2
 
     - name: Set role template
@@ -49,7 +49,7 @@
 
     - name: Print role_template
       debug:
-        msg: "{{ role_template | to_nice_yaml }}"
+        var: role_template
         verbosity: 2
       when: has_acme_cluster_role
 
@@ -64,7 +64,7 @@
 
     - name: Print base_acme_templates
       debug:
-        msg: "{{ base_acme_templates | to_nice_yaml }}"
+        var: base_acme_templates
         verbosity: 2
 
     - name: Create all openshift-acme OpenShift objects
