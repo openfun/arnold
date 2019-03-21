@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Richie's app BuildConfig now supports extra dependencies installation
+
 ### Changed
 
 - Python dependencies have been upgraded thanks to pyup bot.

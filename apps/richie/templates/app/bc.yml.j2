@@ -31,7 +31,11 @@ spec:
   source:
     dockerfile: |-
       FROM {{ richie_image_name }}:{{ richie_image_tag }}
-      # Add new statements here
+      USER 0
+      {% if richie_extra_dependencies is defined and richie_extra_dependencies | length -%}
+      RUN pip install {{ richie_extra_dependencies | join(" ") }}
+      {% endif -%}
+      USER 10000
   triggers:
     - type: "ConfigChange"
   output:
