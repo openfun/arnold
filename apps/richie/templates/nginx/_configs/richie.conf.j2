@@ -29,6 +29,11 @@ server {
     try_files $uri @proxy_to_richie_app;
   }
 
+  location ~ ^/media/(?P<file>.*) {
+    root /data/media/richie;
+    try_files /$file =404;
+  }
+
   location ~ ^/static/(?P<file>.*) {
     root /data/static/richie;
     try_files /$file =404;
