@@ -7,9 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Configure PyUp to submit dependency updates every week
+
 ### Fixed
 
-- Add missing location to serve media files in the `nginx` configuration of the Richie app.
+- Add missing location to serve media files in the `nginx` configuration of the
+  Richie app.
 
 ## [1.7.0] - 2019-03-22
 
