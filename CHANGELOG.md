@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Configure PyUp to submit dependency updates every week
 - Add DJANGO_AWS_S3_REGION_NAME in marsha secret configuration
+- Add DJANGO_CLOUDFRONT_DOMAIN in marsha secret configuration
 
 ### Fixed
 
