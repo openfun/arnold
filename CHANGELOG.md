@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.8.0] - 2019-04-01
+
 ### Added
 
 - Configure PyUp to submit dependency updates every week
@@ -219,7 +221,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - First Arnold's public release
 - Official Docker image is available at: https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v1.7.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v1.8.0...master
+[1.8.0]: https://github.com/openfun/arnold/compare/v1.7.0...v1.8.0
 [1.7.0]: https://github.com/openfun/arnold/compare/v1.6.0...v1.7.0
 [1.6.0]: https://github.com/openfun/arnold/compare/v1.5.1...v1.6.0
 [1.5.1]: https://github.com/openfun/arnold/compare/v1.5.0...v1.5.1
