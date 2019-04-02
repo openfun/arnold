@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.8.1] - 2019-04-02
+
+### Fixed
+
+- fix DJANGO_CLOUDFRONT_DOMAIN variable in marsha secret template
+
 ## [1.8.0] - 2019-04-01
 
 ### Added
@@ -221,7 +227,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - First Arnold's public release
 - Official Docker image is available at: https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v1.8.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v1.8.1...master
+[1.8.1]: https://github.com/openfun/arnold/compare/v1.8.0...v1.8.1
 [1.8.0]: https://github.com/openfun/arnold/compare/v1.7.0...v1.8.0
 [1.7.0]: https://github.com/openfun/arnold/compare/v1.6.0...v1.7.0
 [1.6.0]: https://github.com/openfun/arnold/compare/v1.5.1...v1.6.0
