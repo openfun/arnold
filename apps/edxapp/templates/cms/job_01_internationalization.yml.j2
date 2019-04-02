@@ -34,6 +34,19 @@ spec:
           envFrom:
             - secretRef:
                 name: "{{ edxapp_tx_secret_name }}"
+          # Once transifex client is installed, we use it to fetch recent
+          # reviewed translations for a target release (pointed by the
+          # .tx/config bundled in edx-platform for a release). We only keep
+          # django.po and djangojs.po files corresponding to this release. We
+          # remove all other translation files before copying the new ones to
+          # avoid conflicts in separated and merged .po files (apparently not
+          # required but cleaner).
+          #
+          # Once frontend translation files have been fetched they also need to
+          # be compiled (with the compilejsi18n management command), but this
+          # will be achieved during the collectstatics job since we have no way
+          # to make compiled frontend translated statics persistant from the
+          # current job to a subsequent one.
           command:
             - "bash"
             - "-c"
@@ -41,10 +54,13 @@ spec:
               cp -R .tx /tmp &&
 {% for lang in edxapp_i18n_languages %}
               HOME="/tmp" PYTHONPATH=/tmp/lib/python2.7/site-packages/ /tmp/bin/tx --root /tmp pull --mode=reviewed -l {{ lang }} &&
-              cp -Rf /tmp/conf/locale/{{ lang }} conf/locale/ &&
+              mkdir -p conf/locale/{{ lang }}/LC_MESSAGES &&
+              rm -fr conf/locale/{{ lang }}/LC_MESSAGES/* &&
+              cp -f /tmp/conf/locale/{{ lang }}/LC_MESSAGES/{django,djangojs}.po conf/locale/{{ lang }}/LC_MESSAGES/ &&
               python manage.py cms compilemessages -l {{ lang }} &&
 {% endfor %}
-              python manage.py cms compilejsi18n
+              echo "translations:" &&
+              ls -l conf/locale/*/LC_MESSAGES/
           volumeMounts:
             - mountPath: /edx/app/edxapp/edx-platform/conf/locale
               name: edxapp-v-locale

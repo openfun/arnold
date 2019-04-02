@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+- Frontend translations are now properly updated while deploying `edxapp`
 - The bin/job was broken due to recent changes in the `_docker_run` usage
 
 ## [1.8.1] - 2019-04-02

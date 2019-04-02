@@ -28,12 +28,25 @@ spec:
           env:
             - name: DJANGO_SETTINGS_MODULE
               value: lms.envs.fun.docker_run
-          command: ["python", "manage.py", "lms", "collectstatic", "--noinput"]
+          # FIXME: as mentioned in the internationalization job, we need to
+          # compile frontend translation files right before collecting them from
+          # applications statics. Hence, we call the compilejsi18n management
+          # command in this job. This is not ideal, but we haven't a better
+          # solution for now.
+          command:
+            - "bash"
+            - "-c"
+            - {% if edxapp_should_update_i18n %}python manage.py lms compilejsi18n &&{% endif %}
+              python manage.py lms collectstatic --noinput
           volumeMounts:
             - mountPath: /config
               name: edxapp-config
             - mountPath: /edx/app/edxapp/staticfiles
               name: edxapp-v-static
+{% if edxapp_should_update_i18n %}
+            - mountPath: /edx/app/edxapp/edx-platform/conf/locale
+              name: edxapp-v-locale
+{% endif %}
       initContainers:
         # This initContainer has nothing mounted on its "/config" directory. We
         # copy the content of its "/config" directory (fun-platform default
@@ -83,4 +96,9 @@ spec:
         - name: edxapp-v-static
           persistentVolumeClaim:
             claimName: edxapp-pvc-static
+{% if edxapp_should_update_i18n %}
+        - name: edxapp-v-locale
+          persistentVolumeClaim:
+            claimName: edxapp-pvc-locale
+{% endif %}
       restartPolicy: Never
