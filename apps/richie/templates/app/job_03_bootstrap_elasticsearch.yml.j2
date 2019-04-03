@@ -20,34 +20,41 @@ spec:
         deployment_stamp: "{{ deployment_stamp }}"
         job_stamp: "{{ job_stamp }}"
     spec:
-      containers:
-      - name: richie-bootstrap-elasticsearch
-        env:
-          - name: DJANGO_SETTINGS_MODULE
-            value: settings
-          - name: DJANGO_CONFIGURATION
-            value: "{{ richie_django_configuration }}"
-          - name: DB_ENGINE
-            value: "{{ richie_database_engine }}"
-          - name: DB_NAME
-            value: "{{ richie_database_name }}"
-          - name: DB_HOST
-            value: "richie-{{ richie_database_host }}-{{ deployment_stamp }}"
-          - name: DB_PORT
-            value: "{{ richie_database_port }}"
-          - name: DJANGO_ALLOWED_HOSTS
-            value: "{{ richie_host }}"
-          - name: ES_CLIENT
-            value: "richie-{{ richie_elasticsearch_host }}-{{ deployment_stamp }}"
-        envFrom:
-          - secretRef:
-              name: "{{ richie_secret_name }}"
-        # We point to a local registry image build for this "live" image (see
-        # ImageStream and BuildConfig templates)
-        image: "{{ internal_docker_registry }}/{{ project_name }}/richie:{{ richie_image_tag }}-live"
-        command:
-          - "bash"
-          - "-c"
-          - cd sandbox &&
-            python manage.py bootstrap_elasticsearch
       restartPolicy: Never
+      containers:
+        - name: richie-bootstrap-elasticsearch
+          env:
+            - name: DJANGO_SETTINGS_MODULE
+              value: settings
+            - name: DJANGO_CONFIGURATION
+              value: "{{ richie_django_configuration }}"
+            - name: DB_ENGINE
+              value: "{{ richie_database_engine }}"
+            - name: DB_NAME
+              value: "{{ richie_database_name }}"
+            - name: DB_HOST
+              value: "richie-{{ richie_database_host }}-{{ deployment_stamp }}"
+            - name: DB_PORT
+              value: "{{ richie_database_port }}"
+            - name: DJANGO_ALLOWED_HOSTS
+              value: "{{ richie_host }}"
+            - name: ES_CLIENT
+              value: "richie-{{ richie_elasticsearch_host }}-{{ deployment_stamp }}"
+          envFrom:
+            - secretRef:
+                name: "{{ richie_secret_name }}"
+          # We point to a local registry image build for this "live" image (see
+          # ImageStream and BuildConfig templates)
+          image: "{{ internal_docker_registry }}/{{ project_name }}/richie:{{ richie_image_tag }}-live"
+          command:
+            - "bash"
+            - "-c"
+            - cd sandbox &&
+              python manage.py bootstrap_elasticsearch
+          volumeMounts:
+            - name: richie-v-media
+              mountPath: /data/media
+      volumes:
+        - name: richie-v-media
+          persistentVolumeClaim:
+            claimName: richie-pvc-media
