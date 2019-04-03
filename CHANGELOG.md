@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.8.3] - 2019-04-03
+
 ### Fixed
 
 - Fix Richie deployments by mounting the `media` volume in the `bootstrap_elasticsearch` job
@@ -238,7 +240,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - First Arnold's public release
 - Official Docker image is available at: https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v1.8.2...master
+[unreleased]: https://github.com/openfun/arnold/compare/v1.8.3...master
+[1.8.3]: https://github.com/openfun/arnold/compare/v1.8.2...v1.8.3
 [1.8.2]: https://github.com/openfun/arnold/compare/v1.8.1...v1.8.2
 [1.8.1]: https://github.com/openfun/arnold/compare/v1.8.0...v1.8.1
 [1.8.0]: https://github.com/openfun/arnold/compare/v1.7.0...v1.8.0
