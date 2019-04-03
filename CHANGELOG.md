@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix Richie deployments by mounting the `media` volume in the `bootstrap_elasticsearch` job
+
 ## [1.8.2] - 2019-04-02
 
 ### Fixed
