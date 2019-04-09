@@ -91,6 +91,8 @@ spec:
           name: edxapp-v-static
         - mountPath: /edx/app/edxapp/data
           name: edxapp-v-data
+        - mountPath: {{ edxapp_export_volume_path }}
+          name: edxapp-v-exports
 {% if edxapp_should_update_i18n %}
         - mountPath: /edx/app/edxapp/edx-platform/conf/locale
           name: edxapp-v-locale
@@ -142,6 +144,9 @@ spec:
         - name: edxapp-v-data
           persistentVolumeClaim:
             claimName: edxapp-pvc-data
+        - name: edxapp-v-exports
+          persistentVolumeClaim:
+            claimName: edxapp-pvc-exports
 {% if edxapp_should_update_i18n %}
         - name: edxapp-v-locale
           persistentVolumeClaim:

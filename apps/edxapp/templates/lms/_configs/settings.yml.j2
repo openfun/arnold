@@ -34,3 +34,7 @@ DATABASE_PORT: {{ edxapp_mysql_port }}
 # Mongo
 MONGODB_HOST: "edxapp-mongo-{{ deployment_stamp }}"
 MONGODB_PORT: {{ edxapp_mongodb_port }}
+
+GRADES_DOWNLOAD:
+  STORAGE_TYPE: localfs
+  ROOT_PATH: "{{ edxapp_export_volume_path }}/grades-download"
