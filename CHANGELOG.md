@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Upgrade Ansible to the 2.7.10 release
 
+### Fixed
+
+- Flag `collectstatic` jobs as "pre" jobs for all Django apps to prevent cache
+  bursting issues
+
 ## [1.8.3] - 2019-04-03
 
 ### Fixed
