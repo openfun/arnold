@@ -8,6 +8,8 @@ metadata:
     service: lms
     version: "{{ edxapp_image_tag }}"
     job_stamp: "{{ job_stamp }}"
+    # Jobs with the "pre" job type will be executed prior to deployments
+    job_type: "pre"
     deployment_stamp: "{{ deployment_stamp }}"
 spec:
   template:
