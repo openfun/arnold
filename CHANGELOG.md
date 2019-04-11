@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.9.0] - 2019-04-11
+
 ### Added
 
 - Add new volume to `edxapp` to store CSV reports
@@ -253,7 +255,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - First Arnold's public release
 - Official Docker image is available at: https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v1.8.3...master
+[unreleased]: https://github.com/openfun/arnold/compare/v1.9.0...master
+[1.9.0]: https://github.com/openfun/arnold/compare/v1.8.3...v1.9.0
 [1.8.3]: https://github.com/openfun/arnold/compare/v1.8.2...v1.8.3
 [1.8.2]: https://github.com/openfun/arnold/compare/v1.8.1...v1.8.2
 [1.8.1]: https://github.com/openfun/arnold/compare/v1.8.0...v1.8.1
