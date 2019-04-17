@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 - Increase length of secret keys to 50 characters
+- Mount previously added `export` volume to nginx and add configuration
+  to serve it.
+- Rename the edxapp `exports` volume to `export`
 
 ## [2.3.0] - 2019-05-23
 
