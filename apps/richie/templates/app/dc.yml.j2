@@ -53,7 +53,7 @@ spec:
               value: "{{ richie_database_port }}"
             - name: DJANGO_ALLOWED_HOSTS
               value: "{{ richie_host | blue_green_hosts }}"
-            - name: ES_CLIENT
+            - name: RICHIE_ES_HOST
               value: "richie-{{ richie_elasticsearch_host }}-{{ deployment_stamp }}"
           envFrom:
             - secretRef:
