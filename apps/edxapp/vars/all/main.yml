@@ -70,7 +70,7 @@ edxapp_locale_volume_size: 200Mi
 edxapp_export_volume_size: 100Mi
 
 # -- volume names
-edxapp_export_volume_path: /edx/var/edxapp/exports
+edxapp_export_volume_path: /edx/var/edxapp/export
 
 # -- memcached
 edxapp_memcached_image_name: memcached
