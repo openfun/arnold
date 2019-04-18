@@ -23,20 +23,18 @@ spec:
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: deploymentconfig
-                  operator: In
-                  values:
-                  - "richie-app-{{ deployment_stamp }}"
-              topologyKey: kubernetes.io/hostname
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: deploymentconfig
+                      operator: In
+                      values:
+                        - "richie-app-{{ deployment_stamp }}"
+                topologyKey: kubernetes.io/hostname
       containers:
         - name: richie
-          # We point to a local registry image build for this "live" image (see
-          # ImageStream and BuildConfig templates)
-          image: "{{ internal_docker_registry }}/{{ project_name }}/richie:{{ richie_image_tag }}-live"
+          image: "{{ richie_image_name }}:{{ richie_image_tag }}"
           imagePullPolicy: Always
           env:
             - name: DJANGO_SETTINGS_MODULE
