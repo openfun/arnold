@@ -12,6 +12,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Rename the `ES_CLIENT` setting to `RICHIE_ES_HOST` for compatibility
   with Richie starting from version v1.0.0-beta.6.
 
+### Removed
+
+- Richie and Marsha applications no longer use dedicated `ImageStream` and
+  `BuildConfig`
+
 ## [1.9.0] - 2019-04-11
 
 ### Added
