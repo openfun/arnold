@@ -3,8 +3,3 @@ redirections:
   - to: "hello.{{ project_name}}.{{ domain_name }}"
     from:
       - "www.hello.{{ project_name}}.{{ domain_name }}"
-
-# Richie
-# Test extra dependencies installation
-richie_extra_dependencies:
-  - "factory-boy[django]>=2.11.1"
