@@ -34,9 +34,7 @@ spec:
                 topologyKey: kubernetes.io/hostname
       containers:
         - name: marsha
-          # We point to a local registry image build for this "live" image (see
-          # ImageStream and BuildConfig templates)
-          image: "{{ internal_docker_registry }}/{{ project_name }}/marsha:{{ marsha_image_tag }}-live"
+          image: "{{ marsha_image_name }}:{{ marsha_image_tag }}"
           imagePullPolicy: Always
           env:
             - name: DJANGO_SETTINGS_MODULE
