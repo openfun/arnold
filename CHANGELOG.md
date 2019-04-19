@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Add `jq` and `yq` utilities to the Docker image
+
 ### Changed
 
 - Rename the `ES_CLIENT` setting to `RICHIE_ES_HOST` for compatibility
