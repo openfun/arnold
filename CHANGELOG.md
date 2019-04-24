@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.10.0] - 2019-04-24
+
 ### Added
 
 - Add `jq` and `yq` utilities to the Docker image
@@ -269,7 +271,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - First Arnold's public release
 - Official Docker image is available at: https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v1.9.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v1.10.0...master
+[1.10.0]: https://github.com/openfun/arnold/compare/v1.9.0...v1.10.0
 [1.9.0]: https://github.com/openfun/arnold/compare/v1.8.3...v1.9.0
 [1.8.3]: https://github.com/openfun/arnold/compare/v1.8.2...v1.8.3
 [1.8.2]: https://github.com/openfun/arnold/compare/v1.8.1...v1.8.2
