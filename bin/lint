@@ -48,15 +48,15 @@ _bash() {
 
 _plugins() {
   echo -e "\n---> Plugins: flake8\n"
-  _docker_run flake8 plugins tests
+  _docker_run flake8 filter_plugins lookup_plugins tests
   print_green "  -> Flake8 check OK"
 
   echo -e "\n---> Plugins: isort\n"
-  _docker_run isort --recursive --diff --check-only plugins tests
+  _docker_run isort --recursive --diff --check-only filter_plugins lookup_plugins tests
   print_green "  -> isort check OK"
 
   echo -e "\n---> Plugins: Pylint\n"
-  _docker_run pylint -f colorized plugins tests
+  _docker_run pylint -f colorized filter_plugins lookup_plugins tests
   print_green "  -> Pylint check OK"
 }
 

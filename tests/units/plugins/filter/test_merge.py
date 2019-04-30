@@ -7,7 +7,7 @@ from unittest.mock import patch
 from ansible.compat.tests import unittest
 from ansible.errors import AnsibleFilterError
 
-from plugins.filter.merge import merge_with_app, merge_with_database
+from filter_plugins.merge import merge_with_app, merge_with_database
 
 
 # pylint: disable=invalid-name
@@ -371,7 +371,7 @@ class TestMergeWithAppFilter(unittest.TestCase):
 class TestMergeWithDatabaseFilter(unittest.TestCase):
     """Tests for the ``merge_with_database`` filter"""
 
-    @patch("plugins.filter.merge.random_password", return_value="foo")
+    @patch("filter_plugins.merge.random_password", return_value="foo")
     # pylint: disable=unused-argument
     def test_database_merge_with_no_existing_databases(self, random_password_mock):
         """Test when no database is already configured"""
@@ -401,7 +401,7 @@ class TestMergeWithDatabaseFilter(unittest.TestCase):
             expected,
         )
 
-    @patch("plugins.filter.merge.random_password", return_value="foo")
+    @patch("filter_plugins.merge.random_password", return_value="foo")
     # pylint: disable=unused-argument,bad-continuation
     def test_database_merge_with_existing_databases_different(
         self, random_password_mock
@@ -501,7 +501,7 @@ class TestMergeWithDatabaseFilter(unittest.TestCase):
             expected,
         )
 
-    @patch("plugins.filter.merge.random_password", return_value="foo")
+    @patch("filter_plugins.merge.random_password", return_value="foo")
     # pylint: disable=unused-argument,bad-continuation
     def test_database_merge_with_same_database_and_different_release(
         self, random_password_mock
@@ -558,7 +558,7 @@ class TestMergeWithDatabaseFilter(unittest.TestCase):
             expected,
         )
 
-    @patch("plugins.filter.merge.random_password", return_value="foo")
+    @patch("filter_plugins.merge.random_password", return_value="foo")
     # pylint: disable=unused-argument
     def test_database_merge_with_other_environments(self, random_password_mock):
         """Merge database in production various environments"""
