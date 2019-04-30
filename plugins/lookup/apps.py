@@ -214,7 +214,9 @@ class LookupModule(LookupBase):
                         and settings_file in files
                     ):
                         with open(os.path.join(root, settings_file), "r") as stream:
-                            app["settings"].update(yaml.load(stream))
+                            app["settings"].update(
+                                yaml.load(stream, Loader=yaml.FullLoader)
+                            )
                             continue
 
                     # ./apps/foo/vars/all
