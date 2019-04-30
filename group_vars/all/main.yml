@@ -32,24 +32,12 @@ environments:
   - name: "preprod"
     code: "t"
 
-# Openshift applications list for the project
-# Example :
-# apps:
-#   - name: hello
-#     services:
-#       - name:     hello
-#         host:     "{{ project_name }}.{{ domain_name }}"
-#         port:     "8080"
-#         env:
-#           - name:   "RESPONSE"
-#             value:  "Hello OpenShift! by Arnold"
-#   - name: richie
-#     services:
-#       - name:     richie
-#       - name:     richie-nginx
-#         host:     "{{ env_type }}.richie.{{ domain_name }}"
-#       - name:     postgresql
-#         endpoint: true  # default False
+# Paths to look for deployable applications
+apps_paths:
+  - "apps/"
+
+core_apps_paths:
+  - "core_apps/"
 
 # List environments that are trashable, i.e. not defining services using
 # endpoints but deployment configurations for their databases.

@@ -14,6 +14,11 @@
   with_fileglob:
     - "group_vars/customer/{{ customer }}/{{ env_type }}/*.yml"
 
+- name: Display applications paths (apps_paths)
+  debug:
+    var: apps_paths
+    verbosity: 3
+
 # The following tasks goal is to define the `apps` var that describes
 # applications to work on.
 #
@@ -70,7 +75,8 @@
 #       ]
 #     }
 - name: Lookup available applications
-  set_fact: available_apps="{{ lookup('apps', 'apps/') }}"
+  set_fact:
+    available_apps: "{{ lookup('apps', apps_paths) }}"
 
 - name: Display available applications (available_apps)
   debug:
