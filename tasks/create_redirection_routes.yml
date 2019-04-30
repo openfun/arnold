@@ -9,7 +9,7 @@
 - name: Make sure all redirected routes exist
   k8s:
     force: "{{ force_route | bool }}"
-    definition: "{{ lookup('template', 'core_apps/redirect/templates/nginx/_redirected_route.yml.j2') | from_yaml }}"
+    definition: "{{ lookup('template', 'core_apps/redirect/templates/services/nginx/_redirected_route.yml.j2') | from_yaml }}"
     state: present
   loop: "{{ redirections_from }}"
   loop_control:
