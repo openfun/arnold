@@ -17,7 +17,8 @@
     - import_tasks: tasks/set_vars.yml
 
     - name: Lookup available core applications
-      set_fact: core_apps="{{ [ lookup('apps', 'core_apps/') ] | flatten }}"
+      set_fact:
+        core_apps: "{{ lookup('apps', core_apps_paths) }}"
 
     - name: Print core_apps
       debug:

@@ -134,7 +134,7 @@ class LookupModule(LookupBase):
     # sense to disable all the following warnings.
     #
     # pylint: disable=arguments-differ,too-many-locals,too-many-nested-blocks,too-many-branches,
-    def run(self, apps_paths, variables, **kwargs):
+    def run(self, terms, variables=None, **kwargs):
 
         app_volumes_dir = "_volumes"
         service_config_dir = "_configs"
@@ -143,97 +143,100 @@ class LookupModule(LookupBase):
         apps = []
         app = None
 
-        for apps_path in apps_paths:
+        for term in terms:
+            for apps_path in term:
 
-            ignore_dirs_regex = r"^{}/_.*(/.*)*$".format(apps_path.strip("/"))
+                ignore_dirs_regex = r"^{}/_.*(/.*)*$".format(apps_path.strip("/"))
 
-            for root, _, files in os.walk(apps_path):
+                for root, _, files in os.walk(apps_path):
 
-                (head, tail) = os.path.split(root)
+                    (head, tail) = os.path.split(root)
 
-                # ./apps/
-                if not tail:
-                    continue
-
-                # Ignore directories matching ignore_dirs_regex
-                if re.match(ignore_dirs_regex, root):
-                    continue
-
-                # ./apps/foo app directory
-                if root == os.path.join(apps_path, tail):
-                    if app is not None:
-                        apps.append(app)
-                    app = {
-                        "name": tail,
-                        "services": [],
-                        "vars": [],
-                        "settings": {},
-                        "environment_variables": None,
-                    }
-                    continue
-
-                # ./apps/foo/_volumes directory
-                if tail == app_volumes_dir:
-                    volumes = [os.path.join(root, f) for f in files]
-                    app["volumes"] = volumes
-                    continue
-
-                # ./apps/foo/templates/bar service templates
-                if app is not None and root == os.path.join(
-                    apps_path, app["name"], "templates", tail
-                ):
-                    templates = []
-                    environment_variables = None
-                    for f in files:
-                        if f == environment_variables_file:
-                            environment_variables = os.path.join(root, f)
-                        else:
-                            templates.append(os.path.join(root, f))
-
-                    app["services"].append(
-                        {
-                            "name": tail,
-                            "templates": templates,
-                            "environment_variables": environment_variables,
-                        }
-                    )
-                    continue
-
-                # ./apps/foo/templates/bar/_configs directory
-                if tail == service_config_dir:
-                    service = os.path.basename(head)
-                    idx = [s.get("name") for s in app["services"]].index(service)
-                    configs = [os.path.join(root, f) for f in files]
-                    app["services"][idx].update({"configs": configs})
-                    continue
-
-                # ./apps/foo/vars/settings.yml
-                if (
-                    root == os.path.join(apps_path, app["name"], "vars")
-                    and settings_file in files
-                ):
-                    with open(os.path.join(root, settings_file), "r") as stream:
-                        app["settings"].update(yaml.load(stream))
+                    # ./apps/
+                    if not tail:
                         continue
 
-                # ./apps/foo/vars/all
-                #
-                # For now we only accept "all" type vars, but this can evolve soon.
-                for var_type in ("all",):
-                    if root == os.path.join(apps_path, app["name"], "vars", var_type):
-                        for file_ in files:
-                            name, ext = os.path.splitext(file_)
-                            # We only consider YAML files
-                            if ext != ".yml":
-                                continue
-                            app["vars"].append(
-                                {
-                                    "type": var_type,
-                                    "name": name,
-                                    "path": os.path.join(root, file_),
-                                }
-                            )
+                    # Ignore directories matching ignore_dirs_regex
+                    if re.match(ignore_dirs_regex, root):
+                        continue
 
-            apps.append(app)
+                    # ./apps/foo app directory
+                    if root == os.path.join(apps_path, tail):
+                        if app is not None:
+                            apps.append(app)
+                        app = {
+                            "name": tail,
+                            "services": [],
+                            "vars": [],
+                            "settings": {},
+                            "environment_variables": None,
+                        }
+                        continue
+
+                    # ./apps/foo/_volumes directory
+                    if tail == app_volumes_dir:
+                        volumes = [os.path.join(root, f) for f in files]
+                        app["volumes"] = volumes
+                        continue
+
+                    # ./apps/foo/templates/bar service templates
+                    if app is not None and root == os.path.join(
+                        apps_path, app["name"], "templates", tail
+                    ):
+                        templates = []
+                        environment_variables = None
+                        for f in files:
+                            if f == environment_variables_file:
+                                environment_variables = os.path.join(root, f)
+                            else:
+                                templates.append(os.path.join(root, f))
+
+                        app["services"].append(
+                            {
+                                "name": tail,
+                                "templates": templates,
+                                "environment_variables": environment_variables,
+                            }
+                        )
+                        continue
+
+                    # ./apps/foo/templates/bar/_configs directory
+                    if tail == service_config_dir:
+                        service = os.path.basename(head)
+                        idx = [s.get("name") for s in app["services"]].index(service)
+                        configs = [os.path.join(root, f) for f in files]
+                        app["services"][idx].update({"configs": configs})
+                        continue
+
+                    # ./apps/foo/vars/settings.yml
+                    if (
+                        root == os.path.join(apps_path, app["name"], "vars")
+                        and settings_file in files
+                    ):
+                        with open(os.path.join(root, settings_file), "r") as stream:
+                            app["settings"].update(yaml.load(stream))
+                            continue
+
+                    # ./apps/foo/vars/all
+                    #
+                    # For now we only accept "all" type vars, but this can evolve soon.
+                    for var_type in ("all",):
+                        if root == os.path.join(
+                            apps_path, app["name"], "vars", var_type
+                        ):
+                            for file_ in files:
+                                name, ext = os.path.splitext(file_)
+                                # We only consider YAML files
+                                if ext != ".yml":
+                                    continue
+                                app["vars"].append(
+                                    {
+                                        "type": var_type,
+                                        "name": name,
+                                        "path": os.path.join(root, file_),
+                                    }
+                                )
+
+                apps.append(app)
 
         return apps
