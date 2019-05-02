@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 - Upgrade `openshift` to `0.8.8`
+- Migrate apps to the new tray package tree
+- Refactor and test the `apps` lookup to support the new tray package tree
 
 ## [1.10.0] - 2019-04-24
 
