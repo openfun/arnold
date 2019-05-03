@@ -1,0 +1,20 @@
+# Community apps registry
+#
+# Channels
+deprecated: []
+stable:
+  - name: grafana
+    git:
+      repository: https://github.com/openfun/arnold-apps.git
+      reference: main
+      subpath: apps/grafana
+  - name: jupyter
+    git:
+      repository: https://github.com/openfun/arnold-apps.git
+      reference: main
+      subpath: apps/jupyter
+  - name: ralph
+    git:
+      repository: https://github.com/openfun/ralph.git
+      reference: v2.0.1
+experimental: []

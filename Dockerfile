@@ -37,6 +37,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # -- Core --
 FROM base as core
 
+# hadolint ignore=DL3015,DL3008
+RUN apt-get update && \
+    apt-get install -y git && \
+    rm -rf /var/lib/apt/lists/*
+
 COPY --from=builder /usr/local /usr/local
 
 WORKDIR /app

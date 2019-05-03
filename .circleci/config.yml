@@ -84,6 +84,31 @@ aliases:
 
 version: 2
 jobs:
+
+  # Validate current Arnold registry
+  validate-registry:
+    docker:
+      - image: circleci/python:3.9-buster
+        auth:
+          username: $DOCKER_HUB_USER
+          password: $DOCKER_HUB_PASSWORD
+    working_directory: ~/fun
+    steps:
+      - checkout
+      - run:
+          name: Install jsonschema
+          command: |
+            pip install --user jsonschema
+      - run:
+          name: Install YQ
+          command: |
+            wget https://github.com/mikefarah/yq/releases/download/v4.2.0/yq_linux_amd64 -O ~/.local/bin/yq && \
+            chmod +x ~/.local/bin/yq
+      - run:
+          name: Validate registry schema
+          command: |
+            yq eval -j registry.yml | jsonschema --instance /dev/stdin registry-schema.json
+
   # Build Arnold's docker image
   build:
     <<: *defaults
@@ -210,6 +235,29 @@ jobs:
             docker push registry.127.0.0.1.nip.io:5000/testimage:local
             # Run this image in the cluster
             kubectl run --image registry.127.0.0.1.nip.io:5000/testimage:local testimage --command -- tail -f /dev/null
+
+  # Test community apps fetching and deployments
+  test-dependencies-management:
+    <<: *defaults
+
+    steps:
+      - checkout
+      - *attach_workspace
+      - *ci_env
+      - *docker_load
+      - *install_k8s_requirements
+      - *configure_sysctl_limits
+      - *run_k3d_cluster
+
+      - run:
+          name: Test community applications installation
+          command: |
+            bin/arnold -c eugene -e ci install_trays
+
+      - run:
+          name: Test community applications deployment
+          command: |
+            bin/arnold -c eugene -e ci -a grafana bootstrap
 
   # Test the bootstrap playbook on the "hello" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
@@ -750,6 +798,10 @@ workflows:
 
   arnold:
     jobs:
+      - validate-registry:
+          filters:
+            tags:
+              only: /.*/
       - build:
           filters:
             tags:
@@ -800,6 +852,15 @@ workflows:
             tags:
               only: /.*/
       - test-k3d-cluster-registry:
+          filters:
+            tags:
+              only: /.*/
+      - test-dependencies-management:
+          requires:
+            - lint-bash
+            - lint-docker
+            - lint-ansible
+            - lint-plugins
           filters:
             tags:
               only: /.*/
@@ -947,6 +1008,7 @@ workflows:
           requires:
             - test-build
             - test-plugins
+            - test-dependencies-management
             - test-bootstrap-hello
             - test-bootstrap-richie
             - test-bootstrap-edxapp

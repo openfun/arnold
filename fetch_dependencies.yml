@@ -1,0 +1,71 @@
+---
+- hosts: local
+  gather_facts: False
+
+  tasks:
+    - name: Display playbook name
+      debug: msg="==== Starting fetch_dependencies playbook ===="
+
+    - name: Check application registry
+      stat:
+        path: "{{ apps_registry_file_name }}"
+      register: registry_file
+
+    - name: Loading default registry (if missing)
+      get_url:
+        url: "{{ default_apps_registry_url }}"
+        dest: "{{ apps_registry_file_name }}"
+      when: not registry_file.stat.exists
+
+    - name: Re-check application registry
+      stat:
+        path: "{{ apps_registry_file_name }}"
+      register: registry_file
+
+    - block:
+        - name: Abort if registry file does not exist
+          debug:
+            msg: "No registry file found"
+        - name: Exit playbook
+          meta: end_play
+      when: not registry_file.stat.exists
+
+    - name: Load registry
+      include_vars:
+        file: "{{ apps_registry_file_name }}"
+        name: registry
+      when: registry_file.stat.exists
+
+    - name: Display registry
+      debug:
+        var: registry
+        verbosity: 1
+
+    - name: Check dependencies files
+      stat:
+        path: "{{ dependencies_file_name }}"
+      register: dependencies_file
+
+    - block:
+        - name: Abort if dependencies file does not exist
+          debug:
+            msg: "No dependencies file found"
+        - name: Exit playbook
+          meta: end_play
+      when: not dependencies_file.stat.exists
+
+    - name: Load dependencies
+      include_vars:
+        file: "{{ dependencies_file_name }}"
+      when: dependencies_file.stat.exists
+
+    - name: Display dependencies
+      debug:
+        var: dependencies
+        verbosity: 1
+
+    - name: Fetch dependencies locally
+      include_tasks: tasks/fetch_app.yml
+      loop: "{{ dependencies }}"
+      loop_control:
+        loop_var: dependency

@@ -70,9 +70,15 @@ declare -A LOG_LEVEL_COLORS=(
 declare -r RELATIVE_COMMON_DIR="group_vars/common"
 declare -r RELATIVE_CUSTOMER_DIR="group_vars/customer"
 declare -r RELATIVE_ENV_TYPE_DIR="group_vars/env_type"
+declare -r RELATIVE_COMMUNITY_APPS_DIR="community_apps"
+declare -r RELATIVE_DEPENDENCIES_FILE="dependencies.yml"
+declare -r RELATIVE_REGISTRY_FILE="registry.yml"
 declare -r COMMON_DIR="${ARNOLD_PROJECT_PATH}/${RELATIVE_COMMON_DIR}"
 declare -r CUSTOMER_DIR="${ARNOLD_PROJECT_PATH}/${RELATIVE_CUSTOMER_DIR}"
 declare -r ENV_TYPE_DIR="${ARNOLD_PROJECT_PATH}/${RELATIVE_ENV_TYPE_DIR}"
+declare -r COMMUNITY_APPS_DIR="${ARNOLD_PROJECT_PATH}/${RELATIVE_COMMUNITY_APPS_DIR}"
+declare -r DEPENDENCIES_FILE="${ARNOLD_PROJECT_PATH}/${RELATIVE_DEPENDENCIES_FILE}"
+declare -r REGISTRY_FILE="${ARNOLD_PROJECT_PATH}/${RELATIVE_REGISTRY_FILE}"
 
 # Files
 declare -r VAULT_PASSWORD_FILE_NAME="password.gpg"
@@ -194,6 +200,7 @@ COMMANDS:
   create_db_vault   create or update a vault file with databases credentials
   htpasswd          initialize a namespace's htpassword files
   info              display current configuration
+  install_trays     install project trays (deployable community apps)
   redirect          create (or update) HTTP redirections
   reset_vault_pw    reset vault password for a namespace (and update all vaults)
   run               run any command in the container
@@ -635,8 +642,24 @@ function _docker_run() {
       -v ${COMMON_DIR}:/app/${RELATIVE_COMMON_DIR} \
       -v ${CUSTOMER_DIR}:/app/${RELATIVE_CUSTOMER_DIR}"
 
+    if [[ ! -d ${COMMUNITY_APPS_DIR} ]]; then
+      mkdir -p "${COMMUNITY_APPS_DIR}"
+    fi
+
+    extra_volumes="${extra_volumes} \
+      -v ${COMMUNITY_APPS_DIR}:/app/${RELATIVE_COMMUNITY_APPS_DIR}"
+
+    if [[ -f ${REGISTRY_FILE} ]]; then
+      extra_volumes="${extra_volumes} \
+        -v ${REGISTRY_FILE}:/app/${RELATIVE_REGISTRY_FILE}"
+    fi
+    if [[ -f ${DEPENDENCIES_FILE} ]]; then
+      extra_volumes="${extra_volumes} \
+        -v ${DEPENDENCIES_FILE}:/app/${RELATIVE_DEPENDENCIES_FILE}"
+    fi
+
     # Override default env_types if the local env_type dir exists
-    if [[ -e ${ENV_TYPE_DIR} ]]; then
+    if [[ -d ${ENV_TYPE_DIR} ]]; then
       extra_volumes="${extra_volumes} \
         -v ${ENV_TYPE_DIR}:/app/${RELATIVE_ENV_TYPE_DIR}"
     fi
@@ -871,6 +894,12 @@ function init() {
 
     _set_k8s_env
     _ansible_playbook init_namespace.yml "$@"
+}
+
+# Install dependencies
+function install_trays() {
+
+    _ansible_playbook fetch_dependencies.yml "$@"
 }
 
 # Create (or updade) project's redirections

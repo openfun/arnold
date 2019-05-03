@@ -1,0 +1,24 @@
+# Configuration file to look for in community apps
+arnold_tray_file_name: "arnold.yml"
+
+# Paths to look for deployable applications
+apps_paths:
+  - "apps/"
+  - "community_apps/"
+
+# The path that will store fetched community apps
+community_apps_path: "community_apps"
+
+# Paths that can contain core Arnold applications
+core_apps_paths:
+  - "core_apps/"
+
+# Expected file that describes distributed tray (application)
+tray_file_name: "tray.yml"
+
+# Application registry
+apps_registry_file_name: "registry.yml"
+default_apps_registry_url: "https://raw.githubusercontent.com/openfun/arnold/master/registry.yml"
+
+# Dependencies
+dependencies_file_name: "dependencies.yml"

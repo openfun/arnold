@@ -1,0 +1,118 @@
+# Fetch a community application
+#
+# Expected vars:
+#   - dependency: an application name of the registry list
+
+- name: Will fetch {{ dependency }} app
+  debug:
+    var: dependency
+    verbosity: 1
+
+- name: Create temporary build directory
+  tempfile:
+    state: directory
+    prefix: "arnold-build-"
+  register: build_dir
+
+- name: Set application filtering query
+  set_fact:
+    app_filter_query: "[?name=='{{ dependency }}']"
+
+- name: Display application filtering query
+  debug:
+    var: app_filter_query
+    verbosity: 2
+
+- name: Look for application in the registry
+  set_fact:
+    app: "{{ registry.stable | json_query(app_filter_query) | first }}"
+
+- name: Git clone application
+  git:
+    repo: "{{ app.git.repository }}"
+    dest: "{{ build_dir.path }}"
+    version: "{{ app.git.reference }}"
+  register: git_repo
+
+- name: Set expected Arnold tray file path
+  set_fact:
+    arnold_tray_file_path: "{{ build_dir.path }}/{{ arnold_tray_file_name }}"
+
+- name: Check Arnold tray file path
+  stat:
+    path: "{{ arnold_tray_file_path }}"
+  register: arnold_tray_file
+
+- name: Get tray path (standard trays)
+  include_vars:
+    file: "{{ arnold_tray_file_path }}"
+    name: arnold_tray
+  when: arnold_tray_file.stat.exists
+
+- name: Get tray metadata (standard trays)
+  include_vars:
+    file: "{{ build_dir.path }}/{{ arnold_tray.source.path }}/{{ tray_file_name }}"
+    name: tray
+  when: arnold_tray_file.stat.exists
+
+- name: Set tray source path (standard trays)
+  set_fact:
+    tray_src_path: "{{ build_dir.path }}/{{ arnold_tray.source.path }}"
+  when: arnold_tray_file.stat.exists
+
+- name: Set tray source path (subpath)
+  set_fact:
+    tray_src_path: "{{ build_dir.path }}/{{ app.git.subpath }}"
+  when: app.git.subpath is defined
+
+- name: Set tray destination path
+  set_fact:
+    tray_dest_path: "{{ community_apps_path }}/{{ app.name }}"
+
+- name: Display tray destination path
+  debug:
+    var: tray_dest_path
+    verbosity: 2
+
+- name: Check already installed tray
+  stat:
+    path: "{{ tray_dest_path }}"
+  register: tray_dest
+
+- name: Confirm tray update
+  pause:
+    prompt: "{{ tray.metadata.name }} tray already exists. Do you want to update it (Yes/no)?"
+  register: update_tray_prompt
+  when: tray_dest.stat.exists and tray_dest.stat.isdir
+
+- name: Display user input
+  debug:
+    var: update_tray_prompt.user_input
+    verbosity: 3
+
+- name: Define install_new_tray variable
+  set_fact:
+    install_new_tray: "{{ update_tray_prompt.user_input | default(true) | bool }}"
+
+- name: Display install_new_tray
+  debug:
+    var: install_new_tray
+    verbosity: 3
+
+- name: Remove old tray
+  file:
+    path: "{{ tray_dest_path }}"
+    state: absent
+  when: tray_dest.stat.exists and tray_dest.stat.isdir and install_new_tray
+
+- name: Display tray destination
+  debug:
+    var: tray_dest
+    verbosity: 2
+
+- name: Install fetched tray
+  copy:
+    src: "{{ tray_src_path }}/"
+    dest: "{{ tray_dest_path }}"
+    mode: '0644'
+  when: install_new_tray
