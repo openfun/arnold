@@ -18,6 +18,9 @@ ARNOLD = \
   bin/arnold
 ARNOLD_RUN_DEV = $(ARNOLD) -d -- run
 
+# -- Files
+PLAYBOOKS = $(filter-out dependencies.yml registry.yml, $(wildcard *.yml))
+
 # -- Docker
 # Get the current user ID to use for docker run and docker exec commands
 DOCKER_UID  = $(shell id -u)
@@ -62,9 +65,9 @@ lint: \
 lint-ansible: ## lint ansible sources
 	@echo 'lint:ansible started…'
 	@echo 'Checking syntax…'
-	$(ARNOLD_RUN_DEV) ansible-playbook --syntax-check ./*.yml
+	$(ARNOLD_RUN_DEV) ansible-playbook --syntax-check $(PLAYBOOKS)
 	@echo 'Linting sources…'
-	$(ARNOLD_RUN_DEV) ansible-lint -R -x $(ANSIBLE_LINT_SKIP_RULES) ./*.yml
+	$(ARNOLD_RUN_DEV) ansible-lint -R -x $(ANSIBLE_LINT_SKIP_RULES) $(PLAYBOOKS)
 .PHONY: lint-ansible
 
 lint-bash: ## lint bash scripts with shellcheck

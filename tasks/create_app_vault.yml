@@ -28,9 +28,13 @@
   include_vars:
     file: "{{ databases_vault.stat.path }}"
 
+- name: Set application root directory
+  set_fact:
+    apps_path: "{{ app | json_query('services[0].templates | [0]') | split('/') | first }}"
+
 - name: Retrieve template file
   stat:
-    path: "apps/{{ app.name }}/vars/vault/main.yml.j2"
+    path: "{{ apps_path }}/{{ app.name }}/vars/vault/main.yml.j2"
   register: vault_template
   no_log: True
 

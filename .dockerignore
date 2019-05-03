@@ -51,3 +51,7 @@ k3d-storage/
 
 group_vars/customer/*
 !group_vars/customer/eugene
+
+# Dependencies
+registry.yml
+dependencies.yml

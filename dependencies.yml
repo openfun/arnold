@@ -1,0 +1,10 @@
+# This is an example dependencies list
+#
+# Note that:
+#
+# - The root variable name should be "dependencies"
+# - You should only list application names corresponding to those referenced in
+#   your registry
+dependencies:
+  - ralph
+  - grafana

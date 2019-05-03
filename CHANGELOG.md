@@ -8,6 +8,11 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- Community applications (_i.e._ trays not distributed with Arnold) can now be
+  fetched, installed, configured & deployed.
+
 ## [6.4.0] - 2021-09-29
 
 ### Added

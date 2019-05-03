@@ -32,14 +32,6 @@ environments:
   - name: "preprod"
     code: "t"
 
-# Paths to look for deployable applications
-apps_paths:
-  - "apps/"
-  - "community_apps/"
-
-core_apps_paths:
-  - "core_apps/"
-
 # List environments that are trashable, i.e. not defining services using
 # endpoints but deployment configurations for their databases.
 trashable_env_types:

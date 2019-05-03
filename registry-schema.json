@@ -1,0 +1,41 @@
+{
+    "title": "Registry",
+    "description": "Registry schema for Arnold's trays",
+    "type": "object",
+    "properties": {
+        "deprecated": { "$ref": "#/$defs/channel" },
+        "stable": { "$ref": "#/$defs/channel" },
+        "experimental": { "$ref": "#/$defs/channel" }
+    },
+    "required": ["deprecated", "stable", "experimental"],
+    "$defs": {
+        "channel": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/tray" }
+        },
+        "tray": {
+            "type": "object",
+            "properties": {
+                "name": { "type": "string" },
+                "git": {
+                    "type": "object",
+                    "properties": {
+                        "repository": {
+                            "type": "string",
+                            "format": "uri"
+                        },
+                        "reference": {
+                            "type": "string"
+                        },
+                        "subpath": {
+                            "type": "string",
+                            "format": "uri"
+                        }
+                    },
+                    "required": ["repository", "reference"]
+                }
+            },
+            "required": ["name", "git"]
+        }
+    }
+}
