@@ -1,0 +1,48 @@
+# Fetch a community application
+#
+# Expected vars:
+#   - community_app: an item of the apps_repository list
+
+- name: Create temporary build directory
+  tempfile:
+    state: directory
+    prefix: "arnold-build-"
+  register: build_dir
+
+- name: Git clone application
+  git:
+    repo: "{{ community_app.git.repository }}"
+    dest: "{{ build_dir.path }}"
+    version: "{{ community_app.git.version }}"
+  register: git_repo
+
+- name: Get tray path
+  include_vars:
+    file: "{{ build_dir.path }}/{{ app_tray_finder }}"
+    name: tray_finder
+
+- name: Get tray metadata
+  include_vars:
+    file: "{{ build_dir.path }}/{{ tray_finder.tray.path }}/{{ tray_file }}"
+    name: tray
+
+- name: Check already installed tray
+  stat:
+    path: "{{ community_apps_dir }}/{{ tray.metadata.name }}"
+  register: tray_dest_path
+
+- name: Confirm tray update
+  pause:
+    prompt: "{{ tray.metadata.name }} tray already exists. Do you want to update it? Press enter to continue, Ctrl+C to interrupt"
+  when: tray_dest_path.stat.exists and tray_dest_path.stat.isdir
+
+- name: Remove old tray
+  file:
+    path: "{{ tray_dest_path.stat.path }}"
+    state: absent
+  when: tray_dest_path.stat.exists and tray_dest_path.stat.isdir
+
+- name: Install fetched tray
+  copy:
+    src: "{{ build_dir.path }}/{{ tray_finder.tray.path }}/"
+    dest: "{{ community_apps_dir }}/{{ tray.metadata.name }}"

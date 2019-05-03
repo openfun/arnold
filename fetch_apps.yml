@@ -1,0 +1,15 @@
+---
+- hosts: local
+  gather_facts: False
+
+  tasks:
+    - name: Display playbook name
+      debug: msg="==== Starting fetch_apps playbook ===="
+
+    - import_tasks: tasks/set_vars.yml
+
+    - name: Install community applications
+      include_tasks: tasks/fetch_app.yml
+      loop: "{{ apps_repository }}"
+      loop_control:
+        loop_var: community_app

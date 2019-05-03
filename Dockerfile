@@ -21,6 +21,7 @@ WORKDIR /app
 # hadolint ignore=DL3015,DL3008
 RUN apt-get update && \
     apt-get install -y \
+    git \
     jq \
     shellcheck \
     unzip && \

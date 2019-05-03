@@ -1,0 +1,22 @@
+#
+app_tray_finder: "arnold.yml"
+
+# Paths to look for deployable applications
+apps_paths:
+  - "apps/"
+  - "community_apps/"
+
+apps_repository:
+  - name: funmooc
+    git:
+      # Should be https or ssh (requires more configuration) git repository url
+      repository: https://github.com/openfun/fun-mooc.git
+      # Can be a tag, a branch or a commit sha1
+      version: add-arnold-package
+
+core_apps_paths:
+  - "core_apps/"
+
+community_apps_dir: "community_apps"
+
+tray_file: "tray.yml"
