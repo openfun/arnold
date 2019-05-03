@@ -35,6 +35,7 @@ environments:
 # Paths to look for deployable applications
 apps_paths:
   - "apps/"
+  - "community_apps/"
 
 core_apps_paths:
   - "core_apps/"

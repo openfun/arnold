@@ -25,3 +25,6 @@ k3d-storage
 # Ignore local customers except eugene
 group_vars/customer/*
 !group_vars/customer/eugene
+
+# Third party apps
+community_apps
