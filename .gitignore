@@ -19,3 +19,6 @@ env.d/*
 
 # OpenShift
 openshift.local.clusterup
+
+# Third party apps
+community_apps
