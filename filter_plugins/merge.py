@@ -3,6 +3,7 @@ Merge Jinja filters
 """
 
 from copy import deepcopy
+from pathlib import Path
 
 from ansible.errors import AnsibleFilterError
 from ansible.utils.encrypt import random_password
@@ -51,8 +52,21 @@ def merge_with_app(base, new):
             if new_service.get(k) is None:
                 continue
             if isinstance(new_service[k], list):
-                # Use the list(set()) trick to remove duplicated items
-                base_service[k] = sorted(list(set(new_service[k] + base_service[k])))
+                new_service_files = [Path(f).name for f in new_service[k]]
+                # We filter files based on their name, allowing to override
+                # templates for an app/service.
+                #
+                # Example: while merging baz/foo.yml (new) and bar/foo.yml (old)
+                # as they both share the same file name, e.g. foo.yml, the new
+                # one will be used and the old one ignored.
+                base_service[k] = sorted(
+                    new_service[k]
+                    + [
+                        f
+                        for f in base_service[k]
+                        if Path(f).name not in new_service_files
+                    ]
+                )
             elif isinstance(new_service[k], str):
                 base_service[k] = new_service[k]
 
@@ -139,7 +153,7 @@ def merge_with_database(base, database, app_name, customer, environment):
 
 
 # pylint: disable=no-self-use,too-few-public-methods
-class FilterModule():
+class FilterModule:
     """Filters used to deep merge python objects"""
 
     def filters(self):

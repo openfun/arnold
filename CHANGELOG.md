@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - We now perform health checks to every service pods by implementing and
   defining `livenessProbe` and `readinessProbe` (except for Learninglocker
   applications).
+- The `merge_with_app` filter now allows to override templates for a namespace
+  (_e.g._ for an application/service) based on its file name.
 
 ### Changed
 
@@ -116,7 +118,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 - Upgrade Richie to the `master` docker image by default
-
 
 ## [1.5.1] - 2019-02-27
 
