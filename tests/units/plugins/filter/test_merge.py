@@ -267,6 +267,55 @@ class TestMergeWithAppFilter(unittest.TestCase):
 
         self.assertDictDeepEqual(merge_with_app(base, new), expected)
 
+    def test_services_merge_with_template_overriding(self):
+        """Test app services merging with template overrides"""
+
+        base = {
+            "name": "foo",
+            "services": [
+                {
+                    "name": "bar",
+                    "configs": ["bar.conf"],
+                    "templates": ["bar/dc.yml", "bar/svc.yml"],
+                    "environment_variables": "/foo/_env.yml.j2",
+                },
+                {
+                    "name": "baz",
+                    "configs": ["baz.conf"],
+                    "templates": ["baz/dc.yml", "baz/svc.yml", "baz/ep.yml"],
+                },
+            ],
+            "volumes": ["volumes/foo_bar.yml", "volumes/foo_baz.yml"],
+        }
+
+        new = {
+            "name": "foo",
+            "services": [
+                {"name": "bar", "templates": ["baz/dc.yml"]},
+                {"name": "baz", "templates": ["foo/svc.yml"]},
+            ],
+        }
+
+        expected = {
+            "name": "foo",
+            "services": [
+                {
+                    "name": "bar",
+                    "configs": ["bar.conf"],
+                    "templates": ["baz/dc.yml", "bar/svc.yml"],
+                    "environment_variables": "/foo/_env.yml.j2",
+                },
+                {
+                    "name": "baz",
+                    "configs": ["baz.conf"],
+                    "templates": ["baz/dc.yml", "foo/svc.yml", "baz/ep.yml"],
+                },
+            ],
+            "volumes": ["volumes/foo_bar.yml", "volumes/foo_baz.yml"],
+        }
+
+        self.assertDictDeepEqual(merge_with_app(base, new), expected)
+
     def test_services_merge_with_new_keys(self):
         """Test app services merge with new keys (meta)"""
 
