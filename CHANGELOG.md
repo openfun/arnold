@@ -21,6 +21,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Migrate apps to the new tray package tree
 - Refactor and test the `apps` lookup to support the new tray package tree
 
+### Fixed
+
+- The project display name is no longer empty when creating a new project
+
 ## [1.10.0] - 2019-04-24
 
 ### Added
