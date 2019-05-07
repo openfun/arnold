@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.0.0] - 2019-05-07
+
 ### Added
 
 - We now perform health checks to every service pods by implementing and
@@ -18,8 +20,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 - Upgrade `openshift` to `0.8.8`
-- Migrate apps to the new tray package tree
-- Refactor and test the `apps` lookup to support the new tray package tree
+- Migrate apps to the new tray package tree (BC)
+- Refactor and test the `apps` lookup to support the new tray package tree (BC)
 
 ### Fixed
 
@@ -289,7 +291,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - First Arnold's public release
 - Official Docker image is available at: https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v1.10.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v2.0.0...master
+[2.0.0]: https://github.com/openfun/arnold/compare/v1.10.0...v2.0.0
 [1.10.0]: https://github.com/openfun/arnold/compare/v1.9.0...v1.10.0
 [1.9.0]: https://github.com/openfun/arnold/compare/v1.8.3...v1.9.0
 [1.8.3]: https://github.com/openfun/arnold/compare/v1.8.2...v1.8.3
