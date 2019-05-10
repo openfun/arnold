@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+
+- Richie's application templates are now more generic to easily configure and
+  deploy a custom instance
+
 ## [2.0.0] - 2019-05-07
 
 ### Added

@@ -26,7 +26,7 @@ spec:
           imagePullPolicy: Always
           env:
             - name: DJANGO_SETTINGS_MODULE
-              value: settings
+              value: "{{ richie_django_settings_module }}"
             - name: DJANGO_CONFIGURATION
               value: "{{ richie_django_configuration }}"
             - name: DB_ENGINE
@@ -45,6 +45,5 @@ spec:
           command:
             - "bash"
             - "-c"
-            - cd sandbox &&
-              python manage.py migrate
+            - python manage.py migrate
       restartPolicy: Never

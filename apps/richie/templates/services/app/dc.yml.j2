@@ -56,7 +56,7 @@ spec:
             periodSeconds: 3
           env:
             - name: DJANGO_SETTINGS_MODULE
-              value: settings
+              value: "{{ richie_django_settings_module }}"
             - name: DJANGO_CONFIGURATION
               value: "{{ richie_django_configuration }}"
             - name: DB_ENGINE
