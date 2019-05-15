@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [2.1.0] - 2019-05-10
 
+### Added
+
+- Richie's bootstrapping requires to set up base pages tree _via_ the
+  `richie_init` Django management command; this is performed thanks to a new job
+  in the `richie` app
+
 ### Changed
 
 - Richie's application templates are now more generic to easily configure and

@@ -1,0 +1,47 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "richie-app-init-{{ job_stamp }}"
+  namespace: "{{ project_name }}"
+  labels:
+    app: richie
+    service: richie
+    version: "{{ richie_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+    job_stamp: "{{ job_stamp }}"
+spec:
+  template:
+    metadata:
+      name: "richie-app-init-{{ job_stamp }}"
+      labels:
+        app: richie
+        service: richie
+        version: "{{ richie_image_tag }}"
+        deployment_stamp: "{{ deployment_stamp }}"
+        job_stamp: "{{ job_stamp }}"
+    spec:
+      containers:
+        - name: richie-init
+          image: "{{ richie_image_name }}:{{ richie_image_tag }}"
+          imagePullPolicy: Always
+          env:
+            - name: DJANGO_SETTINGS_MODULE
+              value: "{{ richie_django_settings_module }}"
+            - name: DJANGO_CONFIGURATION
+              value: "{{ richie_django_configuration }}"
+            - name: DB_ENGINE
+              value: "{{ richie_database_engine }}"
+            - name: DB_NAME
+              value: "{{ richie_database_name }}"
+            - name: DB_HOST
+              value: "richie-{{ richie_database_host }}-{{ deployment_stamp }}"
+            - name: DB_PORT
+              value: "{{ richie_database_port }}"
+          envFrom:
+            - secretRef:
+                name: "{{ richie_secret_name }}"
+          command:
+            - "bash"
+            - "-c"
+            - python manage.py richie_init
+      restartPolicy: Never
