@@ -73,21 +73,25 @@ spec:
             - secretRef:
                 name: "{{ marsha_secret_name }}"
           volumeMounts:
+{% if env_type in trashable_env_types %}
             - name: marsha-v-media
               mountPath: /data/media
             - name: marsha-v-static
               mountPath: /data/static
+{% endif %}
 {% if marsha_should_sign_requests %}
             - mountPath: "{{ marsha_cloudfront_private_key_path | dirname }}"
               name: marsha-cloudfront-private-key-secret
 {% endif %}
       volumes:
+{% if env_type in trashable_env_types %}
         - name: marsha-v-media
           persistentVolumeClaim:
             claimName: marsha-pvc-media
         - name: marsha-v-static
           persistentVolumeClaim:
             claimName: marsha-pvc-static
+{% endif %}
 {% if marsha_should_sign_requests %}
         - name: marsha-cloudfront-private-key-secret
           secret:

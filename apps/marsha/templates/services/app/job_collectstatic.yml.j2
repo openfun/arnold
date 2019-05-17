@@ -43,6 +43,7 @@ spec:
             - secretRef:
                 name: "{{ marsha_secret_name }}"
           command: ["python", "manage.py", "collectstatic", "--noinput"]
+{% if env_type in trashable_env_types %}
           volumeMounts:
             - mountPath: /data/static
               name: marsha-v-static
@@ -50,4 +51,5 @@ spec:
         - name: marsha-v-static
           persistentVolumeClaim:
             claimName: marsha-pvc-static
+{% endif %}
       restartPolicy: Never
