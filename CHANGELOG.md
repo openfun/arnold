@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- add an environment file to Marsha application
+
 ### Changed
 
 - Marsha volumes are used only in trashable environments
