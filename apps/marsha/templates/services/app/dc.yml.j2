@@ -72,6 +72,8 @@ spec:
           envFrom:
             - secretRef:
                 name: "{{ marsha_secret_name }}"
+            - configMapRef:
+                name: "marsha-app-dotenv-{{ deployment_stamp }}"
           volumeMounts:
 {% if env_type in trashable_env_types %}
             - name: marsha-v-media
