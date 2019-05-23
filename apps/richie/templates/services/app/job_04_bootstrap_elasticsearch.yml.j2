@@ -38,8 +38,6 @@ spec:
               value: "richie-{{ richie_database_host }}-{{ deployment_stamp }}"
             - name: DB_PORT
               value: "{{ richie_database_port }}"
-            - name: DJANGO_ALLOWED_HOSTS
-              value: "{{ richie_host }}"
             - name: RICHIE_ES_HOST
               value: "richie-{{ richie_elasticsearch_host }}-{{ deployment_stamp }}"
           envFrom:
