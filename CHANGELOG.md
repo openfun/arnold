@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.3.0] - 2019-05-23
+
+### Added
+
+- Richie's bootstrapping requires to set up base pages tree _via_ the
+  `richie_init` Django management command; this is performed thanks to a new job
+  in the `richie` app
+
 ## [2.2.0] - 2019-05-21
 
 ### Added
@@ -18,12 +26,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Marsha volumes are used only in trashable environments
 
 ## [2.1.0] - 2019-05-10
-
-### Added
-
-- Richie's bootstrapping requires to set up base pages tree _via_ the
-  `richie_init` Django management command; this is performed thanks to a new job
-  in the `richie` app
 
 ### Changed
 
@@ -314,7 +316,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - First Arnold's public release
 - Official Docker image is available at: https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v2.2.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v2.3.0...master
+[2.3.0]: https://github.com/openfun/arnold/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/openfun/arnold/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/openfun/arnold/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/openfun/arnold/compare/v1.10.0...v2.0.0
