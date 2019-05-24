@@ -8,5 +8,5 @@ DB_USER: {{ postgresql_credentials.user }}
 DB_PASSWORD: {{ postgresql_credentials.password }}
 
 # richie
-DJANGO_SECRET_KEY: {{ lookup('password', '/dev/null length=30') }}
+DJANGO_SECRET_KEY: {{ lookup('password', '/dev/null length=50') }}
 # DJANGO_SENTRY_DSN: https://super:richie@sentry.io/foo

@@ -9,7 +9,7 @@ MONGODB_PATH: mongodb://{{ mongodb_credentials.user }}:{{ mongodb_credentials.pa
 # secrets variable injected in a secret object
 SECRETS:
   SITE_URL:
-  APP_SECRET: {{ lookup('password', '/dev/null length=30') }}
+  APP_SECRET: {{ lookup('password', '/dev/null length=50') }}
   MONGODB_PATH: mongodb://{{ mongodb_credentials.user }}:{{ mongodb_credentials.password }}@{{ learninglocker_mongodb_host }}:{{ learninglocker_mongodb_port }}/{{ mongodb_credentials.name }}
   REDIS_HOST: redis
   REDIS_PORT: {{ redis_app_port }}

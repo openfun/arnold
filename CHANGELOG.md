@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+
+- Increase length of secret keys to 50 characters
+
 ## [2.3.0] - 2019-05-23
 
 ### Added
