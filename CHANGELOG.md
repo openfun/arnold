@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Add an environment file to Richie application
+
 ### Changed
 
 - Increase length of secret keys to 50 characters
@@ -23,7 +27,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
-- add an environment file to Marsha application
+- Add an environment file to Marsha application
 
 ### Changed
 
