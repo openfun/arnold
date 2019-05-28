@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.4.0] - 2019-05-28
+
 ### Added
 
 - Add an environment file to Richie application
@@ -14,8 +16,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 - Increase length of secret keys to 50 characters
-- Mount previously added `export` volume to nginx and add configuration
-  to serve it.
+- Mount the edxapp `export` volume in its nginx service and modify the nginx
+  configuration to serve the files in this folder via X-Accel
 - Rename the edxapp `exports` volume to `export`
 
 ## [2.3.0] - 2019-05-23
@@ -327,7 +329,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - First Arnold's public release
 - Official Docker image is available at: https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v2.3.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v2.4.0...master
+[2.4.0]: https://github.com/openfun/arnold/compare/v2.3.0...v2.4.0
 [2.3.0]: https://github.com/openfun/arnold/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/openfun/arnold/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/openfun/arnold/compare/v2.0.0...v2.1.0
