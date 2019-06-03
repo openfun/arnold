@@ -11,6 +11,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Upgrade OpenShift to OpenShift `0.9.2`
+- Upgrade Ansible to `2.8.5`
 
 ## [2.8.0] - 2019-08-23
 

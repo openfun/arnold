@@ -2,7 +2,8 @@
 Tests for the "apps" plugin lookup
 """
 
-from ansible.compat.tests import unittest
+import unittest
+
 from pyfakefs.fake_filesystem_unittest import \
     TestCaseMixin as fakefsTestCaseMixin
 
