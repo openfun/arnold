@@ -2,7 +2,8 @@
 Tests for the "deploy" plugin filter
 """
 
-from ansible.compat.tests import unittest
+import unittest
+
 from ansible.errors import AnsibleFilterError
 
 from filter_plugins.deploy import blue_green_host, blue_green_hosts

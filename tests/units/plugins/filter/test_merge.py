@@ -1,10 +1,11 @@
 """
 Tests for the "merge" plugin filter
 """
+
 from copy import deepcopy
+from unittest import TestCase
 from unittest.mock import patch
 
-from ansible.compat.tests import unittest
 from ansible.errors import AnsibleFilterError
 
 from filter_plugins.merge import merge_with_app, merge_with_database
@@ -35,7 +36,7 @@ def deep_sort_dict(d):
 
 
 # pylint: disable=no-self-use
-class TestDeepSortDict(unittest.TestCase):
+class TestDeepSortDict(TestCase):
     """Test the ``deep_sort_dict`` utility"""
 
     def test_immutability(self):
@@ -78,7 +79,7 @@ class TestDeepSortDict(unittest.TestCase):
         assert deep_sort_dict(d) == expected
 
 
-class TestMergeWithAppFilter(unittest.TestCase):
+class TestMergeWithAppFilter(TestCase):
     """Tests for the ``merge_with_app`` filter"""
 
     # View the full diff upon test failure
@@ -417,7 +418,7 @@ class TestMergeWithAppFilter(unittest.TestCase):
         self.assertDictDeepEqual(merge_with_app(base, new), expected)
 
 
-class TestMergeWithDatabaseFilter(unittest.TestCase):
+class TestMergeWithDatabaseFilter(TestCase):
     """Tests for the ``merge_with_database`` filter"""
 
     @patch("filter_plugins.merge.random_password", return_value="foo")

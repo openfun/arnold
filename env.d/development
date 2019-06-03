@@ -3,7 +3,4 @@
 
 # ---- OpenShift ----
 # Whether or not to verify the API server's SSL certificates:
-#   whatever is a value for yes
-#   empty for no
-# Bug: https://github.com/ansible/ansible/pull/51836
-K8S_AUTH_VERIFY_SSL=
+K8S_AUTH_VERIFY_SSL=no

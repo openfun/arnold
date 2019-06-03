@@ -19,10 +19,10 @@ DOCUMENTATION = """
     version_added: "0.1"
     short_description: walk through an application tree to discover deployable
         applications
-    description:
+    description: >
         Lookup ready-to-deploy applications following recommended Arnold
         applications' tree, e.g. for the "richie" application and the
-        "apps" ``apps_path``:
+        "apps" ``apps_path``::
 
             apps/richie
             ├── templates
@@ -51,6 +51,8 @@ DOCUMENTATION = """
 
         Analysing this tree with the ``apps`` lookup should return the
         following data structure:
+
+        .. code-block:: json
 
             [
                 {
