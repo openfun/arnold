@@ -59,7 +59,7 @@ server {
     try_files /$file =404;
   }
 
-  location ~ ^/export/(?P<file>.*) {
+  location ~ ^/restricted/(?P<file>.*) {
     root /data/export;
     try_files /$file =404;
     internal;
