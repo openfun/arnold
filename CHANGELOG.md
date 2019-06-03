@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- In edxapp application, fix badly named nginx location from `export` to `restricted`
+
 ## [2.4.0] - 2019-05-28
 
 ### Added
