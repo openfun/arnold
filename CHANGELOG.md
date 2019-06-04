@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [2.4.1] - 2019-06-04
+
 ### Fixed
 
 - Rename `edxapp` `nginx` service configuration location from `export` to
@@ -342,7 +344,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v2.4.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v2.4.1...master
+[2.4.1]: https://github.com/openfun/arnold/compare/v2.4.0...v2.4.1
 [2.4.0]: https://github.com/openfun/arnold/compare/v2.3.0...v2.4.0
 [2.3.0]: https://github.com/openfun/arnold/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/openfun/arnold/compare/v2.1.0...v2.2.0
