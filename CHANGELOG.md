@@ -3,13 +3,17 @@
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
-and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+and this project adheres to [Semantic
+Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
 ### Fixed
 
-- In edxapp application, fix badly named nginx location from `export` to `restricted`
+- Rename `edxapp` `nginx` service configuration location from `export` to
+  `restricted`
+- Configure `Richie` `SILENCED_SYSTEM_CHECKS` setting to allow `X_FRAME_OPTIONS`
+  value set as `SAMEORIGIN`
 
 ## [2.4.0] - 2019-05-28
 
@@ -77,8 +81,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
-- Rename the `ES_CLIENT` setting to `RICHIE_ES_HOST` for compatibility
-  with Richie starting from version v1.0.0-beta.6.
+- Rename the `ES_CLIENT` setting to `RICHIE_ES_HOST` for compatibility with
+  Richie starting from version v1.0.0-beta.6.
 
 ### Removed
 
@@ -104,7 +108,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
-- Fix Richie deployments by mounting the `media` volume in the `bootstrap_elasticsearch` job
+- Fix Richie deployments by mounting the `media` volume in the
+  `bootstrap_elasticsearch` job
 
 ## [1.8.2] - 2019-04-02
 
@@ -227,9 +232,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
-- Create ConfigMaps to be consumed in environment variables in a DeploymentConfig.
+- Create ConfigMaps to be consumed in environment variables in a
+  DeploymentConfig.
 - Add learning locker in the list of supported applications.
-- Activate and configure learning locker for the eugene customer in development & CI environments.
+- Activate and configure learning locker for the eugene customer in development
+  & CI environments.
 - ConfigMap generation is now compatible with non-blue-green core applications.
 - The redirect application is now part of Arnold's core features, with it's own
   life cycle.
@@ -271,7 +278,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
-- Add app namespace in front of the DJANGO_CLOUDFRONT_PRIVATE_KEY variable where missing
+- Add app namespace in front of the DJANGO_CLOUDFRONT_PRIVATE_KEY variable where
+  missing
 
 ## [1.0.0-alpha.5] - 2019-01-04
 
@@ -331,7 +339,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - First Arnold's public release
-- Official Docker image is available at: https://hub.docker.com/r/fundocker/arnold/
+- Official Docker image is available at:
+  https://hub.docker.com/r/fundocker/arnold/
 
 [unreleased]: https://github.com/openfun/arnold/compare/v2.4.0...master
 [2.4.0]: https://github.com/openfun/arnold/compare/v2.3.0...v2.4.0
