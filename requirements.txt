@@ -5,7 +5,7 @@ deepmerge==0.0.5
 jmespath==0.9.4
 openshift==0.8.9
 passlib==1.7.1
-PyYAML==5.1
+PyYAML==5.1.1
 netaddr==0.7.19
 requests==2.22.0
 yq==2.7.2
@@ -16,6 +16,6 @@ isort==4.3.20
 pylint==2.3.1
 
 # Tests
-pytest==4.6.1
+pytest==4.6.2
 pytest-cov==2.7.1
 pyfakefs==3.5.8
