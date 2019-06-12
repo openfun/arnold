@@ -32,7 +32,7 @@ spec:
                 - "-c"
                 - "redis-cli ping"
             initialDelaySeconds: 120
-            periodSeconds: 5
+            periodSeconds: 30
           readinessProbe:
             exec:
               command:
@@ -40,7 +40,7 @@ spec:
                 - "-c"
                 - "redis-cli ping"
             initialDelaySeconds: 60
-            periodSeconds: 3
+            periodSeconds: 10
           volumeMounts:
             - mountPath: /data
               name: redis-v-data

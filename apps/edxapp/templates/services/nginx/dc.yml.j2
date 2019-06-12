@@ -61,13 +61,13 @@ spec:
               path: "{{ edxapp_nginx_healthcheck_endpoint }}"
               port: {{ edxapp_nginx_healthcheck_port }}
             initialDelaySeconds: 60
-            periodSeconds: 10
+            periodSeconds: 30
           readinessProbe:
             httpGet:
               path: "{{ edxapp_nginx_healthcheck_endpoint }}"
               port: {{ edxapp_nginx_healthcheck_port }}
-            initialDelaySeconds: 5
-            periodSeconds: 3
+            initialDelaySeconds: 10
+            periodSeconds: 5
       volumes:
         - name: edxapp-v-nginx
           configMap:
