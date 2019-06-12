@@ -93,7 +93,7 @@ spec:
               - "-c"
               - "python manage.py {{ service_variant }} celery inspect ping -d celery@{{ celery_worker.name }}.%$(hostname)"
           initialDelaySeconds: 120
-          periodSeconds: 5
+          periodSeconds: 30
         readinessProbe:
           exec:
             command:
@@ -101,7 +101,7 @@ spec:
               - "-c"
               - "python manage.py {{ service_variant }} celery inspect ping -d celery@{{ celery_worker.name }}.%$(hostname)"
           initialDelaySeconds: 60
-          periodSeconds: 3
+          periodSeconds: 10
 {% else %}
         # Pod probes that only apply for wsgi services
         livenessProbe:
@@ -112,7 +112,7 @@ spec:
               - name: Host
                 value: "{{ host }}"
           initialDelaySeconds: 120
-          periodSeconds: 5
+          periodSeconds: 30
         readinessProbe:
           httpGet:
             path: /heartbeat
@@ -121,7 +121,7 @@ spec:
               - name: Host
                 value: "{{ host }}"
           initialDelaySeconds: 60
-          periodSeconds: 3
+          periodSeconds: 10
 {% endif %}
         volumeMounts:
         - mountPath: /config

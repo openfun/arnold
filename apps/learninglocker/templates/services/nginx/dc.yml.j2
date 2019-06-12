@@ -29,13 +29,13 @@ spec:
               path: "{{ learninglocker_nginx_healthcheck_endpoint }}"
               port: {{ learninglocker_nginx_healthcheck_port }}
             initialDelaySeconds: 60
-            periodSeconds: 10
+            periodSeconds: 30
           readinessProbe:
             httpGet:
               path: "{{ learninglocker_nginx_healthcheck_endpoint }}"
               port: {{ learninglocker_nginx_healthcheck_port }}
-            initialDelaySeconds: 5
-            periodSeconds: 3
+            initialDelaySeconds: 10
+            periodSeconds: 5
           volumeMounts:
             - mountPath: /etc/nginx/conf.d
               name: learninglocker-v-nginx

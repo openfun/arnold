@@ -46,7 +46,7 @@ spec:
                 - name: Host
                   value: "{{ forum_host }}"
             initialDelaySeconds: 60
-            periodSeconds: 5
+            periodSeconds: 30
           readinessProbe:
             httpGet:
               path: /heartbeat
@@ -54,8 +54,8 @@ spec:
               httpHeaders:
                 - name: Host
                   value: "{{ forum_host }}"
-            initialDelaySeconds: 5
-            periodSeconds: 3
+            initialDelaySeconds: 10
+            periodSeconds: 5
           ports:
             - containerPort: "{{ forum_port }}"
               protocol: TCP

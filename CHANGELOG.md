@@ -11,6 +11,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Upgrade `openshift` to `0.8.9`
+- Increase pods liveness/readiness probes periodicity to smooth pods replacement
+  scheduling
 
 ## [2.4.1] - 2019-06-04
 

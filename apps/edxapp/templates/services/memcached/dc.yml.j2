@@ -36,7 +36,7 @@ spec:
                 - "-c"
                 - "test -f /tmp/healthcheck/ok"
             initialDelaySeconds: 60
-            periodSeconds: 5
+            periodSeconds: 30
           readinessProbe:
             exec:
               command:
@@ -44,7 +44,7 @@ spec:
                 - "-c"
                 - "test -f /tmp/healthcheck/ok"
             initialDelaySeconds: 5
-            periodSeconds: 3
+            periodSeconds: 10
           volumeMounts:
             - mountPath: /tmp/healthcheck
               name: tmp-healthcheck
@@ -70,7 +70,7 @@ spec:
                 - "-c"
                 - echo -e "set healtz 0 0 2\r\nok\r\nget healtz\r" | nc edxapp-memcached-{{ deployment_stamp }} {{ edxapp_memcached_port }} | grep ok || rm /tmp/healthcheck/ok
             initialDelaySeconds: 60
-            periodSeconds: 5
+            periodSeconds: 30
           volumeMounts:
             - mountPath: /tmp/healthcheck
               name: tmp-healthcheck
