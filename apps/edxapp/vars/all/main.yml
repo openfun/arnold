@@ -126,7 +126,7 @@ edxapp_celery_lms_default_priority_worker:
     - *lms_default
     - *lms_low
     - *lms_high_mem
-  replicas: 1
+  replicas: 2
 edxapp_celery_lms_low_priority_worker:
   name: "lms-low"
   queues: [*lms_low]
@@ -147,7 +147,7 @@ edxapp_celery_cms_default_priority_worker:
     - *cms_high
     - *cms_default
     - *cms_low
-  replicas: 1
+  replicas: 2
 edxapp_celery_cms_low_priority_worker:
   name: "cms-low"
   queues: [*cms_low]

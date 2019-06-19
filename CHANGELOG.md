@@ -8,6 +8,11 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Optimize `edxapp` workers liveness probe frequency and replication to lower
+  base cluster load
+
 ## [2.4.2] - 2019-06-12
 
 ### Changed
