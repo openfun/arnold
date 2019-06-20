@@ -1,0 +1,16 @@
+# Some playbooks require that you set the `apps_filter` variable to ensure their
+# reliability. In this case, import this task set in your playbook pre-tasks:
+#
+# - hosts: local
+#   gather_facts: False
+#
+#   pre_tasks:
+#     - import_tasks: tasks/check_apps_filter.yml
+#
+#   tasks:
+#     - [...]
+
+- name: Check if the "apps_filter" variable is defined
+  fail:
+    msg: "This project contains several apps, the `apps_filter` variable should be defined"
+  when: apps_filter is not defined and apps | length > 1

@@ -8,6 +8,7 @@
 
   pre_tasks:
     - import_tasks: tasks/check_configuration.yml
+    - import_tasks: tasks/check_apps_filter.yml
 
   tasks:
     - name: Display playbook name
@@ -15,11 +16,6 @@
       tags: deploy
 
     - import_tasks: tasks/set_vars.yml
-
-    - name: Check if apps_filter is defined
-      fail:
-        msg: "This project contains several apps, the `apps_filter` variable should be defined"
-      when: apps_filter is not defined and apps | length > 1
 
     - include_tasks: tasks/run_tasks_for_apps.yml
       vars:
