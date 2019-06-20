@@ -192,6 +192,22 @@ jobs:
             # Test service switched to the current route
             bin/ci-test-service "hello" "Hello OpenShift! by Arnold"
 
+      - run:
+          name: Test the "hello" application rollback
+          command: |
+            # Deploy to next
+            bin/ci-ansible-playbook deploy.yml "hello"
+            # Switch next route to current and current to previous
+            bin/ci-ansible-playbook switch.yml "hello"
+            # Test service switched to the current/previous route
+            bin/ci-test-service "hello" "Hello OpenShift! by Arnold"
+            bin/ci-test-service "hello" "Hello OpenShift! by Arnold" "/" "previous"
+            # Rollback previous to current and current to next
+            bin/ci-ansible-playbook rollback.yml "hello"
+            # Test service switched to the current/next route
+            bin/ci-test-service "hello" "Hello OpenShift! by Arnold"
+            bin/ci-test-service "hello" "Hello OpenShift! by Arnold" "/" "next"
+
   # Test the redirect application
   test-redirect:
     machine:

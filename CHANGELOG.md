@@ -13,6 +13,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Ensure expected secrets exists before deploying an application
 - Add `delete_previous.yml` playbook to delete previous stacks (should be used
   with caution)
+- Add a `rollback.yml` playbook to restore the previous stack as the current one
 
 ### Changed
 
