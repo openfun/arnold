@@ -8,11 +8,16 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Ensure expected secrets exists before deploying an application
+- Add `delete_previous.yml` playbook to delete previous stacks (should be used
+  with caution)
+
 ### Changed
 
 - Optimize `edxapp` workers liveness probe frequency and replication to lower
   base cluster load
-- Ensure expected secrets exists before deploying an application
 
 ## [2.4.2] - 2019-06-12
 

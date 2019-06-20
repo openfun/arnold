@@ -1,0 +1,33 @@
+---
+# Delete the previous stack
+#
+# This playbook may be useful to lower server load with old stack that will
+# never be switched back.
+- hosts: local
+  gather_facts: False
+
+  pre_tasks:
+    - import_tasks: tasks/validate_configuration.yml
+
+  tasks:
+    - name: Display playbook name
+      debug: msg="==== Starting delete_previous playbook ===="
+      tags: deploy
+
+    - import_tasks: tasks/set_vars.yml
+
+    - name: Check if apps_filter is defined
+      fail:
+        msg: "This project contains several apps, the `apps_filter` variable should be defined"
+      when: apps_filter is not defined and apps | length > 1
+
+    - include_tasks: tasks/run_tasks_for_apps.yml
+      vars:
+        tasks:
+          - get_objects_for_app
+          - deploy_get_stamp_from_route
+          - delete_app
+        prefix: previous
+      tags:
+        - route
+        - switch
