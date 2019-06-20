@@ -6,7 +6,7 @@
   gather_facts: False
 
   pre_tasks:
-    - import_tasks: tasks/validate_configuration.yml
+    - import_tasks: tasks/check_configuration.yml
 
   tasks:
     - name: Display playbook name
