@@ -43,6 +43,7 @@
       vars:
         tasks:
           - tasks/get_objects_for_app
+          - tasks/check_app_secrets
           - tasks/create_app_config
           - tasks/manage_app
       tags:

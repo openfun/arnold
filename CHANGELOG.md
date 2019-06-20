@@ -12,6 +12,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 - Optimize `edxapp` workers liveness probe frequency and replication to lower
   base cluster load
+- Ensure expected secrets exists before deploying an application
 
 ## [2.4.2] - 2019-06-12
 
