@@ -7,6 +7,7 @@
 
   pre_tasks:
     - import_tasks: tasks/check_configuration.yml
+    - import_tasks: tasks/check_apps_filter.yml
 
   tasks:
     - name: Display playbook name
@@ -14,11 +15,6 @@
       tags: deploy
 
     - import_tasks: tasks/set_vars.yml
-
-    - name: Check if apps_filter is defined
-      fail:
-        msg: "Deploy playbook must be used with apps_filter defined"
-      when: apps_filter is not defined and apps | length > 1
 
     # Set the deployment stamp value for this deployment
     - name: Set deployment stamp
