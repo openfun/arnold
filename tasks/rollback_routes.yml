@@ -3,12 +3,12 @@
 
 - include_tasks: deploy_get_stamp_from_route.yml
   vars:
-    prefix: "previous"
+    prefix: next
   tags: switch
 
-- name: Save previous_app_deployment_stamp
+- name: Save next_app_deployment_stamp
   set_fact:
-    previous_app_deployment_stamp: "{{ app_deployment_stamp }}"
+    next_app_deployment_stamp: "{{ app_deployment_stamp }}"
 
 - include_tasks: switch_route.yml
   vars:
@@ -16,12 +16,12 @@
     prefix_route_dest: "{{ prefix_route.dest }}"
   with_items:
     - src:  current
-      dest: previous
-    - src:  next
+      dest: next
+    - src:  previous
       dest: current
   loop_control:
     loop_var: prefix_route
 
 - include_tasks: delete_app.yml
   vars:
-    app_deployment_stamp: "{{ previous_app_deployment_stamp }}"
+    app_deployment_stamp: "{{ next_app_deployment_stamp }}"

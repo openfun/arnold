@@ -1,0 +1,28 @@
+---
+# This playbook rolls back all routes:
+# 1. point the "current" route to the stack that was pointed by the "previous" route,
+# 2. point the "next" route to the stack that was pointed by the "current" route,
+
+- hosts: local
+  gather_facts: False
+
+  pre_tasks:
+    - import_tasks: tasks/check_configuration.yml
+    - import_tasks: tasks/check_apps_filter.yml
+
+  tasks:
+    - name: Display playbook name
+      debug: msg="==== Starting rollback playbook ===="
+      tags: rollback
+
+    - import_tasks: tasks/set_vars.yml
+      tags: rollback
+
+    - include_tasks: tasks/run_tasks_for_apps.yml
+      vars:
+        tasks:
+          - get_objects_for_app
+          - rollback_routes
+      tags:
+        - route
+        - rollback
