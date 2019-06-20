@@ -1,9 +1,21 @@
+# Perform global configuration checks. You may import this task set in your
+# playbook pre-tasks:
+#
+# - hosts: local
+#   gather_facts: False
+#
+#   pre_tasks:
+#     - import_tasks: tasks/check_configuration.yml
+#
+#   tasks:
+#     - [...]
+
 - name: Check that customer name is maximum 6 characters long
   fail:
-    msg: "Customer name length can not be higher than 6 characters. Current length is {{ customer | length }}."
+    msg: "Customer name length can not be higher than 6 characters (current: {{ customer | length }})."
   when: customer | length > 6
 
-- name: check if env_type is a valid environment
+- name: Check if current env_type is valid
   fail:
-    msg: "defined env_type {{ env_type }} is not a defined environment"
+    msg: "Current env_type {{ env_type }} is not defined"
   when: environments | json_query("[?name=='"~ env_type ~"'] | [0]") is none
