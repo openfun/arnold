@@ -31,10 +31,14 @@
   set_fact:
     app_deployment_stamp: ""
 
-- name: set_fact app_deployment_stamp
+- name: Set app_deployment_stamp
   set_fact:
     app_deployment_stamp: "{{ (targeted_service.resources | first ).metadata.labels.deployment_stamp | default(none) }}"
   when: targeted_service.resources is defined and targeted_service.resources | length == 1
+
+- name: "Set {{ prefix }}_app_deployment_stamp"
+  set_fact:
+    "{{ prefix }}_app_deployment_stamp": "{{ app_deployment_stamp }}"
 
 - name: Print app_deployment_stamp
   debug:

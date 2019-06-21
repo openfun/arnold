@@ -6,10 +6,6 @@
     prefix: next
   tags: switch
 
-- name: Save next_app_deployment_stamp
-  set_fact:
-    next_app_deployment_stamp: "{{ app_deployment_stamp }}"
-
 - include_tasks: switch_route.yml
   vars:
     prefix_route_src:  "{{ prefix_route.src }}"

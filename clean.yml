@@ -1,0 +1,31 @@
+---
+# This playbook removes objects that are no longer used. By used, we mean
+# objects labelled with a deployment stamp that is no longer active, i.e.
+# neither the previous, current or next routes are pointing to a service
+# labelled with this deployment stamp.
+#
+# Warning: this playbook has only effects on blue-green compatible apps.
+
+- hosts: local
+  gather_facts: False
+
+  pre_tasks:
+    - import_tasks: tasks/check_configuration.yml
+    - import_tasks: tasks/check_apps_filter.yml
+
+  tasks:
+    - name: Display playbook name
+      debug: msg="==== Starting clean playbook ===="
+      tags: clean
+
+    - import_tasks: tasks/set_vars.yml
+      tags: clean
+
+    - include_tasks: tasks/run_tasks_for_apps.yml
+      vars:
+        tasks:
+          - get_objects_for_app
+          - clean_app_orphans
+      tags:
+        - route
+        - clean

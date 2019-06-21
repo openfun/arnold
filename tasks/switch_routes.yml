@@ -6,10 +6,6 @@
     prefix: "previous"
   tags: switch
 
-- name: Save previous_app_deployment_stamp
-  set_fact:
-    previous_app_deployment_stamp: "{{ app_deployment_stamp }}"
-
 - include_tasks: switch_route.yml
   vars:
     prefix_route_src:  "{{ prefix_route.src }}"
