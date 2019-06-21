@@ -14,6 +14,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Add `delete_previous.yml` playbook to delete previous stacks (should be used
   with caution)
 - Add a `rollback.yml` playbook to restore the previous stack as the current one
+- Add a `clean.yml` playbook to remove orphan stacks (not associated to any
+  route) for blue-green-compatible applications
 
 ### Changed
 

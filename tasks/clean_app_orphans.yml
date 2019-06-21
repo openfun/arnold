@@ -1,0 +1,44 @@
+---
+# Remove orphan application stacks (i.e. outdated, unused objects)
+
+- include_tasks: deploy_get_stamp_from_route.yml
+  vars:
+    prefix: "{{ item }}"
+  loop: ["previous", "current", "next"]
+  tags: clean
+
+# The select filter removes empty deployment stamps (empty strings)
+- name: Set active_deployment_stamps
+  set_fact:
+    active_deployment_stamps: "{{
+      [ previous_app_deployment_stamp,
+        current_app_deployment_stamp,
+        next_app_deployment_stamp ] |
+      select() | list
+    }}"
+
+- name: "Select objects (CM + pods) for app {{ app.name }}"
+  k8s_facts:
+    api_version: "v1"
+    namespace: "{{ project_name }}"
+    kind: "{{ item }}"
+    label_selectors:
+      - app={{ app.name }}
+  loop:
+    - "Pod"
+    - "ConfigMap"
+  register: app_selected_objects
+
+- name: Set orphan deployment stamps
+  set_fact:
+    orphan_deployment_stamps: "{{
+      app_selected_objects |
+      json_query('results[*].resources[*].metadata.labels.deployment_stamp') |
+      flatten |
+      difference(active_deployment_stamps)
+    }}"
+
+- include_tasks: delete_app.yml
+  vars:
+    app_deployment_stamp: "{{ item }}"
+  loop: "{{ orphan_deployment_stamps }}"
