@@ -8,6 +8,11 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Ignore expected secrets checking for logged users with no permission on
+  secrets
+
 ## [2.5.0] - 2019-06-21
 
 ### Added
