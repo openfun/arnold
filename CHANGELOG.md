@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [2.5.1] - 2019-06-24
+
 ### Fixed
 
 - Ignore expected secrets checking for logged users with no permission on
@@ -373,7 +375,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v2.5.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v2.5.1...master
+[2.5.1]: https://github.com/openfun/arnold/compare/v2.5.0...v2.5.1
 [2.5.0]: https://github.com/openfun/arnold/compare/v2.4.2...v2.5.0
 [2.4.2]: https://github.com/openfun/arnold/compare/v2.4.1...v2.4.2
 [2.4.1]: https://github.com/openfun/arnold/compare/v2.4.0...v2.4.1
