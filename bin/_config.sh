@@ -6,7 +6,7 @@ set -eo pipefail
 function _set_minishift_path() {
     # We avoid using eval() in shell scripts, so we catch minishift's path to
     # binaries and we explictly add it to $PATH.
-    MINISHIFT_PATH=$(minishift oc-env | grep -v \# | sed "s|export PATH=\"\(.*\):\$PATH\"|\1|")
+    MINISHIFT_PATH=$(minishift oc-env | grep -v \# | sed "s|export PATH=\"\\(.*\\):\$PATH\"|\\1|")
     export PATH="$MINISHIFT_PATH:$PATH"
 }
 

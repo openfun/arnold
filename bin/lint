@@ -17,22 +17,22 @@ _docker_run() {
 }
 
 print_green() {
-  echo -e "\e[32m${1}\e[0m"
+  echo -e "\\e[32m${1}\\e[0m"
 }
 
 _docker() {
-  echo -e "\n---> Docker: lint\n"
+  echo -e "\\n---> Docker: lint\\n"
   docker run --rm -i hadolint/hadolint < Dockerfile
   print_green "  -> Docker lint OK"
 }
 
 _ansible() {
-  echo -e "\n---> Ansible: check syntax\n"
+  echo -e "\\n---> Ansible: check syntax\\n"
   _docker_run ansible-playbook --syntax-check ./*.yml
   print_green "  -> Ansible syntax OK"
 
   # https://github.com/willthames/ansible-lint
-  echo -e "\n---> Ansible: lint\n"
+  echo -e "\\n---> Ansible: lint\\n"
   # Skip [E602] Line too long
   SKIP_LIST="E602"
   _docker_run ansible-lint -R -r "${ANSIBLE_LINT_RULES_DIR}" -x $SKIP_LIST ./*.yml
@@ -41,21 +41,21 @@ _ansible() {
 
 _bash() {
   # https://github.com/koalaman/shellcheck
-  echo -e "\n---> Bash: lint\n"
+  echo -e "\\n---> Bash: lint\\n"
   _docker_run shellcheck --shell=bash bin/*
   print_green "  -> Bash lint OK"
 }
 
 _plugins() {
-  echo -e "\n---> Plugins: flake8\n"
+  echo -e "\\n---> Plugins: flake8\\n"
   _docker_run flake8 filter_plugins lookup_plugins tests
   print_green "  -> Flake8 check OK"
 
-  echo -e "\n---> Plugins: isort\n"
+  echo -e "\\n---> Plugins: isort\\n"
   _docker_run isort --recursive --diff --check-only filter_plugins lookup_plugins tests
   print_green "  -> isort check OK"
 
-  echo -e "\n---> Plugins: Pylint\n"
+  echo -e "\\n---> Plugins: Pylint\\n"
   _docker_run pylint -f colorized filter_plugins lookup_plugins tests
   print_green "  -> Pylint check OK"
 }
@@ -65,7 +65,7 @@ _all() {
   _ansible
   _bash
   _plugins
-  print_green "\n--> All lints OK"
+  print_green "\\n--> All lints OK"
 }
 
 # launch all lint without parameters
