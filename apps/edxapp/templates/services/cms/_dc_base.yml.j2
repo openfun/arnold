@@ -91,15 +91,15 @@ spec:
             command:
               - "/bin/bash"
               - "-c"
-              - "python manage.py {{ service_variant }} celery inspect ping -d celery@{{ celery_worker.name }}.%$(hostname)"
+              - "celery -b redis://redis:{{ redis_app_port }} inspect ping -d celery@{{ celery_worker.name }}.%$(hostname)"
           initialDelaySeconds: 120
-          periodSeconds: 400
+          periodSeconds: 600
         readinessProbe:
           exec:
             command:
               - "/bin/bash"
               - "-c"
-              - "python manage.py {{ service_variant }} celery inspect ping -d celery@{{ celery_worker.name }}.%$(hostname)"
+              - "celery -b redis://redis:{{ redis_app_port }} inspect ping -d celery@{{ celery_worker.name }}.%$(hostname)"
           initialDelaySeconds: 60
           periodSeconds: 15
 {% else %}
