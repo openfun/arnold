@@ -8,6 +8,11 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- `edxapp` BuildConfig names now include the theme tag (if any) to avoid having
+  to force their creation
+
 ## [2.6.0] - 2019-07-15
 
 ### Changed
