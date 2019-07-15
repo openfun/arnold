@@ -11,6 +11,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Upgrade OpenShift to OpenShift `0.9.0`
+- Use Celery native commands instead of Django management commands in celery
+  worker probes
 
 ## [2.5.1] - 2019-06-24
 
