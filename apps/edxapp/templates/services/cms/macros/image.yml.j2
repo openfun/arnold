@@ -1,0 +1,9 @@
+# Get an image name (buildconfig target) given the current service variant and
+# the base image & theme tags.
+{%- macro image_name(service_variant, edxapp_image_tag, edxapp_theme_tag) -%}
+   {%- if edxapp_theme_tag | length > 0 -%}
+   edxapp-{{ service_variant }}:{{ edxapp_image_tag }}-{{ edxapp_theme_tag }}-live
+   {%- else -%}
+   edxapp-{{ service_variant }}:{{ edxapp_image_tag }}-live
+   {%- endif -%}
+{%- endmacro %}

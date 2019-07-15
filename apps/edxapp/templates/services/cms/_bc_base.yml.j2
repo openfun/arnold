@@ -1,0 +1,61 @@
+{%- from "apps/edxapp/templates/services/cms/macros/image.yml.j2" import image_name -%}
+
+apiVersion: "v1"
+kind: "BuildConfig"
+metadata:
+  # FIXME
+  #
+  # As mentioned in the official documentation [1]:
+  #
+  #   Configuration change triggers currently only work when creating a new
+  #   BuildConfig. In a future release, configuration change triggers will also
+  #   be able to launch a build whenever a BuildConfig is updated.
+  #
+  # Hence, we must force BuildConfig to always get created with a unique name.
+  # This is a temporary solution that needs to be improved as soon as OKD
+  # triggers a new build upon BC object update.
+  #
+  # References:
+  #
+  # 1. https://docs.okd.io/latest/dev_guide/builds/triggering_builds.html#config-change-triggers
+  name: "{{ image_name(service_variant, edxapp_image_tag, edxapp_theme_tag) | replace(':', '-') }}"
+  namespace: "{{ project_name }}"
+  labels:
+    app: "edxapp"
+    service: "{{ service_variant }}"
+    version: "{{ edxapp_image_tag }}"
+    theme: "{{ edxapp_theme_tag | default("none") }}"
+spec:
+  strategy:
+    type: Docker
+  source:
+    {% if edxapp_theme_url is defined and edxapp_theme_url -%}
+    git:
+      uri: "{{ edxapp_theme_url }}"
+      ref: "{{ edxapp_theme_tag | default("master") }}"
+    {% if edxapp_theme_is_private -%}
+    sourceSecret:
+      name: "{{ edxapp_theme_git_private_key_secret_name }}"
+    {% endif -%}
+    {% endif -%}
+    dockerfile: |-
+      FROM {{ edxapp_image_name }}:{{ edxapp_image_tag }}
+      USER 0
+      {% if edxapp_theme_url is defined and edxapp_theme_url -%}
+      RUN apt-get update && \
+        apt-get install -y \
+        npm && \
+        rm -rf /var/lib/apt/lists/*
+      COPY . /edx/app/edxapp/edx-platform/themes/custom-theme
+      RUN NO_PREREQ_INSTALL=1 paver update_assets --settings={{ edxapp_build_settings }} --skip-collect
+      {% endif -%}
+      {% if edxapp_extra_dependencies is defined and edxapp_extra_dependencies | length -%}
+      RUN pip install {{ edxapp_extra_dependencies | join(" ") }}
+      {% endif -%}
+      USER 10000
+  triggers:
+    - type: "ConfigChange"
+  output:
+    to:
+      kind: "ImageStreamTag"
+      name: "{{ image_name(service_variant, edxapp_image_tag, edxapp_theme_tag) }}"
