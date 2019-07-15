@@ -27,9 +27,7 @@ function _create-kvm-default-network() {
     fi
 
     echo "Checking if KVM ${KVM_DEFAULT_NETWORK} network exists"
-    virsh net-list --all | grep ${KVM_DEFAULT_NETWORK}
-
-    if [ $? -ne 0 ]; then
+    if virsh net-list --all | grep ${KVM_DEFAULT_NETWORK}; then
         echo "Will create KVM ${KVM_DEFAULT_NETWORK} network (admin priviledges are required)"
         sudo virsh net-define ${KVM_DEFAULT_NETWORK_CONFIGURATION}
         sudo virsh net-autostart ${KVM_DEFAULT_NETWORK}
@@ -54,14 +52,14 @@ function _run-minishift() {
     minishift start ${opts}
     minishift status
 
-    echo -e "\n**** MiniShift is up and running ****"
+    echo -e "\\n**** MiniShift is up and running ****"
     echo "local console: https://$(minishift ip):8443"
     echo "username: developer"
     echo "password: developer"
 
-    echo -e "\nTo login as administrator, use:"
+    echo -e "\\nTo login as administrator, use:"
     echo "$ oc login -u system:admin"
-    echo -e "***************************************\n"
+    echo -e "***************************************\\n"
 }
 
 
