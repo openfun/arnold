@@ -17,6 +17,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 - `edxapp` BuildConfig names now include the theme tag (if any) to avoid having
   to force their creation
+- We now remove pods prior to other linked objects to avoid application issues
+  with pods losing database connection or mounted ConfigMap volume
 
 ## [2.6.0] - 2019-07-15
 
