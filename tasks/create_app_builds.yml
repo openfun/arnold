@@ -8,3 +8,37 @@
   with_items: "{{ builds }}"
   when: builds is defined
   tags: build
+
+- name: Get expected target image names
+  set_fact:
+    output_name: "{{ lookup('template', item) | from_yaml | json_query('spec.output.to.name') }}"
+  register: target_images
+  with_items: "{{ builds }}"
+  when: builds is defined
+  tags: build
+
+- name: Set expected target image name list
+  set_fact:
+    expected_images: "{{ target_images.results | json_query('[*].ansible_facts.output_name') }}"
+  when: target_images is defined
+  tags: build
+
+- name: Wait for target images to be available
+  k8s_facts:
+    api_version: "v1"
+    namespace: "{{ project_name }}"
+    kind: "ImageStreamTag"
+  register: image_stream_tags
+  until: >
+    image_stream_tags.resources is defined and
+    ( image_stream_tags.resources |
+      json_query('[*].metadata.name') |
+      intersect(expected_images) |
+      length
+    ) == (
+      expected_images | length
+    )
+  retries: 480
+  delay: 5
+  when: expected_images is defined
+  tags: build

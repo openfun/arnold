@@ -8,6 +8,11 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- The `build_images` playbook is now synchronous, waiting for target
+  ImageStreamTags to be created
+
 ### Changed
 
 - `edxapp` BuildConfig names now include the theme tag (if any) to avoid having
