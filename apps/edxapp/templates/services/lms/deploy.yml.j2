@@ -1,5 +1,6 @@
 {% set service_variant = "lms" %}
 {% set worker_type = "wsgi" %}
 {% set replicas = edxapp_lms_replicas %}
+{% set resources = edxapp_lms_resources %}
 
 {% include "apps/edxapp/templates/services/cms/_deploy_base.yml.j2" with context %}

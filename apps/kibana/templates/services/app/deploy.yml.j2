@@ -64,6 +64,7 @@ spec:
           envFrom:
             - secretRef:
                 name: "{{ kibana_secret_name }}"
+          resources: {{ kibana_app_resources }}
           volumeMounts:
             - name: kibana-config-file
               mountPath: "{{ kibana_config_path }}/kibana.yml"

@@ -1,5 +1,6 @@
 {% set service_variant = "cms" %}
 {% set worker_type = "queue" %}
 {% set celery_worker = edxapp_celery_cms_low_priority_worker %}
+{% set resources = edxapp_queue_resources %}
 
 {% include "apps/edxapp/templates/services/cms/_deploy_base.yml.j2" with context %}

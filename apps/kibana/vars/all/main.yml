@@ -26,3 +26,14 @@ kibana_ca_secret_name: "kibana-ca-{{ kibana_vault_checksum | default('undefined_
 kibana_secret_name: "kibana-{{ kibana_vault_checksum | default('undefined_kibana_vault_checksum') }}"
 kibana_activate_http_basic_auth: false
 kibana_security_enabled: false
+
+# -- resources requests
+kibana_app_resources:
+  requests:
+    cpu: 15m
+    memory: 512Mi
+
+kibana_nginx_resources:
+  requests:
+    cpu: 5m
+    memory: 20Mi

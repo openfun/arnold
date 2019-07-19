@@ -71,6 +71,7 @@ spec:
                 name: "{{ ashley_secret_name }}"
             - configMapRef:
                 name: "ashley-app-dotenv-{{ deployment_stamp }}"
+          resources: {{ ashley_app_resources }}
           volumeMounts:
 {% if ashley_should_activate_media_volume %}
             - name: ashley-v-media

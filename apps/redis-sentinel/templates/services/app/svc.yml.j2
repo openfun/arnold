@@ -58,6 +58,7 @@ spec:
       - "{{ config }}"
 {% endfor %}
 {% endif %}
+    resources: {{ redis_sentinel_resources }}
 {% if redis_sentinel_redis_persistence_enabled %}
     storage:
       keepAfterDeletion: true

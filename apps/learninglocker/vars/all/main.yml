@@ -60,3 +60,25 @@ learninglocker_port: ""
 # these variables are required
 redis_app_port: 6379
 mailcatcher_sender_port: 1025
+
+# -- resources
+learninglocker_app_api_resources:
+  requests:
+    cpu: 10m
+    memory: 250Mi
+learninglocker_app_ui_resources: {{ learninglocker_app_api_resources }}
+learninglocker_app_worker_resources: {{ learninglocker_app_api_resources }}
+learninglocker_app_job_storage_resources: {{ learninglocker_app_api_resources }}
+
+learninglocker_mongodb_resources:
+  requests:
+    cpu: 10m
+    memory: 250Mi
+learninglocker_nginx_resources:
+  requests:
+    cpu: 10m
+    memory: 100Mi
+learninglocker_xapi_resources:
+  requests:
+    cpu: 10m
+    memory: 250Mi

@@ -1,5 +1,6 @@
 {% set service_variant = "worker" %}
 {% set learninglocker_pm2_app = "worker" %}
 {% set learninglocker_replicas = learninglocker_worker_replicas %}
+{% set resources = learninglocker_app_worker_resources %}
 
 {% include "apps/learninglocker/templates/services/app/_dc_base.yml.j2" with context %}

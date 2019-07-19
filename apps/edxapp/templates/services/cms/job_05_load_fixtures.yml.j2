@@ -44,7 +44,7 @@ spec:
               cd - &&
               python manage.py cms import /edx/app/edxapp/data /tmp/edx-demo-course* &&
               python manage.py cms shell < /tmp/configmap-fixtures/create_demo_users.py
-
+          resources: {{ edxapp_cms_job_load_fixtures_resources }}
           volumeMounts:
             - mountPath: /tmp/configmap-fixtures
               name: edxapp-configmap-fixtures
