@@ -463,6 +463,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Fix npm installation in Eucalyptus flavors
 - The forum API key generated a syntax error when its last character was a ":"
 
+### Added
+
+- Add resources requests to all applications to improve pod scheduling.
+
 ## [4.3.0] - 2019-12-13
 
 ### Added

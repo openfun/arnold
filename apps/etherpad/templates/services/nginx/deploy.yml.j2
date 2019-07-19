@@ -71,6 +71,7 @@ spec:
               port: {{ etherpad_nginx_healthcheck_port }}
             initialDelaySeconds: 10
             periodSeconds: 5
+          resources: {{ etherpad_nginx_resources }}
       securityContext:
         runAsUser: {{ container_uid }}
         runAsGroup: {{ container_gid }}

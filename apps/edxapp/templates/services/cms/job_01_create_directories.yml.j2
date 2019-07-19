@@ -47,6 +47,7 @@ spec:
             - mountPath: /edx/app/edxapp/edx-platform/conf/locale
               name: edxapp-v-locale
 {% endif %}
+          resources: {{ edxapp_cms_job_create_directories_resources }}
       securityContext:
         runAsUser: {{ container_uid }}
         runAsGroup: {{ container_gid }}

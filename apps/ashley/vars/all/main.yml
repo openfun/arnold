@@ -53,3 +53,27 @@ ashley_media_volume_size: 2Gi
 ashley_static_volume_size: 1Gi
 ashley_should_activate_media_volume: true
 ashley_should_activate_static_volume: true
+
+# -- resources requests
+{% set app_resources = {
+  "requests": {
+    "cpu": "10m",
+    "memory": "250Mi"
+  }
+} %}
+
+ashley_app_resources: "{{ app_resources }}"
+
+ashley_app_job_collectstatic_resources: "{{ app_resources }}"
+ashley_app_job_db_migrate_resources: "{{ app_resources }}"
+ashley_app_cronjob_update_index_resources: "{{ app_resources }}"
+
+ashley_nginx_resources:
+  requests:
+    cpu: 5m
+    memory: 20Mi
+
+ashley_postgresql_resources:
+  requests:
+    cpu: 10m
+    memory: 100Mi

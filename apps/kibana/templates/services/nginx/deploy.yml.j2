@@ -71,6 +71,7 @@ spec:
               port: {{ kibana_nginx_healthcheck_port }}
             initialDelaySeconds: 10
             periodSeconds: 5
+          resources: {{ kibana_nginx_resources }}
       securityContext:
         runAsUser: {{ container_uid }}
         runAsGroup: {{ container_gid }}

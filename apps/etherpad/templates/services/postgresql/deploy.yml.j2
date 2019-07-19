@@ -44,6 +44,7 @@ spec:
           envFrom:
             - secretRef:
                 name: "{{ etherpad_database_secret_name }}"
+          resources: {{ etherpad_postgresql_resources }}
       securityContext:
         runAsUser: {{ container_uid }}
         runAsGroup: {{ container_gid }}

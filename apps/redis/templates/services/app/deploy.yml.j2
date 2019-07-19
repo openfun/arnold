@@ -57,6 +57,7 @@ spec:
                 - "-c"
                 - "redis-cli ping && touch /data/healthcheck"
             periodSeconds: 10
+          resources: {{ redis_app_resources }}
           volumeMounts:
             - mountPath: /data
               name: redis-v-data

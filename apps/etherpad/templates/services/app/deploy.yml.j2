@@ -82,6 +82,7 @@ spec:
                 name: "{{ etherpad_env_secret_name }}"
             - configMapRef:
                 name: "etherpad-app-dotenv-{{ deployment_stamp }}"
+          resources: {{ etherpad_app_resources }}
           volumeMounts:
             - name: etherpad-v-configs
               mountPath: {{ etherpad_configs_directory_path }}

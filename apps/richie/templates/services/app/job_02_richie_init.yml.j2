@@ -51,6 +51,7 @@ spec:
             - "bash"
             - "-c"
             - python manage.py richie_init
+          resources: {{ richie_app_job_richie_init_resources }}
       restartPolicy: Never
       securityContext:
         runAsUser: {{ container_uid }}

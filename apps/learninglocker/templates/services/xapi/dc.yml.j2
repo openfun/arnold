@@ -33,7 +33,7 @@ spec:
                       operator: In
                       values:
                         - "learninglocker-xapi-{{ deployment_stamp }}"
-                topologyKey: kubernetes.io/hostname  
+                topologyKey: kubernetes.io/hostname
 {% set image_pull_secret_name = learninglocker_xapi_image_pull_secret_name | default(none) or default_image_pull_secret_name %}
 {% if image_pull_secret_name is not none %}
       imagePullSecrets:
@@ -68,6 +68,7 @@ spec:
               mountPath: /app/storage
             - name: pm2-homedir
               mountPath: /home/pm2_user
+          resources: {{ learninglocker_xapi_resources }}
       volumes:
         - name: learninglocker-xapi-configmap
           configMap:

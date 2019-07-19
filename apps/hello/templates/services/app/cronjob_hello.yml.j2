@@ -35,6 +35,7 @@ spec:
                 - "sh"
                 - "-c"
                 - echo "Hello World!"
+              resources: {{ hello_app_cronjob_resources }}
           restartPolicy: Never
           securityContext:
             runAsUser: {{ container_uid }}

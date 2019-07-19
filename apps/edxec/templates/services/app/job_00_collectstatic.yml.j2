@@ -41,6 +41,7 @@ spec:
             - "bash"
             - "-c"
             - python manage.py collectstatic --noinput && python manage.py compress
+          resources: {{ edxec_app_job_collectstatic_resources }}
           volumeMounts:
             - name: edxec-local
               mountPath: /usr/local/etc/ecommerce
@@ -56,6 +57,7 @@ spec:
             - "/bin/sh"
             - "-c"
             - "yq m /tmp/config/local.yml /tmp/secret/local.yml > /usr/local/etc/ecommerce/local.yml"
+          resources: {{ edxec_app_job_collectstatic_resources }}
           volumeMounts:
             - name: edxec-local
               mountPath: /usr/local/etc/ecommerce

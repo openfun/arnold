@@ -37,6 +37,7 @@ spec:
           ports:
             - containerPort: {{ richie_elasticsearch_port }}
               protocol: TCP
+          resources: {{ richie_elasticsearch_resources }}
       securityContext:
         runAsUser: {{ container_uid }}
         runAsGroup: {{ container_gid }}
