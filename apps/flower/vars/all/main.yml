@@ -15,3 +15,14 @@ flower_image_name: "fundocker/flower"
 flower_image_tag: "0.9.3-py2"
 flower_address: "0.0.0.0"
 flower_port: 5555
+
+# -- resources requests
+flower_app_resources:
+  requests:
+    cpu: 10m
+    memory: 128Mi
+
+flower_nginx_resources:
+  requests:
+    cpu: 5m
+    memory: 20Mi

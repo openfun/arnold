@@ -37,3 +37,25 @@ edxec_mysql_secret_name: "edxec-mysql-{{ edxec_vault_checksum | default('undefin
 # -- volumes size
 edxec_static_volume_size: 2Gi
 edxec_media_volume_size: 2Gi
+
+# -- resources requests
+{% set app_resources = {
+  "requests": {
+    "cpu": "10m",
+    "memory": "300Mi"
+  }
+} %}
+
+edxec_app_resources: "{{ app_resources }}"
+edxec_app_job_collectstatic_resources: "{{ app_resources }}"
+edxec_app_job_db_migrate_resources: "{{ app_resources }}"
+
+edxec_nginx_resources:
+  requests:
+    cpu: 5m
+    memory: 20Mi
+
+edxec_mysql_resources:
+  requests:
+    cpu: 10m
+    memory: 100Mi

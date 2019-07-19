@@ -41,6 +41,7 @@ spec:
           envFrom:
             - secretRef:
                 name: "{{ forum_mongodb_secret_name }}"
+          resources: {{ forum_mongodb_resources }}
       securityContext:
         runAsUser: {{ container_uid }}
         runAsGroup: {{ container_gid }}

@@ -33,6 +33,7 @@ spec:
             - |
               id
               echo test > /data/volume/test
+          resources: {{ hello_app_job_writevolume_resources }}
           volumeMounts:
             - mountPath: /data/volume
               name: hello-volume

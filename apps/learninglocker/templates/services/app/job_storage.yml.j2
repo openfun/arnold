@@ -29,6 +29,7 @@ spec:
       - name: learninglocker-job-storage
         image: "busybox:1.30"
         command: ["mkdir", "-p", "/data/tmp", "/data/downloads", "/data/logos", "/data/storage", "/data/tests"]
+        resources: {{ learninglocker_app_job_storage_resources }}
         volumeMounts:
         - name: learninglocker-v-storage
           mountPath: /data

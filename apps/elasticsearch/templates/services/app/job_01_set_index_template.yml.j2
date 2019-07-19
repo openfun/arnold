@@ -35,6 +35,7 @@ spec:
             - secretRef:
                 name: "{{ elasticsearch_credentials_secret_name }}"
 {% endif %}
+          resources: {{ elasticsearch_app_job_set_index_template_resources }}
           volumeMounts:
             - name: set-index-template
               mountPath: /usr/local/bin/set-index-template.sh
