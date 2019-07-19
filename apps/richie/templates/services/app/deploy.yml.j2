@@ -88,6 +88,7 @@ spec:
                 name: "{{ richie_secret_name }}"
             - configMapRef:
                 name: "richie-app-dotenv-{{ deployment_stamp }}"
+          resources: {{ richie_app_resources }}
 {% if richie_should_activate_media_volume %}
           volumeMounts:
             - name: richie-v-media

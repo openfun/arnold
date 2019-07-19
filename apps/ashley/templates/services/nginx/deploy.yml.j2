@@ -68,7 +68,6 @@ spec:
             - mountPath: "{{ http_basic_auth_user_file | dirname }}"
               name: ashley-htpasswd
 {% endif %}
-
           livenessProbe:
             httpGet:
               path: "{{ ashley_nginx_healthcheck_endpoint }}"
@@ -81,6 +80,7 @@ spec:
               port: {{ ashley_nginx_healthcheck_port }}
             initialDelaySeconds: 10
             periodSeconds: 5
+          resources: {{ ashley_nginx_resources }}
       securityContext:
         runAsUser: {{ container_uid }}
         runAsGroup: {{ container_gid }}

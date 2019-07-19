@@ -139,3 +139,55 @@ queue: ""
 # these variables are required
 redis_app_port: 6379
 mailcatcher_sender_port: 1025
+
+# -- resources requests
+{% set cms_app_resources = {
+  "requests": {
+    "cpu": "10m",
+    "memory": "800Mi"
+  }
+} %}
+
+edxapp_cms_resources: "{{ cms_app_resources }}"
+edxapp_cms_job_internationalization_resources: "{{ cms_app_resources }}"
+edxapp_cms_job_db_migrate_resources: "{{ cms_app_resources }}"
+edxapp_cms_job_load_fixtures_resources: "{{ cms_app_resources }}"
+edxapp_cms_job_create_directories_resources:
+  requests:
+    cpu: 10m
+    memory: 20Mi
+
+{% set lms_app_resources = {
+  "requests": {
+    "cpu": "100m",
+    "memory": "1Gi"
+  }
+} %}
+
+edxapp_lms_resources: "{{ lms_app_resources }}"
+edxapp_lms_job_db_migrate_resources: "{{ lms_app_resources }}"
+
+edxapp_queue_resources:
+  requests:
+    cpu: 10m
+    memory: 400Mi
+
+edxapp_mongodb_resources:
+  requests:
+    cpu: 10m
+    memory: 100Mi
+
+edxapp_mysql_resources:
+  requests:
+    cpu: 10m
+    memory: 100Mi
+
+edxapp_mysql_job_load_sql_dump_resources:
+  requests:
+    cpu: 10m
+    memory: 100Mi
+
+edxapp_nginx_resources:
+  requests:
+    cpu: 10m
+    memory: 20Mi

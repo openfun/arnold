@@ -46,6 +46,7 @@ spec:
             - secretRef:
                 name: "{{ marsha_secret_name }}"
           command: ["python", "manage.py", "migrate"]
+          resources: {{ marsha_app_job_db_migrate_resources }}
       restartPolicy: Never
       securityContext:
         runAsUser: {{ container_uid }}

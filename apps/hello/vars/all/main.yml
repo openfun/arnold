@@ -6,3 +6,14 @@ hello_host: "hello.{{ namespace_name }}.{{ domain_name }}"
 # -- misc
 hello_app_port: "8080"
 hello_app_msg: "Hello Kubernetes! by Arnold"
+
+# -- resources
+{% set app_resources = {
+  "requests": {
+    "cpu": "1m",
+    "memory": "50Mi"
+  }
+} %}
+hello_app_resources: "{{ app_resources }}"
+hello_app_job_writevolume_resources: "{{ app_resources }}"
+hello_app_cronjob_resources: "{{ app_resources }}"

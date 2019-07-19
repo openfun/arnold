@@ -88,6 +88,7 @@ spec:
                 name: "{{ marsha_secret_name }}"
             - configMapRef:
                 name: "marsha-app-dotenv-{{ deployment_stamp }}"
+          resources: {{ marsha_app_resources }}
           volumeMounts:
             - name: marsha-configmap
               mountPath: /app/src/backend/marsha/configs

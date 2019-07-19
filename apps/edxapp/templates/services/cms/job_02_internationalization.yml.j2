@@ -65,6 +65,7 @@ spec:
 {% endfor %}
               echo "translations:" &&
               ls -l conf/locale/*/LC_MESSAGES/
+          resources: {{ edxapp_cms_job_internationalization_resources }}
           volumeMounts:
             - mountPath: /edx/app/edxapp/edx-platform/conf/locale
               name: edxapp-v-locale

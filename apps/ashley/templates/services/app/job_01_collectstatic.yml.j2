@@ -45,6 +45,7 @@ spec:
           volumeMounts:
             - mountPath: /data/static
               name: ashley-v-static
+          resources: {{ ashley_app_job_collectstatic_resources }}
       volumes:
         - name: ashley-v-static
           persistentVolumeClaim:

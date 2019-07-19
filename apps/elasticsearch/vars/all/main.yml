@@ -7,6 +7,8 @@ elasticsearch_image_tag: "6.6.2"
 
 # JVM options
 # (-Xms and -Xmx must have the same value or elasticsearch will fail to boot)
+# If you change these values, please also adjust the resources requests
+# (see elasticsearch_app_resources)
 elasticsearch_java_opts:
   - "-Xms512m"
   - "-Xmx512m"
@@ -61,3 +63,16 @@ elasticsearch_ssl_certificates_name: elastic-certificates.p12
 elasticsearch_ca_secret_name: "elasticsearch-ca-{{ elasticsearch_vault_checksum | default('unset-yet') }}"
 elasticsearch_certificates_passwords_secret_name: "elasticsearch-certificates-passwords-{{ elasticsearch_vault_checksum | default('unset-yet') }}"
 elasticsearch_credentials_secret_name: "elasticsearch-credentials-{{ elasticsearch_vault_checksum | default('unset-yet') }}"
+
+# -- resources requests
+elasticsearch_app_resources:
+  requests:
+    cpu: 10m
+    memory: 512Mi
+
+elasticsearch_app_job_set_index_template_resources:
+  requests:
+    cpu: 10m
+    memory: 20Mi
+elasticsearch_app_job_set_passwords_resources: {{ elasticsearch_app_job_set_index_template_resources }}
+elasticsearch_app_job_create_admin_user_resources: {{ elasticsearch_app_job_set_index_template_resources }}
