@@ -24,7 +24,7 @@ spec:
           env:
             - name: RESPONSE
               value: "{{ hello_app_msg }} - {{ deployment_stamp }}"
-          resources: {}
+          resources: {{ hello_app_resources }}
           volumeMounts:
             - name: tmp
               mountPath: "/tmp"

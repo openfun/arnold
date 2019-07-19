@@ -57,6 +57,7 @@ spec:
                   value: "{{ forum_host }}"
             initialDelaySeconds: 10
             periodSeconds: 5
+          resources:{{ forum_app_resources }}
           ports:
             - containerPort: "{{ forum_port }}"
               protocol: TCP

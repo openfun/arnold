@@ -2,5 +2,6 @@
 {% set learninglocker_command = "ui/dist/server" %}
 {% set learninglocker_port = learninglocker_ui_port %}
 {% set learninglocker_replicas = learninglocker_ui_replicas %}
+{% set resources = learninglocker_app_ui_resources %}
 
 {% include "apps/learninglocker/templates/services/app/_dc_base.yml.j2" with context %}

@@ -45,6 +45,7 @@ spec:
                 - "test -f /tmp/healthcheck/ok"
             initialDelaySeconds: 5
             periodSeconds: 10
+          resources: {{ edxapp_memcached_resources }}
           volumeMounts:
             - mountPath: /tmp/healthcheck
               name: tmp-healthcheck

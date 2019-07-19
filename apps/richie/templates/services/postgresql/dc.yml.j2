@@ -32,4 +32,5 @@ spec:
           envFrom:
             - secretRef:
                 name: "{{ richie_database_secret_name }}"
+          resources: {{ richie_postgresql_resources }}
 {% endif%}

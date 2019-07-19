@@ -30,4 +30,5 @@ spec:
           envFrom:
             - secretRef:
                 name: "{{ learninglocker_mongodb_secret_name }}"
+          resources: {{ learninglocker_mongodb_resources }}"
 {% endif %}

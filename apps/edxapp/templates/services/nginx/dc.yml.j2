@@ -38,6 +38,19 @@ spec:
           ports:
             - containerPort: 80
               protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: "{{ edxapp_nginx_healthcheck_endpoint }}"
+              port: {{ edxapp_nginx_healthcheck_port }}
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: "{{ edxapp_nginx_healthcheck_endpoint }}"
+              port: {{ edxapp_nginx_healthcheck_port }}
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          resources: {{ edxapp_nginx_resources }}
           volumeMounts:
             - mountPath: /etc/nginx/conf.d
               name: edxapp-v-nginx
@@ -55,19 +68,6 @@ spec:
             - mountPath: "{{ http_basic_auth_user_file | dirname }}"
               name: edxapp-htpasswd
             {% endif %}
-
-          livenessProbe:
-            httpGet:
-              path: "{{ edxapp_nginx_healthcheck_endpoint }}"
-              port: {{ edxapp_nginx_healthcheck_port }}
-            initialDelaySeconds: 60
-            periodSeconds: 30
-          readinessProbe:
-            httpGet:
-              path: "{{ edxapp_nginx_healthcheck_endpoint }}"
-              port: {{ edxapp_nginx_healthcheck_port }}
-            initialDelaySeconds: 10
-            periodSeconds: 5
       volumes:
         - name: edxapp-v-nginx
           configMap:

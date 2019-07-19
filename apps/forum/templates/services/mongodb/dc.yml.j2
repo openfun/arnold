@@ -29,4 +29,5 @@ spec:
           envFrom:
             - secretRef:
                 name: "{{ forum_mongodb_secret_name }}"
+          resources: {{ forum_mongodb_resources }}
 {% endif %}

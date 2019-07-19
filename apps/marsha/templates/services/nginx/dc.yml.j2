@@ -67,6 +67,7 @@ spec:
               port: {{ marsha_nginx_healthcheck_port }}
             initialDelaySeconds: 10
             periodSeconds: 5
+          resources: {{ marsha_nginx_resources }}
       volumes:
         - name: marsha-v-nginx
           configMap:

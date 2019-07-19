@@ -37,5 +37,6 @@ spec:
               -h "edxapp-mysql-{{ deployment_stamp }}"
               --password=${MYSQL_PASSWORD}
               ${MYSQL_DATABASE} < edx-database.sql
+          resources: {{ edxapp_mysql_job_load_sql_dump_resources }}
       restartPolicy: Never
 {% endif %}

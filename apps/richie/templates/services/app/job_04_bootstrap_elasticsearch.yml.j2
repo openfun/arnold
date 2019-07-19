@@ -51,6 +51,7 @@ spec:
             - "bash"
             - "-c"
             - python manage.py bootstrap_elasticsearch
+          resources: {{ richie_app_job_bootstrap_elasticsearch_resources }}
 {% if richie_should_activate_media_volume %}
           volumeMounts:
             - name: richie-v-media

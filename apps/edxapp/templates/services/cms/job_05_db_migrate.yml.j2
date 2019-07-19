@@ -33,6 +33,7 @@ spec:
             - "/bin/bash"
             - "-c"
             - DJANGO_SETTINGS_MODULE=cms.envs.fun.docker_run python manage.py cms migrate
+          resources: {{ edxapp_cms_job_db_migrate_resources }}
           volumeMounts:
             - mountPath: /config
               name: edxapp-config

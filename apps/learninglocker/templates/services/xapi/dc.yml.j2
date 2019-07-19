@@ -39,6 +39,7 @@ spec:
           volumeMounts:
             - name: learninglocker-xapi-storage
               mountPath: /app/storage
+          resources: {{ learninglocker_xapi_resources }}
       volumes:
         - name: learninglocker-xapi-storage
           emptyDir: {}

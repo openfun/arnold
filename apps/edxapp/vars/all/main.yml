@@ -173,3 +173,46 @@ queue: ""
 # these variables are required
 redis_app_port: 6379
 mailcatcher_sender_port: 1025
+
+# -- resources requests
+edxapp_cms_resources:
+  requests:
+    cpu: 10m
+    memory: 250Mi
+edxapp_cms_job_internationalization_resources: {{ edxapp_cms_resources }}
+edxapp_cms_job_collectstatic_resources: {{ edxapp_cms_resources }}
+edxapp_cms_job_db_migrate_resources: {{ edxapp_cms_resources }}
+edxapp_cms_job_load_fixtures_resources: {{ edxapp_cms_resources }}
+
+edxapp_lms_resources:
+  requests:
+    cpu: 10m
+    memory: 250Mi
+edxapp_lms_job_collectstatic_resources: {{ edxapp_lms_resources }}
+edxapp_lms_job_db_migrate_resources: {{ edxapp_lms_resources }}
+
+edxapp_queue_resources:
+  requests:
+    cpu: 10m
+    memory: 250Mi
+
+edxapp_memcached_resources:
+  requests:
+    cpu: 10m
+    memory: 1Gi
+
+edxapp_mongodb_resources:
+  requests:
+    cpu: 10m
+    memory: 100Mi
+
+edxapp_mysql_resources:
+  requests:
+    cpu: 10m
+    memory: 100Mi
+edxapp_mysql_job_load_sql_dump_resources: {{ edxapp_mysql_resources }}
+
+edxapp_nginx_resources:
+  requests:
+    cpu: 10m
+    memory: 5Mi

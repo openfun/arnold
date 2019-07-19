@@ -38,6 +38,7 @@ spec:
               port: {{ learninglocker_nginx_healthcheck_port }}
             initialDelaySeconds: 10
             periodSeconds: 5
+          resources: {{ learninglocker_nginx_resources }}
           volumeMounts:
             - mountPath: /etc/nginx/conf.d
               name: learninglocker-v-nginx

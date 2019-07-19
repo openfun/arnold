@@ -41,6 +41,7 @@ spec:
             - "-c"
             - {% if edxapp_should_update_i18n %}python manage.py cms compilejsi18n &&{% endif %}
               python manage.py cms collectstatic --noinput
+          resources: {{ edxapp_cms_job_collectstatic_resources }}
           volumeMounts:
             - mountPath: /config
               name: edxapp-config

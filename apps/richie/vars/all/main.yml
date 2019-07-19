@@ -63,3 +63,27 @@ richie_media_volume_size: 2Gi
 richie_static_volume_size: 2Gi
 richie_should_activate_media_volume: true
 richie_should_activate_static_volume: true
+
+# -- resources requests
+richie_app_resources:
+  requests:
+    cpu: 10m
+    memory: 250Mi
+richie_app_job_collectstatic_resources: {{ richie_app_resources }}
+richie_app_job_db_migrate_resources: {{ richie_app_resources }}
+richie_app_job_richie_init_resources: {{ richie_app_resources }}
+richie_app_job_bootstrap_elasticsearch_resources: {{ richie_app_resources }}
+
+richie_elasticsearch_resources:
+  requests:
+    cpu: 10m
+    memory: 2Gi
+richie_nginx_resources:
+  requests:
+    cpu: 10m
+    memory: 100Mi
+richie_postgresql_resources:
+  requests:
+    cpu: 10m
+    memory: 100Mi
+

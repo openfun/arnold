@@ -48,4 +48,5 @@ spec:
             - "bash"
             - "-c"
             - python manage.py migrate
+          resources: {{ richie_app_job_db_migrate_resources }}
       restartPolicy: Never

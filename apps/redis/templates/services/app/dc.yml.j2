@@ -44,6 +44,7 @@ spec:
                 - "redis-cli ping && touch /data/healthcheck"
             initialDelaySeconds: 60
             periodSeconds: 10
+          resources: {{ redis_app_resources }}
           volumeMounts:
             - mountPath: /data
               name: redis-v-data

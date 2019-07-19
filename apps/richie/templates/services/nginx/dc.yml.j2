@@ -38,6 +38,19 @@ spec:
           ports:
             - containerPort: {{ richie_nginx_port }}
               protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: "{{ richie_nginx_healthcheck_endpoint }}"
+              port: {{ richie_nginx_healthcheck_port }}
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: "{{ richie_nginx_healthcheck_endpoint }}"
+              port: {{ richie_nginx_healthcheck_port }}
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          resources: {{ richie_nginx_resources }}
           volumeMounts:
             - mountPath: /etc/nginx/conf.d
               name: richie-v-nginx
@@ -56,19 +69,6 @@ spec:
             - mountPath: "{{ http_basic_auth_user_file | dirname }}"
               name: richie-htpasswd
 {% endif %}
-
-          livenessProbe:
-            httpGet:
-              path: "{{ richie_nginx_healthcheck_endpoint }}"
-              port: {{ richie_nginx_healthcheck_port }}
-            initialDelaySeconds: 60
-            periodSeconds: 30
-          readinessProbe:
-            httpGet:
-              path: "{{ richie_nginx_healthcheck_endpoint }}"
-              port: {{ richie_nginx_healthcheck_port }}
-            initialDelaySeconds: 10
-            periodSeconds: 5
       volumes:
         - name: richie-v-nginx
           configMap:

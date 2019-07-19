@@ -43,6 +43,7 @@ spec:
             - secretRef:
                 name: "{{ marsha_secret_name }}"
           command: ["python", "manage.py", "collectstatic", "--noinput"]
+          resources: {{ marsha_app_job_collectstatic_resources }}
 {% if env_type in trashable_env_types %}
           volumeMounts:
             - mountPath: /data/static

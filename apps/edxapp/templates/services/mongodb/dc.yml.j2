@@ -29,4 +29,5 @@ spec:
           envFrom:
             - secretRef:
                 name: "{{ edxapp_mongodb_secret_name }}"
+          resources: {{ edxapp_mongodb_resources }}
 {% endif %}

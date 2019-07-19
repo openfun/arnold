@@ -33,6 +33,7 @@ spec:
             - "/bin/bash"
             - "-c"
             - DJANGO_SETTINGS_MODULE=lms.envs.fun.docker_run python manage.py lms migrate
+          resources: {{ edxapp_lms_job_db_migrate_resources }}
           volumeMounts:
             - mountPath: /config
               name: edxapp-config

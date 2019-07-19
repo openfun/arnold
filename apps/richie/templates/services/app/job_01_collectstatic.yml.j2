@@ -51,6 +51,7 @@ spec:
             - "bash"
             - "-c"
             - python manage.py collectstatic --noinput
+          resources: {{ richie_app_job_collectstatic_resources }}
 {% if richie_should_activate_static_volume %}
           volumeMounts:
             - mountPath: /data/static

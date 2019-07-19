@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Add resources requests to all applications to improve pod scheduling.
+
 ## [4.3.0] - 2019-12-13
 
 ### Added

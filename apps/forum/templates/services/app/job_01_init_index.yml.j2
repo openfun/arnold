@@ -36,4 +36,6 @@ spec:
             - "/bin/bash"
             - "-c"
             - bin/rake search:initialize
+          resources: {{ forum_app_job_init_index_resources }}
       restartPolicy: Never
+
