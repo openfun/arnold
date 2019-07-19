@@ -65,6 +65,7 @@ spec:
             # directory the user can write to.
             - name: HOME
               value: /home/pm2_user
+          resources: {{ resources }}
           volumeMounts:
             - name: learninglocker-v-storage
               mountPath: /app/storage

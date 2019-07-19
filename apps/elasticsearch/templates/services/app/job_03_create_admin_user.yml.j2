@@ -44,6 +44,7 @@ spec:
           envFrom:
             - secretRef:
                 name: "{{ elasticsearch_credentials_secret_name }}"
+          resources: {{ elasticsearch_app_job_create_admin_user_resources }}
       restartPolicy: Never
       securityContext:
         runAsUser: {{ container_uid }}

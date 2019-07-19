@@ -41,6 +41,7 @@ spec:
           envFrom:
             - configMapRef:
                 name: "flower-app-dotenv-{{ deployment_stamp }}"
+          resources: {{ flower_app_resources }}
           volumeMounts:
             - mountPath: /app
               name: flower-configmap

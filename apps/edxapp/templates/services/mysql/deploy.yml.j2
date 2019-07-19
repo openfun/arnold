@@ -41,6 +41,7 @@ spec:
           envFrom:
             - secretRef:
                 name: "{{ edxapp_mysql_secret_name }}"
+          resources: {{ edxapp_mysql_resources }}
       securityContext:
         runAsUser: {{ container_uid }}
         runAsGroup: {{ container_gid }}

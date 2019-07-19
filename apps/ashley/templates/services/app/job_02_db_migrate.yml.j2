@@ -38,6 +38,7 @@ spec:
             - "bash"
             - "-c"
             - python manage.py migrate
+          resources: {{ ashley_app_job_db_migrate_resources }}
       restartPolicy: Never
       securityContext:
         runAsUser: {{ container_uid }}

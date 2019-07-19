@@ -23,3 +23,9 @@ redis_sentinel_redis_data_volume_size: 2Gi
 # eg:
 #   - "stop-writes-on-bgsave-error no"
 redis_sentinel_redis_custom_config: []
+
+# -- resources requests
+redis_sentinel_resources:
+  requests:
+    cpu: 20m
+    memory: 100Mi

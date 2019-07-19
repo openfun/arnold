@@ -6,3 +6,9 @@ redis_app_port: 6379
 
 # -- volume size
 redis_data_volume_size: 2Gi
+
+# -- resources requests
+redis_app_resources:
+  requests:
+    cpu: 10m
+    memory: 500Mi

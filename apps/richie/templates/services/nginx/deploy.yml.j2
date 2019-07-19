@@ -63,7 +63,6 @@ spec:
             - mountPath: "{{ http_basic_auth_user_file | dirname }}"
               name: richie-htpasswd
 {% endif %}
-
           livenessProbe:
             httpGet:
               path: "{{ richie_nginx_healthcheck_endpoint }}"
@@ -76,6 +75,7 @@ spec:
               port: {{ richie_nginx_healthcheck_port }}
             initialDelaySeconds: 10
             periodSeconds: 5
+          resources: {{ richie_nginx_resources }}
       securityContext:
         runAsUser: {{ container_uid }}
         runAsGroup: {{ container_gid }}

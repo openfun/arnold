@@ -49,3 +49,20 @@ etherpad_loglevel: "INFO"
 etherpad_skin_name: "colibris"
 # The name of the instance
 etherpad_title: "{{ namespace_name }} etherpad"
+
+
+# -- resources requests
+etherpad_app_resources:
+  requests:
+    cpu: 5m
+    memory: 128Mi
+
+etherpad_postgresql_resources:
+  requests:
+    cpu: 10m
+    memory: 100Mi
+
+etherpad_nginx_resources:
+  requests:
+    cpu: 5m
+    memory: 100Mi
