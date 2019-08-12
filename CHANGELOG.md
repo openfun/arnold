@@ -8,6 +8,11 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Security
+
+- Upgrade Ansible to `2.7.12` (see
+  [CVE-2019-10156](https://nvd.nist.gov/vuln/detail/CVE-2019-10156))
+
 ## [2.7.0] - 2019-07-18
 
 ### Added
