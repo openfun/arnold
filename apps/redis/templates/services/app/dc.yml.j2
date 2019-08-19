@@ -30,7 +30,7 @@ spec:
               command:
                 - "/bin/bash"
                 - "-c"
-                - "redis-cli ping"
+                - "'redis-cli ping && touch /data/healthcheck'"
             initialDelaySeconds: 120
             periodSeconds: 30
           readinessProbe:
@@ -38,7 +38,7 @@ spec:
               command:
                 - "/bin/bash"
                 - "-c"
-                - "redis-cli ping"
+                - "'redis-cli ping && touch /data/healthcheck'"
             initialDelaySeconds: 60
             periodSeconds: 10
           volumeMounts:

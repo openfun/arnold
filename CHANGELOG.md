@@ -8,6 +8,11 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- `redis` app heath check probes now check that the data volume is accessible
+  with write permissions
+
 ### Security
 
 - Upgrade Ansible to `2.7.12` (see
