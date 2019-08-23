@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [2.8.0] - 2019-08-23
+
 ### Changed
 
 - `redis` app heath check probes now check that the data volume is accessible
@@ -407,7 +409,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v2.7.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v2.8.0...master
+[2.8.0]: https://github.com/openfun/arnold/compare/v2.7.0...v2.8.0
 [2.7.0]: https://github.com/openfun/arnold/compare/v2.6.0...v2.7.0
 [2.6.0]: https://github.com/openfun/arnold/compare/v2.5.1...v2.6.0
 [2.5.1]: https://github.com/openfun/arnold/compare/v2.5.0...v2.5.1
