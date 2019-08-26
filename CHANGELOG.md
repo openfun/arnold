@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Upgrade OpenShift to OpenShift `0.9.1`
+
 ## [2.8.0] - 2019-08-23
 
 ### Changed
