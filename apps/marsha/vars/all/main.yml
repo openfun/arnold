@@ -30,6 +30,7 @@ marsha_django_configuration: "Development"
 marsha_secret_name: "marsha-{{ marsha_vault_checksum | default('undefined_marsha_vault_checksum') }}"
 marsha_cloudfront_private_key_secret_name: "marsha-sshkey-{{ marsha_vault_checksum | default('undefined_marsha_vault_checksum') }}"
 marsha_cloudfront_private_key_path: "/private/.ssh/aws/ssh-privatekey"
+marsha_gunicorn_command: "gunicorn --threads=6 --worker-class=gthread --worker-tmp-dir /dev/shm -c /usr/local/etc/gunicorn/marsha.py marsha.wsgi:application"
 # Set this to true if you have configured AWS CloudFront to require requests
 # signature with the aforementioned SSH key
 marsha_should_sign_requests: true

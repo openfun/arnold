@@ -36,6 +36,11 @@ spec:
         - name: marsha
           image: "{{ marsha_image_name }}:{{ marsha_image_tag }}"
           imagePullPolicy: Always
+          command:
+            - /bin/bash
+            - '-c'
+            - >-
+              {{ marsha_gunicorn_command }}
           livenessProbe:
             httpGet:
               path: /__heartbeat__
