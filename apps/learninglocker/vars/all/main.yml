@@ -19,7 +19,6 @@ learninglocker_xapi_image_name: "fundocker/xapi-service"
 learninglocker_xapi_image_tag: "v2.2.15"
 learninglocker_xapi_port: 8081
 learninglocker_xapi_secret_name: "learninglocker-xapi-{{ learninglocker_vault_checksum | default('undefined_learninglocker_vault_checksum') }}"
-learnonglocker_xapi_storage_volume_size: 2Gi
 learninglocker_xapi_replicas: 1
 
 # -- monogodb
