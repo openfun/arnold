@@ -1,20 +1,24 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: "learninglocker-job-storage"
+  name: "learninglocker-job-storage-{{ job_stamp }}"
   namespace: "{{ project_name }}"
   labels:
     app: learninglocker
     service: learninglocker
     version: "{{ learninglocker_image_tag }}"
+    job_stamp: "{{ job_stamp }}"
+    deployment_stamp: "{{ deployment_stamp }}"
 spec:
   template:
     metadata:
-      name: "learninglocker-job-storage"
+      name: "learninglocker-job-storage-{{ job_stamp }}"
       labels:
         app: learninglocker
         service: learninglocker
         version: "{{ learninglocker_image_tag }}"
+        job_stamp: "{{ job_stamp }}"
+        deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:
       - name: learninglocker-job-storage

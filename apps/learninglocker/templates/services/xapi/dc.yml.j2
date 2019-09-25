@@ -5,7 +5,8 @@ metadata:
     app: learninglocker
     service: xapi
     version: "{{ learninglocker_xapi_image_tag }}"
-  name: "learninglocker-xapi"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: "learninglocker-xapi-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
   replicas: 1
@@ -15,7 +16,8 @@ spec:
         app: learninglocker
         service: xapi
         version: "{{ learninglocker_xapi_image_tag }}"
-        deploymentconfig: "learninglocker-xapi"
+        deployment_stamp: "{{ deployment_stamp }}"
+        deploymentconfig: "learninglocker-xapi-{{ deployment_stamp }}"
     spec:
       containers:
         - image: "{{ learninglocker_xapi_image_name }}:{{ learninglocker_xapi_image_tag }}"
@@ -25,10 +27,11 @@ spec:
             - containerPort: "{{ learninglocker_xapi_port }}"
               protocol: TCP
           envFrom:
-            - secretRef:
-                name: "{{ learninglocker_xapi_secret_name }}"
             - configMapRef:
                 name: "learninglocker-xapi-dotenv-{{ deployment_stamp }}"
+          env:
+            - name: MONGO_URL
+              value: "mongodb://$(MONGODB_USER):$(MONGODB_PASSWORD)@{{ learninglocker_mongodb_host }}-{{ deployment_stamp }}:{{ learninglocker_mongodb_port }}/$(MONGODB_DATABASE)"
           volumeMounts:
             - name: learninglocker-xapi-storage
               mountPath: /app/storage

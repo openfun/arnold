@@ -2,17 +2,20 @@ apiVersion: v1
 kind: Route
 metadata:
   namespace: "{{ project_name }}"
-  name: "learninglocker-nginx"
+  name: "learninglocker-nginx-{{ prefix }}"
   labels:
     env_type: "{{ env_type }}"
     customer: "{{ customer }}"
     app: "learninglocker"
     service: "nginx"
     version: "{{ learninglocker_nginx_image_tag }}"
+    route_prefix: "{{ prefix }}"
   annotations:
     kubernetes.io/tls-acme: "true"
+    haproxy.router.openshift.io/disable_cookies: "true"
+    haproxy.router.openshift.io/balance: "roundrobin"
 spec:
-  host: "{{ learninglocker_host }}"
+  host: "{{ learninglocker_host | blue_green_host(prefix) }}"
   tls:
     termination: edge
     insecureEdgeTerminationPolicy: Redirect
@@ -20,4 +23,4 @@ spec:
     targetPort: "{{ learninglocker_nginx_port }}-tcp"
   to:
     kind: Service
-    name: "learninglocker-nginx"
+    name: "learninglocker-nginx-{{ deployment_stamp }}"

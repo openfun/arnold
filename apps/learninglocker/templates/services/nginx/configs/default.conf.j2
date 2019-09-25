@@ -1,13 +1,13 @@
 upstream backend_ui {
-  server learninglocker-ui:{{ learninglocker_ui_port }};
+  server learninglocker-ui-{{ deployment_stamp }}:{{ learninglocker_ui_port }};
 }
 
 upstream backend_xapi {
-  server learninglocker-xapi:{{ learninglocker_xapi_port }};
+  server learninglocker-xapi-{{ deployment_stamp }}:{{ learninglocker_xapi_port }};
 }
 
 upstream backend_api {
-  server learninglocker-api:{{ learninglocker_api_port }};
+  server learninglocker-api-{{ deployment_stamp }}:{{ learninglocker_api_port }};
 }
 
 server {

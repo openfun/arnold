@@ -5,7 +5,8 @@ metadata:
     app: learninglocker
     service: xapi
     version: "{{ learninglocker_xapi_image_tag }}"
-  name: learninglocker-xapi
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: learninglocker-xapi-{{ deployment_stamp }}
   namespace: "{{ project_name }}"
 spec:
   ports:
@@ -15,5 +16,5 @@ spec:
     targetPort: {{ learninglocker_xapi_port }}
   selector:
     app: learninglocker
-    deploymentconfig: "learninglocker-xapi"
+    deploymentconfig: "learninglocker-xapi-{{ deployment_stamp }}"
   type: ClusterIP

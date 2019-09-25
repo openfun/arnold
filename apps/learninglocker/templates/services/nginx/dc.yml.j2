@@ -5,7 +5,8 @@ metadata:
     app: learninglocker
     service: nginx
     version: "{{ learninglocker_nginx_image_tag }}"
-  name: "learninglocker-nginx"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: "learninglocker-nginx-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
   replicas: 1
@@ -15,7 +16,8 @@ spec:
         app: learninglocker
         service: nginx
         version: "{{ learninglocker_nginx_image_tag }}"
-        deploymentconfig: "learninglocker-nginx"
+        deploymentconfig: "learninglocker-nginx-{{ deployment_stamp }}"
+        deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:
         - image: "{{ learninglocker_nginx_image_name }}:{{ learninglocker_nginx_image_tag }}"

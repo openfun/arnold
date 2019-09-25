@@ -5,8 +5,9 @@ metadata:
     app: learninglocker
     service: mongodb
     version: "{{ learninglocker_mongodb_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
   # name of the service should be mongodb host name in settings
-  name: "learninglocker-mongodb"
+  name: "learninglocker-mongodb-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
   ports:
@@ -21,6 +22,6 @@ spec:
 {% if env_type in trashable_env_types %}
   selector:
     app: learninglocker
-    deploymentconfig: "learninglocker-mongodb"
+    deploymentconfig: "learninglocker-mongodb-{{ deployment_stamp }}"
   type: ClusterIP
 {% endif%}
