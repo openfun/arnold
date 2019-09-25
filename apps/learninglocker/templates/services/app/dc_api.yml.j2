@@ -1,5 +1,6 @@
 {% set service_variant = "api" %}
 {% set learninglocker_command = "api/dist/server" %}
 {% set learninglocker_port = learninglocker_api_port %}
+{% set learninglocker_replicas = learninglocker_api_replicas %}
 
 {% include "apps/learninglocker/templates/services/app/_dc_base.yml.j2" with context %}

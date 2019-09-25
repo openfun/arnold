@@ -11,7 +11,7 @@ metadata:
   name: "{{ dc_name }}-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
-  replicas: 1
+  replicas: {{ learninglocker_replicas }}
   template:
     metadata:
       labels:

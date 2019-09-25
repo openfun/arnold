@@ -9,7 +9,7 @@ metadata:
   name: "learninglocker-xapi-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
-  replicas: 1
+  replicas: {{ learninglocker_xapi_replicas }}
   template:
     metadata:
       labels:
