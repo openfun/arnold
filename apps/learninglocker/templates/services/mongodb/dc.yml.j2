@@ -6,7 +6,8 @@ metadata:
     app: learninglocker
     service: mongodb
     version: "{{ learninglocker_mongodb_image_tag }}"
-  name: "learninglocker-mongodb"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: "learninglocker-mongodb-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
   replicas: 1
@@ -16,7 +17,8 @@ spec:
         app: learninglocker
         service: mongodb
         version: "{{ learninglocker_mongodb_image_tag }}"
-        deploymentconfig: "learninglocker-mongodb"
+        deploymentconfig: "learninglocker-mongodb-{{ deployment_stamp }}"
+        deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:
         - image: "{{ learninglocker_mongodb_image_name }}:{{ learninglocker_mongodb_image_tag }}"

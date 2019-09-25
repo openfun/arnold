@@ -1,4 +1,4 @@
-is_blue_green_compatible: False
+is_blue_green_compatible: True
 
 databases:
   - engine: "mongodb"

@@ -5,7 +5,8 @@ metadata:
     app: learninglocker
     service: nginx
     version: "{{ learninglocker_nginx_image_tag }}"
-  name: "learninglocker-nginx"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: "learninglocker-nginx-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
   ports:
@@ -19,5 +20,5 @@ spec:
       targetPort: {{ learninglocker_nginx_healthcheck_port }}
   selector:
     app: learninglocker
-    deploymentconfig: "learninglocker-nginx"
+    deploymentconfig: "learninglocker-nginx-{{ deployment_stamp }}"
   type: ClusterIP

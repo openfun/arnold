@@ -6,8 +6,9 @@ metadata:
   labels:
     app: learninglocker
     service: "{{ service_variant }}"
+    deployment_stamp: "{{ deployment_stamp }}"
     version: "{{ learninglocker_image_tag }}"
-  name: "{{ dc_name }}"
+  name: "{{ dc_name }}-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
   replicas: 1
@@ -16,8 +17,9 @@ spec:
       labels:
         app: learninglocker
         service: "{{ service_variant }}"
+        deployment_stamp: "{{ deployment_stamp }}"
         version: "{{ learninglocker_image_tag }}"
-        deploymentconfig: "{{ dc_name }}"
+        deploymentconfig: "{{ dc_name }}-{{ deployment_stamp }}"
     spec:
       containers:
         - name: "{{ service_variant }}"
@@ -34,6 +36,9 @@ spec:
                 name: "{{ learninglocker_secret_name }}"
             - configMapRef:
                 name: "learninglocker-app-dotenv-{{ deployment_stamp }}"
+          env:
+            - name: MONGODB_PATH
+              value: "mongodb://$(MONGODB_USER):$(MONGODB_PASSWORD)@{{ learninglocker_mongodb_host }}-{{ deployment_stamp }}:{{ learninglocker_mongodb_port }}/$(MONGODB_DATABASE)"
           volumeMounts:
             - name: learninglocker-v-storage
               mountPath: /app/storage

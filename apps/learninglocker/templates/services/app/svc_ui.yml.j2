@@ -5,7 +5,8 @@ metadata:
     app: learninglocker
     service: ui
     version: "{{ learninglocker_image_tag }}"
-  name: learninglocker-ui
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: learninglocker-ui-{{ deployment_stamp }}
   namespace: "{{ project_name }}"
 spec:
   ports:
@@ -15,5 +16,5 @@ spec:
     targetPort: {{ learninglocker_ui_port }}
   selector:
     app: learninglocker
-    deploymentconfig: "learninglocker-ui"
+    deploymentconfig: "learninglocker-ui-{{ deployment_stamp }}"
   type: ClusterIP

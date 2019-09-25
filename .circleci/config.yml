@@ -417,6 +417,14 @@ jobs:
           name: Test the "learninglocker" application bootstrapping
           command: |
             bin/ci-ansible-playbook bootstrap.yml "redis,mailcatcher,learninglocker"
+            bin/ci-test-service "learninglocker" "OK" "/api" "next"
+
+      - run:
+          name: Test the "learninglocker" application switch
+          command: |
+            # Switch next route to current
+            bin/ci-ansible-playbook switch.yml "learninglocker"
+            # Test service switched to the current route
             bin/ci-test-service "learninglocker" "OK" "/api"
 
   # Test the delete_app tasks for blue-green applications
