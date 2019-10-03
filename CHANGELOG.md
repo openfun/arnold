@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Implement support for docker private registry secrets
+
 ## [3.0.1] - 2019-10-04
 
 ### Fixed
