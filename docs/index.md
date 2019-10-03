@@ -34,8 +34,10 @@ changes to your OpenShift instance that orchestrate your OpenEdx services.
 3.  [Using Ansible playbooks](./developer_guide/playbooks.md)
 4.  [Working with routes](./developer_guide/routes_aliases.md)
 5.  [Handling secrets](./developer_guide/secrets.md)
-6.  [Hello customer](./developer_guide/hello.md)
-7.  [Continous_Integration](./developer_guide/continous_integration.md)
+6.  [Using private Docker registries](./developer_guide/registries.md)
+7.  [Hello customer](./developer_guide/hello.md)
+8.  [Continous_Integration](./developer_guide/continous_integration.md)
+9.  [Frequently Asked Questions (FAQ)](./faq.md)
 
 ### III. Contributing
 
