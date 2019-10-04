@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [3.0.1] - 2019-10-04
+
 ### Fixed
 
 - Remove extra quotes from redis healthcheck commands
@@ -421,7 +423,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v3.0.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v3.0.1...master
+[3.0.1]: https://github.com/openfun/arnold/compare/v3.0.0...v3.0.1
 [3.0.0]: https://github.com/openfun/arnold/compare/v2.8.0...v3.0.0
 [2.8.0]: https://github.com/openfun/arnold/compare/v2.7.0...v2.8.0
 [2.7.0]: https://github.com/openfun/arnold/compare/v2.6.0...v2.7.0
