@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Remove extra quotes from redis healthcheck commands
+
 ## [3.0.0] - 2019-10-03
 
 ### Changed
