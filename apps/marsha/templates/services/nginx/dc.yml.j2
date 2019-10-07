@@ -75,7 +75,7 @@ spec:
         - name: marsha-v-static
           persistentVolumeClaim:
             claimName: marsha-pvc-static
-        {% if activate_http_basic_auth -%}
+        {% if activate_http_basic_auth or marsha_activate_http_basic_auth -%}
         - name: marsha-htpasswd
           secret:
             secretName: "{{ marsha_nginx_htpasswd_secret_name }}"
