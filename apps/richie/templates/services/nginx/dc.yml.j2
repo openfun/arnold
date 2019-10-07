@@ -75,7 +75,7 @@ spec:
         - name: richie-v-static
           persistentVolumeClaim:
             claimName: richie-pvc-static
-        {% if activate_http_basic_auth -%}
+        {% if activate_http_basic_auth or richie_activate_http_basic_auth -%}
         - name: richie-htpasswd
           secret:
             secretName: "{{ richie_nginx_htpasswd_secret_name }}"

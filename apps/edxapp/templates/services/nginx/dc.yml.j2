@@ -81,7 +81,7 @@ spec:
         - name: edxapp-v-export
           persistentVolumeClaim:
             claimName: edxapp-pvc-export
-        {% if activate_http_basic_auth -%}
+        {% if activate_http_basic_auth or edxapp_activate_http_basic_auth -%}
         - name: edxapp-htpasswd
           secret:
             secretName: "{{ edxapp_nginx_htpasswd_secret_name }}"
