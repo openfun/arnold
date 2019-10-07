@@ -6,7 +6,7 @@ server {
   listen {{ edxapp_nginx_lms_port }};
   server_name localhost;
 
-  {% if activate_http_basic_auth -%}
+  {% if activate_http_basic_auth or edxapp_activate_http_basic_auth -%}
   auth_basic "{{ http_basic_auth_message }}";
   auth_basic_user_file {{ http_basic_auth_user_file }};
   {% endif %}

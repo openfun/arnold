@@ -18,9 +18,14 @@
   register: app_htpasswd_file
   tags: htpasswd
 
+- name: Get application activate_http_basic_auth value
+  set_fact:
+    app_activate_http_basic_auth: "{{ lookup('vars', app.name + '_activate_http_basic_auth', default=false) }}"
+  tags: htpasswd
+
 - name: Set application htpasswd variable
   set_fact:
     "{{ app.name }}_htpasswd": "{{ app_htpasswd_file.stat.path }}"
   # Only set this variable when the htpasswd file exists and is a regular file
-  when: activate_http_basic_auth and app_htpasswd_file.stat.exists and app_htpasswd_file.stat.isreg
+  when: (activate_http_basic_auth or app_activate_http_basic_auth) and app_htpasswd_file.stat.exists and app_htpasswd_file.stat.isreg
   tags: htpasswd
