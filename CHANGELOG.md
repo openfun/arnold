@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [3.1.0] - 2019-10-07
+
 ### Added
 
 - Implement support for docker private registry secrets
@@ -429,7 +431,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v3.0.1...master
+[unreleased]: https://github.com/openfun/arnold/compare/v3.1.0...master
+[3.1.0]: https://github.com/openfun/arnold/compare/v3.0.1...v3.1.0
 [3.0.1]: https://github.com/openfun/arnold/compare/v3.0.0...v3.0.1
 [3.0.0]: https://github.com/openfun/arnold/compare/v2.8.0...v3.0.0
 [2.8.0]: https://github.com/openfun/arnold/compare/v2.7.0...v2.8.0
