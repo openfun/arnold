@@ -12,6 +12,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 - Implement support for docker private registry secrets
 - Make private docker registry usage available for richie
+- Allow to configure HTTP Basic Auth protection on a per-app basis
 
 ## [3.0.1] - 2019-10-04
 

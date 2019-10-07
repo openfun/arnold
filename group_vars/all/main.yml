@@ -82,7 +82,10 @@ has_acme_cluster_role: false
 # Expected vault path
 vault_path: "group_vars/customer/{{ customer }}/{{ env_type }}/secrets"
 
-# Protect public services behind HTTP basic authentication
+# Protect public services behind HTTP basic authentication (global setting that
+# applies for every compatible app of the project). Note that some apps (e.g.
+# edxapp, Richie, Marsha...) can be protected individually by setting the "{{
+# app.name }}_activate_http_basic_auth" variable to true.
 activate_http_basic_auth: false
 # The message that will be displayed by the client browser
 http_basic_auth_message: "Restricted Area"

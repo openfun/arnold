@@ -55,6 +55,8 @@ richie_extra_dependencies:
   # - "raven>=6.0.0"
   # - "requests"
 
+richie_activate_http_basic_auth: false
+
 # -- volumes
 richie_media_volume_size: 2Gi
 richie_static_volume_size: 2Gi

@@ -48,7 +48,7 @@ spec:
             - mountPath: /data/static/marsha
               name: marsha-v-static
               readOnly: true
-            {% if activate_http_basic_auth -%}
+            {% if activate_http_basic_auth or marsha_activate_http_basic_auth -%}
             - mountPath: "{{ http_basic_auth_user_file | dirname }}"
               name: marsha-htpasswd
             {% endif %}

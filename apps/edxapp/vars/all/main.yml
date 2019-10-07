@@ -13,6 +13,7 @@ edxapp_lms_replicas: 1
 edxapp_cms_replicas: 1
 edxapp_sql_dump_url: "https://gist.githubusercontent.com/jmaupetit/76fe7db4a8314fe1fa10895edf14248e/raw/1fd2aab7d57273bbe4cf40603c119a1c8026cbc1/edx-database-hawthorn.sql"
 edxapp_secret_name: "edxapp-{{ edxapp_vault_checksum | default('undefined_edxapp_vault_checksum') }}"
+edxapp_activate_http_basic_auth: false
 
 # i18n
 # Should we download and compile latest translations?
