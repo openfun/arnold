@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Task that creates a secret with credentials for private Docker registries.
+
 ## [3.1.0] - 2019-10-07
 
 ### Added
