@@ -11,6 +11,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Upgrade Ansible to `2.8.6`
+- Generate `edxapp` theme translations in target image build configuration
 
 ## [3.1.1] - 2019-10-09
 

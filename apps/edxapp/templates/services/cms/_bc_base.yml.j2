@@ -47,6 +47,9 @@ spec:
         npm && \
         rm -rf /var/lib/apt/lists/*
       COPY . /edx/app/edxapp/edx-platform/themes/custom-theme
+{% for lang in edxapp_i18n_languages %}
+      RUN python manage.py {{ service_variant }} compilemessages -l {{ lang }} --settings=fun.docker_run
+{% endfor %}
       RUN NO_PREREQ_INSTALL=1 paver update_assets --settings={{ edxapp_build_settings }} --skip-collect
       {% endif -%}
       {% if edxapp_extra_dependencies is defined and edxapp_extra_dependencies | length -%}
