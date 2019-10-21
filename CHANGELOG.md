@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Upgrade Ansible to `2.8.6`
+
 ## [3.1.1] - 2019-10-09
 
 ### Fixed
