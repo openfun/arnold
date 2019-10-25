@@ -13,6 +13,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Upgrade Ansible to `2.8.6`
 - Generate `edxapp` theme translations in target image build configuration
 
+### Fixed
+
+- Fixed broken `edxapp` jobs container image name when enabling a custom theme
+
 ## [3.1.1] - 2019-10-09
 
 ### Fixed
