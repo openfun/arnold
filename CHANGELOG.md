@@ -8,6 +8,11 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Upgrade OpenShift to `0.10.0`
+- Upgrade `yq` ti `2.8.1`
+
 ## [3.2.0] - 2019-10-25
 
 ### Changed
