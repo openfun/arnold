@@ -3,12 +3,12 @@ ansible==2.8.6
 ansible-lint==4.1.0
 deepmerge==0.1.0
 jmespath==0.9.4
-openshift==0.9.2
+openshift==0.10.0
 passlib==1.7.1
 PyYAML==5.1.2
 netaddr==0.7.19
 requests==2.22.0
-yq==2.7.2
+yq==2.8.1
 
 # Quality
 flake8==3.7.8
