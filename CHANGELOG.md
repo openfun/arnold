@@ -10,6 +10,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Upgrade Ansible to `2.9.0`
 - Upgrade OpenShift to `0.10.0`
 - Upgrade `yq` ti `2.8.1`
 
