@@ -14,6 +14,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Upgrade OpenShift to `0.10.0`
 - Upgrade `yq` ti `2.8.1`
 
+### Fixed
+
+- Set sentry in marsha secret only if present in the vault
+
 ## [3.2.0] - 2019-10-25
 
 ### Changed
