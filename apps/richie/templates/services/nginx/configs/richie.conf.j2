@@ -29,13 +29,18 @@ server {
     try_files $uri @proxy_to_richie_app;
   }
 
+{% if richie_should_activate_media_volume %}
   location ~ ^/media/(?P<file>.*) {
     root /data/media/richie;
     try_files /$file =404;
   }
+{% endif %}
 
+{% if richie_should_activate_static_volume %}
   location ~ ^/static/(?P<file>.*) {
     root /data/static/richie;
     try_files /$file =404;
   }
+{% endif %}
+
 }

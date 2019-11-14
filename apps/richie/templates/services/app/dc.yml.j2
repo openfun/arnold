@@ -81,14 +81,22 @@ spec:
             - configMapRef:
                 name: "richie-app-dotenv-{{ deployment_stamp }}"
           volumeMounts:
+{% if richie_should_activate_media_volume %}
             - name: richie-v-media
               mountPath: /data/media
+{% endif %}
+{% if richie_should_activate_static_volume %}
             - name: richie-v-static
               mountPath: /data/static
+{% endif %}
       volumes:
+{% if richie_should_activate_media_volume %}
         - name: richie-v-media
           persistentVolumeClaim:
             claimName: richie-pvc-media
+{% endif %}
+{% if richie_should_activate_static_volume %}
         - name: richie-v-static
           persistentVolumeClaim:
             claimName: richie-pvc-static
+{% endif %}
