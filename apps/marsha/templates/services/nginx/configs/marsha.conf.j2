@@ -29,8 +29,10 @@ server {
     try_files $uri @proxy_to_marsha_app;
   }
 
+  {% if env_type in trashable_env_types %}
   location ~ ^/static/(?P<file>.*) {
     root /data/static/marsha;
     try_files /$file =404;
   }
+  {% endif %}
 }

@@ -42,16 +42,18 @@ spec:
             - mountPath: /etc/nginx/conf.d
               name: marsha-v-nginx
               readOnly: true
+{% if env_type in trashable_env_types %}
             - mountPath: /data/media/marsha
               name: marsha-v-media
               readOnly: true
             - mountPath: /data/static/marsha
               name: marsha-v-static
               readOnly: true
-            {% if activate_http_basic_auth or marsha_activate_http_basic_auth -%}
+{% endif %}
+{% if activate_http_basic_auth or marsha_activate_http_basic_auth %}
             - mountPath: "{{ http_basic_auth_user_file | dirname }}"
               name: marsha-htpasswd
-            {% endif %}
+{% endif %}
 
           livenessProbe:
             httpGet:
@@ -69,14 +71,16 @@ spec:
         - name: marsha-v-nginx
           configMap:
             name: marsha-nginx-{{ deployment_stamp }}
+{% if env_type in trashable_env_types %}
         - name: marsha-v-media
           persistentVolumeClaim:
             claimName: marsha-pvc-media
         - name: marsha-v-static
           persistentVolumeClaim:
             claimName: marsha-pvc-static
-        {% if activate_http_basic_auth or marsha_activate_http_basic_auth -%}
+{% endif %}
+{% if activate_http_basic_auth or marsha_activate_http_basic_auth %}
         - name: marsha-htpasswd
           secret:
             secretName: "{{ marsha_nginx_htpasswd_secret_name }}"
-        {% endif %}
+{% endif %}
