@@ -17,6 +17,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - Set sentry in marsha secret only if present in the vault
+- Ignore creating empty volume templates
 
 ## [3.2.0] - 2019-10-25
 

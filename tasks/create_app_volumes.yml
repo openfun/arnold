@@ -6,10 +6,24 @@
     msg: "App name {{ app.name }}"
   tags: volume
 
+# Remove empty rendered volume templates (e.g. inactivated for an env_type)
+- name: Ignore empty rendered volume templates
+  set_fact:
+    path: "{{ item }}"
+  register: filtered_volumes
+  with_items: "{{ app.volumes }}"
+  when: app.volumes is defined and lookup('template', item) | length > 1
+  tags: deploy
+
+- name: Update volume templates list for this app
+  set_fact:
+    volumes: "{{ filtered_volumes | json_query('results[*].ansible_facts.path') | list }}"
+  when: app.volumes is defined
+  
 - name: Make sure application volumes exist
   k8s:
     definition: "{{ lookup('template', item) | from_yaml }}"
     state: present
-  with_items: "{{ app.volumes }}"
+  with_items: "{{ volumes }}"
   when: app.volumes is defined
   tags: volume
