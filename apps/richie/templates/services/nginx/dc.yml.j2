@@ -42,16 +42,20 @@ spec:
             - mountPath: /etc/nginx/conf.d
               name: richie-v-nginx
               readOnly: true
+{% if richie_should_activate_media_volume %}
             - mountPath: /data/media/richie
               name: richie-v-media
               readOnly: true
+{% endif %}
+{% if richie_should_activate_static_volume %}
             - mountPath: /data/static/richie
               name: richie-v-static
               readOnly: true
-            {% if activate_http_basic_auth or richie_activate_http_basic_auth -%}
+{% endif %}
+{% if activate_http_basic_auth or richie_activate_http_basic_auth -%}
             - mountPath: "{{ http_basic_auth_user_file | dirname }}"
               name: richie-htpasswd
-            {% endif %}
+{% endif %}
 
           livenessProbe:
             httpGet:
@@ -69,14 +73,18 @@ spec:
         - name: richie-v-nginx
           configMap:
             name: richie-nginx-{{ deployment_stamp }}
+{% if richie_should_activate_media_volume %}
         - name: richie-v-media
           persistentVolumeClaim:
             claimName: richie-pvc-media
+{% endif %}
+{% if richie_should_activate_static_volume %}
         - name: richie-v-static
           persistentVolumeClaim:
             claimName: richie-pvc-static
-        {% if activate_http_basic_auth or richie_activate_http_basic_auth -%}
+{% endif %}
+{% if activate_http_basic_auth or richie_activate_http_basic_auth -%}
         - name: richie-htpasswd
           secret:
             secretName: "{{ richie_nginx_htpasswd_secret_name }}"
-        {% endif %}
+{% endif %}

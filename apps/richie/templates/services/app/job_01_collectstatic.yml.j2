@@ -26,6 +26,7 @@ spec:
       imagePullSecrets:
         - name: "{{ richie_image_pull_secret_name }}"
 {% endif %}
+      restartPolicy: Never
       containers:
         - name: richie-collectstatic
           image: "{{ richie_image_name }}:{{ richie_image_tag }}"
@@ -50,6 +51,7 @@ spec:
             - "bash"
             - "-c"
             - python manage.py collectstatic --noinput
+{% if richie_should_activate_static_volume %}
           volumeMounts:
             - mountPath: /data/static
               name: richie-v-static
@@ -57,4 +59,4 @@ spec:
         - name: richie-v-static
           persistentVolumeClaim:
             claimName: richie-pvc-static
-      restartPolicy: Never
+{% endif %}

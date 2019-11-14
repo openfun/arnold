@@ -51,6 +51,7 @@ spec:
             - "bash"
             - "-c"
             - python manage.py bootstrap_elasticsearch
+{% if richie_should_activate_media_volume %}
           volumeMounts:
             - name: richie-v-media
               mountPath: /data/media
@@ -58,3 +59,4 @@ spec:
         - name: richie-v-media
           persistentVolumeClaim:
             claimName: richie-pvc-media
+{% endif %}

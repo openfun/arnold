@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Allow deactivating volumes for static and media files in the richie app
+
 ### Changed
 
 - Upgrade Ansible to `2.9.0`
