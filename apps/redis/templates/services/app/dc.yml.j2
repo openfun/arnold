@@ -25,6 +25,9 @@ spec:
       containers:
         - name: redis
           image: "{{ redis_app_image_name }}:{{ redis_app_image_tag }}"
+          command:
+            - "redis-server"
+            - "/config/redis/app.conf"
           livenessProbe:
             exec:
               command:
@@ -44,7 +47,12 @@ spec:
           volumeMounts:
             - mountPath: /data
               name: redis-v-data
+            - mountPath: /config/redis
+              name: redis-v-config
       volumes:
         - name: redis-v-data
           persistentVolumeClaim:
             claimName: redis-pvc-data
+        - name: redis-v-config
+          configMap:
+            name: "redis-app-{{ deployment_stamp }}"
