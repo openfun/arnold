@@ -13,6 +13,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Upgrade Ansible to `2.9.0`
 - Upgrade OpenShift to `0.10.0`
 - Upgrade `yq` ti `2.8.1`
+- Create a config map to manage redis configuration
 
 ### Fixed
 
