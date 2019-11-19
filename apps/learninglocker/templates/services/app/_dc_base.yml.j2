@@ -1,5 +1,7 @@
 {%- set dc_name = "learninglocker-%s" | format(service_variant) -%}
 
+{%- from "apps/learninglocker/templates/services/app/macros/mongodb_uri.yml.j2" import mongodb_uri with context -%}
+
 apiVersion: v1
 kind: DeploymentConfig
 metadata:
@@ -38,7 +40,7 @@ spec:
                 name: "learninglocker-app-dotenv-{{ deployment_stamp }}"
           env:
             - name: MONGODB_PATH
-              value: "mongodb://$(MONGODB_USER):$(MONGODB_PASSWORD)@{{ learninglocker_mongodb_host }}-{{ deployment_stamp }}:{{ learninglocker_mongodb_port }}/$(MONGODB_DATABASE)"
+              value: "{{ mongodb_uri(env_type, trashable_env_types, learninglocker_mongodb_host, deployment_stamp, endpoint_mongodb_ips, learninglocker_mongodb_replicaset, learninglocker_mongodb_read_preference) }}"
           volumeMounts:
             - name: learninglocker-v-storage
               mountPath: /app/storage
