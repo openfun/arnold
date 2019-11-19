@@ -105,7 +105,8 @@ force_route: false
 # In trashable environments these endpoints will not be used because everything will
 # run inside OpenShift pods. in Production and Pre-production environments you should consider using a dedicated cluster
 # for your databases.
-# Endpoint IPs are initialized at "null" by default and you SHOULD overwrite them in the corresponding environment where you will use them.
-endpoint_mongodb_ip:     null
+# Endpoint IPs are initialized at "null" (except for mongodb we initalize it with an empty list) by default 
+# and you SHOULD overwrite them in the corresponding environment where you will use them.
+endpoint_mongodb_ips:     []
 endpoint_mysql_ip:       null
 endpoint_postgresql_ip:  null
