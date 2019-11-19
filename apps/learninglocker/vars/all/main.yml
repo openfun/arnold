@@ -27,6 +27,8 @@ learninglocker_mongodb_image_name: "centos/mongodb-32-centos7"
 learninglocker_mongodb_image_tag: "3.2"
 learninglocker_mongodb_port: 27017
 learninglocker_mongodb_host: "learninglocker-mongodb"
+learninglocker_mongodb_replicaset: ""
+learninglocker_mongodb_read_preference: ""
 learninglocker_mongodb_secret_name: "learninglocker-mongodb-{{ learninglocker_vault_checksum | default('undefined_learninglocker_vault_checksum') }}"
 
 # -- nginx
