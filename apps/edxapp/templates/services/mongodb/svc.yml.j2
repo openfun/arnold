@@ -7,21 +7,29 @@ metadata:
     version: "{{ edxapp_mongodb_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
   # name of the service should be mongodb host name in settings
-  name: "edxapp-mongo-{{ deployment_stamp }}"
+  name: "{{ edxapp_mongodb_host }}-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
   ports:
+{% if env_type in trashable_env_types %}
   - name: "{{ edxapp_mongodb_port }}-tcp"
     port: {{ edxapp_mongodb_port }}
     protocol: TCP
     targetPort: {{ edxapp_mongodb_port }}
 # As commented in the ad hoc endpoint, the endpoint name points to this service
 # so that it does not rely on a deployment configuration when the "env_type" is
-# not trashable. In this case, we use a PostgreSQL cluster outside of
+# not trashable. In this case, we use a mongodb cluster outside of
 # OpenShift.
-{% if env_type in trashable_env_types %}
   selector:
     app: edxapp
-    deploymentconfig: "edxapp-mongodb-{{ deployment_stamp }}"
+    deploymentconfig: "{{ edxapp_mongodb_host }}-{{ deployment_stamp }}"
   type: ClusterIP
-{% endif%}
+{% else %}
+{% for ip in endpoint_mongodb_ips %}
+  - 
+    name: "mongodb-{{ ip | regex_replace("\.", "-") }}-tcp"
+    port: {{ edxapp_mongodb_port | int + loop.index0 }} 
+    protocol: TCP
+    targetPort: {{ edxapp_mongodb_port }}
+{% endfor %}
+{% endif %}

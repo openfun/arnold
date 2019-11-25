@@ -8,6 +8,11 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Configure MongoDB to use replicaSet and read_preference settings for all
+  applications working with MongoDB
+
 ## [3.3.1] - 2019-11-25
 
 ### Fixed
