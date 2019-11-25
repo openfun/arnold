@@ -21,4 +21,7 @@ forum_mongodb_version: "3.2"
 forum_mongodb_image_name: "centos/mongodb-32-centos7"
 forum_mongodb_image_tag: "3.2"
 forum_mongodb_port: 27017
+forum_mongodb_host: "forum-mongodb"
+forum_mongodb_replicaset: ""
+forum_mongodb_read_preference: ""
 forum_mongodb_secret_name: "forum-mongo-{{ forum_vault_checksum | default('undefined_forum_vault_checksum') }}"

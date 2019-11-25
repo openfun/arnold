@@ -1,0 +1,28 @@
+{# compute the mongodb URI #}
+{%- macro mongodb_uri(env_type, trashable_env_types, forum_mongodb_host, deployment_stamp, endpoint_mongodb_ips, forum_mongodb_replicaset, forum_mongodb_port, forum_mongodb_read_preference) -%}
+    {%- if env_type in trashable_env_types -%}
+        mongodb://$(MONGODB_USER):$(MONGODB_PASSWORD_URLENCODED)@{{ forum_mongodb_host }}-{{ deployment_stamp }}:{{ forum_mongodb_port }}/$(MONGODB_DATABASE)
+    {%- else -%}
+        {%- set mondogdb_service_name = "%s-%s" | format(forum_mongodb_host, deployment_stamp) -%}
+        {%- set ns = namespace(services="") -%}
+        {%- for ip in endpoint_mongodb_ips -%}
+            {%- set ns.services = "%s%s:%s" | format(ns.services, mondogdb_service_name, forum_mongodb_port | int + loop.index0) -%}
+            {%- if loop.index < endpoint_mongodb_ips | length -%}
+                {%- set ns.services = "%s," | format(ns.services) -%}
+            {%- endif -%}
+        {%- endfor -%}
+
+        {%- set uri = "mongodb://$(MONGODB_USER):$(MONGODB_PASSWORD_URLENCODED)@%s/$(MONGODB_DATABASE)" | format(ns.services) -%}
+        {%- set isReplicasetDefined = forum_mongodb_replicaset is defined and forum_mongodb_replicaset | length > 1 -%}
+
+        {%- if isReplicasetDefined -%}
+            {%- set uri = "%s?replicaSet=%s" | format(uri, forum_mongodb_replicaset) -%}
+        {%- endif -%}
+
+        {% if isReplicasetDefined and forum_mongodb_read_preference is defined and forum_mongodb_read_preference | length > 1 %}
+            {%- set uri = "%s&readPreference=%s" | format(uri, forum_mongodb_read_preference) -%}
+        {% endif %}
+
+        {{uri}}
+    {%- endif -%}
+{%- endmacro %}

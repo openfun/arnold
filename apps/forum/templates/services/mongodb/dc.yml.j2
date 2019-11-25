@@ -7,7 +7,7 @@ metadata:
     service: mongodb
     version: "{{ forum_mongodb_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
-  name: "forum-mongodb-{{ deployment_stamp }}"
+  name: "{{ forum_mongodb_host }}-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
   replicas: 1
@@ -17,7 +17,7 @@ spec:
         app: forum
         service: mongodb
         version: "{{ forum_mongodb_image_tag }}"
-        deploymentconfig: "forum-mongodb-{{ deployment_stamp }}"
+        deploymentconfig: "{{ forum_mongodb_host }}-{{ deployment_stamp }}"
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
       containers:
