@@ -52,7 +52,7 @@ spec:
               name: richie-v-static
               readOnly: true
 {% endif %}
-{% if activate_http_basic_auth or richie_activate_http_basic_auth -%}
+{% if activate_http_basic_auth or richie_activate_http_basic_auth %}
             - mountPath: "{{ http_basic_auth_user_file | dirname }}"
               name: richie-htpasswd
 {% endif %}
@@ -83,7 +83,7 @@ spec:
           persistentVolumeClaim:
             claimName: richie-pvc-static
 {% endif %}
-{% if activate_http_basic_auth or richie_activate_http_basic_auth -%}
+{% if activate_http_basic_auth or richie_activate_http_basic_auth %}
         - name: richie-htpasswd
           secret:
             secretName: "{{ richie_nginx_htpasswd_secret_name }}"
