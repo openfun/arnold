@@ -1,3 +1,4 @@
+{%- from "apps/forum/templates/services/app/macros/mongodb_uri.yml.j2" import mongodb_uri with context -%}
 apiVersion: v1
 kind: DeploymentConfig
 metadata:
@@ -65,7 +66,9 @@ spec:
           env:
             - name: SEARCH_SERVER
               value: "http://forum-elasticsearch-{{ deployment_stamp }}:{{ forum_elasticsearch_port }}"
+            - name: MONGOHQ_URL
+              value: "{{ mongodb_uri(env_type, trashable_env_types, forum_mongodb_host, deployment_stamp, endpoint_mongodb_ips, forum_mongodb_replicaset, forum_mongodb_port, forum_mongodb_read_preference) }}"
           command:
             - "/bin/bash"
             - "-c"
-            - MONGOHQ_URL=mongodb://${MONGODB_USER}:${MONGODB_PASSWORD_URLENCODED}@forum-mongo-{{ deployment_stamp }}:{{ forum_mongodb_port }}/${MONGODB_DATABASE} bundle exec puma
+            - bundle exec puma
