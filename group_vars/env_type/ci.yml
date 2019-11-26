@@ -2,12 +2,6 @@
 project_description: "A minimal project to test apps bootstrapping ({{ env_type }})"
 domain_name: "{{ lookup('env', 'OPENSHIFT_DOMAIN') }}.nip.io"
 
-# OpenShift's internal docker registry server
-#
-# FIXME: use docker registry server IP address instead of the service name (i.e.
-# docker-registry.default.svc) to prevent oc cluster DNS issues
-internal_docker_registry: "172.30.1.1:5000"
-
 apps:
   - name: mailcatcher
   - name: marsha

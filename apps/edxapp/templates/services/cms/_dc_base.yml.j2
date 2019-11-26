@@ -85,7 +85,7 @@ spec:
           value: {{ service_variant }}.envs.fun.docker_run
         # We point to a local registry image build for this "live" image (see
         # ImageStream and BuildConfig templates)
-        image: "{{ internal_docker_registry }}/{{ project_name }}/{{ image_name(service_variant, edxapp_image_tag, edxapp_theme_tag) }}"
+        image: "{{ image_name(service_variant, edxapp_image_tag, edxapp_theme_tag) }}"
         imagePullPolicy: Always
 {% if celery_worker is defined %}
         livenessProbe:

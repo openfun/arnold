@@ -13,6 +13,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Configure MongoDB to use replicaSet and read_preference settings for all
   applications working with MongoDB
 
+### Changed
+
+- Use local lookupPolicy to fetch image from internal registry first
+
 ## [3.3.1] - 2019-11-25
 
 ### Fixed

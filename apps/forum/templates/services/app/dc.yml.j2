@@ -37,7 +37,7 @@ spec:
         - name: forum
           # We point to a local registry image build for this "live" image (see
           # ImageStream and BuildConfig templates)
-          image: "{{ internal_docker_registry }}/{{ project_name }}/forum:{{ forum_image_tag }}-live"
+          image: "forum:{{ forum_image_tag }}-live"
           imagePullPolicy: Always
           livenessProbe:
             httpGet:

@@ -67,9 +67,6 @@ deployment_stamp: null
 # never be used as is, but initiated in a playbook using a "set_fact" task.
 job_stamp: null
 
-# OpenShift's internal docker registry server
-internal_docker_registry: "docker-registry.default.svc:5000"
-
 # ACME (Automated Certificate Management Environment) We use the letsencrypt
 # staging environment except in (pre)production (see:
 # https://letsencrypt.org/docs/staging-environment)
