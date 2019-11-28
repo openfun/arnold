@@ -1,0 +1,26 @@
+# The following settings can be found in the project's annotation.
+# To retrieve them run the following command:
+#   $ oc project {{ project_name }} -o yaml
+# then copy values of the `openshift.io/sa.scc.supplemental-groups` annotation
+redis_sentinel_user_id: null
+redis_sentinel_group_id: null
+redis_sentinel_fsgroup_id: null
+
+## Sentinel configuration
+# Number of sentinel replicas 
+redis_sentinel_sentinel_replicas: 3
+# If you need custom sentinel configuration you should add
+# them in this list with one configuration per item, e.g.:
+#   - "sentinel down-after-milliseconds mymaster 2000"
+#   - "down-after-milliseconds 2000"
+redis_sentinel_sentinel_custom_config: []
+
+## Redis configuration
+# Number of redis replicas
+redis_sentinel_redis_replicas: 3
+redis_sentinel_redis_data_volume_size: 2Gi
+# If you need custom redis configuration you should add
+# them in this list. One configuration is a new entry
+# eg:
+#   - "stop-writes-on-bgsave-error no"
+redis_sentinel_redis_custom_config: []
