@@ -1,0 +1,56 @@
+{# 
+  Disclaimer: This template is not relative to an OpenShift Service object but to a RedisFailover object.
+  RedisFailover is part of the redis-operator (https://github.com/spotahome/redis-operator) and must be
+  deploy at the same time of other OpenShift Service, this is why we decided to created in this file.
+#}
+apiVersion: databases.spotahome.com/v1
+kind: RedisFailover
+metadata:
+  labels:
+    app: redis-sentinel
+    service: app
+    version: RedisFailover
+  # Nota bene: the name of the service should be the host name in edxapp configuration,
+  # prefixed by "rfs-", e.g. "rfs-redis-sentinel"
+  name: redis-sentinel
+  namespace: "{{ project_name }}"
+spec:
+  sentinel:
+    replicas: {{ redis_sentinel_sentinel_replicas }}
+{% if redis_sentinel_sentinel_custom_config | length > 0 %}
+    customConfig:
+{% for config in redis_sentinel_sentinel_custom_config %}
+      - "{{ config }}"
+{% endfor %}
+{% endif %}
+    securityContext:
+      runAsUser: {{ redis_sentinel_user_id }}
+      runAsGroup: {{ redis_sentinel_group_id }}
+      fsGroup: {{ redis_sentinel_fsgroup_id }}
+  redis:
+    replicas: {{ redis_sentinel_redis_replicas }}
+{% if redis_sentinel_redis_custom_config | length > 0 %}
+    customConfig:
+{% for config in redis_sentinel_redis_custom_config %}
+      - "{{ config }}"
+{% endfor %}
+{% endif %}
+    storage:
+      keepAfterDeletion: true
+      persistentVolumeClaim:
+        metadata:
+          name: redis-sentinel-pvc-data
+          namespace: "{{ project_name }}"
+          labels:
+            app: redis-sentinel
+            version: RedisFailover
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: {{ redis_sentinel_redis_data_volume_size }}
+    securityContext:
+      runAsUser: {{ redis_sentinel_user_id }}
+      runAsGroup: {{ redis_sentinel_group_id }}
+      fsGroup: {{ redis_sentinel_fsgroup_id }}

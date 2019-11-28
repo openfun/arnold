@@ -8,6 +8,12 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Create a new app redis-sentinel. This app uses the redis-operator 
+  (https://github.com/spotahome/redis-operator) and it must be installed
+  on your OpenShift cluster before deploying.
+
 ## [4.0.0] - 2019-11-26
 
 ### Added
