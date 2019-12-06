@@ -87,24 +87,7 @@ spec:
         # ImageStream and BuildConfig templates)
         image: "{{ internal_docker_registry }}/{{ project_name }}/{{ image_name(service_variant, edxapp_image_tag, edxapp_theme_tag) }}"
         imagePullPolicy: Always
-{% if celery_worker is defined %}
-        livenessProbe:
-          exec:
-            command:
-              - "/bin/bash"
-              - "-c"
-              - "celery -b redis://redis:{{ redis_app_port }} inspect ping -d celery@{{ celery_worker.name }}.%$(hostname)"
-          initialDelaySeconds: 120
-          periodSeconds: 600
-        readinessProbe:
-          exec:
-            command:
-              - "/bin/bash"
-              - "-c"
-              - "celery -b redis://redis:{{ redis_app_port }} inspect ping -d celery@{{ celery_worker.name }}.%$(hostname)"
-          initialDelaySeconds: 60
-          periodSeconds: 15
-{% else %}
+{% if celery_worker is not defined %}
         # Pod probes that only apply for wsgi services
         livenessProbe:
           httpGet:
