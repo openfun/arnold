@@ -14,6 +14,13 @@ Versioning](http://semver.org/spec/v2.0.0.html).
   (https://github.com/spotahome/redis-operator) and it must be installed
   on your OpenShift cluster before deploying.
 
+### Removed
+
+- Probes on edxapp workers. Existing probes are not compatible with redis sentinel.
+  To use them with redis sentinel, we must use a Django management command or Celery
+  using Django settings, but doing so is too slow to be considered as a relevant alternative.
+  This removal is temporary, a new solution will be developped soon.
+
 ## [4.0.0] - 2019-11-26
 
 ### Added
