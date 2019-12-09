@@ -8,6 +8,11 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## Fixed
+
+- Checking the number of running pods was hanging when redeploying an already
+  running `redis-sentinel` app.
+
 ## [4.1.1] - 2019-12-09
 
 ### Fixed

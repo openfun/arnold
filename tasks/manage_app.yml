@@ -87,6 +87,7 @@
   until: pods.resources is defined and ( pods.resources | length ) == ( expected_running_pods | int )
   retries: 120
   delay: 5
+  when: expected_running_pods | int > 0
 
 - name: Run post-deployment jobs
   include_tasks: tasks/run_job.yml
