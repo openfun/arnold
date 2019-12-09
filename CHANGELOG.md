@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [4.1.1] - 2019-12-09
+
 ### Fixed
 
 - Inject XAPI secret as environment variable in XAPI DeploymentConfig
@@ -498,7 +500,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v4.1.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v4.1.1...master
+[4.1.1]: https://github.com/openfun/arnold/compare/v4.1.0...v4.1.1
 [4.1.0]: https://github.com/openfun/arnold/compare/v4.0.0...v4.1.0
 [4.0.0]: https://github.com/openfun/arnold/compare/v3.3.1...v4.0.0
 [3.3.1]: https://github.com/openfun/arnold/compare/v3.3.0...v3.3.1
