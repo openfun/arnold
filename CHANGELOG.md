@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Inject XAPI secret as environment variable in XAPI DeploymentConfig
+
 ## [4.1.0] - 2019-12-06
 
 ### Added
