@@ -29,6 +29,8 @@ spec:
             - containerPort: "{{ learninglocker_xapi_port }}"
               protocol: TCP
           envFrom:
+            - secretRef:
+                name: "{{ learninglocker_xapi_secret_name }}"
             - configMapRef:
                 name: "learninglocker-xapi-dotenv-{{ deployment_stamp }}"
           env:
