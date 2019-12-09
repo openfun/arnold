@@ -1,6 +1,6 @@
 # The following settings can be found in the project's annotation.
 # To retrieve them run the following command:
-#   $ oc project {{ project_name }} -o yaml
+#   $ oc get project $(oc project -q) -o yaml
 # then copy values of the `openshift.io/sa.scc.supplemental-groups` annotation
 redis_sentinel_user_id: null
 redis_sentinel_group_id: null
