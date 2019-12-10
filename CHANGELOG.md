@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Apply PodAntiAffinity rules to redis-sentinel app
+
 ## [4.1.2] - 2019-12-10
 
 ## Fixed

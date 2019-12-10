@@ -17,6 +17,18 @@ metadata:
 spec:
   sentinel:
     replicas: {{ redis_sentinel_sentinel_replicas }}
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/component
+                    operator: In
+                    values:
+                      - sentinel
+              topologyKey: kubernetes.io/hostname
 {% if redis_sentinel_sentinel_custom_config | length > 0 %}
     customConfig:
 {% for config in redis_sentinel_sentinel_custom_config %}
@@ -29,6 +41,18 @@ spec:
       fsGroup: {{ redis_sentinel_fsgroup_id }}
   redis:
     replicas: {{ redis_sentinel_redis_replicas }}
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/component
+                    operator: In
+                    values:
+                      - redis
+              topologyKey: kubernetes.io/hostname
 {% if redis_sentinel_redis_custom_config | length > 0 %}
     customConfig:
 {% for config in redis_sentinel_redis_custom_config %}
