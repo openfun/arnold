@@ -12,9 +12,14 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 - Apply PodAntiAffinity rules to redis-sentinel app
 
+### Fixed
+
+- Use the `forum_elasticsearch_host` variable in the forum application to make
+  it overridable
+
 ## [4.1.2] - 2019-12-10
 
-## Fixed
+### Fixed
 
 - Checking the number of running pods was hanging when redeploying an already
   running `redis-sentinel` app.
@@ -29,7 +34,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- Create a new app redis-sentinel. This app uses the redis-operator 
+- Create a new app redis-sentinel. This app uses the redis-operator
   (https://github.com/spotahome/redis-operator) and it must be installed
   on your OpenShift cluster before deploying.
 
@@ -557,4 +562,5 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 [1.0.0-alpha.4]: https://github.com/openfun/arnold/compare/v1.0.0-alpha.3...v1.0.0-alpha.4
 [1.0.0-alpha.3]: https://github.com/openfun/arnold/compare/v1.0.0-alpha.2...v1.0.0-alpha.3
 [1.0.0-alpha.2]: https://github.com/openfun/arnold/compare/v1.0.0-alpha.1...v1.0.0-alpha.2
+[1.0.0-alpha.1]: https://github.com/openfun/arnold/compare/f9238a2...v1.0.0-alpha.1
 [1.0.0-alpha.1]: https://github.com/openfun/arnold/compare/f9238a2...v1.0.0-alpha.1

@@ -13,7 +13,7 @@ forum_secret_name: "forum-{{ forum_vault_checksum | default('undefined_forum_vau
 # -- elasticsearch
 forum_elasticsearch_image_name: "fundocker/openshift-elasticsearch"
 forum_elasticsearch_image_tag: "1.5.2"
-forum_elasticsearch_host: "elasticsearch"
+forum_elasticsearch_host: "forum-elasticsearch"
 forum_elasticsearch_port: 9200
 
 # -- mongo
