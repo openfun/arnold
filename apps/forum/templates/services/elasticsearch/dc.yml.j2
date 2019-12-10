@@ -6,7 +6,7 @@ metadata:
     service: elasticsearch
     version: "{{ forum_elasticsearch_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
-  name: "forum-elasticsearch-{{ deployment_stamp }}"
+  name: "{{ forum_elasticsearch_host }}-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
   replicas: 1
