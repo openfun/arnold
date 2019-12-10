@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [4.1.2] - 2019-12-10
+
 ## Fixed
 
 - Checking the number of running pods was hanging when redeploying an already
@@ -505,7 +507,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v4.1.1...master
+[unreleased]: https://github.com/openfun/arnold/compare/v4.1.2...master
+[4.1.2]: https://github.com/openfun/arnold/compare/v4.1.1...v4.1.2
 [4.1.1]: https://github.com/openfun/arnold/compare/v4.1.0...v4.1.1
 [4.1.0]: https://github.com/openfun/arnold/compare/v4.0.0...v4.1.0
 [4.0.0]: https://github.com/openfun/arnold/compare/v3.3.1...v4.0.0
