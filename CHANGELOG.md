@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [4.2.0] - 2019-12-10
+
 ### Changed
 
 - Apply PodAntiAffinity rules to redis-sentinel app
@@ -516,7 +518,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v4.1.2...master
+[unreleased]: https://github.com/openfun/arnold/compare/v4.2.0...master
+[4.2.0]: https://github.com/openfun/arnold/compare/v4.1.2...v4.2.0
 [4.1.2]: https://github.com/openfun/arnold/compare/v4.1.1...v4.1.2
 [4.1.1]: https://github.com/openfun/arnold/compare/v4.1.0...v4.1.1
 [4.1.0]: https://github.com/openfun/arnold/compare/v4.0.0...v4.1.0
@@ -562,5 +565,4 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 [1.0.0-alpha.4]: https://github.com/openfun/arnold/compare/v1.0.0-alpha.3...v1.0.0-alpha.4
 [1.0.0-alpha.3]: https://github.com/openfun/arnold/compare/v1.0.0-alpha.2...v1.0.0-alpha.3
 [1.0.0-alpha.2]: https://github.com/openfun/arnold/compare/v1.0.0-alpha.1...v1.0.0-alpha.2
-[1.0.0-alpha.1]: https://github.com/openfun/arnold/compare/f9238a2...v1.0.0-alpha.1
 [1.0.0-alpha.1]: https://github.com/openfun/arnold/compare/f9238a2...v1.0.0-alpha.1
