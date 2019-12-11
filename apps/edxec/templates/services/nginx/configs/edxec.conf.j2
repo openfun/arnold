@@ -1,0 +1,41 @@
+upstream edxec-backend {
+  server edxec-app-{{ deployment_stamp }}:{{ edxec_django_port }} fail_timeout=0;
+}
+
+server {
+  listen {{ edxec_nginx_port }};
+  server_name localhost;
+
+  {% if activate_http_basic_auth or edxec_activate_http_basic_auth -%}
+  auth_basic "{{ http_basic_auth_message }}";
+  auth_basic_user_file {{ http_basic_auth_user_file }};
+  {% endif %}
+
+  client_max_body_size 100M;
+
+  rewrite ^(.*)/favicon.ico$ /static/images/favicon.ico last;
+
+  # Disables server version feedback on pages and in headers
+  server_tokens off;
+
+  location @proxy_to_edxec_app {
+    proxy_set_header Host $http_host;
+
+    proxy_redirect off;
+    proxy_pass http://edxec-backend;
+  }
+
+  location / {
+    try_files $uri @proxy_to_edxec_app;
+  }
+
+  location ~ ^/static/(?P<file>.*) {
+    root /data/static/;
+    try_files /$file =404;
+  }
+
+  location ~ ^/media/(?P<file>.*) {
+    root /data/media/;
+    try_files /$file =404;
+  }
+}

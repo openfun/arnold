@@ -1,0 +1,35 @@
+# Application default configuration
+
+# -- routes
+edxec_host: "edxec.{{ project_name}}.{{ domain_name }}"
+
+# -- edxec
+edxec_image_name: "fundocker/edxec"
+edxec_image_tag: "ironwood.2-1.0.0"
+edxec_django_port: "8000"
+edxec_app_replicas: 1
+edxec_secret_name: "edxec-{{ edxec_vault_checksum | default('undefined_edxec_vault_checksum') }}"
+edxec_activate_http_basic_auth: false
+edxec_yq_image_name: "mikefarah/yq"
+edxec_yq_image_tag: "2.4.1"
+
+# -- nginx
+edxec_nginx_image_name: "fundocker/openshift-nginx"
+edxec_nginx_image_tag: "1.13"
+edxec_nginx_port: 8061
+edxec_nginx_replicas: 1
+edxec_nginx_htpasswd_secret_name: "edxec-htpasswd"
+edxec_nginx_healthcheck_port: 5000
+edxec_nginx_healthcheck_endpoint: "/__healthcheck__"
+
+
+# -- mysql
+edxec_mysql_version: "5.7"
+edxec_mysql_image_name: "centos/mysql-57-centos7"
+edxec_mysql_image_tag: "5.7"
+edxec_mysql_port: 3306
+edxec_mysql_secret_name: "edxec-mysql-{{ edxec_vault_checksum | default('undefined_edxec_vault_checksum') }}"
+
+# -- volumes size
+edxec_static_volume_size: 2Gi
+edxec_media_volume_size: 2Gi
