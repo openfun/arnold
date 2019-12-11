@@ -1,0 +1,32 @@
+{% if env_type in trashable_env_types %}
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: edxec
+    service: mysql
+    version: "{{ edxec_mysql_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: "edxec-mysql-{{ deployment_stamp }}"
+  namespace: "{{ project_name }}"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: edxec
+        service: mysql
+        version: "{{ edxec_mysql_image_tag }}"
+        deployment_stamp: "{{ deployment_stamp }}"
+        deploymentconfig: "edxec-mysql-{{ deployment_stamp }}"
+    spec:
+      containers:
+        - image: "{{ edxec_mysql_image_name }}:{{ edxec_mysql_image_tag }}"
+          name: mysql
+          ports:
+            - containerPort: "{{ edxec_mysql_port }}"
+              protocol: TCP
+          envFrom:
+            - secretRef:
+                name: "{{ edxec_mysql_secret_name }}"
+{% endif %}

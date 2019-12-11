@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: edxec-pvc-media
+  namespace: "{{ project_name }}"
+  labels:
+    app: edxec
+    version: "{{ edxec_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ edxec_media_volume_size }}

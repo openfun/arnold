@@ -1,0 +1,74 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: edxec-collectstatic-{{ job_stamp }}
+  namespace: "{{ project_name }}"
+  labels:
+    app: edxec
+    service: edxec
+    version: "{{ edxec_image_tag }}"
+    job_stamp: "{{ job_stamp }}"
+    # Jobs with the "pre" job type will be executed prior to deployments
+    job_type: "pre"
+    deployment_stamp: "{{ deployment_stamp }}"
+spec:
+  template:
+    metadata:
+      name: edxec-collectstatic-{{ job_stamp }}
+      labels:
+        app: edxec
+        service: edxec
+        version: "{{ edxec_image_tag }}"
+        job_stamp: "{{ job_stamp }}"
+        deployment_stamp: "{{ deployment_stamp }}"
+    spec:
+      containers:
+        - name: edxec-collectstatic-{{ job_stamp }}
+          image: "{{ edxec_image_name }}:{{ edxec_image_tag }}"
+          imagePullPolicy: Always
+          # Describe environment explicitly
+          env:
+            - name: ECOMMERCE_CFG
+              value: /usr/local/etc/ecommerce/local.yml
+            - name: DJANGO_SETTINGS_MODULE
+              value: ecommerce.settings.production
+          command:
+            - "bash"
+            - "-c"
+            - python manage.py collectstatic --noinput && python manage.py compress
+          volumeMounts:
+            - name: edxec-local
+              mountPath: /usr/local/etc/ecommerce
+            - name: edxec-v-static
+              mountPath: /app/assets
+      initContainers:
+        # As we separate configuration from secrets, we need an initcontainer
+        # to merge settings into a single local.yml file.
+        - name: init-create-local
+          image: "{{ edxec_yq_image_name }}:{{ edxec_yq_image_tag }}"
+          imagePullPolicy: Always
+          command:
+            - "/bin/sh"
+            - "-c"
+            - "yq m /tmp/config/local.yml /tmp/secret/local.yml > /usr/local/etc/ecommerce/local.yml"
+          volumeMounts:
+            - name: edxec-local
+              mountPath: /usr/local/etc/ecommerce
+            - name: edxec-configmap
+              mountPath: /tmp/config
+            - name: edxec-secret
+              mountPath: /tmp/secret
+      volumes:
+        - name: edxec-local
+          emptyDir: {}  # volume that lives as long as the pod lives
+        - name: edxec-configmap
+          configMap:
+            defaultMode: 420
+            name: edxec-app-{{ deployment_stamp }}
+        - name: edxec-secret
+          secret:
+            secretName: "{{ edxec_secret_name }}"
+        - name: edxec-v-static
+          persistentVolumeClaim:
+            claimName: edxec-pvc-static
+      restartPolicy: Never

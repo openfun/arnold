@@ -1,0 +1,16 @@
+# MySQL
+{% set mysql_credentials = databases.mysql | json_query("[?release=='" ~ edxec_mysql_version ~ "'].databases | [0][?application=='edxec'].{user: user, password: password, name: name} | [0]") %}
+MYSQL_ROOT_PASSWORD: ""
+MYSQL_ALLOW_EMPTY_PASSWORD: yes
+MYSQL_DATABASE: {{ mysql_credentials.name }}
+MYSQL_USER: {{ mysql_credentials.user }}
+MYSQL_PASSWORD: {{ mysql_credentials.password }}
+
+# local.yml file that will be mounted to every pod running edxec
+LOCAL_FILE:
+  DATABASES:
+    default:
+      NAME: "{{ mysql_credentials.name }}"
+      USER: "{{ mysql_credentials.user }}"
+      PASSWORD: "{{ mysql_credentials.password }}"
+

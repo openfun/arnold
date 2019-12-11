@@ -1,0 +1,18 @@
+{% if endpoint_mysql_ip | ipaddr != false %}
+apiVersion: v1
+kind: Endpoints
+metadata:
+  labels:
+    app: edxec
+    endpoint: mysql
+    deployment_stamp: "{{ deployment_stamp }}"
+  # name of the endpoint should be the same as the corresponding service
+  name: "edxec-mysql-{{ deployment_stamp }}"
+  namespace: "{{ project_name }}"
+subsets:
+  - addresses:
+    - ip: "{{ endpoint_mysql_ip }}"
+    ports:
+    - port: "{{ edxec_mysql_port }}"
+      name: "{{ edxec_mysql_port }}-tcp"
+{% endif %}

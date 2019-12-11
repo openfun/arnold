@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: edxec
+    service: mysql
+    version: "{{ edxec_mysql_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  # name of the service should be database host name in settings
+  name: "edxec-mysql-{{ deployment_stamp }}"
+  namespace: "{{ project_name }}"
+spec:
+  ports:
+  - name: "{{ edxec_mysql_port }}-tcp"
+    port: {{ edxec_mysql_port }}
+    protocol: TCP
+    targetPort: {{ edxec_mysql_port }}
+# As commented in the ad hoc endpoint, the endpoint name points to this service
+# so that it does not rely on a deployment configuration when the "env_type" is
+# not trashable. In this case, we use a MySQL cluster outside of
+# OpenShift.
+{% if env_type in trashable_env_types %}
+  selector:
+    app: edxec
+    deploymentconfig: "edxec-mysql-{{ deployment_stamp }}"
+  type: ClusterIP
+{% endif%}

@@ -9,11 +9,12 @@ domain_name: "{{ lookup('env', 'OPENSHIFT_DOMAIN') }}.nip.io"
 internal_docker_registry: "172.30.1.1:5000"
 
 apps:
+  - name: edxapp
+  - name: edxec
+  - name: forum
+  - name: hello
+  - name: learninglocker
   - name: mailcatcher
   - name: marsha
-  - name: hello
-  - name: richie
-  - name: edxapp
   - name: redis
-  - name: forum
-  - name: learninglocker
+  - name: richie

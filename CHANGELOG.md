@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- Make OpenEdx E-Commerce application (_aka_ `edxec`) deployable _via_ Arnold
+
 ## [4.4.0] - 2020-01-08
 
 ### Added
@@ -16,7 +20,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
- - Update README.md about the oc version to use
+- Update README.md about the oc version to use
 
 ### Fixed
 
