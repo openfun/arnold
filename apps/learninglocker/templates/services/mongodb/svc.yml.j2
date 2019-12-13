@@ -25,7 +25,7 @@ spec:
     deploymentconfig: "learninglocker-mongodb-{{ deployment_stamp }}"
   type: ClusterIP
 {% else %}
-{% for ip in endpoint_mongodb_ips %}
+{% for ip in learninglocker_endpoint_mongodb_ips %}
   - 
     name: "mongodb-{{ ip | regex_replace("\.", "-") }}-tcp"
     port: {{ learninglocker_mongodb_port | int + loop.index0 }} 

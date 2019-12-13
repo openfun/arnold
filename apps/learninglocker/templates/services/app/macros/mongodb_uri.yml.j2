@@ -1,13 +1,13 @@
 {# compute the mongodb URI #}
-{%- macro mongodb_uri(env_type, trashable_env_types, learninglocker_mongodb_host, deployment_stamp, endpoint_mongodb_ips, learninglocker_mongodb_replicaset, learninglocker_mongodb_read_preference) -%}
+{%- macro mongodb_uri(env_type, trashable_env_types, learninglocker_mongodb_host, deployment_stamp, learninglocker_endpoint_mongodb_ips, learninglocker_mongodb_replicaset, learninglocker_mongodb_read_preference) -%}
     {%- if env_type in trashable_env_types -%}
         mongodb://$(MONGODB_USER):$(MONGODB_PASSWORD)@{{ learninglocker_mongodb_host }}-{{ deployment_stamp }}/$(MONGODB_DATABASE)
     {%- else -%}
         {%- set mondogdb_service_name = "learninglocker-mongodb-%s" | format(deployment_stamp) -%}
         {%- set ns = namespace(services="") -%}
-        {%- for ip in endpoint_mongodb_ips -%}
+        {%- for ip in learninglocker_endpoint_mongodb_ips -%}
             {%- set ns.services = "%s%s:%s" | format(ns.services, mondogdb_service_name, learninglocker_mongodb_port | int + loop.index0) -%}
-            {%- if loop.index < endpoint_mongodb_ips | length -%}
+            {%- if loop.index < learninglocker_endpoint_mongodb_ips | length -%}
                 {%- set ns.services = "%s," | format(ns.services) -%}
             {%- endif -%}
         {%- endfor -%}

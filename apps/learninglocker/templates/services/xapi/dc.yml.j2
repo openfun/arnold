@@ -35,7 +35,7 @@ spec:
                 name: "learninglocker-xapi-dotenv-{{ deployment_stamp }}"
           env:
             - name: MONGO_URL
-              value: "{{ mongodb_uri(env_type, trashable_env_types, learninglocker_mongodb_host, deployment_stamp, endpoint_mongodb_ips, learninglocker_mongodb_replicaset, learninglocker_mongodb_read_preference) }}"
+              value: "{{ mongodb_uri(env_type, trashable_env_types, learninglocker_mongodb_host, deployment_stamp, learninglocker_endpoint_mongodb_ips, learninglocker_mongodb_replicaset, learninglocker_mongodb_read_preference) }}"
           volumeMounts:
             - name: learninglocker-xapi-storage
               mountPath: /app/storage
