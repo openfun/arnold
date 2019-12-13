@@ -1,4 +1,4 @@
-{% if endpoint_mongodb_ips | length > 1 %}
+{% if edxapp_endpoint_mongodb_ips | length > 1 %}
 apiVersion: v1
 kind: Endpoints
 metadata:
@@ -10,7 +10,7 @@ metadata:
   name: "{{ edxapp_mongodb_host }}-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 subsets:
-{% for ip in endpoint_mongodb_ips -%}
+{% for ip in edxapp_endpoint_mongodb_ips -%}
   - 
     addresses:
       - 

@@ -32,7 +32,7 @@ DATABASE_HOST: "edxapp-mysql-{{ deployment_stamp }}"
 DATABASE_PORT: {{ edxapp_mysql_port }}
 
 # Mongo
-MONGODB_HOST: "{{ mongodb_host(env_type, trashable_env_types, deployment_stamp, endpoint_mongodb_ips, edxapp_mongodb_port, edxapp_mongodb_host) }}"
+MONGODB_HOST: "{{ mongodb_host(env_type, trashable_env_types, deployment_stamp, edxapp_endpoint_mongodb_ips, edxapp_mongodb_port, edxapp_mongodb_host) }}"
 {% if edxapp_mongodb_replicaset is defined and edxapp_mongodb_replicaset | length > 1 %}
 MONGODB_REPLICASET: {{ edxapp_mongodb_replicaset }}
 

@@ -1,13 +1,13 @@
 {# compute mongodb host #}
-{%- macro mongodb_host(env_type, trashable_env_types, deployment_stamp, endpoint_mongodb_ips, edxapp_mongodb_port, edxapp_mongodb_host) %}
+{%- macro mongodb_host(env_type, trashable_env_types, deployment_stamp, edxapp_endpoint_mongodb_ips, edxapp_mongodb_port, edxapp_mongodb_host) %}
     {%- if env_type in trashable_env_types -%}
         {{ edxapp_mongodb_host }}-{{ deployment_stamp }}:{{ edxapp_mongodb_port }}
     {%- else -%}
         {%- set mongodb_service_name = "%s-%s" | format(edxapp_mongodb_host, deployment_stamp) -%}
         {%- set ns = namespace(hosts="") -%}
-        {%- for ip in endpoint_mongodb_ips -%}
+        {%- for ip in edxapp_endpoint_mongodb_ips -%}
             {%- set ns.hosts = "%s%s:%s" | format(ns.hosts, mongodb_service_name, edxapp_mongodb_port | int + loop.index0) -%}
-            {%- if loop.index < endpoint_mongodb_ips | length -%}
+            {%- if loop.index < edxapp_endpoint_mongodb_ips | length -%}
                 {%- set ns.hosts = "%s," | format(ns.hosts) -%}
             {%- endif -%}
         {%- endfor -%}
