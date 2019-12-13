@@ -87,6 +87,7 @@ edxapp_mongodb_host: "edxapp-mongodb"
 edxapp_mongodb_replicaset: ""
 edxapp_mongodb_read_preference: ""
 edxapp_mongodb_secret_name: "edxapp-mongo-{{ edxapp_vault_checksum | default('undefined_edxapp_vault_checksum') }}"
+edxapp_endpoint_mongodb_ips: "{{ endpoint_mongodb_ips }}"
 
 # -- mysql
 edxapp_mysql_version: "5.7"
