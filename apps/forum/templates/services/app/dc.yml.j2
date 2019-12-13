@@ -67,7 +67,7 @@ spec:
             - name: SEARCH_SERVER
               value: "http://forum-elasticsearch-{{ deployment_stamp }}:{{ forum_elasticsearch_port }}"
             - name: MONGOHQ_URL
-              value: "{{ mongodb_uri(env_type, trashable_env_types, forum_mongodb_host, deployment_stamp, endpoint_mongodb_ips, forum_mongodb_replicaset, forum_mongodb_port, forum_mongodb_read_preference) }}"
+              value: "{{ mongodb_uri(env_type, trashable_env_types, forum_mongodb_host, deployment_stamp, forum_endpoint_mongodb_ips, forum_mongodb_replicaset, forum_mongodb_port, forum_mongodb_read_preference) }}"
           command:
             - "/bin/bash"
             - "-c"

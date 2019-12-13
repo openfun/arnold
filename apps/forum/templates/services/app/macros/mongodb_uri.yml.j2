@@ -1,5 +1,5 @@
 {# compute the mongodb URI #}
-{%- macro mongodb_uri(env_type, trashable_env_types, forum_mongodb_host, deployment_stamp, endpoint_mongodb_ips, forum_mongodb_replicaset, forum_mongodb_port, forum_mongodb_read_preference) -%}
+{%- macro mongodb_uri(env_type, trashable_env_types, forum_mongodb_host, deployment_stamp, forum_endpoint_mongodb_ips, forum_mongodb_replicaset, forum_mongodb_port, forum_mongodb_read_preference) -%}
     {%- if env_type in trashable_env_types -%}
         mongodb://$(MONGODB_USER):$(MONGODB_PASSWORD_URLENCODED)@{{ forum_mongodb_host }}-{{ deployment_stamp }}:{{ forum_mongodb_port }}/$(MONGODB_DATABASE)
     {%- else -%}
@@ -7,7 +7,7 @@
         {%- set ns = namespace(services="") -%}
         {%- for ip in endpoint_mongodb_ips -%}
             {%- set ns.services = "%s%s:%s" | format(ns.services, mondogdb_service_name, forum_mongodb_port | int + loop.index0) -%}
-            {%- if loop.index < endpoint_mongodb_ips | length -%}
+            {%- if loop.index < forum_endpoint_mongodb_ips | length -%}
                 {%- set ns.services = "%s," | format(ns.services) -%}
             {%- endif -%}
         {%- endfor -%}
