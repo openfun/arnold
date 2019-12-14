@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Set MongoDB 4.0 as the default database version for the learninglocker app
+
 ## [4.3.0] - 2019-12-13
 
 ### Added

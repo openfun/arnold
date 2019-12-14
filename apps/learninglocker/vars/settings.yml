@@ -2,4 +2,4 @@ is_blue_green_compatible: True
 
 databases:
   - engine: "mongodb"
-    release: "3.2"
+    release: "4.0"
