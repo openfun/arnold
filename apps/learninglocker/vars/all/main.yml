@@ -5,7 +5,7 @@ learninglocker_host: "learninglocker.{{ project_name}}.{{ domain_name }}"
 
 # -- learninglocker
 learninglocker_image_name: "fundocker/learninglocker"
-learninglocker_image_tag: "v2.6.2"
+learninglocker_image_tag: "v5.2.2"
 learninglocker_secret_name: "learninglocker-{{ learninglocker_vault_checksum | default('undefined_learninglocker_vault_checksum') }}"
 learninglocker_ui_port: 3000
 learninglocker_api_port: 8080
@@ -16,7 +16,7 @@ learninglocker_ui_replicas: 1
 
 # -- xapi
 learninglocker_xapi_image_name: "fundocker/xapi-service"
-learninglocker_xapi_image_tag: "v2.2.15"
+learninglocker_xapi_image_tag: "v2.9.10"
 learninglocker_xapi_port: 8081
 learninglocker_xapi_secret_name: "learninglocker-xapi-{{ learninglocker_vault_checksum | default('undefined_learninglocker_vault_checksum') }}"
 learninglocker_xapi_replicas: 1
