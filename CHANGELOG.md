@@ -10,6 +10,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Upgrade the learninglocker image to v5.2.2 and the xapi-service image to v2.9.10
 - Set MongoDB 4.0 as the default database version for the learninglocker app
 
 ## [4.3.0] - 2019-12-13
