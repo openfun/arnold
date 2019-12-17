@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Run `db_migrate` jobs before starting new pods in a deployment
+
 ## [4.3.0] - 2019-12-13
 
 ### Added

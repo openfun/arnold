@@ -5,10 +5,12 @@ metadata:
   namespace: "{{ project_name }}"
   labels:
     app: marsha
-    service: marsha
-    version: "{{ marsha_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
     job_stamp: "{{ job_stamp }}"
+    # Jobs with the "pre" job type will be executed prior to deployments
+    job_type: "pre"
+    service: marsha
+    version: "{{ marsha_image_tag }}"
 spec:
   template:
     metadata:
