@@ -43,8 +43,7 @@ spec:
       USER 0
       {% if edxapp_theme_url is defined and edxapp_theme_url -%}
       RUN apt-get update && \
-        apt-get install -y \
-        npm && \
+        ( which npm || apt-get install -y npm ) && \
         rm -rf /var/lib/apt/lists/*
       COPY . /edx/app/edxapp/edx-platform/themes/custom-theme
 {% for lang in edxapp_i18n_languages %}
