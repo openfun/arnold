@@ -13,6 +13,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Upgrade the learninglocker image to v5.2.2 and the xapi-service image to v2.9.10
 - Set MongoDB 4.0 as the default database version for the learninglocker app
 
+### Fixed
+
+- The forum API key generated a syntax error when its last character was a ":"
+
 ## [4.3.0] - 2019-12-13
 
 ### Added
