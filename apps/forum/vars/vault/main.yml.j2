@@ -12,4 +12,5 @@ MONGODB_DATABASE: {{ mongodb_credentials.name }}
 # Forum
 # Nota bene: the forum API_KEY should match the following edxapp lms settings:
 # COMMENTS_SERVICE_KEY
-API_KEY: "{{ lookup('password','/dev/null length=48') }}"
+# Make sure your forum key does not end with a ":" or the ruby app will break with a syntax error
+API_KEY: "{{ lookup('password','/dev/null length=47') }}{{ lookup('password','/dev/null length=1 chars=ascii_letters') }}"
