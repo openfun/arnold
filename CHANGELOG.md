@@ -11,6 +11,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - Update eugene/development vault file for learninglocker
+- Fix MONGODB_HOST for eugene/development environment
 
 ## [4.3.1] - 2019-12-23
 
