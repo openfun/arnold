@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Changed
+
+ - Update README.md about the oc version to use
+
 ### Fixed
 
 - Update eugene/development vault file for learninglocker

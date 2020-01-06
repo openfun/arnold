@@ -28,10 +28,10 @@ changes to your OpenShift instance that orchestrates your services.
 - [OpenShift's client](https://docs.openshift.org/latest/welcome/index.html)
   (_aka_ `oc`): this CLI is used to communicate with the running OpenShift
   instance you will use. Plus, it offers the possibility to run a minimal
-  cluster for development purpose (using a set of docker containers). For now
-  please stick to the [`3.9` release of
-  `oc`](https://github.com/openshift/origin/releases/tag/v3.9.0), we've
-  experienced too much DNS issues with the `3.10` newer release.
+  cluster for development purpose (using a set of docker containers). You
+  can use the [`3.11` release of
+  `oc`](https://github.com/openshift/origin/releases/tag/v3.11.0). Please
+  avoid the `3.10` release because we encountered DNS issues with it.
 
 > Even if we recommend to only use `oc` and docker to work locally with Arnold,
 > you might also consider using
