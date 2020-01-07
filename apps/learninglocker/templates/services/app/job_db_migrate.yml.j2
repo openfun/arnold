@@ -7,10 +7,12 @@ metadata:
   namespace: "{{ project_name }}"
   labels:
     app: learninglocker
+    deployment_stamp: "{{ deployment_stamp }}"
+    job_stamp: "{{ job_stamp }}"
+    # Jobs with the "pre" job type will be executed prior to deployments
+    job_type: "pre"
     service: learninglocker
     version: "{{ learninglocker_image_tag }}"
-    job_stamp: "{{ job_stamp }}"
-    deployment_stamp: "{{ deployment_stamp }}"
 spec:
   template:
     metadata:

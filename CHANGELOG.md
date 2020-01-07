@@ -30,6 +30,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Fix npm installation in Eucalyptus flavors
 - The forum API key generated a syntax error when its last character was a ":"
 
+### Changed
+
+- Run `db_migrate` jobs before starting new pods in a deployment
+
 ## [4.3.0] - 2019-12-13
 
 ### Added
