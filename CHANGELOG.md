@@ -20,6 +20,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [4.3.1] - 2019-12-23
 
+### Added
+
+- Configure routing timeout in edxapp application
+
 ### Changed
 
 - Upgrade the learninglocker image to v5.2.2 and the xapi-service image to v2.9.10

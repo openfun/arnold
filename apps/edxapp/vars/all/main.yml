@@ -105,6 +105,7 @@ edxapp_nginx_replicas: 1
 edxapp_nginx_htpasswd_secret_name: "edxapp-htpasswd"
 edxapp_nginx_healthcheck_port: 5000
 edxapp_nginx_healthcheck_endpoint: "/__healthcheck__"
+edxapp_routing_timeout: "60s"
 
 # -- celery/redis
 

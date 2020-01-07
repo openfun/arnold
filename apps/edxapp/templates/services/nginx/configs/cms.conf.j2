@@ -24,6 +24,8 @@ server {
   location @proxy_to_cms_app {
     proxy_set_header Host $http_host;
 
+    proxy_read_timeout {{ edxapp_routing_timeout | default("60s") }};
+
     proxy_redirect off;
     proxy_pass http://cms-backend;
   }
