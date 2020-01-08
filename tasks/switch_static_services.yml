@@ -1,12 +1,12 @@
 ---
-# Patch app dest routes with src stack
+# Patch app dest static services with src stack
 
-- include_tasks: deploy_get_stamp_from_route.yml
+- include_tasks: deploy_get_stamp_from_static_service.yml
   vars:
     prefix: "previous"
   tags: switch
 
-- include_tasks: deploy_get_stamp_from_route.yml
+- include_tasks: deploy_get_stamp_from_static_service.yml
   vars:
     prefix: "next"
   tags: switch
@@ -15,10 +15,10 @@
     msg: "next stack is not deployed, aborting switch"
   when: next_app_deployment_stamp == ''
 
-- include_tasks: switch_route.yml
+- include_tasks: switch_static_service.yml
   vars:
-    prefix_route_src:  "{{ prefix_route.src }}"
-    prefix_route_dest: "{{ prefix_route.dest }}"
+    prefix_service_src:  "{{ prefix_service.src }}"
+    prefix_service_dest: "{{ prefix_service.dest }}"
     update_src: "{{ prefix_route.update_src | default(True)}}"
   with_items:
     - src:  current
@@ -27,7 +27,7 @@
     - src:  next
       dest: current
   loop_control:
-    loop_var: prefix_route
+    loop_var: prefix_service
 
 - include_tasks: delete_app.yml
   vars:

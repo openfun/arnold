@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ashley
+    service: nginx
+    deployment_stamp: "{{ deployment_stamp }}"
+    service_prefix: "{{ prefix }}"
+    type: static-service
+    removable: "no"
+  name: "ashley-nginx-{{ prefix }}"
+  namespace: "{{ project_name }}"
+spec:
+  ports:
+    - name: {{ ashley_nginx_port }}-tcp
+      port: {{ ashley_nginx_port }}
+      protocol: TCP
+      targetPort: {{ ashley_nginx_port }}
+    - name: "{{ ashley_nginx_healthcheck_port }}-tcp"
+      port: {{ ashley_nginx_healthcheck_port }}
+      protocol: TCP
+      targetPort: {{ ashley_nginx_healthcheck_port }}
+  selector:
+    app: ashley
+    deploymentconfig: "ashley-nginx-{{ deployment_stamp | default('undefined', true) }}"
+  type: ClusterIP

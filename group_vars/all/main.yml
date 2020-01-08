@@ -47,7 +47,7 @@ trashable_env_types:
   - "feature"
 
 # Blue/Green deployment route prefixes
-blue_green_route_prefixes:
+blue_green_prefixes:
   - "previous"
   - "current"
   - "next"

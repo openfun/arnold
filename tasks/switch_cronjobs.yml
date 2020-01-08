@@ -4,12 +4,12 @@
 # At this point routes are already switched, the next stack is empty and only
 # the current and previous are alive.
 
-- include_tasks: deploy_get_stamp_from_route.yml
+- include_tasks: deploy_get_stamp_from_static_service.yml
   vars:
     prefix: "current"
   tags: switch
 
-- include_tasks: deploy_get_stamp_from_route.yml
+- include_tasks: deploy_get_stamp_from_static_service.yml
   vars:
     prefix: "previous"
   tags: switch

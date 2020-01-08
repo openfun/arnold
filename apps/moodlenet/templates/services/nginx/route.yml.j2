@@ -26,4 +26,4 @@ spec:
     targetPort: "{{ moodlenet_nginx_port }}-tcp"
   to:
     kind: Service
-    name: "moodlenet-nginx-{{ deployment_stamp }}"
+    name: "moodlenet-nginx-{{ prefix }}"

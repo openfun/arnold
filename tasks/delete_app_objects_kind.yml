@@ -7,6 +7,7 @@
     label_selectors:
       - app={{ app.name }}
       - deployment_stamp={{ targeted_deployment_stamp }}
+      - removable!=no
   register: selected_objects
   tags: deploy
 
@@ -29,6 +30,7 @@
     label_selectors:
       - app={{ app.name }}
       - deployment_stamp={{ targeted_deployment_stamp }}
+      - removable!=no
   register: remaining_objects
   until: remaining_objects.failed == True or ( remaining_objects.resources | length ) == 0
   retries: 120
