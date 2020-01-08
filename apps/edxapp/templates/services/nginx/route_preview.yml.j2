@@ -27,4 +27,4 @@ spec:
     targetPort: "{{ edxapp_nginx_lms_port }}-tcp"
   to:
     kind: Service
-    name: "edxapp-nginx-{{ deployment_stamp }}"
+    name: "edxapp-nginx-{{ prefix }}"

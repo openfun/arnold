@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: richie
+    service: nginx
+    service_prefix: "{{ prefix }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+    type: static-service
+    removable: "no"
+  name: "richie-nginx-{{ prefix }}"
+  namespace: "{{ project_name }}"
+spec:
+  ports:
+    - name: {{ richie_nginx_port }}-tcp
+      port: {{ richie_nginx_port }}
+      protocol: TCP
+      targetPort: {{ richie_nginx_port }}
+    - name: "{{ richie_nginx_healthcheck_port }}-tcp"
+      port: {{ richie_nginx_healthcheck_port }}
+      protocol: TCP
+      targetPort: {{ richie_nginx_healthcheck_port }}
+  type: ClusterIP
+  selector:
+    app: richie
+    deploymentconfig: "richie-nginx-{{ deployment_stamp | default('undefined', true) }}"

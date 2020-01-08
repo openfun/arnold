@@ -8,7 +8,6 @@ metadata:
     customer: "{{ customer }}"
     app: "marsha"
     service: "nginx"
-    version: "{{ marsha_nginx_image_tag }}"
     route_prefix: "{{ prefix }}"
     route_target_service: "app"
   annotations:
@@ -26,4 +25,4 @@ spec:
     targetPort: "{{ marsha_nginx_port }}-tcp"
   to:
     kind: Service
-    name: "marsha-nginx-{{ deployment_stamp }}"
+    name: "marsha-nginx-{{ prefix }}"

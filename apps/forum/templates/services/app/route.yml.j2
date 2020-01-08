@@ -8,7 +8,6 @@ metadata:
     customer: "{{ customer }}"
     app: "forum"
     service: "app"
-    version: "{{ forum_image_tag }}"
     route_prefix: "{{ prefix }}"
     route_target_service: "app"
   annotations:
@@ -26,4 +25,4 @@ spec:
     targetPort: "{{ forum_port }}-tcp"
   to:
     kind: Service
-    name: "forum-app-{{ deployment_stamp }}"
+    name: "forum-app-{{ prefix }}"

@@ -26,4 +26,4 @@ spec:
     targetPort: "{{ kibana_nginx_port }}-tcp"
   to:
     kind: Service
-    name: "kibana-nginx-{{ deployment_stamp }}"
+    name: "kibana-nginx-{{ prefix }}"
