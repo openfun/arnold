@@ -8,6 +8,12 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [4.4.0] - 2020-01-08
+
+### Added
+
+- Configure routing timeout in edxapp application
+
 ### Changed
 
  - Update README.md about the oc version to use
@@ -19,10 +25,6 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Fix local ip address detection in dev script
 
 ## [4.3.1] - 2019-12-23
-
-### Added
-
-- Configure routing timeout in edxapp application
 
 ### Changed
 
@@ -550,7 +552,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v4.3.1...master
+[unreleased]: https://github.com/openfun/arnold/compare/v4.4.0...master
+[4.4.0]: https://github.com/openfun/arnold/compare/v4.3.1...v4.4.0
 [4.3.1]: https://github.com/openfun/arnold/compare/v4.3.0...v4.3.1
 [4.3.0]: https://github.com/openfun/arnold/compare/v4.2.0...v4.3.0
 [4.2.0]: https://github.com/openfun/arnold/compare/v4.1.2...v4.2.0
