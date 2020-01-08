@@ -26,4 +26,4 @@ spec:
     targetPort: "{{ ashley_nginx_port }}-tcp"
   to:
     kind: Service
-    name: "ashley-nginx-{{ deployment_stamp }}"
+    name: "ashley-nginx-{{ prefix }}"

@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: kibana
+    service: nginx
+    deployment_stamp: "{{ deployment_stamp }}"
+    service_prefix: "{{ prefix }}"
+    type: static-service
+    removable: "no"
+  name: "kibana-nginx-{{ deployment_stamp }}"
+  namespace: "{{ project_name }}"
+spec:
+  ports:
+    - name: {{ kibana_nginx_port }}-tcp
+      port: {{ kibana_nginx_port }}
+      protocol: TCP
+      targetPort: {{ kibana_nginx_port }}
+    - name: "{{ kibana_nginx_healthcheck_port }}-tcp"
+      port: {{ kibana_nginx_healthcheck_port }}
+      protocol: TCP
+      targetPort: {{ kibana_nginx_healthcheck_port }}
+  selector:
+    app: kibana
+    deploymentconfig: "kibana-nginx-{{ deployment_stamp | default('undefined', true) }}"
+  type: ClusterIP

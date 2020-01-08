@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: hello
+    deployment_stamp: "{{ deployment_stamp }}"
+    service_prefix: "{{ prefix }}"
+    type: static-service
+    removable: "no"
+  name: "hello-app-{{ prefix }}"
+  namespace: "{{ project_name }}"
+spec:
+  ports:
+  - name: {{ hello_app_port }}-tcp
+    port: {{ hello_app_port }}
+    protocol: TCP
+    targetPort: {{ hello_app_port }}
+  type: ClusterIP
+  selector:
+    deploymentconfig: "hello-app-{{ deployment_stamp | default('undefined', true) }}"

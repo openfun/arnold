@@ -8,7 +8,6 @@ metadata:
     customer: "{{ customer }}"
     app: "learninglocker"
     service: "nginx"
-    version: "{{ learninglocker_nginx_image_tag }}"
     route_prefix: "{{ prefix }}"
   annotations:
 {% if prefix in acme_enabled_route_prefix %}
@@ -25,4 +24,4 @@ spec:
     targetPort: "{{ learninglocker_nginx_port }}-tcp"
   to:
     kind: Service
-    name: "learninglocker-nginx-{{ deployment_stamp }}"
+    name: "learninglocker-nginx-{{ prefix }}"

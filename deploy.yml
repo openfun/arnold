@@ -47,15 +47,15 @@
         - config
         - deploy
 
-    # Patch all next routes of all apps after deploy
+    # Patch all next static services of all apps after deploy
     - include_tasks: tasks/run_tasks_for_apps.yml
       vars:
         prefix: "next"
         tasks:
           - get_objects_for_app
-          - deploy_get_stamp_from_route
-          - deploy_patch_route
+          - deploy_get_stamp_from_static_service
+          - deploy_patch_static_service
           - delete_app
       tags:
-        - route
+        - static_service
         - deploy

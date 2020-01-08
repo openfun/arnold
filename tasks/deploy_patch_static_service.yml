@@ -1,0 +1,23 @@
+# Patch all static services of a given app to the new deployment_stamp
+
+- name: "Patching services with prefix {{ prefix }} for the {{ app.name }} application with deployment_stamp {{ deployment_stamp }}"
+  k8s:
+    force: "{{ force_route | bool }}"
+    definition: "{{ lookup('template', service_template) | from_yaml }}"
+    state: present
+  loop: "{{ static_services }}"
+  loop_control:
+    loop_var: service_template
+  when: static_services | length > 0 and app.settings.is_blue_green_compatible | default(True) == True
+  tags: static_service
+
+- name: "Patching services for the {{ app.name }} application"
+  k8s:
+    force: "{{ force_route | bool }}"
+    definition: "{{ lookup('template', service_template) | from_yaml }}"
+    state: present
+  loop: "{{ static_services }}"
+  loop_control:
+    loop_var: service_template
+  when: static_services | length > 0 and app.settings.is_blue_green_compatible | default(True) == False
+  tags: static_service
