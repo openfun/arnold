@@ -3,7 +3,7 @@
 
 - name: "Make sure static route exists for the '{{ app.name }}' app with all prefixes"
   include_tasks: tasks/deploy_patch_route.yml
-  loop: "{{ blue_green_route_prefixes }}"
+  loop: "{{ blue_green_prefixes }}"
   loop_control:
     loop_var: prefix
   when: routes | length > 0 and app.settings.is_blue_green_compatible | default(True)

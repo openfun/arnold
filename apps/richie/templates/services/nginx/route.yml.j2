@@ -8,7 +8,6 @@ metadata:
     customer: "{{ customer }}"
     app: "richie"
     service: "nginx"
-    version: "{{ richie_nginx_image_tag }}"
     route_prefix: "{{ prefix }}"
     route_target_service: "app"
   annotations:
@@ -26,4 +25,4 @@ spec:
     targetPort: "{{ richie_nginx_port }}-tcp"
   to:
     kind: Service
-    name: "richie-nginx-{{ deployment_stamp }}"
+    name: "richie-nginx-{{ prefix }}"

@@ -1,0 +1,10 @@
+---
+# Create static routes for services of an app
+
+- name: "Make sure static service exists for the '{{ app.name }}' app with all prefixes"
+  include_tasks: tasks/deploy_patch_static_service.yml
+  loop: "{{ blue_green_prefixes }}"
+  loop_control:
+    loop_var: prefix
+  when: static_services | length > 0 and app.settings.is_blue_green_compatible | default(True)
+  tags: static_service

@@ -8,7 +8,7 @@
   loop: "{{ cronjobs }}"
   loop_control:
     loop_var: cronjob_template
-  when: cronjobs | length > 0 and app.settings.is_blue_green_compatible | default(True) == True
+  when: cronjobs | length > 0 and deployment_stamp | length > 0 and app.settings.is_blue_green_compatible | default(True) == True
   tags:
     - switch
     - cronjob

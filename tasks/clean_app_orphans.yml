@@ -1,7 +1,7 @@
 ---
 # Remove orphan application stacks (i.e. outdated, unused objects)
 
-- include_tasks: deploy_get_stamp_from_route.yml
+- include_tasks: deploy_get_stamp_from_static_service.yml
   vars:
     prefix: "{{ item }}"
   loop: ["previous", "current", "next"]

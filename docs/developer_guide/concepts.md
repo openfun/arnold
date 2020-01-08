@@ -159,3 +159,91 @@ After running this playbook, the developer will be invited to manually:
 
 * customize variables and files as necessary,
 * commit everything to the repository.
+
+## Supported object kinds
+
+Arnold applications can declare various kinds of objects that will be deployed on the
+openshift cluster.
+
+### DeploymentConfig
+
+[DeploymentConfig](https://docs.openshift.com/container-platform/3.11/dev_guide/deployments/how_deployments_work.html)
+objects are declared in jinja2 template files matching the pattern `dc*.yml.j2` .
+
+> Deployment configurations describe the desired state of a particular component of
+ the application as a pod template.
+
+For the purpose of our blue/green deployment process, the name of a
+`DeploymentConfig` is dynamic: it is suffixed with a stamp that is unique to the version of the deployed application.
+
+### Service (aka `Blue/Green service`)
+
+[Service](https://kubernetes.io/docs/concepts/services-networking/service/)
+objects are declared in jinja2 template files matching the pattern `svc*.yml.j2`
+
+They are part of our blue/green deployment process and their name are also dynamic: they are suffixed with a deployment stamp.
+Each deployed version of an application has its own set of services and is referred to as a `stack`.
+
+Services allow components (i.e. `pods`) of a deployed application to communicate with each other while also
+ensuring that the application stack is consistent.
+
+### Static Service
+
+*Static Service* objects are declared in jinja2 template files matching the pattern `static-svc*.yml.j2`.
+
+Technically, they are pure kubernetes [Service](https://kubernetes.io/docs/concepts/services-networking/service/) objects.
+But in arnold, we use them for a specific case in our blue/green compatible applications.
+
+B/G Services are helpful for blue/green deployments and for internal communication inside the same application, but their dynamic name makes it difficult to be used by other applications.
+That's why we introduced static services.
+
+Static services, as their name suggests, are services with a name that does not change.
+
+Static services are declined in 3 variants (i.e. the static service `foo` is declined in `foo-previous`, `foo-current` and `foo-next`).
+Each variant targets the corresponding stack.
+
+The 2 use cases for a static service are:
+
+- Exposing an application to another application
+- Exposing an application to a route
+
+### Route
+
+[Route](https://docs.openshift.com/container-platform/3.11/architecture/networking/routes.html)
+objects are declared in jinja2 template files matching the pattern `route*.yml.j2`.
+
+> An OpenShift Container Platform route exposes a service at a host name, such as www.example.com, so that external clients can reach it by name.
+
+If you want to expose your application to external clients via HTTP, you must declare a route.
+
+Routes work with static services in a blue/green compatible application. So you must declare a static service if you declare a route.
+
+Each route is declined in 3 variants:
+i.e. if you declare a route `bar`, it is declined in `bar-previous`, `bar-current` and `bar-next`.
+
+And each variant targets the corresponding variant of the static service.
+
+### ConfigMap
+
+ConfigMaps are automagically generated if you create files in the `configs` directory of a service template.
+
+For example, if I create the file `apps/my-app/templates/services/my-service/config/test.yml.j2`, a ConfigMap will be generated with a key named `test.yml` and with the content of the rendered template as a `value`.
+
+This might change in the future.
+
+### Jobs
+
+[Job](https://docs.openshift.com/container-platform/3.11/dev_guide/jobs.html)
+objects are declared in jinja2 template files matching the pattern `job_*.yml.j2`.
+
+They are launched when you deploy your application.
+
+They can be launched before (default) or after the deployment of your DeploymentConfigs.
+
+To run a job after the deployment, you must set a label `job_type: "post"`
+
+### Endpoint
+
+For specific cases (i.e. having a kubernetes service that targets a machine outside of the kubernetes cluster), we may want to declare a [Service](https://kubernetes.io/docs/concepts/services-networking/service/) without `selector`.
+
+In this case, we can manage the endpoints of the service by declaring them in jinja2 template files matching the pattern `ep*.yml.j2`

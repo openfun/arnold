@@ -1,0 +1,23 @@
+---
+# Patch app dest static service with src stack
+
+- name: Print switch details
+  debug: msg="[{{ app.name }}] Switch static service from {{ prefix_service_src }} to {{ prefix_service_dest }}"
+  tags: switch
+
+- include_tasks: deploy_get_stamp_from_static_service.yml
+  vars:
+    prefix: "{{ prefix_service_src }}"
+  tags: switch
+
+- include_tasks: deploy_patch_static_service.yml
+  vars:
+    prefix: "{{ prefix_service_dest }}"
+    deployment_stamp: "{{ app_deployment_stamp }}"
+  tags: switch
+
+- include_tasks: deploy_patch_static_service.yml
+  vars:
+    prefix: "{{ prefix_service_src }}"
+  tags: switch
+  when: update_src is defined and update_src == True

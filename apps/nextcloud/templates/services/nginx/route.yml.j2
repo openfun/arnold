@@ -26,4 +26,4 @@ spec:
     targetPort: "{{ nextcloud_nginx_port }}-tcp"
   to:
     kind: Service
-    name: "nextcloud-nginx-{{ deployment_stamp }}"
+    name: "nextcloud-nginx-{{ prefix }}"
