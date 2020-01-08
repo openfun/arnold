@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: moodlenet
+    service: nginx
+    deployment_stamp: "{{ deployment_stamp }}"
+    service_prefix: "{{ prefix }}"
+    type: static-service
+    removable: "no"
+  name: "moodlenet-nginx-{{ deployment_stamp }}"
+  namespace: "{{ project_name }}"
+spec:
+  ports:
+    - name: {{ moodlenet_nginx_port }}-tcp
+      port: {{ moodlenet_nginx_port }}
+      protocol: TCP
+      targetPort: {{ moodlenet_nginx_port }}
+    - name: "{{ moodlenet_nginx_healthcheck_port }}-tcp"
+      port: {{ moodlenet_nginx_healthcheck_port }}
+      protocol: TCP
+      targetPort: {{ moodlenet_nginx_healthcheck_port }}
+  selector:
+    app: moodlenet
+    deploymentconfig: "moodlenet-nginx-{{ deployment_stamp | default('undefined', true) }}"
+  type: ClusterIP

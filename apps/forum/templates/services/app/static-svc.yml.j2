@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: forum
+    service: forum
+    deployment_stamp: "{{ deployment_stamp }}"
+    service_prefix: "{{ prefix }}"
+    type: static-service
+    removable: "no"
+  name: "forum-app-{{ prefix }}"
+  namespace: "{{ project_name }}"
+spec:
+  ports:
+    - name: "{{ forum_port }}-tcp"
+      port: {{ forum_port }}
+      protocol: TCP
+      targetPort: {{ forum_port }}
+  selector:
+    app: forum
+    deploymentconfig: "forum-app-{{ deployment_stamp | default('undefined', true) }}"
+  type: ClusterIP

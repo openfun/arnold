@@ -23,4 +23,4 @@ spec:
     targetPort: "{{ hello_app_port }}-tcp"
   to:
     kind: Service
-    name: "hello-app-{{ deployment_stamp }}"
+    name: "hello-app-{{ prefix }}"

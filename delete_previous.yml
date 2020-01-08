@@ -21,9 +21,9 @@
       vars:
         tasks:
           - get_objects_for_app
-          - deploy_get_stamp_from_route
+          - deploy_get_stamp_from_static_service
           - delete_app
         prefix: previous
       tags:
-        - route
+        - static_service
         - switch

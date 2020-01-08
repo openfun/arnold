@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: edxec
+    service: nginx
+    deployment_stamp: "{{ deployment_stamp }}"
+    service_prefix: "{{ prefix }}"
+    type: static-service
+    removable: "no"
+  name: "edxec-nginx-{{ prefix }}"
+  namespace: "{{ project_name }}"
+spec:
+  ports:
+    - name: {{ edxec_nginx_port }}-tcp
+      port: {{ edxec_nginx_port }}
+      protocol: TCP
+      targetPort: {{ edxec_nginx_port }}
+    - name: "{{ edxec_nginx_healthcheck_port }}-tcp"
+      port: {{ edxec_nginx_healthcheck_port }}
+      protocol: TCP
+      targetPort: {{ edxec_nginx_healthcheck_port }}
+  selector:
+    app: edxec
+    deploymentconfig: "edxec-nginx-{{ deployment_stamp | default('undefined', true) }}"
+  type: ClusterIP

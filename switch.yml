@@ -1,9 +1,9 @@
 ---
-# This playbook switch all routes:
-# 1. point the "previous" route to the stack that was pointed by the "current" route,
-# 2. point the "current" route to the stack that was pointed by the "next" route,
-# 3. delete the stack that was pointed by the "previous" route,
-# 4. patch the next route to the init stamp
+# This playbook switches all static services:
+# 1. point the "previous" static service to the stack that was pointed by the "current" static service,
+# 2. point the "current" static service to the stack that was pointed by the "next" static service,
+# 3. delete the stack that was pointed by the "previous" static service,
+# 4. patch the next static service to the init stamp
 
 - hosts: local
   gather_facts: False
@@ -23,8 +23,8 @@
       vars:
         tasks:
           - get_objects_for_app
-          - switch_routes
+          - switch_static_services
           - switch_cronjobs
       tags:
-        - route
+        - static_service
         - switch

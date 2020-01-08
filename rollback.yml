@@ -22,7 +22,7 @@
       vars:
         tasks:
           - get_objects_for_app
-          - rollback_routes
+          - rollback_static_services
       tags:
         - route
         - rollback
