@@ -10,6 +10,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- In edxapp, add an lms queue to the list of cms Celery queues
 - Add edxec to eugene/development apps list
 
 ## [4.5.0] - 2020-01-08

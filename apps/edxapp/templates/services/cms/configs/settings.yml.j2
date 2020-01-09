@@ -19,9 +19,15 @@ CELERY_BROKER_USER: ""
 CELERY_BROKER_PASSWORD: ""
 
 # Celery queues
-HIGH_PRIORITY_QUEUE: "{{ edxapp_celery_cms_high_priority_queue }}-{{ deployment_stamp }}"
 DEFAULT_PRIORITY_QUEUE: "{{ edxapp_celery_cms_default_priority_queue }}-{{ deployment_stamp }}"
+HIGH_PRIORITY_QUEUE: "{{ edxapp_celery_cms_high_priority_queue }}-{{ deployment_stamp }}"
 LOW_PRIORITY_QUEUE: "{{ edxapp_celery_cms_low_priority_queue }}-{{ deployment_stamp }}"
+
+CELERY_QUEUES:
+  {{ edxapp_celery_cms_default_priority_queue }}-{{ deployment_stamp }}: {}
+  {{ edxapp_celery_cms_high_priority_queue }}-{{ deployment_stamp }}: {}
+  {{ edxapp_celery_cms_low_priority_queue }}-{{ deployment_stamp }}: {}
+  {{ edxapp_celery_lms_default_priority_queue }}-{{ deployment_stamp }}: {}
 
 # Memcached
 MEMCACHED_HOST: "edxapp-memcached-{{ deployment_stamp }}"
