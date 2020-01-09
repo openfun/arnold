@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Fixed
+
+- Add edxec to eugene/development apps list
+
 ## [4.5.0] - 2020-01-08
 
 ### Added

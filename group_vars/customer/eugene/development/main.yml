@@ -22,6 +22,7 @@ apps:
           - group_vars/customer/eugene/development/configs/edxapp/lms/settings.yml.j2
   - name: redis
   - name: hello
+  - name: edxec
 
 # Install a custom theme for edxapp-lms
 edxapp_theme_url: "https://github.com/raccoongang/themes_for_themex.io"
