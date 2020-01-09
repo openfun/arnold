@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- Whitelist ips authorized to access /admin on edxapp, marsha and richie
+
 ### Fixed
 
 - In edxapp, add an lms queue to the list of cms Celery queues
