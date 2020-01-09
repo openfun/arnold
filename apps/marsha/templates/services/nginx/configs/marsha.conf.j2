@@ -29,6 +29,24 @@ server {
     try_files $uri @proxy_to_marsha_app;
   }
 
+{% if marsha_nginx_admin_ip_withelist | length > 0 %}
+  location /admin {
+    {# 
+      We want to limit access to a list of whitelisted IP addresses.
+
+      $http_x_forwarded_for variable contains a list of IPs listed from the HTTP_X_FORWARED_FOR 
+      header (e.g. w.x.y.z, 10.0.0.1). The first IP corresponds to the client's public address,
+      which is of interest (other ones have been added by subsequent proxies),
+      hence we restrict our comparison with the beginning of this list (this is why our regex starts with a ^).
+    #}
+    if ($http_x_forwarded_for !~ ^({{ marsha_nginx_admin_ip_withelist | join("|") }})) {
+      return 403;
+    }
+
+    try_files $uri @proxy_to_marsha_app;
+  }
+{% endif %}
+
   {% if env_type in trashable_env_types %}
   location ~ ^/static/(?P<file>.*) {
     root /data/static/marsha;
