@@ -1,0 +1,66 @@
+{%- from "apps/edxapp/templates/services/cms/macros/image.yml.j2" import image_name -%}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: edxapp-cms-create-directories-{{ job_stamp }}
+  namespace: "{{ project_name }}"
+  labels:
+    app: edxapp
+    service: cms
+    version: "{{ edxapp_image_tag }}"
+    job_stamp: "{{ job_stamp }}"
+    # Jobs with the "pre" job type will be executed prior to deployments
+    job_type: "pre"
+    deployment_stamp: "{{ deployment_stamp }}"
+spec:
+  template:
+    metadata:
+      name: edxapp-cms-create-directories-{{ job_stamp }}
+      labels:
+        app: edxapp
+        service: cms
+        version: "{{ edxapp_image_tag }}"
+        job_stamp: "{{ job_stamp }}"
+        deployment_stamp: "{{ deployment_stamp }}"
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: edxapp-cms-create-directories-{{ job_stamp }}
+          # We point to a local registry image build for this "live" image (see
+          # ImageStream and BuildConfig templates)
+          image: "{{ internal_docker_registry }}/{{ project_name }}/{{ image_name('cms', edxapp_image_tag, edxapp_theme_tag) }}"
+          command:
+            - "bash"
+            - "-c"
+            - {% for path in edxapp_required_directories %}mkdir -p {{ path }} && {% endfor %}echo "✅"
+          volumeMounts:
+            - mountPath: /edx/var/edxapp/media
+              name: edxapp-v-media
+            - mountPath: /edx/app/edxapp/staticfiles
+              name: edxapp-v-static
+            - mountPath: /edx/app/edxapp/data
+              name: edxapp-v-data
+            - mountPath: {{ edxapp_export_volume_path }}
+              name: edxapp-v-export
+{% if edxapp_should_update_i18n %}
+            - mountPath: /edx/app/edxapp/edx-platform/conf/locale
+              name: edxapp-v-locale
+{% endif %}
+      volumes:
+        - name: edxapp-v-media
+          persistentVolumeClaim:
+            claimName: edxapp-pvc-media
+        - name: edxapp-v-static
+          persistentVolumeClaim:
+            claimName: edxapp-pvc-static
+        - name: edxapp-v-data
+          persistentVolumeClaim:
+            claimName: edxapp-pvc-data
+        - name: edxapp-v-export
+          persistentVolumeClaim:
+            claimName: edxapp-pvc-export
+{% if edxapp_should_update_i18n %}
+        - name: edxapp-v-locale
+          persistentVolumeClaim:
+            claimName: edxapp-pvc-locale
+{% endif %}
