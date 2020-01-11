@@ -72,6 +72,8 @@ edxapp_export_volume_size: 100Mi
 
 # -- volume names
 edxapp_export_volume_path: /edx/var/edxapp/export
+edxapp_required_directories:
+  - /edx/app/edxapp/data/openassessment_submissions
 
 # -- memcached
 edxapp_memcached_image_name: memcached
