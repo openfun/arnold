@@ -12,6 +12,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 - Whitelist ips authorized to access /admin on edxapp,
   edxec, marsha and richie
+- Whitelist ips authorized to access learninglocker's UI
 
 ### Fixed
 
