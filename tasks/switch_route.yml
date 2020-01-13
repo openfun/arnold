@@ -20,3 +20,5 @@
   vars:
     prefix: "{{ prefix_route_src }}"
   tags: switch
+  when: update_src is defined and update_src == True
+
