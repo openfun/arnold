@@ -10,9 +10,11 @@
   vars:
     prefix_route_src:  "{{ prefix_route.src }}"
     prefix_route_dest: "{{ prefix_route.dest }}"
+    update_src: "{{ prefix_route.update_src | default(True)}}"
   with_items:
     - src:  current
       dest: previous
+      update_src: False
     - src:  next
       dest: current
   loop_control:

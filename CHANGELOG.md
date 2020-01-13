@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Fixed
+
+- Avoid downtime during a switch or rollback
+
 ## [4.6.0] - 2020-01-13
 
 ### Added
