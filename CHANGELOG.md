@@ -357,6 +357,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
   - `edxapp`
 - Handle `CronJob` object type
 - Introduce static services to expose services to other apps with a fixed name
+- Add a static service for the elasticsearch forum
 
 ### Changed
 
