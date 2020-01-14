@@ -11,6 +11,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - Avoid downtime during a switch or rollback
+- Improve `delete_previous` playbook behavior on k8s api failure
 
 ## [4.6.0] - 2020-01-13
 

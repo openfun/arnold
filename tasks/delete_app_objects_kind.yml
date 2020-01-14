@@ -29,6 +29,6 @@
       - app={{ app.name }}
       - deployment_stamp={{ targeted_deployment_stamp }}
   register: remaining_objects
-  until: ( remaining_objects.resources | length ) == 0
+  until: remaining_objects.failed == True or ( remaining_objects.resources | length ) == 0
   retries: 120
   delay: 5
