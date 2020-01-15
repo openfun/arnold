@@ -7,7 +7,7 @@
 # then the service targeted by this route. TThis service will be labelled with the
 # deploy_stamp we are looking for.
 - name: Get route for application {{ app.name }} with prefix {{ prefix }}
-  k8s_facts:
+  k8s_info:
     api_version: "v1"
     namespace: "{{ project_name }}"
     kind: "Route"
@@ -18,7 +18,7 @@
   when: routes | length > 0 and app.settings.is_blue_green_compatible | default(True)
 
 - name: Get targeted service
-  k8s_facts:
+  k8s_info:
     api_version: "v1"
     namespace: "{{ project_name }}"
     kind: "Service"

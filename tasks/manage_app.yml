@@ -76,7 +76,7 @@
   when: app.settings.is_blue_green_compatible | default(True) == True
 
 - name: Wait for pods to be running
-  k8s_facts:
+  k8s_info:
     api_version: "v1"
     namespace: "{{ project_name }}"
     kind: "Pod"

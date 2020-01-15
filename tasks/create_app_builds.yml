@@ -24,7 +24,7 @@
   tags: build
 
 - name: Wait for target images to be available
-  k8s_facts:
+  k8s_info:
     api_version: "v1"
     namespace: "{{ project_name }}"
     kind: "ImageStreamTag"
