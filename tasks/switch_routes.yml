@@ -6,6 +6,15 @@
     prefix: "previous"
   tags: switch
 
+- include_tasks: deploy_get_stamp_from_route.yml
+  vars:
+    prefix: "next"
+  tags: switch
+
+- fail:
+    msg: "next stack is not deployed, aborting switch"
+  when: next_app_deployment_stamp == ''
+
 - include_tasks: switch_route.yml
   vars:
     prefix_route_src:  "{{ prefix_route.src }}"
