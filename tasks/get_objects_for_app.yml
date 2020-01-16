@@ -35,7 +35,7 @@
   debug:
     var: builds
     verbosity: 2
-  when: builds
+  when: builds is defined
   tags:
     - deploy
     - build
@@ -44,7 +44,7 @@
   debug:
     var: deployments
     verbosity: 2
-  when: deployments
+  when: deployments is defined
   tags:
     - deploy
     - deployment
@@ -53,7 +53,7 @@
   debug:
     var: endpoints
     verbosity: 2
-  when: deployments
+  when: deployments is defined
   tags:
     - deploy
     - endpoint
@@ -62,7 +62,7 @@
   debug:
     var: services
     verbosity: 2
-  when: services
+  when: services is defined
   tags:
     - deploy
     - service
@@ -71,7 +71,7 @@
   debug:
     var: streams
     verbosity: 2
-  when: streams
+  when: streams is defined
   tags:
     - deploy
     - stream
@@ -80,7 +80,7 @@
   debug:
     var: jobs
     verbosity: 2
-  when: jobs
+  when: jobs is defined
   tags:
     - deploy
     - job
@@ -89,7 +89,7 @@
   debug:
     var: routes
     verbosity: 2
-  when: routes
+  when: routes is defined
   tags:
     - deploy
     - route
