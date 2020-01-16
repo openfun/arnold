@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: flower
+    service: app
+    version: "{{ flower_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: "flower-app"
+  namespace: "{{ project_name }}"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: flower
+        service: app
+        version: "{{ flower_image_tag }}"
+        deployment_stamp: "{{ deployment_stamp }}"
+        deploymentconfig: "flower-app"
+    spec:
+      containers:
+        - image: "{{ flower_image_name }}:{{ flower_image_tag }}"
+          name: flower
+          workingDir: /app
+          command:
+            - "/bin/bash"
+            - "-c"
+            - celery flower -A project
+          ports:
+            - containerPort: {{ flower_port }}
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: "flower-app-dotenv-{{ deployment_stamp }}"
+          volumeMounts:
+            - mountPath: /app
+              name: flower-configmap
+      volumes:
+        - name: flower-configmap
+          configMap:
+            defaultMode: 420
+            name: flower-app-{{ deployment_stamp }}
