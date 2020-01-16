@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: flower
+    service: app
+    version: "{{ flower_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: "flower-app"  # name of the service should be host name in nginx
+  namespace: "{{ project_name }}"
+spec:
+  ports:
+  - name: "{{ flower_port }}-tcp"
+    port: {{ flower_port }}
+    protocol: TCP
+    targetPort: {{ flower_port }}
+  selector:
+    app: flower
+    deploymentconfig: "flower-app"
+  type: ClusterIP

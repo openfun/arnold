@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- Create `flower` application
+
 ### Changed
 
 - Use the `k8s_info` module instead of the deprecated `k8s_facts` module

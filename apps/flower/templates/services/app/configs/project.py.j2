@@ -1,0 +1,10 @@
+from celery import Celery
+from celery_redis_sentinel import register
+
+# In order to connect to redis sentinel we need to register
+# the celery_redis_sentinel plugin who will monkey path the way
+# celery connect to a backend
+register()
+
+app = Celery('proj')
+app.config_from_object('celeryconfig')

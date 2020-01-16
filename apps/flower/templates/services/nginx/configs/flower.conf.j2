@@ -1,0 +1,36 @@
+upstream flower {
+  server flower-app:{{ flower_port }} fail_timeout=0;
+}
+
+server {
+  listen {{ flower_nginx_app_port }};
+  server_name localhost;
+  charset utf-8;
+
+  location @proxy_to_flower {
+    proxy_pass http://flower;
+    proxy_set_header Host $host;
+    proxy_redirect off;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+  }
+
+  location / {
+{% if flower_nginx_app_ip_whitelist | length > 0 %}
+    {# 
+        We want to limit access to a list of whitelisted IP addresses.
+
+        $http_x_forwarded_for variable contains a list of IPs listed from the HTTP_X_FORWARED_FOR 
+        header (e.g. w.x.y.z, 10.0.0.1). The first IP corresponds to the client's public address,
+        which is of interest (other ones have been added by subsequent proxies),
+        hence we restrict our comparison with the beginning of this list (this is why our regex starts with a ^).
+    #}
+    if ($http_x_forwarded_for !~ ^({{ flower_nginx_app_ip_whitelist | join("|") }})) {
+      return 403;
+    }
+{% endif %}
+        
+    try_files $uri @proxy_to_flower;
+  }
+}
