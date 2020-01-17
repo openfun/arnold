@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [4.7.0] - 2020-01-17
+
 ### Added
 
 - Create `flower` application
@@ -587,7 +589,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v4.6.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v4.7.0...master
+[4.7.0]: https://github.com/openfun/arnold/compare/v4.6.0...v4.7.0
 [4.6.0]: https://github.com/openfun/arnold/compare/v4.5.0...v4.6.0
 [4.5.0]: https://github.com/openfun/arnold/compare/v4.4.0...v4.5.0
 [4.4.0]: https://github.com/openfun/arnold/compare/v4.3.1...v4.4.0
