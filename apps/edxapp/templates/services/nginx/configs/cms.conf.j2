@@ -36,10 +36,10 @@ server {
 
 {% if edxapp_nginx_cms_admin_ip_withelist | length > 0 %}
   location /admin {
-    {# 
+    {#
       We want to limit access to a list of whitelisted IP addresses.
 
-      $http_x_forwarded_for variable contains a list of IPs listed from the HTTP_X_FORWARED_FOR 
+      $http_x_forwarded_for variable contains a list of IPs listed from the HTTP_X_FORWARED_FOR
       header (e.g. w.x.y.z, 10.0.0.1). The first IP corresponds to the client's public address,
       which is of interest (other ones have been added by subsequent proxies),
       hence we restrict our comparison with the beginning of this list (this is why our regex starts with a ^).
@@ -53,6 +53,12 @@ server {
 {% endif %}
 
   location ~ ^/static/(?P<file>.*) {
+    access_log off;
+    gzip on;
+    gzip_comp_level 5;
+    gzip_types text/plain text/css text/xml text/javascript application/x-javascript application/xml image/svg+xml;
+    expires {{ edxapp_nginx_cms_static_cache_expires }};
+    add_header Cache-Control public;
     root /data/static;
     try_files /$file =404;
   }
