@@ -11,8 +11,9 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Configured nginx cache for statics and media files for the following apps:
-  - richie
-  - marsha
+  - `richie`
+  - `marsha`
+  - `edxec`
 
 ## [4.7.0] - 2020-01-17
 
