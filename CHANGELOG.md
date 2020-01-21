@@ -12,6 +12,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 - Configured nginx cache for statics and media files for the following apps:
   - richie
+  - marsha
 
 ## [4.7.0] - 2020-01-17
 
