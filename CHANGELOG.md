@@ -14,6 +14,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
   - `richie`
   - `marsha`
   - `edxec`
+  - `edxapp`
 
 ## [4.7.0] - 2020-01-17
 
