@@ -7,7 +7,7 @@ edxapp_preview_host: "preview.{{ project_name}}.{{ domain_name }}"
 
 # -- edxapp (cms/lms)
 edxapp_image_name: "fundocker/edxapp"
-edxapp_image_tag: "hawthorn.1-oee-2.11.0"
+edxapp_image_tag: "hawthorn.1-oee-3.1.2"
 edxapp_django_port: 8000
 edxapp_lms_replicas: 1
 edxapp_cms_replicas: 1
@@ -99,8 +99,8 @@ edxapp_mysql_port: 3306
 edxapp_mysql_secret_name: "edxapp-mysql-{{ edxapp_vault_checksum | default('undefined_edxapp_vault_checksum') }}"
 
 # -- nginx
-edxapp_nginx_image_name: "fundocker/openshift-nginx"
-edxapp_nginx_image_tag: "1.13"
+edxapp_nginx_image_name: "fundocker/edxapp-nginx"
+edxapp_nginx_image_tag: "hawthorn.1-oee-3.1.2"
 edxapp_nginx_cms_port: 8081
 edxapp_nginx_lms_port: 8071
 edxapp_nginx_replicas: 1
