@@ -36,8 +36,6 @@ spec:
           volumeMounts:
             - mountPath: /edx/var/edxapp/media
               name: edxapp-v-media
-            - mountPath: /edx/app/edxapp/staticfiles
-              name: edxapp-v-static
             - mountPath: /edx/app/edxapp/data
               name: edxapp-v-data
             - mountPath: {{ edxapp_export_volume_path }}
@@ -50,9 +48,6 @@ spec:
         - name: edxapp-v-media
           persistentVolumeClaim:
             claimName: edxapp-pvc-media
-        - name: edxapp-v-static
-          persistentVolumeClaim:
-            claimName: edxapp-pvc-static
         - name: edxapp-v-data
           persistentVolumeClaim:
             claimName: edxapp-pvc-data

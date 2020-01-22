@@ -23,6 +23,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 ### Removed
 
 - `edxapp`'s static files collection jobs are no longer required
+- `edxapp`'s static files PV is no longer required
 
 ## [4.7.0] - 2020-01-17
 
