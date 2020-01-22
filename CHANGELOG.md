@@ -20,6 +20,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 - `edxapp`'s `nginx` service now uses a docker image with bundled CMS & LMS static files
 
+### Removed
+
+- `edxapp`'s static files collection jobs are no longer required
+
 ## [4.7.0] - 2020-01-17
 
 ### Added
