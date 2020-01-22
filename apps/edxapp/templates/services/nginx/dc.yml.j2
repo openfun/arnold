@@ -45,9 +45,6 @@ spec:
             - mountPath: /data/media
               name: edxapp-v-media
               readOnly: true
-            - mountPath: /data/static
-              name: edxapp-v-static
-              readOnly: true
             - mountPath: /data/export
               name: edxapp-v-export
               readOnly: true
@@ -72,9 +69,6 @@ spec:
         - name: edxapp-v-nginx
           configMap:
             name: "edxapp-nginx-{{ deployment_stamp }}"
-        - name: edxapp-v-static
-          persistentVolumeClaim:
-            claimName: edxapp-pvc-static
         - name: edxapp-v-media
           persistentVolumeClaim:
             claimName: edxapp-pvc-media
