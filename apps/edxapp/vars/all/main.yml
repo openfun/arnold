@@ -108,7 +108,9 @@ edxapp_nginx_healthcheck_port: 5000
 edxapp_nginx_healthcheck_endpoint: "/__healthcheck__"
 edxapp_routing_timeout: "60s"
 edxapp_nginx_cms_admin_ip_withelist: []
+edxapp_nginx_cms_bypass_htaccess_ip_whitelist: []
 edxapp_nginx_lms_admin_ip_withelist: []
+edxapp_nginx_lms_bypass_htaccess_ip_whitelist: []
 edxapp_nginx_cms_static_cache_expires: "1M"
 edxapp_nginx_lms_media_cache_expires: "1y"
 edxapp_nginx_lms_profile_cache_expires: "1y"

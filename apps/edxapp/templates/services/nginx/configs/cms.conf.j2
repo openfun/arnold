@@ -1,3 +1,5 @@
+{% set http_basic_auth_enabled = activate_http_basic_auth or edxapp_activate_http_basic_auth %}
+{% set bypass_htaccess = edxapp_nginx_cms_bypass_htaccess_ip_whitelist | length > 0 %}
 upstream cms-backend {
   server edxapp-cms-{{ deployment_stamp }}:{{ edxapp_django_port }} fail_timeout=0;
 }
@@ -6,11 +8,19 @@ server {
   listen {{ edxapp_nginx_cms_port }};
   server_name localhost;
 
-  {% if activate_http_basic_auth or edxapp_activate_http_basic_auth -%}
+{% if http_basic_auth_enabled %}
+{% if bypass_htaccess %}
+  location @basicauth {
+    auth_basic "{{ http_basic_auth_message }}";
+    auth_basic_user_file {{ http_basic_auth_user_file }};
+
+    try_files $uri @proxy_to_cms_app;
+  }
+{% else %}
   auth_basic "{{ http_basic_auth_message }}";
   auth_basic_user_file {{ http_basic_auth_user_file }};
-  {% endif %}
-
+{% endif %}
+{% endif %}
   # Prevent invalid display courseware in IE 10+ with high privacy settings
   add_header P3P 'CP="Open edX does not have a P3P policy."';
 
@@ -31,6 +41,13 @@ server {
   }
 
   location / {
+{% if http_basic_auth_enabled and bypass_htaccess %}
+    if ($http_x_forwarded_for !~ ^({{ edxapp_nginx_cms_bypass_htaccess_ip_whitelist | join("|") }})) {
+      error_page 401 @basicauth;
+      return 401;
+    }
+{% endif %} 
+
     try_files $uri @proxy_to_cms_app;
   }
 
