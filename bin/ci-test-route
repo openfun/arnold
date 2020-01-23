@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+#
+# usage: ci-test-route [SERVICE] [CONTENT] [PATH] [PREFIX]
+
+# First script argument is the application's service name. It defaults to
+# 'hello'
+service="${1:-hello}"
+
+# Second script argument is the message to look for in the application's service
+# HTTP response. If this message has been found, it means that the application's
+# service is up and running, thus validating deployment. It defaults to the
+# expected 'hello' service message.
+content="${2:-Hello OpenShift! by Arnold}"
+
+# Third script argument is the url path. It defaults to: "/"
+path="${3:-"/"}"
+
+# Fourth script argument is the prefix used in the url. It defaults to "current".
+prefix="${4:-"current"}"
+
+# Current URL has by definition no prefix, while next and previous URLs are
+# sub-domains. Hence, we add the sub-domain dot for next and previous prefixes
+# and remove the current prefix for the current URL.
+if [[ "${prefix}" != "current" ]]; then
+  prefix="${prefix}."
+else
+  prefix=""
+fi
+
+# Wait for the application to respond
+for try in $(seq 5); do
+  echo "Testing ${service} application http response ($try)"
+  curl -vLk --header "Accept: text/html" "https://${prefix}${service}.ci-eugene.${OPENSHIFT_DOMAIN}.nip.io${path}" 2> "/tmp/${service}.err" > "/tmp/${service}.out"
+  if grep "HTTP/1.1 200 OK" "/tmp/${service}.err" && grep "${content}" "/tmp/${service}.out"; then
+    exit 0
+  fi
+  sleep 10
+done
+exit 1

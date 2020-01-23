@@ -23,6 +23,7 @@ apps:
   - name: redis
   - name: hello
   - name: edxec
+  - name: elasticsearch
 
 # Install a custom theme for edxapp-lms
 edxapp_theme_url: "https://github.com/raccoongang/themes_for_themex.io"

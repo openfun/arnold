@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+declare -r ES_HOST="127.0.0.1"
+declare -i ES_PORT={{ elasticsearch_api_port }}
+declare -r ES_STARTED="/tmp/es_started"
+
+function testStatus() {
+    status_to_test="${1}"
+    expected_status="${2}"
+
+    declare -A statuses=( ["red"]=1 ["yellow"]=2 ["green"]=3 )
+
+    if [[ -z "${status_to_test}" || -z "${statuses[${status_to_test}]}" ]] ; then
+        echo "Error: unknown status_to_test [${status_to_test}]" 1>&2
+        exit 1
+    fi
+
+    if [[ -z "${expected_status}" || -z "${statuses[${expected_status}]}" ]]; then
+        echo "Error: unknown expected_status [${expected_status}]" 1>&2
+        exit 2
+    fi
+
+    if [ "${statuses[$status_to_test]}" -lt "${statuses[${expected_status}]}" ]; then
+        echo "Assertion failed: ${status_to_test} < ${expected_status}"
+        exit 3
+    fi
+}
+
+if [ -f "${ES_STARTED}" ]; then
+    echo -n "Elasticsearch is already running. Checking if API is alive..."
+    curl -fsSL "http://${ES_HOST}:${ES_PORT}/" > /dev/null
+    echo "OK"
+else
+    echo "Waiting for elasticsearch cluster to be running and in green state..."
+    health_status=$(
+      curl -fsSL "http://${ES_HOST}:${ES_PORT}/_cat/health?h=status" | \
+      sed -r 's/^[[:space:]]+|[[:space:]]+$//g'
+    )
+    testStatus "${health_status}" "green"
+
+    echo "Waiting for initializing_shards to be 0"
+    init_shards=$(
+      curl -fsSL "http://${ES_HOST}:${ES_PORT}/_cat/health?h=init" | \
+      sed -r 's/^[[:space:]]+|[[:space:]]+$//g'
+    )
+
+    if [ "${init_shards}" -gt 0 ]; then
+        echo "Synchronization not ready yet, initializing_shards = ${init_shards}"
+        exit 4
+    fi
+
+    touch "${ES_STARTED}"
+
+    echo "Elasticsearch cluster is up (status = ${health_status})"
+fi

@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: elasticsearch
+    service: app
+    version: "{{ elasticsearch_image_tag }}"
+  name: elasticsearch
+  namespace: "{{ project_name }}"
+spec:
+  selector:
+    app: elasticsearch
+    service: app
+    type: es-node
+  ports:
+    - name: http
+      port: {{ elasticsearch_api_port }}
+  type: ClusterIP

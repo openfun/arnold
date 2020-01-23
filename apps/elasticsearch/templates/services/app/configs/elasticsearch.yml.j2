@@ -1,0 +1,23 @@
+cluster.name: {{ elasticsearch_cluster_name }}
+
+# Bind address (listen to all interfaces)
+network.host: "0.0.0.0"
+
+{% if elasticsearch_image_tag is version('6.0', '<') %}
+bootstrap.mlockall: {{ elasticsearch_memory_lock }}
+{% else %}
+bootstrap.memory_lock: {{ elasticsearch_memory_lock }}
+{% endif %}
+
+# Cluster discovery address, to get the peer list.
+# This is a kubernetes service that target every ES running nodes, even if they
+# are not ready yet.
+discovery.zen.ping.unicast.hosts: elasticsearch-discovery.{{ project_name }}.svc
+
+discovery.zen.minimum_master_nodes: {{ elasticsearch_minimum_master_nodes }}
+
+# Security features are disabled by default on ES basic and trial licenses
+xpack.security.enabled: false
+
+# Monitoring is not supported in this arnold application yet
+xpack.monitoring.enabled: false

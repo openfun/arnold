@@ -1,0 +1,49 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "es-index-template-{{ job_stamp }}"
+  namespace: "{{ project_name }}"
+  labels:
+    app: elasticsearch
+    service: app
+    version: "{{ elasticsearch_image_tag }}"
+    job_stamp: "{{ job_stamp }}"
+    job_type: "post"
+    deployment_stamp: "{{ deployment_stamp }}"
+spec:
+  template:
+    metadata:
+      name: "es-index-template-{{ job_stamp }}"
+      labels:
+        app: elasticsearch
+        service: app
+        version: "{{ elasticsearch_image_tag }}"
+        deployment_stamp: "{{ deployment_stamp }}"
+        job_stamp: "{{ job_stamp }}"
+    spec:
+      containers:
+        - name: es-index-template
+          image: "{{ elasticsearch_image_name }}:{{ elasticsearch_image_tag }}"
+          command: [ "/usr/local/bin/set-index-template.sh" ]
+          volumeMounts:
+            - name: set-index-template
+              mountPath: /usr/local/bin/set-index-template.sh
+              subPath: set-index-template.sh
+            - name: index-template
+              mountPath: /usr/local/share/elasticsearch/index-template.json
+              subPath: index-template.json
+      restartPolicy: Never
+      volumes:
+        - name: set-index-template
+          configMap:
+            name: elasticsearch-app-{{ deployment_stamp }}
+            defaultMode: 0755
+            items:
+              - key: set-index-template.sh
+                path: set-index-template.sh
+        - name: index-template
+          configMap:
+            name: elasticsearch-app-{{ deployment_stamp }}
+            items:
+              - key: index-template.json
+                path: index-template.json

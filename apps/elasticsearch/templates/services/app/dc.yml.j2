@@ -1,0 +1,84 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: elasticsearch
+    service: app
+    version: "{{ elasticsearch_image_tag }}"
+    type: es-node
+  name: "elasticsearch-node"
+  namespace: "{{ project_name }}"
+spec:
+  replicas: {{ elasticsearch_nodes }}
+  template:
+    metadata:
+      labels:
+        app: elasticsearch
+        service: app
+        type: es-node
+    spec:
+      strategy:
+        type: Rolling
+        rollingParams:
+          maxUnavailable: 0
+          maxSurge: 1
+          timeoutSeconds: 3600
+      # Prefer running pods on different nodes for redundancy
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: deploymentconfig
+                      operator: In
+                      values:
+                        - "elasticsearch-node"
+                topologyKey: kubernetes.io/hostname
+      containers:
+        - image: {{ elasticsearch_image_name }}:{{ elasticsearch_image_tag }}
+          name: elasticsearch
+          ports:
+            - containerPort: {{ elasticsearch_api_port }}
+              protocol: TCP
+              name: "http-port"
+            - containerPort: {{ elasticsearch_communication_port }}
+              protocol: TCP
+              name: "comm-port"
+          volumeMounts:
+            - name: elasticsearch-config
+              mountPath: /usr/share/elasticsearch/config/elasticsearch.yml
+              subPath: elasticsearch.yml
+            - name: readiness-probe
+              mountPath: /usr/local/bin/readiness-probe.sh
+              subPath: readiness-probe.sh
+          env:
+            - name: ES_JAVA_OPTS
+              value: "{{ elasticsearch_java_opts | join(' ') }}"
+          readinessProbe:
+            exec:
+              command:
+                - /usr/local/bin/readiness-probe.sh
+            initialDelaySeconds: 20
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ elasticsearch_api_port }}
+            initialDelaySeconds: 30
+            periodSeconds: 30
+      volumes:
+        - name: elasticsearch-config
+          configMap:
+            name: elasticsearch-app-{{ deployment_stamp }}
+            items:
+              - key: elasticsearch.yml
+                path: elasticsearch.yml
+        - name: readiness-probe
+          configMap:
+            name: elasticsearch-app-{{ deployment_stamp }}
+            defaultMode: 0755
+            items:
+              - key: readiness-probe.sh
+                path: readiness-probe.sh

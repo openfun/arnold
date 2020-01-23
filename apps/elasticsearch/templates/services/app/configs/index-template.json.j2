@@ -1,0 +1,13 @@
+{
+{% if elasticsearch_image_tag is version('6.0', '<') %}
+    "template" : "*",
+{% else %}
+    "index_patterns": ["*"],
+{% endif %}
+    "settings" : {
+        "number_of_shards": {{ elasticsearch_index_default_shards }},
+        "number_of_replicas": {{ elasticsearch_index_default_replicas }},
+        "index.store.type": "{{ elasticsearch_index_store_type }}",
+        "index.unassigned.node_left.delayed_timeout": "{{ elasticsearch_index_node_left_delayed_timeout }}"
+    }
+}

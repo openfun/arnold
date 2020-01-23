@@ -10,6 +10,7 @@ internal_docker_registry: "172.30.1.1:5000"
 apps:
   - name: edxapp
   - name: edxec
+  - name: elasticsearch
   - name: hello
   - name: learninglocker
   - name: mailcatcher

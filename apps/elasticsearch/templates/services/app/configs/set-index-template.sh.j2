@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+declare -i MAX_RETRY=20
+declare -i RETRY_DELAY=5
+declare -i retry=0
+
+echo -n "Waiting for ES service to be up."
+while ! curl --output /dev/null --silent --max-time 1 --connect-timeout 1 --head --fail "http://elasticsearch.{{ project_name }}.svc:{{ elasticsearch_api_port }}/"
+do
+    echo -n "."
+    ((retry++)) && ((retry==MAX_RETRY)) && echo "ERROR: timeout" && exit 62
+    sleep ${RETRY_DELAY}
+done
+
+curl -fssL \
+  -X PUT "http://elasticsearch.{{ project_name }}.svc:{{ elasticsearch_api_port }}/_template/default" \
+  -H 'Content-Type: application/json' \
+  -d @/usr/local/share/elasticsearch/index-template.json

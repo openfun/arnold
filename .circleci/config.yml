@@ -201,7 +201,7 @@ jobs:
             # Bootstrap app
             bin/ci-ansible-playbook bootstrap.yml "hello"
             # Test service deployed with the next route
-            bin/ci-test-service "hello" "Hello OpenShift! by Arnold" "/" "next"
+            bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "next"
 
       - run:
           name: Test the "hello" application switch
@@ -209,7 +209,7 @@ jobs:
             # Switch next route to current
             bin/ci-ansible-playbook switch.yml "hello"
             # Test service switched to the current route
-            bin/ci-test-service "hello" "Hello OpenShift! by Arnold"
+            bin/ci-test-route "hello" "Hello OpenShift! by Arnold"
 
       - run:
           name: Test the "hello" application rollback
@@ -219,13 +219,13 @@ jobs:
             # Switch next route to current and current to previous
             bin/ci-ansible-playbook switch.yml "hello"
             # Test service switched to the current/previous route
-            bin/ci-test-service "hello" "Hello OpenShift! by Arnold"
-            bin/ci-test-service "hello" "Hello OpenShift! by Arnold" "/" "previous"
+            bin/ci-test-route "hello" "Hello OpenShift! by Arnold"
+            bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "previous"
             # Rollback previous to current and current to next
             bin/ci-ansible-playbook rollback.yml "hello"
             # Test service switched to the current/next route
-            bin/ci-test-service "hello" "Hello OpenShift! by Arnold"
-            bin/ci-test-service "hello" "Hello OpenShift! by Arnold" "/" "next"
+            bin/ci-test-route "hello" "Hello OpenShift! by Arnold"
+            bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "next"
 
   # Test the redirect application
   test-redirect:
@@ -255,7 +255,7 @@ jobs:
           name: Test the "www" to root domain redirection
           command: |
             # Test service switched to the current route
-            bin/ci-test-service "hello" "Hello OpenShift! by Arnold" "/" "www"
+            bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "www"
 
   # Test the bootstrap playbook on the "mailcatcher" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
@@ -278,7 +278,7 @@ jobs:
           name: Test the "mailcatcher" application bootstrapping
           command: |
             bin/ci-ansible-playbook bootstrap.yml "mailcatcher"
-            bin/ci-test-service "mailcatcher" "MailCatcher"
+            bin/ci-test-route "mailcatcher" "MailCatcher"
 
   # Test the bootstrap playbook on the "richie" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
@@ -303,7 +303,7 @@ jobs:
             # Bootstrap app
             bin/ci-ansible-playbook bootstrap.yml "richie"
             # Test service deployed with the next route
-            bin/ci-test-service "richie" "Django administration" "/en/admin" "next"
+            bin/ci-test-route "richie" "Django administration" "/en/admin" "next"
 
       - run:
           name: Test the "richie" application switch
@@ -311,7 +311,7 @@ jobs:
             # Switch next route to current
             bin/ci-ansible-playbook switch.yml "richie"
             # Test service switched to the current route
-            bin/ci-test-service "richie" "Django administration" "/en/admin"
+            bin/ci-test-route "richie" "Django administration" "/en/admin"
 
   # Test the bootstrap playbook on the "forum" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
@@ -336,7 +336,7 @@ jobs:
             # Bootstrap app
             bin/ci-ansible-playbook bootstrap.yml "forum"
             # Test service deployed with the next route
-            bin/ci-test-service "forum" "collection" "/api/v1/threads?api_key=thisisafakeapikey" "next"
+            bin/ci-test-route "forum" "collection" "/api/v1/threads?api_key=thisisafakeapikey" "next"
 
       - run:
           name: Test the "forum" application switch
@@ -344,7 +344,7 @@ jobs:
             # Switch next route to current
             bin/ci-ansible-playbook switch.yml "forum"
             # Test service switched to the current route
-            bin/ci-test-service "forum" "collection" "/api/v1/threads?api_key=thisisafakeapikey"
+            bin/ci-test-route "forum" "collection" "/api/v1/threads?api_key=thisisafakeapikey"
 
   # Test the bootstrap playbook on the "edxapp" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
@@ -369,8 +369,8 @@ jobs:
             # Bootstrap app
             bin/ci-ansible-playbook bootstrap.yml "edxapp,redis"
             # Test services deployed with the next route
-            bin/ci-test-service "cms" "Welcome to Your Platform Studio" "/" "next"
-            bin/ci-test-service "lms" "It works! This is the default homepage for this Open edX instance." "/" "next"
+            bin/ci-test-route "cms" "Welcome to Your Platform Studio" "/" "next"
+            bin/ci-test-route "lms" "It works! This is the default homepage for this Open edX instance." "/" "next"
 
       - run:
           name: Test the "edxapp" application switch
@@ -378,8 +378,8 @@ jobs:
             # Switch next route to current
             bin/ci-ansible-playbook switch.yml "edxapp"
             # Test service switched to the current route
-            bin/ci-test-service "cms" "Welcome to Your Platform Studio"
-            bin/ci-test-service "lms" "It works! This is the default homepage for this Open edX instance."
+            bin/ci-test-route "cms" "Welcome to Your Platform Studio"
+            bin/ci-test-route "lms" "It works! This is the default homepage for this Open edX instance."
 
   # Test the bootstrap playbook on the "edxec" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
@@ -404,14 +404,14 @@ jobs:
             # Bootstrap edxec
             bin/ci-ansible-playbook bootstrap.yml "edxec"
             # Test the service
-            bin/ci-test-service "edxec" "OK" "/health/" "next"
+            bin/ci-test-route "edxec" "OK" "/health/" "next"
 
       - run:
           name: Test the "edxec" application switch
           command: |
             # Switch next route to current
             bin/ci-ansible-playbook switch.yml "edxec"
-            bin/ci-test-service "edxec" "OK" "/health/"
+            bin/ci-test-route "edxec" "OK" "/health/"
 
   # Test the bootstrap playbook on the "marsha" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
@@ -436,7 +436,7 @@ jobs:
             # Bootstrap app
             bin/ci-ansible-playbook bootstrap.yml "marsha"
             # Test services deployed with the next route
-            bin/ci-test-service "marsha" "Api Root" "/api/" "next"
+            bin/ci-test-route "marsha" "Api Root" "/api/" "next"
 
       - run:
           name: Test the "marsha" application switch
@@ -444,7 +444,7 @@ jobs:
             # Switch next route to current
             bin/ci-ansible-playbook switch.yml "marsha"
             # Test service switched to the current route
-            bin/ci-test-service "marsha" "Api Root" "/api/"
+            bin/ci-test-route "marsha" "Api Root" "/api/"
 
   # Test the bootstrap playbook on the "learninglocker" application.
   # We also need redis and mailcatcher for this application
@@ -468,7 +468,7 @@ jobs:
           name: Test the "learninglocker" application bootstrapping
           command: |
             bin/ci-ansible-playbook bootstrap.yml "redis,mailcatcher,learninglocker"
-            bin/ci-test-service "learninglocker" "OK" "/api" "next"
+            bin/ci-test-route "learninglocker" "OK" "/api" "next"
 
       - run:
           name: Test the "learninglocker" application switch
@@ -476,7 +476,30 @@ jobs:
             # Switch next route to current
             bin/ci-ansible-playbook switch.yml "learninglocker"
             # Test service switched to the current route
-            bin/ci-test-service "learninglocker" "OK" "/api"
+            bin/ci-test-route "learninglocker" "OK" "/api"
+
+  # Test the bootstrap playbook on the "elasticsearch" application.
+  test-bootstrap-elasticsearch:
+    machine:
+      docker_layer_caching: false
+
+    working_directory: ~/fun
+
+    steps:
+      - checkout
+      - *attach_workspace
+      - *docker_load
+      - *ci_env
+      - *install_openshift_cluster
+      - *configure_openshift_cluster
+      - *run_openshift_cluster
+
+      - run:
+          name: Test the "elasticsearch" application bootstrapping
+          command: |
+            bin/ci-ansible-playbook bootstrap.yml "elasticsearch"
+            oc project ci-eugene
+            bin/ci-test-service elasticsearch 9200 "green" /_cluster/health
 
   # Test the delete_app tasks for blue-green applications
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
@@ -501,7 +524,7 @@ jobs:
             # Bootstrap app
             bin/ci-ansible-playbook bootstrap.yml "richie"
             # Test service deployed with the next route
-            bin/ci-test-service "richie" "Django administration" "/en/admin" "next"
+            bin/ci-test-route "richie" "Django administration" "/en/admin" "next"
 
       - run:
           name: Test "richie"'s next stack substitution (create + delete)
@@ -509,7 +532,7 @@ jobs:
             # Deploy the next stack a second time
             bin/ci-ansible-playbook deploy.yml "richie"
             # Test service re-deployed with the next route
-            bin/ci-test-service "richie" "Django administration" "/en/admin" "next"
+            bin/ci-test-route "richie" "Django administration" "/en/admin" "next"
 
       - run:
           name: Check that only one pod is running Richie's app
@@ -544,7 +567,7 @@ jobs:
             # Bootstrap app
             bin/ci-ansible-playbook bootstrap.yml "hello"
             # Test service deployed with the next route
-            bin/ci-test-service "hello" "Hello OpenShift! by Arnold" "/" "next"
+            bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "next"
 
       - run:
           name: Test "hello"'s switch
@@ -552,9 +575,9 @@ jobs:
             # Switch next route to current
             bin/ci-ansible-playbook switch.yml "hello"
             # Test service on the current route
-            bin/ci-test-service "hello" "Hello OpenShift! by Arnold" "/" "current"
+            bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "current"
             # Test that the service is not responding on next route
-            bin/ci-test-service "hello" "Hello OpenShift! by Arnold" "/" "next" && exit 1 || true
+            bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "next" && exit 1 || true
 
       - run:
           name: Test that a second switch fails to execute with an error
@@ -775,6 +798,15 @@ workflows:
           filters:
             tags:
               only: /.*/
+      - test-bootstrap-elasticsearch:
+          requires:
+            - lint-bash
+            - lint-docker
+            - lint-ansible
+            - lint-plugins
+          filters:
+            tags:
+              only: /.*/
       - test-delete-app:
           requires:
             - test-bootstrap-richie
@@ -812,6 +844,7 @@ workflows:
             - test-bootstrap-marsha
             - test-bootstrap-forum
             - test-bootstrap-learninglocker
+            - test-bootstrap-elasticsearch
             - test-redirect
             - test-delete-app
             - test-prevent-switch-to-nothing
