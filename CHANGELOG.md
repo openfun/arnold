@@ -15,6 +15,12 @@ Versioning](http://semver.org/spec/v2.0.0.html).
   - `marsha`
   - `edxec`
   - `edxapp`
+- Bypass htaccess using a whitelist ip for the following apps:
+  - `richie`
+  - `marsha`
+  - `edxec`
+  - `edxapp`
+
 
 ### Changed
 

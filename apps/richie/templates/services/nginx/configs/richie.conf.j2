@@ -1,3 +1,5 @@
+{% set http_basic_auth_enabled = activate_http_basic_auth or richie_activate_http_basic_auth %}
+{% set bypass_htaccess = richie_nginx_bypass_htaccess_ip_whitelist | length > 0 %}
 upstream richie-backend {
   server richie-app-{{ deployment_stamp }}:{{ richie_django_port }} fail_timeout=0;
 }
@@ -6,17 +8,26 @@ server {
   listen {{ richie_nginx_port }};
   server_name localhost;
 
-  {% if activate_http_basic_auth or richie_activate_http_basic_auth -%}
-  auth_basic "{{ http_basic_auth_message }}";
-  auth_basic_user_file {{ http_basic_auth_user_file }};
-  {% endif %}
-
   client_max_body_size 100M;
 
   rewrite ^(.*)/favicon.ico$ /static/images/favicon.ico last;
 
   # Disables server version feedback on pages and in headers
   server_tokens off;
+
+{% if http_basic_auth_enabled %}
+{% if bypass_htaccess %}
+  location @basicauth {
+    auth_basic "{{ http_basic_auth_message }}";
+    auth_basic_user_file {{ http_basic_auth_user_file }};
+
+    try_files $uri @proxy_to_richie_app;
+  }
+{% else %}
+  auth_basic "{{ http_basic_auth_message }}";
+  auth_basic_user_file {{ http_basic_auth_user_file }};
+{% endif %}
+{% endif %}
 
   location @proxy_to_richie_app {
     proxy_set_header Host $http_host;
@@ -26,6 +37,13 @@ server {
   }
 
   location / {
+{% if http_basic_auth_enabled and bypass_htaccess %}
+    if ($http_x_forwarded_for !~ ^({{ richie_nginx_bypass_htaccess_ip_whitelist | join("|") }})) {
+      error_page 401 @basicauth;
+      return 401;
+    }
+{% endif %}
+
     try_files $uri @proxy_to_richie_app;
   }
 
