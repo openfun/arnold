@@ -10,6 +10,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- New application `elasticsearch` deployable _via_ Arnold
 - Configured nginx cache for statics and media files for the following apps:
   - `richie`
   - `marsha`

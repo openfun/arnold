@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: elasticsearch
+    service: app
+    version: "{{ elasticsearch_image_tag }}"
+  name: elasticsearch-discovery
+  namespace: "{{ project_name }}"
+  annotations:
+    # Deprecated annotation replaced by publishNotReadyAddresses
+    # Needed to be compatible with openshift < 3.11
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+spec:
+  clusterIP: None
+  # Required for peer discovery.
+  # It allows ES nodes to join the cluster and start data synchronization before being declared ready.
+  publishNotReadyAddresses: true
+  selector:
+    app: elasticsearch
+    service: app
+    type: es-node
+  ports:
+    - name: transport
+      port: {{ elasticsearch_communication_port }}

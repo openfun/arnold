@@ -9,3 +9,10 @@ apps:
 # Marsha
 # We don't want to require an AWS SSH key for testing
 marsha_should_sign_requests: false
+
+
+# Elasticsearch
+# Limit memory usage
+elasticsearch_java_opts:
+  - "-Xms64m"
+  - "-Xmx64m"

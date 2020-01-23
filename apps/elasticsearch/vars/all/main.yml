@@ -1,0 +1,52 @@
+# -- Docker related configuration
+
+elasticsearch_image_name: "fundocker/openshift-elasticsearch"
+elasticsearch_image_tag: "6.6.2"
+
+# -- Node specific configuration
+
+# JVM options
+# (-Xms and -Xmx must have the same value or elasticsearch will fail to boot)
+elasticsearch_java_opts:
+  - "-Xms512m"
+  - "-Xmx512m"
+
+# If set to true, it prevent any elasticsearch memory from being swapped out.
+# It uses mlockall on Linux/Unix systems to try to lock the process address space into RAM
+# This is not the only option to disable swap, you can also configure swapiness on each kubernetes node.
+elasticsearch_memory_lock: false
+
+# -- Cluster configuration
+
+# cluster size (number of pods to start)
+elasticsearch_nodes: 3
+
+# Minimum number of master eligible nodes a node should "see" in order to win a master election
+# (see discovery.zen.minimum_master_nodes setting in ES documentation)
+elasticsearch_minimum_master_nodes: 2
+
+elasticsearch_cluster_name: "elasticsearch-cluster"
+elasticsearch_api_port: 9200
+elasticsearch_communication_port: 9300
+
+# -- Default index template
+# The values in this section will only affect future creation of indexes.
+# If you modify them, they will not have any effect on existing indexes.
+
+# Number of shards per index
+elasticsearch_index_default_shards: 2
+
+# Number of replica of each shard
+elasticsearch_index_default_replicas: 2
+
+# If a node is disconnected, the cluster will wait (default is 1m) before re-assigning shards to other nodes.
+# This has an impact on the rolling upgrade process, it will take at least:
+# (elasticsearch_nodes * elasticsearch_index_node_left_delayed_timeout) + data synchronization time
+# (see index.unassigned.node_left.delayed_timeout setting in ES documentation)
+elasticsearch_index_node_left_delayed_timeout: "30s"
+
+
+# Index storage type
+# (see index.store.type in ES documentation)
+elasticsearch_index_store_type: "niofs"
+
