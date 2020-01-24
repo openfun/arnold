@@ -1,0 +1,44 @@
+{%- from "apps/edxapp/templates/services/cms/macros/image.yml.j2" import image_name -%}
+
+# Note that we use chained builds to override OpenShift's Docker multistage
+# build limitation (incompatible old docker release). This build is triggered
+# by the first build (bc_collectstatic) where we collect static files
+# (including theme statics) given an edxapp Docker image.
+apiVersion: "v1"
+kind: "BuildConfig"
+metadata:
+  name: "{{ image_name("nginx", edxapp_nginx_image_tag, edxapp_theme_tag) | replace(':', '-') }}"
+  namespace: "{{ project_name }}"
+  labels:
+    app: "edxapp"
+    service: "nginx"
+    version: "{{ edxapp_nginx_image_tag }}"
+    theme: "{{ edxapp_theme_tag | default("none") }}"
+spec:
+  strategy:
+    type: Docker
+  source:
+    dockerfile: |-
+      FROM {{ edxapp_nginx_image_name }}:{{ edxapp_nginx_image_tag }}
+      USER 0
+      {% if edxapp_theme_url is defined and edxapp_theme_url -%}
+      COPY ./tmp/edxapp/staticfiles/* /edx/app/edxapp/staticfiles/
+      {% endif -%}
+      USER 10000
+    images:
+      - from:
+          kind: ImageStreamTag
+          name: "{{ image_name("collectstatic", edxapp_nginx_image_tag, edxapp_theme_tag) }}"
+        paths:
+          - sourcePath: /edx/app/edxapp/staticfiles
+            destinationDir: "./tmp/edxapp/staticfiles"
+  triggers:
+    - imageChange:
+        from:
+          kind: "ImageStreamTag"
+          name: "{{ image_name("collectstatic", edxapp_nginx_image_tag, edxapp_theme_tag) }}"
+      type: ImageChange
+  output:
+    to:
+      kind: "ImageStreamTag"
+      name: "{{ image_name("nginx", edxapp_nginx_image_tag, edxapp_theme_tag) }}"

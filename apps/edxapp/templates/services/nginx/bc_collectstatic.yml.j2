@@ -1,0 +1,58 @@
+{%- from "apps/edxapp/templates/services/cms/macros/image.yml.j2" import image_name -%}
+
+# Note that we use chained builds to override OpenShift's Docker multistage
+# build limitation (incompatible old docker release). This build is the first
+# step where we collect static files (including theme statics) given an edxapp
+# Docker image, and store this artefact in the /edx/app/edxapp/staticfiles
+# directory.
+#
+# The next build (bc_nginx) is triggered when this build successfully finishes.
+apiVersion: "v1"
+kind: "BuildConfig"
+metadata:
+  name: "{{ image_name("collectstatic", edxapp_nginx_image_tag, edxapp_theme_tag) | replace(':', '-') }}"
+  namespace: "{{ project_name }}"
+  labels:
+    app: "edxapp"
+    service: "nginx"
+    version: "{{ edxapp_image_tag }}"
+    theme: "{{ edxapp_theme_tag | default("none") }}"
+spec:
+  strategy:
+    type: Docker
+  source:
+    {% if edxapp_theme_url is defined and edxapp_theme_url -%}
+    git:
+      uri: "{{ edxapp_theme_url }}"
+      ref: "{{ edxapp_theme_tag | default("master") }}"
+    {% if edxapp_theme_is_private -%}
+    sourceSecret:
+      name: "{{ edxapp_theme_git_private_key_secret_name }}"
+    {% endif -%}
+    {% endif -%}
+    dockerfile: |-
+      FROM {{ edxapp_image_name }}:{{ edxapp_image_tag }}
+      USER 0
+      {% if edxapp_theme_url is defined and edxapp_theme_url -%}
+      RUN apt-get update && \
+        ( which npm || apt-get install -y npm ) && \
+        apt-get install -y rdfind && \
+        rm -rf /var/lib/apt/lists/*
+      COPY . /edx/app/edxapp/edx-platform/themes/custom-theme
+      {% if edxapp_should_update_i18n -%}
+      RUN python manage.py lms compilejsi18n && \
+          python manage.py cms compilejsi18n
+      {% endif -%}
+      # Note that we also collect statics here.
+      RUN NO_PREREQ_INSTALL=1 paver update_assets --settings={{ edxapp_build_settings }}
+      # Replace duplicated file by a symlink to decrease the overall size of the
+      # final image
+      RUN rdfind -makesymlinks true /edx/app/edxapp/staticfiles
+      {% endif -%}
+      USER 10000
+  triggers:
+    - type: "ConfigChange"
+  output:
+    to:
+      kind: "ImageStreamTag"
+      name: "{{ image_name("collectstatic", edxapp_nginx_image_tag, edxapp_theme_tag) }}"
