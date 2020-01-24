@@ -25,7 +25,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
-- `edxapp`'s `nginx` service now uses a docker image with bundled CMS & LMS static files
+- `edxapp`'s `nginx` service now uses a docker image with bundled CMS & LMS
+  static files (even for custom themes)
 - Upgrade `ansible` to 2.9.4
 - Upgrade `openshift` to 0.10.1
 
