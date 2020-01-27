@@ -20,6 +20,7 @@
     services: "{{ templates | map('regex_search', '.*/svc.*\\.yml\\.j2$') | select('string') | list }}"
     streams: "{{ templates | map('regex_search', '.*/is.*\\.yml\\.j2$') | select('string') | list }}"
     jobs: "{{ templates | map('regex_search', '.*/job_.*\\.yml\\.j2$') | select('string') | list }}"
+    cronjobs: "{{ templates | map('regex_search', '.*/cronjob_.*\\.yml\\.j2$') | select('string') | list }}"
     routes: "{{ templates | map('regex_search', '.*/route.*\\.yml\\.j2$') | select('string') | list }}"
   tags:
     - deploy
@@ -84,6 +85,15 @@
   tags:
     - deploy
     - job
+
+- name: Display OpenShift's cronjobs for this app
+  debug:
+    var: cronjobs
+    verbosity: 2
+  when: cronjobs is defined
+  tags:
+    - deploy
+    - cronjob
 
 - name: Display OpenShift's routes for this app
   debug:
