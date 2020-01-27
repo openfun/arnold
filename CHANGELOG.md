@@ -20,6 +20,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
   - `marsha`
   - `edxec`
   - `edxapp`
+- Handle `CronJob` object type
 
 ### Changed
 
