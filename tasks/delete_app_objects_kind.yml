@@ -1,30 +1,31 @@
 # Delete a kind of objects for the targeted deployment_stamp
-- name: Lookup {{ kind }} to delete with deployment_stamp {{ targeted_deployment_stamp }} for app {{ app.name }}
+- name: Lookup {{ resource_to_delete.kind }} to delete with deployment_stamp {{ targeted_deployment_stamp }} for app {{ app.name }}
   k8s_info:
-    api_version: "v1"
+    api_version: "{{ resource_to_delete.api_version }}"
     namespace: "{{ project_name }}"
-    kind: "{{ kind }}"
+    kind: "{{ resource_to_delete.kind }}"
     label_selectors:
       - app={{ app.name }}
       - deployment_stamp={{ targeted_deployment_stamp }}
   register: selected_objects
   tags: deploy
 
-- name: Delete {{ kind }} with deployment_stamp {{ targeted_deployment_stamp }} for app {{ app.name }}
+- name: Delete {{ resource_to_delete.kind }} with deployment_stamp {{ targeted_deployment_stamp }} for app {{ app.name }}
   k8s:
+    api_version: "{{ resource_to_delete.api_version }}"
     namespace: "{{ project_name }}"
-    kind: "{{ kind }}"
+    kind: "{{ resource_to_delete.kind }}"
     name: "{{ object.metadata.name }}"
     state: absent
   loop: "{{ selected_objects.resources }}"
   loop_control:
     loop_var: object
 
-- name: Wait for objects of kind {{ kind }} to be deleted
+- name: Wait for objects of kind {{ resource_to_delete.kind }} to be deleted
   k8s_info:
-    api_version: "v1"
+    api_version: "{{ resource_to_delete.api_version }}"
     namespace: "{{ project_name }}"
-    kind: "{{ kind }}"
+    kind: "{{ resource_to_delete.kind }}"
     label_selectors:
       - app={{ app.name }}
       - deployment_stamp={{ targeted_deployment_stamp }}
