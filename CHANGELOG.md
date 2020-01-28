@@ -26,6 +26,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 - `edxapp`'s `nginx` service now uses a docker image with bundled CMS & LMS static files
 
+### Fixed
+
+- Error while generating JSON config file from jinja2 template
+
 ### Removed
 
 - `edxapp`'s static files collection jobs are no longer required
