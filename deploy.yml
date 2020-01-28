@@ -37,6 +37,7 @@
 
     - include_tasks: tasks/run_tasks_for_apps.yml
       vars:
+        suspend_cronjob: true
         tasks:
           - tasks/get_objects_for_app
           - tasks/check_app_secrets

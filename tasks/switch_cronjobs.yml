@@ -1,0 +1,26 @@
+---
+# In a switch, cronjobs from the previous stack must be suspended
+# and those from  the current stack must be activated.
+# At this point routes are already switched, the next stack is empty and only
+# the current and previous are alive.
+
+- include_tasks: deploy_get_stamp_from_route.yml
+  vars:
+    prefix: "current"
+  tags: switch
+
+- include_tasks: deploy_get_stamp_from_route.yml
+  vars:
+    prefix: "previous"
+  tags: switch
+
+- include_tasks: deploy_patch_cronjob.yml
+  vars:
+    suspend_cronjob: true
+    deployment_stamp: "{{ previous_app_deployment_stamp }}"
+  when: previous_app_deployment_stamp | length > 0
+
+- include_tasks: deploy_patch_cronjob.yml
+  vars:
+    suspend_cronjob: false
+    deployment_stamp: "{{ current_app_deployment_stamp }}"

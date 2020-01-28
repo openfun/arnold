@@ -24,6 +24,7 @@
         tasks:
           - get_objects_for_app
           - switch_routes
+          - switch_cronjobs
       tags:
         - route
         - switch

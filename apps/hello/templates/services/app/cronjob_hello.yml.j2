@@ -1,0 +1,33 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: "cronjob-hello-{{ deployment_stamp }}"
+  namespace: "{{ project_name }}"
+  labels:
+    app: hello
+    service: app
+    deployment_stamp: "{{ deployment_stamp }}"
+spec:
+  schedule: "*/3 * * * *"  
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 1
+  concurrencyPolicy: Forbid
+  suspend: {{ suspend_cronjob | default(false) }}
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          name: "cronjob-hello-{{ deployment_stamp }}"
+          labels:
+            app: hello
+            service: app
+            deployment_stamp: "{{ deployment_stamp }}"
+        spec:
+          containers:
+            - name: hello-world
+              image: busybox:1.31.1
+              command:
+                - "sh"
+                - "-c"
+                - echo "Hello World!"
+          restartPolicy: Never
