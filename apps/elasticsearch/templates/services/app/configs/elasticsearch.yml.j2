@@ -4,9 +4,9 @@ cluster.name: {{ elasticsearch_cluster_name }}
 network.host: "0.0.0.0"
 
 {% if elasticsearch_image_tag is version('6.0', '<') %}
-bootstrap.mlockall: {{ elasticsearch_memory_lock }}
+bootstrap.mlockall: {{ elasticsearch_memory_lock | to_yaml }}
 {% else %}
-bootstrap.memory_lock: {{ elasticsearch_memory_lock }}
+bootstrap.memory_lock: {{ elasticsearch_memory_lock | to_yaml }}
 {% endif %}
 
 # Cluster discovery address, to get the peer list.
