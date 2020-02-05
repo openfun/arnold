@@ -12,7 +12,6 @@ metadata:
     # Needed to be compatible with openshift < 3.11
     service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
 spec:
-  clusterIP: None
   # Required for peer discovery.
   # It allows ES nodes to join the cluster and start data synchronization before being declared ready.
   publishNotReadyAddresses: true
