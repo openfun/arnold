@@ -478,29 +478,6 @@ jobs:
             # Test service switched to the current route
             bin/ci-test-route "learninglocker" "OK" "/api"
 
-  # Test the bootstrap playbook on the "elasticsearch" application.
-  test-bootstrap-elasticsearch:
-    machine:
-      docker_layer_caching: false
-
-    working_directory: ~/fun
-
-    steps:
-      - checkout
-      - *attach_workspace
-      - *docker_load
-      - *ci_env
-      - *install_openshift_cluster
-      - *configure_openshift_cluster
-      - *run_openshift_cluster
-
-      - run:
-          name: Test the "elasticsearch" application bootstrapping
-          command: |
-            bin/ci-ansible-playbook bootstrap.yml "elasticsearch"
-            oc project ci-eugene
-            bin/ci-test-service elasticsearch 9200 "green" /_cluster/health
-
   # Test the delete_app tasks for blue-green applications
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
   test-delete-app:
@@ -798,15 +775,6 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - test-bootstrap-elasticsearch:
-          requires:
-            - lint-bash
-            - lint-docker
-            - lint-ansible
-            - lint-plugins
-          filters:
-            tags:
-              only: /.*/
       - test-delete-app:
           requires:
             - test-bootstrap-richie
@@ -844,7 +812,6 @@ workflows:
             - test-bootstrap-marsha
             - test-bootstrap-forum
             - test-bootstrap-learninglocker
-            - test-bootstrap-elasticsearch
             - test-redirect
             - test-delete-app
             - test-prevent-switch-to-nothing
