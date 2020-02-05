@@ -11,6 +11,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - `elasticsearch-discovery` service is not a headless service anymore
+- Generate a valid YAML value from `elasticsearch_memory_lock` variable
 
 
 ## [5.0.0] - 2020-01-31
