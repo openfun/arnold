@@ -8,6 +8,11 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Fixed
+
+- `elasticsearch-discovery` service is not a headless service anymore
+
+
 ## [5.0.0] - 2020-01-31
 
 ### Added
