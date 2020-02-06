@@ -369,8 +369,8 @@ jobs:
             # Bootstrap app
             bin/ci-ansible-playbook bootstrap.yml "edxapp,redis"
             # Test services deployed with the next route
-            bin/ci-test-route "cms" "Welcome to Your Platform Studio" "/" "next"
-            bin/ci-test-route "lms" "It works! This is the default homepage for this Open edX instance." "/" "next"
+            bin/ci-test-route "cms" "Welcome to Your Platform Studio" "/" "next" 20
+            bin/ci-test-route "lms" "It works! This is the default homepage for this Open edX instance." "/" "next" 20
 
       - run:
           name: Test the "edxapp" application switch
@@ -378,8 +378,8 @@ jobs:
             # Switch next route to current
             bin/ci-ansible-playbook switch.yml "edxapp"
             # Test service switched to the current route
-            bin/ci-test-route "cms" "Welcome to Your Platform Studio"
-            bin/ci-test-route "lms" "It works! This is the default homepage for this Open edX instance."
+            bin/ci-test-route "cms" "Welcome to Your Platform Studio" "/" "current" 20
+            bin/ci-test-route "lms" "It works! This is the default homepage for this Open edX instance." "/" "current" 20
 
   # Test the bootstrap playbook on the "edxec" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.

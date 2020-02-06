@@ -18,6 +18,9 @@ path="${3:-"/"}"
 # Fourth script argument is the prefix used in the url. It defaults to "current".
 prefix="${4:-"current"}"
 
+# Fifth script argument is the maximum number of retry to get the expected response
+max_retry="${5:-"5"}"
+
 # Current URL has by definition no prefix, while next and previous URLs are
 # sub-domains. Hence, we add the sub-domain dot for next and previous prefixes
 # and remove the current prefix for the current URL.
@@ -28,7 +31,7 @@ else
 fi
 
 # Wait for the application to respond
-for try in $(seq 5); do
+for try in $(seq "${max_retry}"); do
   echo "Testing ${service} application http response ($try)"
   curl -vLk --header "Accept: text/html" "https://${prefix}${service}.ci-eugene.${OPENSHIFT_DOMAIN}.nip.io${path}" 2> "/tmp/${service}.err" > "/tmp/${service}.out"
   if grep "HTTP/1.1 200 OK" "/tmp/${service}.err" && grep "${content}" "/tmp/${service}.out"; then
