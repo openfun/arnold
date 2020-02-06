@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- Add argument to `ci-test-route` to configure the maximum number of retries
+
 ### Fixed
 
 - `elasticsearch-discovery` service is not a headless service anymore
