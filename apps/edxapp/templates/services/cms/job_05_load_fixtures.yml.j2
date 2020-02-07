@@ -27,6 +27,7 @@ spec:
           # We point to a local registry image build for this "live" image (see
           # ImageStream and BuildConfig templates)
           image: "{{ internal_docker_registry }}/{{ project_name }}/{{ image_name('cms', edxapp_image_tag, edxapp_theme_tag) }}"
+          imagePullPolicy: Always
           env:
             - name: DJANGO_SETTINGS_MODULE
               value: cms.envs.fun.docker_run
@@ -64,7 +65,7 @@ spec:
         # container. Please refer to the documentation to better understand our
         # settings generation mecanism.
         - name: init-create-config
-          image: "{{ edxapp_image_name }}:{{ edxapp_image_tag }}"
+          image: "{{ internal_docker_registry }}/{{ project_name }}/{{ image_name('cms', edxapp_image_tag, edxapp_theme_tag) }}"
           imagePullPolicy: Always
           command:
             - "/bin/bash"
