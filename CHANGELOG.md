@@ -12,6 +12,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 - Add argument to `ci-test-route` to configure the maximum number of retries
 
+### Changed
+
+- Upgrade Ansible to `2.9.5`
+
 ### Fixed
 
 - `elasticsearch-discovery` service is not a headless service anymore
