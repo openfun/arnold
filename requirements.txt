@@ -7,7 +7,7 @@ openshift==0.10.1
 passlib==1.7.2
 PyYAML==5.3
 netaddr==0.7.19
-requests==2.22.0
+requests==2.23.0
 yq==2.10.0
 
 # Quality
