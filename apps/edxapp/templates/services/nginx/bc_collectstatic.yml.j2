@@ -33,12 +33,17 @@ spec:
     dockerfile: |-
       FROM {{ edxapp_image_name }}:{{ edxapp_image_tag }}
       USER 0
-      {% if edxapp_theme_url is defined and edxapp_theme_url -%}
       RUN apt-get update && \
         ( which npm || apt-get install -y npm ) && \
-        apt-get install -y rdfind && \
+        apt-get install -y rdfind \
+          ruby1.9.1-dev && \
         rm -rf /var/lib/apt/lists/*
+      # Install Ruby dependencies
+      RUN gem install bundler -v 1.17.3 && \
+        bundle install
+      {% if edxapp_theme_url is defined and edxapp_theme_url -%}
       COPY . /edx/app/edxapp/edx-platform/themes/custom-theme
+      {% endif -%}
       {% if edxapp_should_update_i18n -%}
       RUN python manage.py lms compilejsi18n && \
           python manage.py cms compilejsi18n
@@ -48,7 +53,6 @@ spec:
       # Replace duplicated file by a symlink to decrease the overall size of the
       # final image
       RUN rdfind -makesymlinks true /edx/app/edxapp/staticfiles
-      {% endif -%}
       USER 10000
   triggers:
     - type: "ConfigChange"
