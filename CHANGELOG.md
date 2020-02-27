@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [5.1.0] - 2020-02-27
+
 ### Added
 
 - Add argument to `ci-test-route` to configure the maximum number of retries
@@ -637,7 +639,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v5.0.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v5.1.0...master
+[5.1.0]: https://github.com/openfun/arnold/compare/v5.0.0...v5.1.0
 [5.0.0]: https://github.com/openfun/arnold/compare/v4.7.0...v5.0.0
 [4.7.0]: https://github.com/openfun/arnold/compare/v4.6.0...v4.7.0
 [4.6.0]: https://github.com/openfun/arnold/compare/v4.5.0...v4.6.0
