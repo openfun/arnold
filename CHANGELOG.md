@@ -21,6 +21,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - `elasticsearch-discovery` service is not a headless service anymore
 - Generate a valid YAML value from `elasticsearch_memory_lock` variable
 - Set `edxapp`'s jobs image pull policy to "Always"
+- Force creation of `/edx/app/edxapp/staticfiles` directory in `bc_nginx` build config
 
 ## [5.0.0] - 2020-01-31
 
