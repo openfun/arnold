@@ -33,6 +33,9 @@ spec:
     dockerfile: |-
       FROM {{ edxapp_image_name }}:{{ edxapp_image_tag }}
       USER 0
+      # This directory must be present. Without it the next BC bc_nginx
+      # will fail if no theme is used
+      RUN mkdir -p /edx/app/edxapp/staticfiles
       {% if edxapp_theme_url is defined and edxapp_theme_url -%}
       RUN apt-get update && \
         ( which npm || apt-get install -y npm ) && \
