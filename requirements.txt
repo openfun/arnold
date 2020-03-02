@@ -2,7 +2,7 @@
 ansible==2.9.5
 ansible-lint==4.2.0
 deepmerge==0.1.0
-jmespath==0.9.4
+jmespath==0.9.5
 openshift==0.10.1
 passlib==1.7.2
 PyYAML==5.3
