@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Fixed
+
+- Fix syntax error in elasticsearch configuration file
+
 ## [5.1.0] - 2020-02-27
 
 ### Added
