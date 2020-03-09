@@ -1,5 +1,5 @@
 # Core
-ansible==2.9.5
+ansible==2.9.6
 ansible-lint==4.2.0
 deepmerge==0.1.0
 jmespath==0.9.5
@@ -18,4 +18,4 @@ pylint==2.4.4
 # Tests
 pytest==5.3.5
 pytest-cov==2.8.1
-pyfakefs==3.7.1
+pyfakefs==4.0.2

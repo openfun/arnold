@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Changed
+
+- Upgrade ansible to `2.9.6`
+
 ### Fixed
 
 - Fix syntax error in elasticsearch configuration file
@@ -20,7 +24,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
-- Upgrade Ansible to `2.9.5`
+- Upgrade ansible to `2.9.5`
 
 ### Fixed
 
