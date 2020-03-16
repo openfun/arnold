@@ -10,7 +10,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
-- Upgrade ansible to `2.9.6`
+- Upgrade Ansible to `2.9.6`
+- Upgrade `openshift` to `0.10.3`
 
 ### Fixed
 
