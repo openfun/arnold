@@ -1,0 +1,28 @@
+apiVersion: "v1"
+kind: "BuildConfig"
+metadata:
+  name: "nextcloud-{{ nextcloud_image_tag }}"
+  namespace: "{{ project_name }}"
+  labels:
+    app: nextcloud
+    service: nextcloud
+    version: "{{ nextcloud_version }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+spec:
+  strategy:
+    type: Docker
+  source:
+    dockerfile: |-
+      FROM {{ nextcloud_image_name }}:{{ nextcloud_image_tag }}
+      USER 0
+
+      RUN chown -R {{ nextcloud_user_id }}:root /app && \
+          chown {{ nextcloud_user_id }}:root /install.sh
+        
+      USER {{ nextcloud_user_id }}
+  triggers:
+    - type: "ConfigChange"
+  output:
+    to:
+      kind: "ImageStreamTag"
+      name: "nextcloud:{{ nextcloud_image_tag }}"

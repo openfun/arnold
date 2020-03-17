@@ -8,11 +8,15 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- New `nextcloud` application
+
 ## [5.3.0] - 2020-03-31
 
 ### Added
 
-- New application `ashley` deployable _via_ Arnold
+- New `ashley` application
 
 ### Changed
 

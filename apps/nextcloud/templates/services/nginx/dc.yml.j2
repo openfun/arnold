@@ -1,0 +1,89 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: nextcloud
+    service: nginx
+    version: "{{ nextcloud_nginx_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: "nextcloud-nginx-{{ deployment_stamp }}"
+  namespace: "{{ project_name }}"
+spec:
+  replicas: {{ nextcloud_nginx_replicas }}
+  template:
+    metadata:
+      labels:
+        app: nextcloud
+        service: nginx
+        version: "{{ nextcloud_nginx_image_tag }}"
+        deploymentconfig: "nextcloud-nginx-{{ deployment_stamp }}"
+        deployment_stamp: "{{ deployment_stamp }}"
+    spec:
+      # Prefer running pods on different nodes for redundancy
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: deploymentconfig
+                  operator: In
+                  values:
+                  - "nextcloud-nginx-{{ deployment_stamp }}"
+              topologyKey: kubernetes.io/hostname
+      containers:
+        - image: "{{ nextcloud_nginx_image_name }}:{{ nextcloud_nginx_image_tag }}"
+          name: nginx
+          imagePullPolicy: Always
+          ports:
+            - containerPort: {{ nextcloud_nginx_port }}
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /etc/nginx/conf.d
+              name: nextcloud-v-nginx
+              readOnly: true
+            - mountPath: {{ nextcloud_nginx_root }}
+              name: nextcloud-root
+{% if activate_http_basic_auth or nextcloud_activate_http_basic_auth %}
+            - mountPath: "{{ http_basic_auth_user_file | dirname }}"
+              name: nextcloud-htpasswd
+{% endif %}
+
+          livenessProbe:
+            httpGet:
+              path: "{{ nextcloud_nginx_healthcheck_endpoint }}"
+              port: {{ nextcloud_nginx_healthcheck_port }}
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: "{{ nextcloud_nginx_healthcheck_endpoint }}"
+              port: {{ nextcloud_nginx_healthcheck_port }}
+            initialDelaySeconds: 10
+            periodSeconds: 5
+
+      initContainers:
+        - image: "{{ nextcloud_image_name }}:{{ nextcloud_image_tag }}"
+          name: init-copy-src
+          imagePullPolicy: Always
+          command:
+            - "/bin/bash"
+            - "-c"
+            - cd {{ nextcloud_nginx_root }} && 
+              cp -r . /tmp/nextcloud-src
+          volumeMounts:
+            - mountPath: /tmp/nextcloud-src
+              name: nextcloud-root
+
+      volumes:
+        - name: nextcloud-root
+          emptyDir: {}
+        - name: nextcloud-v-nginx
+          configMap:
+            name: nextcloud-nginx-{{ deployment_stamp }}
+{% if activate_http_basic_auth or nextcloud_activate_http_basic_auth %}
+        - name: nextcloud-htpasswd
+          secret:
+            secretName: "{{ nextcloud_nginx_htpasswd_secret_name }}"
+{% endif %}

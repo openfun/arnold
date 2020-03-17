@@ -1,0 +1,35 @@
+{% if env_type in trashable_env_types %}
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: nextcloud
+    service: postgresql
+    version: "{{ nextcloud_database_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: "nextcloud-postgresql-{{ deployment_stamp }}"
+  namespace: "{{ project_name }}"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nextcloud
+        service: postgresql
+        version: "{{ nextcloud_database_image_tag }}"
+        deploymentconfig: "nextcloud-postgresql-{{ deployment_stamp }}"
+        deployment_stamp: "{{ deployment_stamp }}"
+    spec:
+      containers:
+        - image: {{ nextcloud_database_image_name }}:{{ nextcloud_database_image_tag }}
+          name: postgresql
+          ports:
+            - containerPort: {{ nextcloud_database_port }}
+              protocol: TCP
+          env:
+            - name: POSTGRESQL_DATABASE
+              value: "{{ nextcloud_database_name }}"
+          envFrom:
+            - secretRef:
+                name: "{{ nextcloud_database_secret_name }}"
+{% endif %}

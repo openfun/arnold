@@ -1,0 +1,16 @@
+# customer: {{ customer }}
+# env_type: {{ env_type }}
+
+# postgresql
+{% set postgresql_credentials = databases.postgresql | json_query("[?release=='" ~ nextcloud_postgresql_version ~ "'].databases | [0][?application=='nextcloud'].{user: user, password: password} | [0]") %}
+
+DB_USER: {{ postgresql_credentials.user }}
+DB_PASSWORD: {{ postgresql_credentials.password }}
+
+NEXTCLOUD_SECRETS: 
+  POSTGRES_USER: {{ postgresql_credentials.user }}
+  POSTGRES_PASSWORD: {{ postgresql_credentials.password }}
+  NEXTCLOUD_ADMIN_PASSWORD: {{ lookup('password', '/dev/null length=50') }}
+  NEXTCLOUD_PASSWORD_SALT: {{ lookup('password', '/dev/null length=50') }}
+  NEXTCLOUD_SECRET: {{ lookup('password', '/dev/null length=50') }}
+  INSTANCE_ID: {{ lookup('password', '/dev/null length=10') }}
