@@ -1,0 +1,48 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: nextcloud-install-job-{{ job_stamp }}
+  namespace: "{{ project_name }}"
+  labels:
+    app: nextcloud
+    service: nextcloud
+    version: "{{ nextcloud_version }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+    job_stamp: "{{ job_stamp }}"
+spec:
+  template:
+    metadata:
+      name: nextcloud-install-job-{{ job_stamp }}
+      labels:
+        app: nextcloud
+        service: nextcloud
+        version: "{{ nextcloud_version }}"
+        deployment_stamp: "{{ deployment_stamp }}"
+        job_stamp: "{{ job_stamp }}"
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: nextcloud
+          image: "{{ internal_docker_registry }}/{{ project_name }}/nextcloud:{{ nextcloud_image_tag }}"
+          imagePullPolicy: Always
+          securityContext:
+            runAsUser: "{{ nextcloud_user_id }}"
+          envFrom:
+            - secretRef:
+                name: "{{ nextcloud_secret_name }}"
+            - configMapRef:
+                name: "nextcloud-app-dotenv-{{ deployment_stamp }}"
+          env:
+            - name: INSTALLED
+              value: "false"
+          command:
+            - "/bin/bash"
+            - "-c"
+            - /entrypoint.sh /install.sh
+          volumeMounts:
+            - name: nextcloud-v-install
+              mountPath: /tmp/nextcloud  
+      volumes:
+        - name: nextcloud-v-install
+          persistentVolumeClaim:
+            claimName: nextcloud-pvc-install

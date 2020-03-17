@@ -20,3 +20,4 @@ apps:
   - name: marsha
   - name: redis
   - name: richie
+  - name: nextcloud

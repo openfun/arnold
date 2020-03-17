@@ -1,0 +1,73 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: nextcloud
+    service: nextcloud
+    version: "{{ nextcloud_version }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: "nextcloud-app-{{ deployment_stamp }}"
+  namespace: "{{ project_name }}"
+spec:
+  replicas: {{ nextcloud_app_replicas }}
+  template:
+    metadata:
+      labels:
+        app: nextcloud
+        service: nextcloud
+        version: "{{ nextcloud_version }}"
+        deploymentconfig: "nextcloud-app-{{ deployment_stamp }}"
+        deployment_stamp: "{{ deployment_stamp }}"
+    spec:
+      # Prefer running pods on different nodes for redundancy
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: deploymentconfig
+                      operator: In
+                      values:
+                        - "nextcloud-app-{{ deployment_stamp }}"
+                topologyKey: kubernetes.io/hostname
+      containers:
+        - name: nextcloud
+          image: "{{ internal_docker_registry }}/{{ project_name }}/nextcloud:{{ nextcloud_image_tag }}"
+          imagePullPolicy: Always
+          securityContext:
+            runAsUser: "{{ nextcloud_user_id }}"
+          envFrom:
+            - secretRef:
+                name: "{{ nextcloud_secret_name }}"
+            - configMapRef:
+                name: "nextcloud-app-dotenv-{{ deployment_stamp }}"
+          volumeMounts:
+            - mountPath: {{ nextcloud_base_dir }}/config
+              name: nextcloud-config
+      initContainers:
+        # We use an initContainer because NextCloud check if the config directory is writable.
+        # If we mount directly the ConfigMap in the container, the config directory will not be writable
+        # and NextCloud will not start. The workaround is to copy the config file in an emptyDir and 
+        # mount this emptyDir in the container.
+        - name: init-create-config
+          image: "busybox:1.31.1"
+          securityContext:
+            runAsUser: "{{ nextcloud_user_id }}"
+          command:
+            - "/bin/sh"
+            - "-c"
+            - cp /tmp/configmap/config.php /tmp/config/config.php
+          volumeMounts:
+            - mountPath: /tmp/config
+              name: nextcloud-config
+            - mountPath: /tmp/configmap
+              name: nextcloud-configmap
+      volumes:
+      - name: nextcloud-configmap
+        configMap:
+          defaultMode: 420
+          name: nextcloud-app-{{ deployment_stamp }}
+      - name: nextcloud-config
+        emptyDir: {}  # volume that lives as long as the pod lives      

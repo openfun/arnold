@@ -513,6 +513,56 @@ jobs:
             bin/ci-test-route "ashley" "ok" "/__heartbeat__"
 
 
+  # Test the bootstrap playbook on the "nextcloud" application.
+  # We also need redis and mailcatcher for this application
+  # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
+  test-bootstrap-nextcloud:
+    machine:
+      docker_layer_caching: false
+
+    working_directory: ~/fun
+
+    steps:
+      - checkout
+      - *attach_workspace
+      - *docker_load
+      - *ci_env
+      - *install_openshift_cluster
+      - *configure_openshift_cluster
+      - *run_openshift_cluster
+
+      - run: 
+          name: Rebuild Arnold's docker image once the OpenShift project has been created to use the modified USER_ID variable
+          command: |
+            bin/ci-ansible-playbook create_project.yml "redis,mailcatcher,nextcloud"
+            export USER_ID=$(\
+                oc get project ci-eugene -o json | \
+                jq -r '.metadata.annotations."openshift.io/sa.scc.uid-range"' | \
+                sed -r "s|([0-9]+)/([0-9]+)|\\1|" \
+              )
+            sed -i -e "s/REPLACE_USER_ID/$USER_ID/g" group_vars/customer/eugene/ci/main.yml
+            bin/build
+
+      # Once deployed, we need to manually run the upgrade command because some dependencies have to be updated.
+      - run:
+          name: Test the "nextcloud" application bootstrapping
+          command: |
+            bin/ci-ansible-playbook init_project.yml "redis,mailcatcher,nextcloud"
+            bin/ci-ansible-playbook build_images.yml "redis,mailcatcher,nextcloud"
+            bin/ci-ansible-playbook deploy.yml "redis,mailcatcher,nextcloud"
+            oc project ci-eugene
+            oc exec -it $(oc get pod -l 'app in (nextcloud),service in (nextcloud),!job_stamp' -o json | jq -r '.items[0].metadata.name') \
+              -- /bin/bash -c 'php /app/occ upgrade && php /app/occ maintenance:mode --off'
+            bin/ci-test-route "nextcloud" "Nextcloud" "/login" "next" 20
+
+      - run:
+          name: Test the "nextcloud" application switch
+          command: |
+            # Switch next route to current
+            bin/ci-ansible-playbook switch.yml "nextcloud"
+            # Test service switched to the current route
+            bin/ci-test-route "nextcloud" "Nextcloud" "/login" "current" 20
+
   # Test the delete_app tasks for blue-green applications
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
   test-delete-app:
@@ -819,6 +869,15 @@ workflows:
           filters:
             tags:
               only: /.*/
+      - test-bootstrap-nextcloud:
+          requires:
+            - lint-bash
+            - lint-docker
+            - lint-ansible
+            - lint-plugins
+          filters:
+            tags:
+              only: /.*/
       - test-delete-app:
           requires:
             - test-bootstrap-richie
@@ -857,6 +916,7 @@ workflows:
             - test-bootstrap-forum
             - test-bootstrap-learninglocker
             - test-bootstrap-ashley
+            - test-bootstrap-nextcloud
             - test-redirect
             - test-delete-app
             - test-prevent-switch-to-nothing

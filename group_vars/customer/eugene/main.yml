@@ -10,6 +10,8 @@ apps:
 # We don't want to require an AWS SSH key for testing
 marsha_should_sign_requests: false
 
+# Nextcloud
+nextcloud_database_name: nextcloud
 
 # Elasticsearch
 # Limit memory usage

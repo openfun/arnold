@@ -1,0 +1,49 @@
+# Application default configuration
+
+# -- route
+nextcloud_host: "nextcloud.{{ project_name}}.{{ domain_name }}"
+
+# -- nginx
+nextcloud_nginx_image_name: "fundocker/openshift-nginx"
+nextcloud_nginx_image_tag: "1.13"
+nextcloud_nginx_port: 8061
+nextcloud_nginx_replicas: 1
+nextcloud_nginx_htpasswd_secret_name: "nextcloud-htpasswd"
+nextcloud_nginx_healthcheck_port: 5000
+nextcloud_nginx_healthcheck_endpoint: "/__healthcheck__"
+nextcloud_nginx_ip_withelist: []
+nextcloud_nginx_static_cache_expires: "1M"
+nextcloud_nginx_root: "/app"
+nextcloud_nginx_max_body_size: 512M
+
+# -- database
+nextcloud_postgresql_version: "9.6"
+nextcloud_database_image_name: "centos/postgresql-96-centos7"
+nextcloud_database_image_tag: "9.6"
+nextcloud_database_host: "postgresql"
+nextcloud_database_port: 5432
+nextcloud_database_name: "nextcloud"
+nextcloud_database_secret_name: "nextcloud-database-{{ nextcloud_vault_checksum | default('undefined_nextcloud_vault_checksum') }}"
+
+# -- redis
+nextcloud_redis_host: "redis"
+nextcloud_redis_port: 6379
+
+# -- nextcloud
+nextcloud_image_name: "fundocker/nextcloud"
+nextcloud_image_tag: "18.0.2-fpm"
+nextcloud_version: "18.0.2"
+nextcloud_app_replicas: 1
+nextcloud_secret_name: "nextcloud-{{ nextcloud_vault_checksum | default('undefined_nextcloud_vault_checksum') }}"
+nextcloud_activate_http_basic_auth: false
+nextcloud_admin_user: "admin"
+nextcloud_debug: false
+nextcloud_log_level: 2
+nextcloud_log_type: "file"
+nextcloud_user_id: 1000
+nextcloud_base_dir: "/app"
+nextcloud_container_user: "openfun"
+nextcloud_container_home_dir: "/home/openfun"
+
+# -- volumes
+nextcloud_install_volume_size: 2Mi

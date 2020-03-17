@@ -1,0 +1,38 @@
+<?php
+$CONFIG = array (
+  'apps_paths' => array (
+    0 => array (
+      'path' => sprintf('%s/apps', getenv('NEXTCLOUD_BASE_DIR')),
+      'url' => '/apps',
+      'writable' => false,
+    ),
+  ),
+  'appstoreenabled' => false,
+  'config_is_read_only' => true,
+  'datadirectory' => sprintf('%s/data', getenv('NEXTCLOUD_BASE_DIR')),
+  'dbtype' => 'pgsql',
+  'dbname' => getenv('POSTGRES_DB'),
+  'dbhost' => getenv('POSTGRES_HOST'),
+  'dbport' => getenv('POSTGRES_PORT'),
+  'dbtableprefix' => '',
+  'dbuser' => getenv('POSTGRES_USER'),
+  'dbpassword' => getenv('POSTGRES_PASSWORD'),
+  'debug' => getenv('NEXTCLOUD_DEBUG') === 'false' ? false : true,
+  'installed' => true,
+  'instanceid' => getenv('INSTANCE_ID'),  
+  'log_type' => getenv('NEXTCLOUD_LOG_TYPE') ?: 'file',
+  'loglevel' => getenv('NEXTCLOUD_LOG_LEVEL'),
+  'memcache.local' => '\\OC\\Memcache\\APCu',
+  'passwordsalt' => getenv('NEXTCLOUD_PASSWORD_SALT'),
+  'secret' => getenv('NEXTCLOUD_SECRET'),
+  'trusted_domains' => array (
+    0 => getenv('NEXTCLOUD_PREVIOUS_DOMAIN'),
+    1 => getenv('NEXTCLOUD_CURRENT_DOMAIN'),
+    2 => getenv('NEXTCLOUD_NEXT_DOMAIN'),
+  ),
+  'updatechecker' => false,
+  'updater.server.url' => 'https://updates.nextcloud.com/updater_server/',
+  'updater.release.channel' => 'stable',
+  'upgrade.disable-web' => true,
+  'version' => getenv('NEXTCLOUD_VERSION'),
+);
