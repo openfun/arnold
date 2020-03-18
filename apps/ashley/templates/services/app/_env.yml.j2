@@ -1,0 +1,8 @@
+DJANGO_SETTINGS_MODULE: "{{ ashley_django_settings_module }}"
+DJANGO_CONFIGURATION: "{{ ashley_django_configuration }}"
+DB_ENGINE: "{{ ashley_database_engine }}"
+DB_NAME: "{{ ashley_database_name }}"
+DB_HOST: "ashley-{{ ashley_database_host }}-{{ deployment_stamp }}"
+DB_PORT: "{{ ashley_database_port }}"
+DJANGO_ALLOWED_HOSTS: "{{ ashley_host | blue_green_hosts }}"
+

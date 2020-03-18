@@ -1,6 +1,7 @@
 # Variables specific to the eugene customer in development env_type
 
 apps:
+  - name: ashley
   - name: mailcatcher
   - name: marsha
   - name: forum

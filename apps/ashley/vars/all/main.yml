@@ -1,0 +1,46 @@
+# Application default configuration
+
+# -- route
+ashley_host: "ashley.{{ project_name}}.{{ domain_name }}"
+
+# -- nginx
+ashley_nginx_image_name: "fundocker/openshift-nginx"
+ashley_nginx_image_tag: "1.13"
+ashley_nginx_port: 8061
+ashley_nginx_replicas: 1
+ashley_nginx_htpasswd_secret_name: "ashley-htpasswd"
+ashley_nginx_healthcheck_port: 5000
+ashley_nginx_healthcheck_endpoint: "/__healthcheck__"
+ashley_nginx_admin_ip_withelist: []
+ashley_nginx_bypass_htaccess_ip_whitelist: []
+ashley_nginx_static_cache_expires: "1M"
+ashley_nginx_media_cache_expires: "1d"
+
+
+# -- postgresql
+ashley_postgresql_version: "9.6"
+ashley_database_engine: "django.db.backends.postgresql_psycopg2"
+ashley_database_image_name: "centos/postgresql-96-centos7"
+ashley_database_image_tag: "9.6"
+ashley_database_host: "postgresql"
+ashley_database_port: 5432
+ashley_database_name: "ashley"
+ashley_database_secret_name: "ashley-database-{{ ashley_vault_checksum | default('undefined_ashley_vault_checksum') }}"
+
+# -- ashley
+ashley_image_name: "fundocker/ashley"
+ashley_image_tag: "master"
+ashley_django_port: 8000
+ashley_app_replicas: 1
+ashley_django_settings_module: "settings"
+ashley_django_configuration: "Development"
+ashley_secret_name: "ashley-{{ ashley_vault_checksum | default('undefined_ashley_vault_checksum') }}"
+
+ashley_activate_http_basic_auth: false
+
+# -- volumes
+# volume sizes with power of 2 suffices (Ki, Mi, Gi, Ti...) e.g 2Gi and 0 for no volume.
+ashley_media_volume_size: 2Gi
+ashley_static_volume_size: 1Gi
+ashley_should_activate_media_volume: true
+ashley_should_activate_static_volume: true

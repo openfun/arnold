@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- New application `ashley` deployable _via_ Arnold
+
 ## [5.2.0] - 2020-03-23
 
 ### Changed
