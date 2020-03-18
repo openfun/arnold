@@ -1,0 +1,85 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: ashley
+    service: app
+    version: "{{ ashley_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: "ashley-app-{{ deployment_stamp }}"
+  namespace: "{{ project_name }}"
+spec:
+  replicas: {{ ashley_app_replicas }}
+  template:
+    metadata:
+      labels:
+        app: ashley
+        service: app
+        version: "{{ ashley_image_tag }}"
+        deploymentconfig: "ashley-app-{{ deployment_stamp }}"
+        deployment_stamp: "{{ deployment_stamp }}"
+    spec:
+      # Prefer running pods on different nodes for redundancy
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: deploymentconfig
+                      operator: In
+                      values:
+                        - "ashley-app-{{ deployment_stamp }}"
+                topologyKey: kubernetes.io/hostname
+{% if ashley_image_pull_secret_name is defined and ashley_image_pull_secret_name is not none %}
+      imagePullSecrets:
+        - name: "{{ ashley_image_pull_secret_name }}"
+{% endif %}
+      containers:
+        - name: ashley
+          image: "{{ ashley_image_name }}:{{ ashley_image_tag }}"
+          imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /__heartbeat__
+              port: {{ ashley_django_port }}
+              httpHeaders:
+                - name: Host
+                  value: "{{ ashley_host }}"
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /__lbheartbeat__
+              port: {{ ashley_django_port }}
+              httpHeaders:
+                - name: Host
+                  value: "{{ ashley_host }}"
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          envFrom:
+            - secretRef:
+                name: "{{ ashley_secret_name }}"
+            - configMapRef:
+                name: "ashley-app-dotenv-{{ deployment_stamp }}"
+          volumeMounts:
+{% if ashley_should_activate_media_volume %}
+            - name: ashley-v-media
+              mountPath: /data/media
+{% endif %}
+{% if ashley_should_activate_static_volume %}
+            - name: ashley-v-static
+              mountPath: /data/static
+{% endif %}
+      volumes:
+{% if ashley_should_activate_media_volume %}
+        - name: ashley-v-media
+          persistentVolumeClaim:
+            claimName: ashley-pvc-media
+{% endif %}
+{% if ashley_should_activate_static_volume %}
+        - name: ashley-v-static
+          persistentVolumeClaim:
+            claimName: ashley-pvc-static
+{% endif %}

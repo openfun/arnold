@@ -1,0 +1,17 @@
+{% if ashley_should_activate_media_volume %}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ashley-pvc-media
+  namespace: "{{ project_name }}"
+  labels:
+    app: ashley
+    version: "{{ ashley_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ ashley_media_volume_size }}
+{% endif %}

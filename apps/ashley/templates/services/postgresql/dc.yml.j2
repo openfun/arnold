@@ -1,0 +1,35 @@
+{% if env_type in trashable_env_types %}
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: ashley
+    service: postgresql
+    version: "{{ ashley_database_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: "ashley-postgresql-{{ deployment_stamp }}"
+  namespace: "{{ project_name }}"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ashley
+        service: postgresql
+        version: "{{ ashley_database_image_tag }}"
+        deploymentconfig: "ashley-postgresql-{{ deployment_stamp }}"
+        deployment_stamp: "{{ deployment_stamp }}"
+    spec:
+      containers:
+        - image: {{ ashley_database_image_name }}:{{ ashley_database_image_tag }}
+          name: postgresql
+          ports:
+            - containerPort: {{ ashley_database_port }}
+              protocol: TCP
+          env:
+            - name: POSTGRESQL_DATABASE
+              value: "{{ ashley_database_name }}"
+          envFrom:
+            - secretRef:
+                name: "{{ ashley_database_secret_name }}"
+{% endif%}

@@ -1,0 +1,91 @@
+{% set http_basic_auth_enabled = activate_http_basic_auth or ashley_activate_http_basic_auth %}
+{% set bypass_htaccess = ashley_nginx_bypass_htaccess_ip_whitelist | length > 0 %}
+upstream ashley-backend {
+  server ashley-app-{{ deployment_stamp }}:{{ ashley_django_port }} fail_timeout=0;
+}
+
+server {
+  listen {{ ashley_nginx_port }};
+  server_name localhost;
+
+  client_max_body_size 100M;
+
+  rewrite ^(.*)/favicon.ico$ /static/images/favicon.ico last;
+
+  # Disables server version feedback on pages and in headers
+  server_tokens off;
+
+{% if http_basic_auth_enabled %}
+{% if bypass_htaccess %}
+  location @basicauth {
+    auth_basic "{{ http_basic_auth_message }}";
+    auth_basic_user_file {{ http_basic_auth_user_file }};
+
+    try_files $uri @proxy_to_ashley_app;
+  }
+{% else %}
+  auth_basic "{{ http_basic_auth_message }}";
+  auth_basic_user_file {{ http_basic_auth_user_file }};
+{% endif %}
+{% endif %}
+
+  location @proxy_to_ashley_app {
+    proxy_set_header Host $http_host;
+
+    proxy_redirect off;
+    proxy_pass http://ashley-backend;
+  }
+
+  location / {
+{% if http_basic_auth_enabled and bypass_htaccess %}
+    if ($http_x_forwarded_for !~ ^({{ ashley_nginx_bypass_htaccess_ip_whitelist | join("|") }})) {
+      error_page 401 @basicauth;
+      return 401;
+    }
+{% endif %}
+
+    try_files $uri @proxy_to_ashley_app;
+  }
+
+{% if ashley_nginx_admin_ip_withelist | length > 0 %}
+  location /admin {
+    {#
+      We want to limit access to a list of whitelisted IP addresses.
+
+      $http_x_forwarded_for variable contains a list of IPs listed from the HTTP_X_FORWARED_FOR
+      header (e.g. w.x.y.z, 10.0.0.1). The first IP corresponds to the client's public address,
+      which is of interest (other ones have been added by subsequent proxies),
+      hence we restrict our comparison with the beginning of this list (this is why our regex starts with a ^).
+    #}
+    if ($http_x_forwarded_for !~ ^({{ ashley_nginx_admin_ip_withelist | join("|") }})) {
+      return 403;
+    }
+
+    try_files $uri @proxy_to_ashley_app;
+  }
+{% endif %}
+
+{% if ashley_should_activate_media_volume %}
+  location ~ ^/media/(?P<file>.*) {
+    access_log off;
+    expires {{ ashley_nginx_media_cache_expires }};
+    add_header Cache-Control public;
+    root /data/media/ashley;
+    try_files /$file =404;
+  }
+{% endif %}
+
+{% if ashley_should_activate_static_volume %}
+  location ~ ^/static/(?P<file>.*) {
+    access_log off;
+    gzip on;
+    gzip_comp_level 5;
+    gzip_types text/plain text/css text/xml text/javascript application/x-javascript application/xml image/svg+xml;
+    expires {{ ashley_nginx_static_cache_expires }};
+    add_header Cache-Control public;
+    root /data/static/ashley;
+    try_files /$file =404;
+  }
+{% endif %}
+
+}
