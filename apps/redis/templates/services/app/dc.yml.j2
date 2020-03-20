@@ -28,6 +28,9 @@ spec:
           command:
             - "redis-server"
             - "/config/redis/app.conf"
+          ports:
+            - containerPort: 6379
+              protocol: TCP
           livenessProbe:
             exec:
               command:
