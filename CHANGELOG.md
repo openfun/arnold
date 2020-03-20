@@ -16,6 +16,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - Fix syntax error in elasticsearch configuration file
+- Configure the `redis` container to listen to all network interfaces
 
 ## [5.1.0] - 2020-02-27
 
