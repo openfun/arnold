@@ -12,6 +12,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 - New application `ashley` deployable _via_ Arnold
 
+### Changed
+
+- Upgrade PyYAML to `5.3.1`
+
 ## [5.2.0] - 2020-03-23
 
 ### Changed
