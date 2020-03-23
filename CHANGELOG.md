@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## Added
+
+- New `etherpad` application
+
 ## Changed
 
 - Update `nextcloud` app scripts path to: `/usr/local/bin`

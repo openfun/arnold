@@ -8,6 +8,7 @@ apps:
   - name: richie
   - name: learninglocker
   - name: nextcloud
+  - name: etherpad
   - name: edxapp
     services:
       - name: cms

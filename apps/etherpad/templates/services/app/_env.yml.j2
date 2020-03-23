@@ -1,0 +1,13 @@
+TITLE: {{ etherpad_title }}
+FAVICON: {{ etherpad_favicon }}
+SKIN_NAME: {{ etherpad_skin_name }}
+IP: "0.0.0.0"
+PORT: "{{ etherpad_application_port }}"
+DB_TYPE: {{ etherpad_database_engine }}
+DB_HOST: etherpad-postgresql-{{ deployment_stamp }}
+DB_PORT: "{{ etherpad_database_port }}"
+DB_NAME: {{ etherpad_database_name }}
+TRUST_PROXY: "true"
+LOGLEVEL: {{ etherpad_loglevel }}
+APIKEY: "{{ etherpad_private_directory_path }}/APIKEY.txt"
+SESSIONKEY: "{{ etherpad_private_directory_path }}/SESSIONKEY.txt"
