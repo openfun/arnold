@@ -1,0 +1,35 @@
+{% if env_type in trashable_env_types %}
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: etherpad
+    service: postgresql
+    version: "{{ etherpad_database_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: "etherpad-postgresql-{{ deployment_stamp }}"
+  namespace: "{{ project_name }}"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: etherpad
+        service: postgresql
+        version: "{{ etherpad_database_image_tag }}"
+        deploymentconfig: "etherpad-postgresql-{{ deployment_stamp }}"
+        deployment_stamp: "{{ deployment_stamp }}"
+    spec:
+      containers:
+        - image: {{ etherpad_database_image_name }}:{{ etherpad_database_image_tag }}
+          name: postgresql
+          ports:
+            - containerPort: {{ etherpad_database_port }}
+              protocol: TCP
+          env:
+            - name: POSTGRESQL_DATABASE
+              value: "{{ etherpad_database_name }}"
+          envFrom:
+            - secretRef:
+                name: "{{ etherpad_database_secret_name }}"
+{% endif %}

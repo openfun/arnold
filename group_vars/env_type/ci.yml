@@ -13,6 +13,7 @@ apps:
   - name: edxapp
   - name: edxec
   - name: elasticsearch
+  - name: etherpad
   - name: forum
   - name: hello
   - name: learninglocker
