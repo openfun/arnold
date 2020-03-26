@@ -1,16 +1,16 @@
 kind: Deployment
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 metadata:
   name: openshift-acme
   labels:
     app: openshift-acme
-  annotations:
-    image.alpha.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"openshift-acme:latest"},"fieldPath":"spec.template.spec.containers[0].image"}]'
-    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"openshift-acme:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"openshift-acme\")].image"}]'
 spec:
-  replicas: 1
+  selector:
+    matchLabels:
+      app: openshift-acme
+  replicas: 2
   strategy:
-    type: Recreate
+    type: RollingUpdate
   template:
     metadata:
       labels:
@@ -19,31 +19,9 @@ spec:
       serviceAccountName: openshift-acme
       containers:
       - name: openshift-acme
-        image: " "
+        image: quay.io/tnozicka/openshift-acme:controller
         imagePullPolicy: Always
-        ports:
-        - containerPort: 5000
-        env:
-        - name: OPENSHIFT_ACME_EXPOSER_IP
-          valueFrom:
-            fieldRef:
-              fieldPath: status.podIP
-        - name: OPENSHIFT_ACME_ACMEURL
-          value: "https://acme-{% if acme_env == 'live' %}v01{% else %}staging{% endif %}.api.letsencrypt.org/directory"
-        - name: OPENSHIFT_ACME_LOGLEVEL
-          value: "4"
-        - name: OPENSHIFT_ACME_NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
-        volumeMounts:
-        - name: podinfo
-          mountPath: /dapi
-          readOnly: true
-      volumes:
-      - name: podinfo
-        downwardAPI:
-          items:
-          - path: "labels"
-            fieldRef:
-              fieldPath: metadata.labels
+        args:
+        - --exposer-image=quay.io/tnozicka/openshift-acme:exposer
+        - --loglevel=4
+        - --namespace={{ project_name }}
