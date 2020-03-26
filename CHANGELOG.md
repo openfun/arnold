@@ -15,6 +15,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Upgrade PyYAML to `5.3.1`
+- Upgrade `acme` core app to its latest release that supports ACME v2 API
 
 ## [5.2.0] - 2020-03-23
 
