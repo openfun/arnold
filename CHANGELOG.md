@@ -17,6 +17,11 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Upgrade PyYAML to `5.3.1`
 - Upgrade `acme` core app to its latest release that supports ACME v2 API
 
+### Removed
+
+- Stop declaring a specific tag for the `edxapp-nginx` docker image and use
+  the `edxapp` image tag for both the `edxapp` and `nginx` images
+
 ### Fixed
 
 - Temporarily reinstate the static volume on edxapp pods to allow using the

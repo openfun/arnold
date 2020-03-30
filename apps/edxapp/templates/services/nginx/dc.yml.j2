@@ -6,7 +6,7 @@ metadata:
   labels:
     app: edxapp
     service: nginx
-    version: "{{ edxapp_nginx_image_tag }}"
+    version: "{{ edxapp_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
   name: "edxapp-nginx-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
@@ -17,7 +17,7 @@ spec:
       labels:
         app: edxapp
         service: nginx
-        version: "{{ edxapp_nginx_image_tag }}"
+        version: "{{ edxapp_image_tag }}"
         deployment_stamp: "{{ deployment_stamp }}"
         deploymentconfig: "edxapp-nginx-{{ deployment_stamp }}"
     spec:
@@ -35,7 +35,7 @@ spec:
                   - "edxapp-nginx-{{ deployment_stamp }}"
               topologyKey: kubernetes.io/hostname
       containers:
-        - image: "{{ internal_docker_registry }}/{{ project_name }}/{{ image_name('nginx', edxapp_nginx_image_tag, edxapp_theme_tag) }}"
+        - image: "{{ internal_docker_registry }}/{{ project_name }}/{{ image_name('nginx', edxapp_image_tag, edxapp_theme_tag) }}"
           name: nginx
           ports:
             - containerPort: 80

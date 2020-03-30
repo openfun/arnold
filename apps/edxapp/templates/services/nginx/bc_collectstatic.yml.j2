@@ -10,7 +10,7 @@
 apiVersion: "v1"
 kind: "BuildConfig"
 metadata:
-  name: "{{ image_name("collectstatic", edxapp_nginx_image_tag, edxapp_theme_tag) | replace(':', '-') }}"
+  name: "{{ image_name("collectstatic", edxapp_image_tag, edxapp_theme_tag) | replace(':', '-') }}"
   namespace: "{{ project_name }}"
   labels:
     app: "edxapp"
@@ -58,4 +58,4 @@ spec:
   output:
     to:
       kind: "ImageStreamTag"
-      name: "{{ image_name("collectstatic", edxapp_nginx_image_tag, edxapp_theme_tag) }}"
+      name: "{{ image_name("collectstatic", edxapp_image_tag, edxapp_theme_tag) }}"
