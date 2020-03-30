@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: edxapp-pvc-static
+  namespace: "{{ project_name }}"
+  labels:
+    app: edxapp
+    version: "{{ edxapp_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ edxapp_static_volume_size }}
