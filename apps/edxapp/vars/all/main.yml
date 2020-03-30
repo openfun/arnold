@@ -100,7 +100,6 @@ edxapp_mysql_secret_name: "edxapp-mysql-{{ edxapp_vault_checksum | default('unde
 
 # -- nginx
 edxapp_nginx_image_name: "fundocker/edxapp-nginx"
-edxapp_nginx_image_tag: "hawthorn.1-oee-3.1.2"
 edxapp_nginx_cms_port: 8081
 edxapp_nginx_lms_port: 8071
 edxapp_nginx_replicas: 1
