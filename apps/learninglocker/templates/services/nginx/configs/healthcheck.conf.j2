@@ -6,4 +6,8 @@ server {
     add_header Content-Type text/plain;
     return 200 "OK";
   }
+
+  location {{ learninglocker_nginx_status_endpoint }} {
+     stub_status;
+  }
 }

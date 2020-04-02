@@ -11,6 +11,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 ### Added
 
 - New `nextcloud` application
+- Add nginx status endpoint in `ashley`, `edxapp`, `edxec`, `flower`,
+  `learninglocker`, `marsha`, `nextcloud` and `richie`.
 
 ## [5.3.0] - 2020-03-31
 

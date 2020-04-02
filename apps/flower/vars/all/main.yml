@@ -5,6 +5,7 @@ flower_nginx_image_name: "fundocker/openshift-nginx"
 flower_nginx_image_tag: "1.13"
 flower_nginx_healthcheck_port: 5000
 flower_nginx_healthcheck_endpoint: "/__healthcheck__"
+flower_nginx_status_endpoint: "/__status__"
 flower_nginx_app_port: 8091
 flower_nginx_app_ip_whitelist: []
 
