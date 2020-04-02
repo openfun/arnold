@@ -7,4 +7,8 @@ server {
     access_log off;
     return 200 "OK";
   }
+
+  location {{ ashley_nginx_status_endpoint }} {
+     stub_status;
+  }
 }

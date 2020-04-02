@@ -39,6 +39,7 @@ learninglocker_nginx_image_tag: "1.13"
 learninglocker_nginx_port: 8888
 learninglocker_nginx_healthcheck_port: 5000
 learninglocker_nginx_healthcheck_endpoint: "/__healthcheck__"
+learninglocker_nginx_status_endpoint: "/__status__"
 learninglocker_nginx_replicas: 1
 
 # -- volumes
