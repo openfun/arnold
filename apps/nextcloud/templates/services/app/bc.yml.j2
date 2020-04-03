@@ -16,6 +16,10 @@ spec:
       FROM {{ nextcloud_image_name }}:{{ nextcloud_image_tag }}
       USER 0
 
+      # Remove skeleton content to create an empty directory
+      # when a user is created
+      RUN rm -rf /app/core/skeleton/*
+
       RUN chown -R {{ nextcloud_user_id }}:root /app && \
           chown {{ nextcloud_user_id }}:root /install.sh
         
