@@ -1,0 +1,19 @@
+module.exports = [{
+  cwd: '/app',
+  exec_mode: 'cluster',
+  instances: {{ learninglocker_api_pm2_instances }},
+  name: 'api',
+  script: 'api/dist/server'
+}, {
+  cwd: '/app',
+  exec_mode: 'cluster',
+  instances: {{ learninglocker_ui_pm2_instances }},
+   name: 'ui',
+  script: 'ui/dist/server'
+}, {
+  cwd: '/app',
+  exec_mode: 'fork',
+  instances: {{ learninglocker_worker_pm2_instances }},
+  name: 'worker',
+  script: 'worker/dist/server'
+}];

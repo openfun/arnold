@@ -14,6 +14,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Add nginx status endpoint in `ashley`, `edxapp`, `edxec`, `flower`,
   `learninglocker`, `marsha`, `nextcloud` and `richie`.
 
+### Changed
+
+- Run learninglocker using pm2 process manager
+
 ## [5.3.0] - 2020-03-31
 
 ### Added

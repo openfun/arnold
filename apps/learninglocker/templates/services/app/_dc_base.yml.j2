@@ -32,7 +32,7 @@ spec:
             - containerPort: "{{ learninglocker_port }}"
               protocol: TCP
 {% endif %}
-          command: ["node", "{{ learninglocker_command }}"]
+          command: ["pm2-runtime", "/usr/local/etc/pm2/config.d/ecosystem.config.js", "--only", "{{ learninglocker_pm2_app }}"]
           envFrom:
             - secretRef:
                 name: "{{ learninglocker_secret_name }}"
@@ -41,10 +41,26 @@ spec:
           env:
             - name: MONGODB_PATH
               value: "{{ mongodb_uri(env_type, trashable_env_types, learninglocker_mongodb_host, deployment_stamp, learninglocker_endpoint_mongodb_ips, learninglocker_mongodb_replicaset, learninglocker_mongodb_read_preference) }}"
+            # PM2 creates files and directories in the user's HOME. By default the user's HOME is `/`
+            # and obviously it's not possible for an unprivileged user to write to the `/` directory.
+            # PM2 will work as expected after changing the `HOME` environment variable to a
+            # directory the user can write to.
+            - name: HOME
+              value: /home/pm2_user
           volumeMounts:
             - name: learninglocker-v-storage
               mountPath: /app/storage
+            - name: learninglocker-configmap
+              mountPath: /usr/local/etc/pm2/config.d
+            - name: pm2-homedir
+              mountPath: /home/pm2_user
       volumes:
         - name: learninglocker-v-storage
           persistentVolumeClaim:
             claimName: learninglocker-pvc-storage
+        - name: learninglocker-configmap
+          configMap:
+            defaultMode: 420
+            name: learninglocker-app-{{ deployment_stamp }}
+        - name: pm2-homedir
+          emptyDir: {}  # volume that lives as long as the pod lives

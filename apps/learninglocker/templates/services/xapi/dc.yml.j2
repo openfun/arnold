@@ -25,6 +25,7 @@ spec:
         - image: "{{ learninglocker_xapi_image_name }}:{{ learninglocker_xapi_image_tag }}"
           imagePullPolicy: Always
           name: nginx
+          command: ["pm2-runtime", "/usr/local/etc/pm2/config.d/ecosystem.config.js", "--only", "xapi"]
           ports:
             - containerPort: "{{ learninglocker_xapi_port }}"
               protocol: TCP
@@ -36,9 +37,25 @@ spec:
           env:
             - name: MONGO_URL
               value: "{{ mongodb_uri(env_type, trashable_env_types, learninglocker_mongodb_host, deployment_stamp, learninglocker_endpoint_mongodb_ips, learninglocker_mongodb_replicaset, learninglocker_mongodb_read_preference) }}"
+            # PM2 creates files and directories in the user's HOME. By default the user's HOME is `/`
+            # and obviously it's not possible for an unprivileged user to write to the `/` directory.
+            # PM2 will work as expected after changing the `HOME` environment variable to a
+            # directory the user can write to.
+            - name: HOME
+              value: /home/pm2_user
           volumeMounts:
+            - name: learninglocker-xapi-configmap
+              mountPath: /usr/local/etc/pm2/config.d
             - name: learninglocker-xapi-storage
               mountPath: /app/storage
+            - name: pm2-homedir
+              mountPath: /home/pm2_user
       volumes:
+        - name: learninglocker-xapi-configmap
+          configMap:
+            defaultMode: 420
+            name: learninglocker-xapi-{{ deployment_stamp }}
         - name: learninglocker-xapi-storage
           emptyDir: {}
+        - name: pm2-homedir
+          emptyDir: {}  # volume that lives as long as the pod lives
