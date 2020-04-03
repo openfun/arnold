@@ -23,6 +23,19 @@ spec:
         version: "{{ learninglocker_image_tag }}"
         deploymentconfig: "{{ dc_name }}-{{ deployment_stamp }}"
     spec:
+      # Prefer running pods on different nodes for redundancy
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: deploymentconfig
+                      operator: In
+                      values:
+                        - "{{ dc_name }}-{{ deployment_stamp }}"
+                topologyKey: kubernetes.io/hostname
       containers:
         - name: "{{ service_variant }}"
           image: "{{ learninglocker_image_name }}:{{ learninglocker_image_tag }}"

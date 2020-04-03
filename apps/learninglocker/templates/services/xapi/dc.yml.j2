@@ -21,6 +21,19 @@ spec:
         deployment_stamp: "{{ deployment_stamp }}"
         deploymentconfig: "learninglocker-xapi-{{ deployment_stamp }}"
     spec:
+      # Prefer running pods on different nodes for redundancy
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: deploymentconfig
+                      operator: In
+                      values:
+                        - "learninglocker-xapi-{{ deployment_stamp }}"
+                topologyKey: kubernetes.io/hostname
       containers:
         - image: "{{ learninglocker_xapi_image_name }}:{{ learninglocker_xapi_image_tag }}"
           imagePullPolicy: Always
