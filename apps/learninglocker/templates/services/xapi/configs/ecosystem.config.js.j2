@@ -1,0 +1,7 @@
+module.exports = [{
+  cwd: '/app',
+  exec_mode: 'cluster',
+  instances: {{ learninglocker_xapi_pm2_instances }},
+  name: 'xapi',
+  script: 'dist/server.js'
+}]
