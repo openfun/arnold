@@ -20,9 +20,9 @@ spec:
       # when a user is created
       RUN rm -rf /app/core/skeleton/*
 
-      RUN chown -R {{ nextcloud_user_id }}:root /app && \
-          chown {{ nextcloud_user_id }}:root /install.sh
-        
+      RUN chown -R {{ nextcloud_user_id }}:root {{ nextcloud_base_dir }} && \
+          chown {{ nextcloud_user_id }}:root /usr/local/bin/install.sh
+
       USER {{ nextcloud_user_id }}
   triggers:
     - type: "ConfigChange"
