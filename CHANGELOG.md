@@ -8,6 +8,14 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## Changed
+
+- Update `nextcloud` app scripts path to: `/usr/local/bin`
+
+## Fixed
+
+- Create `.ocdata` file in the `data` directory for the Nextcloud image
+
 ## [5.4.0] - 2020-04-03
 
 ### Added
