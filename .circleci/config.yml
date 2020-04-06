@@ -543,7 +543,8 @@ jobs:
             sed -i -e "s/REPLACE_USER_ID/$USER_ID/g" group_vars/customer/eugene/ci/main.yml
             bin/build
 
-      # Once deployed, we need to manually run the upgrade command because some dependencies have to be updated.
+      # Once deployed, we need to turn off the maintenance mode in case it is still enabled once
+      # the upgrade command run in the entrypoint.
       - run:
           name: Test the "nextcloud" application bootstrapping
           command: |
@@ -552,7 +553,7 @@ jobs:
             bin/ci-ansible-playbook deploy.yml "redis,mailcatcher,nextcloud"
             oc project ci-eugene
             oc exec -it $(oc get pod -l 'app in (nextcloud),service in (nextcloud),!job_stamp' -o json | jq -r '.items[0].metadata.name') \
-              -- /bin/bash -c 'php /app/occ upgrade && php /app/occ maintenance:mode --off'
+              -- php /app/occ maintenance:mode --off
             bin/ci-test-route "nextcloud" "Nextcloud" "/login" "next" 20
 
       - run:

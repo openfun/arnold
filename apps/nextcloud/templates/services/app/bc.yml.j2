@@ -26,6 +26,9 @@ spec:
           chown {{ nextcloud_user_id }}:root /usr/local/bin/install.sh
 
       USER {{ nextcloud_user_id }}
+
+      # Nextcloud warn us if this file doesn't exists and the pod stays in CrashLoopBackOff
+      RUN touch {{ nextcloud_base_dir }}/data/.ocdata
   triggers:
     - type: "ConfigChange"
   output:
