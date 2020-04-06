@@ -38,7 +38,7 @@ spec:
           command:
             - "/bin/bash"
             - "-c"
-            - /entrypoint.sh /install.sh
+            - entrypoint.sh install.sh
           volumeMounts:
             - name: nextcloud-v-install
               mountPath: /tmp/nextcloud  
