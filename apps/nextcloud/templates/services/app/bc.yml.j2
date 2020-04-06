@@ -10,7 +10,9 @@ metadata:
     deployment_stamp: "{{ deployment_stamp }}"
 spec:
   strategy:
-    type: Docker
+    dockerStrategy:
+      noCache: true
+      forcePull: true
   source:
     dockerfile: |-
       FROM {{ nextcloud_image_name }}:{{ nextcloud_image_tag }}
