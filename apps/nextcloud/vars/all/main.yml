@@ -45,6 +45,7 @@ nextcloud_user_id: 1000
 nextcloud_base_dir: "/app"
 nextcloud_container_user: "openfun"
 nextcloud_container_home_dir: "/home/openfun"
+nextcloud_apps_user_saml_version: "3.0.1"
 
 # -- volumes
 nextcloud_install_volume_size: 2Mi

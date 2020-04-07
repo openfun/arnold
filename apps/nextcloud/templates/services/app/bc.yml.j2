@@ -25,6 +25,11 @@ spec:
       RUN chown -R {{ nextcloud_user_id }}:root {{ nextcloud_base_dir }} && \
           chown {{ nextcloud_user_id }}:root /usr/local/bin/install.sh
 
+      # Install user_saml app
+      RUN cd {{ nextcloud_base_dir }}/apps && \
+          curl -Ls https://github.com/nextcloud/user_saml/releases/download/v{{ nextcloud_apps_user_saml_version }}/user_saml-{{ nextcloud_apps_user_saml_version }}.tar.gz | tar xz && \
+          chown -R {{ nextcloud_user_id }}:root {{ nextcloud_base_dir }}/apps/user_saml
+
       USER {{ nextcloud_user_id }}
 
       # Nextcloud warn us if this file doesn't exists and the pod stays in CrashLoopBackOff
