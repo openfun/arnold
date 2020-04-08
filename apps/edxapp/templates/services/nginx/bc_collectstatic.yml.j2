@@ -43,8 +43,8 @@ spec:
         rm -rf /var/lib/apt/lists/*
       COPY . /edx/app/edxapp/edx-platform/themes/custom-theme
       {% if edxapp_should_update_i18n -%}
-      RUN python manage.py lms compilejsi18n && \
-          python manage.py cms compilejsi18n
+      RUN python manage.py lms compilejsi18n --settings={{ edxapp_build_settings }} && \
+          python manage.py cms compilejsi18n --settings={{ edxapp_build_settings }}
       {% endif -%}
       # Note that we also collect statics here.
       RUN NO_PREREQ_INSTALL=1 paver update_assets --settings={{ edxapp_build_settings }}
