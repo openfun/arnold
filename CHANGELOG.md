@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [5.5.0] - 2020-04-09
+
 ## Added
 
 - New `etherpad` application
@@ -700,7 +702,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v5.4.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v5.5.0...master
+[5.5.0]: https://github.com/openfun/arnold/compare/v5.4.0...v5.5.0
 [5.4.0]: https://github.com/openfun/arnold/compare/v5.3.0...v5.4.0
 [5.3.0]: https://github.com/openfun/arnold/compare/v5.2.0...v5.3.0
 [5.2.0]: https://github.com/openfun/arnold/compare/v5.1.0...v5.2.0
