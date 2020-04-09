@@ -21,6 +21,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Create `.ocdata` file in the `data` directory for the Nextcloud image
 - Restore `edxapp` custom theme support (front-end translations in `nginx`
   collectstatic BC)
+- Use nextcloud image built by our BC in the Nginx InitContainer
 
 ## [5.4.0] - 2020-04-03
 
