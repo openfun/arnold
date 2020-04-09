@@ -8,12 +8,11 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
-## Changed
-
-- Update `nextcloud` app scripts path to: `/usr/local/bin`
+## [5.4.1] - 2020-04-09
 
 ## Fixed
 
+- Update `nextcloud` app scripts path to: `/usr/local/bin`
 - Create `.ocdata` file in the `data` directory for the Nextcloud image
 - Restore `edxapp` custom theme support (front-end translations in `nginx`
   collectstatic BC)
@@ -695,7 +694,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v5.4.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v5.4.1...master
+[5.4.1]: https://github.com/openfun/arnold/compare/v5.4.0...v5.4.1
 [5.4.0]: https://github.com/openfun/arnold/compare/v5.3.0...v5.4.0
 [5.3.0]: https://github.com/openfun/arnold/compare/v5.2.0...v5.3.0
 [5.2.0]: https://github.com/openfun/arnold/compare/v5.1.0...v5.2.0
