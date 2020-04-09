@@ -64,7 +64,7 @@ spec:
             periodSeconds: 5
 
       initContainers:
-        - image: "{{ nextcloud_image_name }}:{{ nextcloud_image_tag }}"
+        - image: "{{ internal_docker_registry }}/{{ project_name }}/nextcloud:{{ nextcloud_image_tag }}"
           name: init-copy-src
           imagePullPolicy: Always
           command:
