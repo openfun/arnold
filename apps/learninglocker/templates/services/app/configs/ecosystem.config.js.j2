@@ -3,17 +3,29 @@ module.exports = [{
   exec_mode: 'cluster',
   instances: {{ learninglocker_api_pm2_instances }},
   name: 'api',
-  script: 'api/dist/server'
+  script: 'api/dist/server',
+  log_date_format: 'YYYY-MM-DD HH:mm Z',
+  combine_logs: true,
+  error_file: '/dev/stderr',
+  out_file: '/dev/stderr'
 }, {
   cwd: '/app',
   exec_mode: 'cluster',
   instances: {{ learninglocker_ui_pm2_instances }},
-   name: 'ui',
-  script: 'ui/dist/server'
+  name: 'ui',
+  script: 'ui/dist/server',
+  log_date_format: 'YYYY-MM-DD HH:mm Z',
+  combine_logs: true,
+  error_file: '/dev/stderr',
+  out_file: '/dev/stderr'
 }, {
   cwd: '/app',
   exec_mode: 'fork',
   instances: {{ learninglocker_worker_pm2_instances }},
   name: 'worker',
-  script: 'worker/dist/server'
+  script: 'worker/dist/server',
+  log_date_format: 'YYYY-MM-DD HH:mm Z',
+  combine_logs: true,
+  error_file: '/dev/stderr',
+  out_file: '/dev/stderr'
 }];

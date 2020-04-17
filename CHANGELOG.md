@@ -12,6 +12,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 - Upgrade `openshift` to `0.11.0`
 
+### Fixed
+
+- Improve pm2 logs configuration for the `learninglocker` application
+
 ## [5.5.0] - 2020-04-09
 
 ## Added
