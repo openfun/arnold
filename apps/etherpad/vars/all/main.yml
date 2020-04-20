@@ -35,6 +35,9 @@ etherpad_file_secret_name: "etherpad-file-{{ etherpad_vault_checksum | default('
 etherpad_activate_http_basic_auth: false
 etherpad_configs_directory_path: "/app/configs"
 etherpad_private_directory_path: "/app/private"
+etherpad_app_healthcheck_port: 9002
+etherpad_app_healthcheck_live_endpoint: "/live"
+etherpad_app_healthcheck_ready_endpoint: "/ready"
 
 # Configuration
 #
