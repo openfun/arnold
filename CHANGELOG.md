@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [5.6.0] - 2020-04-20
+
 ### Changed
 
 - Upgrade `openshift` to `0.11.0`
@@ -712,7 +714,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v5.5.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v5.6.0...master
+[5.6.0]: https://github.com/openfun/arnold/compare/v5.5.0...v5.6.0
 [5.5.0]: https://github.com/openfun/arnold/compare/v5.4.0...v5.5.0
 [5.4.0]: https://github.com/openfun/arnold/compare/v5.3.0...v5.4.0
 [5.3.0]: https://github.com/openfun/arnold/compare/v5.2.0...v5.3.0
