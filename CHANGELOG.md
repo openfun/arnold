@@ -11,6 +11,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Upgrade `openshift` to `0.11.0`
+- Use lightship-based health checks for the `etherpad` application (requires a
+  recent `fundocker/etherpad` docker image; at least `1.8.0-education-1.2.0`).
 
 ### Fixed
 
