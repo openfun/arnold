@@ -15,6 +15,7 @@
 - name: Set OpenShift objects to manage
   set_fact:
     builds: "{{ templates | map('regex_search', '.*/bc.*\\.yml\\.j2$') | select('string') | list }}"
+    configmaps: "{{ templates | map('regex_search', '.*/cm.*\\.yml\\.j2$') | select('string') | list }}"
     deployments: "{{ templates | map('regex_search', '.*/dc.*\\.yml\\.j2$') | select('string') | list }}"
     endpoints: "{{ templates | map('regex_search', '.*/ep.*\\.yml\\.j2$') | select('string') | list }}"
     services: "{{ templates | map('regex_search', '.*/svc.*\\.yml\\.j2$') | select('string') | list }}"
@@ -23,14 +24,15 @@
     cronjobs: "{{ templates | map('regex_search', '.*/cronjob_.*\\.yml\\.j2$') | select('string') | list }}"
     routes: "{{ templates | map('regex_search', '.*/route.*\\.yml\\.j2$') | select('string') | list }}"
   tags:
-    - deploy
     - build
+    - configmap
+    - deploy
     - deployment
     - endpoint
-    - service
-    - stream
     - job
     - route
+    - service
+    - stream
 
 - name: Display OpenShift's builds for this app
   debug:
@@ -40,6 +42,15 @@
   tags:
     - deploy
     - build
+
+- name: Display OpenShift's configmaps for this app
+  debug:
+    var: configmaps
+    verbosity: 2
+  when: configmaps is defined
+  tags:
+    - deploy
+    - configmap
 
 - name: Display OpenShift's deployments for this app
   debug:
