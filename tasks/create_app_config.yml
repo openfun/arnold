@@ -7,6 +7,15 @@
 # [1] https://docs.okd.io/latest/dev_guide/configmaps.html#configmaps-use-case-consuming-in-volumes
 # [2] https://docs.okd.io/latest/dev_guide/configmaps.html#configmaps-use-case-consuming-in-env-vars
 
+################# Generic ConfigMaps #######################
+- name: Create generic config maps
+  k8s:
+    definition: "{{ lookup('template', item) | from_yaml }}"
+    state: present
+  with_items: "{{ configmaps }}"
+  when: configmaps is defined
+  tags: configmap
+
 ################# ConfigMaps used in a volume #######################
 
 # Select services with ConfigMaps
@@ -31,21 +40,21 @@
 # }
 - name: Format configMaps
   set_fact:
-    configmaps: |
-      {%- set configmaps = {} -%}
+    configmaps_from_files: |
+      {%- set configmaps_from_files = {} -%}
       {%- for service in app_configmaps -%}
-        {%- set _ = configmaps.update({ service.name: {} }) -%}
+        {%- set _ = configmaps_from_files.update({ service.name: {} }) -%}
         {%- for cm_path in service.configs -%}
           {%- set content = lookup('template', cm_path, convert_data = False) -%}
           {%- set filename = cm_path | basename | regex_replace('.j2') -%}
-          {%- set _ = configmaps.get(service.name).update({filename: content}) -%}
+          {%- set _ = configmaps_from_files.get(service.name).update({filename: content}) -%}
         {%- endfor -%}
       {%- endfor -%}
-      {{ configmaps }}
+      {{ configmaps_from_files }}
 
 - name: Display config maps
   debug:
-    var: configmaps
+    var: configmaps_from_files
     verbosity: 3
 
 - name: Create the config maps in OpenShift
@@ -62,7 +71,7 @@
           service: "{{ item.key }}"
           deployment_stamp: "{{ deployment_stamp | default('N/A') }}"
       data: "{{ item.value }}"
-  with_dict: "{{ configmaps }}"
+  with_dict: "{{ configmaps_from_files }}"
 
 ################# ConfigMaps used to populate environment variables #######################
 
