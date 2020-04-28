@@ -3,17 +3,17 @@ kind: Service
 metadata:
   labels:
     app: marsha
-    service: marsha
+    service: app
     version: "{{ marsha_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
   name: marsha-app-{{ deployment_stamp }}  # name of the service should be host name in nginx
   namespace: "{{ project_name }}"
 spec:
   ports:
-  - name: 8000-tcp
-    port: 8000
+  - name: {{ marsha_django_port }}-tcp
+    port: {{ marsha_django_port }}
     protocol: TCP
-    targetPort: 8000
+    targetPort: {{ marsha_django_port }}
   selector:
     app: marsha
     deploymentconfig: "marsha-app-{{ deployment_stamp }}"

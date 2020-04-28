@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Changed
+
+- Split API and XAPI requests in marsha
+
 ## [5.7.0] - 2020-04-23
 
 ### Added

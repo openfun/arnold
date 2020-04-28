@@ -1,22 +1,24 @@
+{%- set dc_name = "marsha-%s" | format(service_variant) -%}
+
 apiVersion: v1
 kind: DeploymentConfig
 metadata:
   labels:
     app: marsha
-    service: marsha
+    service: "{{ service_variant }}"
     version: "{{ marsha_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
-  name: "marsha-app-{{ deployment_stamp }}"
+  name: "{{ dc_name }}-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
-  replicas: {{ marsha_app_replicas }}
+  replicas: {{ marsha_replicas }}
   template:
     metadata:
       labels:
         app: marsha
-        service: marsha
+        service: "{{ service_variant }}"
         version: "{{ marsha_image_tag }}"
-        deploymentconfig: "marsha-app-{{ deployment_stamp }}"
+        deploymentconfig: "{{ dc_name }}-{{ deployment_stamp }}"
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
       # Prefer running pods on different nodes for redundancy
@@ -30,7 +32,7 @@ spec:
                     - key: deploymentconfig
                       operator: In
                       values:
-                        - "marsha-app-{{ deployment_stamp }}"
+                        - "{{ dc_name }}-{{ deployment_stamp }}"
                 topologyKey: kubernetes.io/hostname
       containers:
         - name: marsha

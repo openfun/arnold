@@ -4,6 +4,10 @@ upstream marsha-backend {
   server marsha-app-{{ deployment_stamp }}:{{ marsha_django_port }} fail_timeout=0;
 }
 
+upstream marsha-xapi {
+  server marsha-xapi-{{ deployment_stamp }}:{{ marsha_django_port }} fail_timeout=0;
+}
+
 server {
   listen {{ marsha_nginx_port }};
   server_name localhost;
@@ -36,6 +40,13 @@ server {
     proxy_pass http://marsha-backend;
   }
 
+  location @proxy_to_marsha_xapi {
+    proxy_set_header Host $http_host;
+
+    proxy_redirect off;
+    proxy_pass http://marsha-xapi;
+  }
+
   location / {
 {% if http_basic_auth_enabled and bypass_htaccess %}
     if ($http_x_forwarded_for !~ ^({{ marsha_nginx_bypass_htaccess_ip_whitelist | join("|") }})) {
@@ -45,6 +56,17 @@ server {
 {% endif %} 
 
     try_files $uri @proxy_to_marsha_app;
+  }
+
+  location /xapi {
+{% if http_basic_auth_enabled and bypass_htaccess %}
+    if ($http_x_forwarded_for !~ ^({{ marsha_nginx_bypass_htaccess_ip_whitelist | join("|") }})) {
+      error_page 401 @basicauth;
+      return 401;
+    }
+{% endif %} 
+
+    try_files $uri @proxy_to_marsha_xapi;
   }
 
 {% if marsha_nginx_admin_ip_withelist | length > 0 %}
