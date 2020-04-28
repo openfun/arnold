@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [5.8.0] - 2020-04-28
+
 ### Changed
 
 - Split API and XAPI requests in marsha
@@ -728,7 +730,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v5.7.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v5.8.0...master
+[5.8.0]: https://github.com/openfun/arnold/compare/v5.7.0...v5.8.0
 [5.7.0]: https://github.com/openfun/arnold/compare/v5.6.0...v5.7.0
 [5.6.0]: https://github.com/openfun/arnold/compare/v5.5.0...v5.6.0
 [5.5.0]: https://github.com/openfun/arnold/compare/v5.4.0...v5.5.0
