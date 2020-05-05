@@ -1,5 +1,3 @@
-{% from "apps/edxapp/templates/services/cms/macros/image.yml.j2" import image_name %}
-
 apiVersion: v1
 kind: DeploymentConfig
 metadata:
@@ -35,7 +33,7 @@ spec:
                   - "edxapp-nginx-{{ deployment_stamp }}"
               topologyKey: kubernetes.io/hostname
       containers:
-        - image: "{{ internal_docker_registry }}/{{ project_name }}/{{ image_name('nginx', edxapp_image_tag, edxapp_theme_tag) }}"
+        - image: "{{ edxapp_nginx_image_name }}:{{ edxapp_image_tag }}"
           name: nginx
           ports:
             - containerPort: 80

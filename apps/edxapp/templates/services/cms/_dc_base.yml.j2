@@ -35,8 +35,6 @@
   {%- endif %}
 {%- endmacro -%}
 
-{%- from "apps/edxapp/templates/services/cms/macros/image.yml.j2" import image_name -%}
-
 apiVersion: v1
 kind: DeploymentConfig
 metadata:
@@ -83,9 +81,7 @@ spec:
           value: {{ service_variant }}
         - name: DJANGO_SETTINGS_MODULE
           value: {{ service_variant }}.envs.fun.docker_run
-        # We point to a local registry image build for this "live" image (see
-        # ImageStream and BuildConfig templates)
-        image: "{{ internal_docker_registry }}/{{ project_name }}/{{ image_name(service_variant, edxapp_image_tag, edxapp_theme_tag) }}"
+        image: "{{ edxapp_image_name }}:{{ edxapp_image_tag }}"
         imagePullPolicy: Always
 {% if celery_worker is not defined %}
         # Pod probes that only apply for wsgi services
@@ -134,7 +130,7 @@ spec:
         # container. Please refer to the documentation to better understand our
         # settings generation mecanism.
         - name: init-create-config
-          image: "{{ internal_docker_registry }}/{{ project_name }}/{{ image_name(service_variant, edxapp_image_tag, edxapp_theme_tag) }}"
+          image: "{{ edxapp_image_name }}:{{ edxapp_image_tag }}"
           imagePullPolicy: Always
           command:
             - "/bin/bash"

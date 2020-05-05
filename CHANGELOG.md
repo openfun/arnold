@@ -12,6 +12,12 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 - Upgrade `yq` to `2.10.1`
 
+### Removed
+
+- Remove now useless static volume and collecstatic jobs from edxapp
+- Remove build configurations and image streams from edxapp and rely on
+  images built externally and embedding their theme and static files
+
 ## [5.9.0] - 2020-05-11
 
 ### Added
