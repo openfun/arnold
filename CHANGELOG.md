@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- Allow to set unlimited secrets in marsha
+
 ## [5.8.0] - 2020-04-28
 
 ### Changed
