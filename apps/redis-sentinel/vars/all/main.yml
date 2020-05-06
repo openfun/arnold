@@ -6,6 +6,10 @@ redis_sentinel_user_id: null
 redis_sentinel_group_id: null
 redis_sentinel_fsgroup_id: null
 
+## Service configuration
+# name used by the service. This name will be prefixed by `rfs-` in the final service
+redis_sentinel_service_name: redis-sentinel
+
 ## Sentinel configuration
 # Number of sentinel replicas 
 redis_sentinel_sentinel_replicas: 3
@@ -18,6 +22,8 @@ redis_sentinel_sentinel_custom_config: []
 ## Redis configuration
 # Number of redis replicas
 redis_sentinel_redis_replicas: 3
+# Enable disk persistence
+redis_sentinel_redis_persistence_enabled: false
 redis_sentinel_redis_data_volume_size: 2Gi
 # If you need custom redis configuration you should add
 # them in this list. One configuration is a new entry
