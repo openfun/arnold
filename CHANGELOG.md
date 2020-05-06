@@ -10,7 +10,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- Allow to set unlimited secrets in marsha
+- Allow to set unlimited secrets in Marsha
+- Create custom settings module in Marsha
 
 ## [5.8.0] - 2020-04-28
 
