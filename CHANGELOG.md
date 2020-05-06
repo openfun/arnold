@@ -13,6 +13,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Allow to set unlimited secrets in Marsha
 - Create custom settings module in Marsha
 
+### Changed
+
+- Allow to disable persistence in redis-sentinel
+
 ## [5.8.0] - 2020-04-28
 
 ### Changed

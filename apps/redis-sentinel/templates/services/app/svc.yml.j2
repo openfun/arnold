@@ -12,7 +12,7 @@ metadata:
     version: RedisFailover
   # Nota bene: the name of the service should be the host name in edxapp configuration,
   # prefixed by "rfs-", e.g. "rfs-redis-sentinel"
-  name: redis-sentinel
+  name: {{ redis_sentinel_service_name }}
   namespace: "{{ project_name }}"
 spec:
   sentinel:
@@ -59,6 +59,7 @@ spec:
       - "{{ config }}"
 {% endfor %}
 {% endif %}
+{% if redis_sentinel_redis_persistence_enabled %}
     storage:
       keepAfterDeletion: true
       persistentVolumeClaim:
@@ -74,6 +75,7 @@ spec:
           resources:
             requests:
               storage: {{ redis_sentinel_redis_data_volume_size }}
+{% endif %}
     securityContext:
       runAsUser: {{ redis_sentinel_user_id }}
       runAsGroup: {{ redis_sentinel_group_id }}
