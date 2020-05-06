@@ -58,7 +58,7 @@ spec:
             periodSeconds: 5
           env:
             - name: DJANGO_SETTINGS_MODULE
-              value: marsha.settings
+              value: marsha.configs.settings
             - name: DJANGO_CONFIGURATION
               value: "{{ marsha_django_configuration }}"
             - name: POSTGRES_DB
@@ -77,6 +77,8 @@ spec:
             - configMapRef:
                 name: "marsha-app-dotenv-{{ deployment_stamp }}"
           volumeMounts:
+            - name: marsha-configmap
+              mountPath: /app/src/backend/marsha/configs
 {% if env_type in trashable_env_types %}
             - name: marsha-v-media
               mountPath: /data/media
@@ -88,6 +90,10 @@ spec:
               name: marsha-cloudfront-private-key-secret
 {% endif %}
       volumes:
+        - name: marsha-configmap
+          configMap:
+            defaultMode: 420
+            name: marsha-app-{{ deployment_stamp }}
 {% if env_type in trashable_env_types %}
         - name: marsha-v-media
           persistentVolumeClaim:
