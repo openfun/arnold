@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Changed
+
+- Upgrade `yq` to `2.10.1`
+
 ## [5.9.0] - 2020-05-11
 
 ### Added
