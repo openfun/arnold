@@ -8,6 +8,11 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Changed
+
+- Upgrade `ansible` to `2.9.9`
+- Upgrade `jmespath` to `0.10.0`
+
 ## [5.10.0] - 2020-05-19
 
 ### Changed
