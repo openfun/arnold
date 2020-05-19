@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [5.10.0] - 2020-05-19
+
 ### Changed
 
 - Upgrade `yq` to `2.10.1`
@@ -751,7 +753,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v5.9.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v5.10.0...master
+[5.10.0]: https://github.com/openfun/arnold/compare/v5.9.0...v5.10.0
 [5.9.0]: https://github.com/openfun/arnold/compare/v5.8.0...v5.9.0
 [5.8.0]: https://github.com/openfun/arnold/compare/v5.7.0...v5.8.0
 [5.7.0]: https://github.com/openfun/arnold/compare/v5.6.0...v5.7.0
