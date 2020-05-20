@@ -14,7 +14,14 @@ bootstrap.memory_lock: {{ elasticsearch_memory_lock | lower }}
 # are not ready yet.
 discovery.zen.ping.unicast.hosts: elasticsearch-discovery.{{ project_name }}.svc
 
+{% if elasticsearch_image_tag is version('7.0', '>=') %}
+cluster.initial_master_nodes:
+{% for replica in range(elasticsearch_nodes | int) %}
+  - elasticsearch-node-{{ replica }}
+{% endfor %}
+{% else %}
 discovery.zen.minimum_master_nodes: {{ elasticsearch_minimum_master_nodes }}
+{% endif %}
 
 # Security features are disabled by default on ES basic and trial licenses
 xpack.security.enabled: false
