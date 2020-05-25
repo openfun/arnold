@@ -1,0 +1,26 @@
+# Application default configuration
+
+# -- route
+kibana_host: "kibana.{{ project_name}}.{{ domain_name }}"
+
+# -- nginx
+kibana_nginx_image_name: "fundocker/openshift-nginx"
+kibana_nginx_image_tag: "1.13"
+kibana_nginx_port: 8061
+kibana_nginx_replicas: 1
+kibana_nginx_htpasswd_secret_name: "kibana-htpasswd"
+kibana_nginx_healthcheck_port: 5000
+kibana_nginx_healthcheck_endpoint: "/__healthcheck__"
+kibana_nginx_status_endpoint: "/__status__"
+kibana_nginx_admin_ip_withelist: []
+kibana_nginx_bypass_htaccess_ip_whitelist: []
+
+# -- kibana
+kibana_image_name: "kibana"
+kibana_image_tag: "7.7.0"
+kibana_app_port: 5601
+kibana_app_replicas: 1
+kibana_es_hosts: [ "http://elasticsearch:9200" ]
+kibana_config_path: "/usr/share/kibana/config"
+kibana_secret_name: "kibana-{{ kibana_vault_checksum | default('undefined_kibana_vault_checksum') }}"
+kibana_activate_http_basic_auth: false

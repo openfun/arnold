@@ -18,3 +18,5 @@ nextcloud_database_name: nextcloud
 elasticsearch_java_opts:
   - "-Xms64m"
   - "-Xmx64m"
+elasticsearch_image_name: "elasticsearch"
+elasticsearch_image_tag: "7.7.0"

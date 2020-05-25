@@ -1,0 +1,11 @@
+# Arnold-controlled configuration
+
+# The server name should be unique for all replica
+server.name: ${HOSTNAME}
+
+# Accept requests from all hosts
+server.host: 0.0.0.0
+
+elasticsearch.hosts: {{ kibana_es_hosts | to_yaml }}
+
+monitoring.ui.container.elasticsearch.enabled: true

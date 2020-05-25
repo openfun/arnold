@@ -5,3 +5,4 @@ redirections:
       - "www.hello.{{ project_name}}.{{ domain_name }}"
 
 nextcloud_user_id: REPLACE_USER_ID
+
