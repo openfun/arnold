@@ -16,6 +16,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Upgrade `openshift` to `0.11.1`
 - Upgrade `ansible` to `2.9.9`
 - Upgrade `jmespath` to `0.10.0`
 
