@@ -27,6 +27,7 @@ apps:
   - name: hello
   - name: edxec
   - name: elasticsearch
+  - name: kibana
 
 # While deploying edxapp separately from the forum, those vars are required to
 # compile custom configMaps

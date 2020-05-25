@@ -16,6 +16,7 @@ apps:
   - name: etherpad
   - name: forum
   - name: hello
+  - name: kibana
   - name: learninglocker
   - name: mailcatcher
   - name: marsha

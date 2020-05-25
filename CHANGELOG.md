@@ -10,6 +10,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- New `kibana` application
 - ElasticSearch `7.0+` releases are now supported
 - Implemented `StatefulSet` k8s objects support
 

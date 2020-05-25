@@ -1,0 +1,7 @@
+# customer: {{ customer }}
+# env_type: {{ env_type }}
+
+# kibana
+XPACK_SECURITY_ENCRYPTIONKEY: {{ lookup('password', '/dev/null length=50') }}
+XPACK_REPORTING_ENCRYPTIONKEY: {{ lookup('password', '/dev/null length=50') }}
+XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY: {{ lookup('password', '/dev/null length=50') }}
