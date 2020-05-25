@@ -19,6 +19,7 @@
     deployments: "{{ templates | map('regex_search', '.*/dc.*\\.yml\\.j2$') | select('string') | list }}"
     endpoints: "{{ templates | map('regex_search', '.*/ep.*\\.yml\\.j2$') | select('string') | list }}"
     services: "{{ templates | map('regex_search', '.*/svc.*\\.yml\\.j2$') | select('string') | list }}"
+    statefulsets: "{{ templates | map('regex_search', '.*/sts.*\\.yml\\.j2$') | select('string') | list }}"
     streams: "{{ templates | map('regex_search', '.*/is.*\\.yml\\.j2$') | select('string') | list }}"
     jobs: "{{ templates | map('regex_search', '.*/job_.*\\.yml\\.j2$') | select('string') | list }}"
     cronjobs: "{{ templates | map('regex_search', '.*/cronjob_.*\\.yml\\.j2$') | select('string') | list }}"
@@ -32,6 +33,7 @@
     - job
     - route
     - service
+    - statefulset
     - stream
 
 - name: Display OpenShift's builds for this app
@@ -60,6 +62,15 @@
   tags:
     - deploy
     - deployment
+
+- name: Display OpenShift's statefulsets for this app
+  debug:
+    var: statefulsets
+    verbosity: 2
+  when: deployments is defined
+  tags:
+    - deploy
+    - statefulset
 
 - name: Display OpenShift's endpoints for this app
   debug:
