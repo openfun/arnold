@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- Implemented `StatefulSet` k8s objects support
+
 ### Changed
 
 - Upgrade `ansible` to `2.9.9`

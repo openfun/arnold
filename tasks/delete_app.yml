@@ -10,6 +10,7 @@
     # Manually handle deletion cascade as the k8s module won't
     # https://github.com/ansible/ansible/issues/42302
     - { kind:  "ReplicationController", api_version: "v1" }
+    - { kind:  "StatefulSet", api_version: "v1" }
     - { kind:  "Pod", api_version: "v1" }
     - { kind:  "Job", api_version: "v1" }
     - { kind:  "CronJob", api_version: "v1beta1" }

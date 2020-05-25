@@ -63,10 +63,19 @@
     - deploy
     - deployment
 
-- name: Render deployment templates to prepare expected running pods calculation
+- name: OpenShift StatefulSets with deployment_stamp[{{ deployment_stamp }}] must be {{ deployment_state | default('present') }}
+  k8s:
+    definition: "{{ lookup('template', item) | from_yaml }}"
+    state: "{{ deployment_state | default('present') }}"
+  with_items: "{{ statefulsets }}"
+  tags:
+    - deploy
+    - statefulset
+
+- name: Render deployment and statefulset templates to prepare expected running pods calculation
   set_fact:
     tpl: "{{ lookup('template', item) | from_yaml }}"
-  with_items: "{{ deployments }}"
+  with_items: "{{ deployments | union(statefulsets) }}"
   register: rendered_deployment_templates
 
 - name: Calculate expected running pods given their replicas
