@@ -50,7 +50,7 @@ server {
   location / {
 {% if http_basic_auth_enabled and bypass_htaccess %}
     if ($http_x_forwarded_for !~ ^({{ marsha_nginx_bypass_htaccess_ip_whitelist | join("|") }})) {
-      error_page 401 @basicauth;
+      error_page 401 = @basicauth;
       return 401;
     }
 {% endif %} 
@@ -61,7 +61,7 @@ server {
   location /xapi {
 {% if http_basic_auth_enabled and bypass_htaccess %}
     if ($http_x_forwarded_for !~ ^({{ marsha_nginx_bypass_htaccess_ip_whitelist | join("|") }})) {
-      error_page 401 @basicauth;
+      error_page 401 = @basicauth;
       return 401;
     }
 {% endif %} 
