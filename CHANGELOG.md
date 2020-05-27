@@ -11,6 +11,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - NGINX default configuration were broken when using whitelisted IP condition
+- Remove unused `kibana_nginx_admin_ip_withelist` variable
 
 ## [5.11.0] - 2020-05-27
 

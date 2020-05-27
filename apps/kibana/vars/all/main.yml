@@ -12,7 +12,6 @@ kibana_nginx_htpasswd_secret_name: "kibana-htpasswd"
 kibana_nginx_healthcheck_port: 5000
 kibana_nginx_healthcheck_endpoint: "/__healthcheck__"
 kibana_nginx_status_endpoint: "/__status__"
-kibana_nginx_admin_ip_withelist: []
 kibana_nginx_bypass_htaccess_ip_whitelist: []
 
 # -- kibana
