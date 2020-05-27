@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [5.11.0] - 2020-05-27
+
 ### Added
 
 - New `kibana` application
@@ -765,7 +767,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v5.10.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v5.11.0...master
+[5.11.0]: https://github.com/openfun/arnold/compare/v5.10.0...v5.11.0
 [5.10.0]: https://github.com/openfun/arnold/compare/v5.9.0...v5.10.0
 [5.9.0]: https://github.com/openfun/arnold/compare/v5.8.0...v5.9.0
 [5.8.0]: https://github.com/openfun/arnold/compare/v5.7.0...v5.8.0
