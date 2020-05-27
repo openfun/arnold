@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Fixed
+
+- NGINX default configuration were broken when using whitelisted IP condition
+
 ## [5.11.0] - 2020-05-27
 
 ### Added
