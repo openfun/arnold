@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [5.11.1] - 2020-05-27
+
 ### Fixed
 
 - NGINX default configuration were broken when using whitelisted IP condition
@@ -772,7 +774,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v5.11.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v5.11.1...master
+[5.11.1]: https://github.com/openfun/arnold/compare/v5.11.0...v5.11.1
 [5.11.0]: https://github.com/openfun/arnold/compare/v5.10.0...v5.11.0
 [5.10.0]: https://github.com/openfun/arnold/compare/v5.9.0...v5.10.0
 [5.9.0]: https://github.com/openfun/arnold/compare/v5.8.0...v5.9.0
