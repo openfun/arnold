@@ -4,8 +4,8 @@
 richie_host: "richie.{{ project_name}}.{{ domain_name }}"
 
 # -- nginx
-richie_nginx_image_name: "fundocker/openshift-nginx"
-richie_nginx_image_tag: "1.13"
+richie_nginx_image_name: "fundocker/richie-demo-nginx"
+richie_nginx_image_tag: "master"
 richie_nginx_port: 8061
 richie_nginx_replicas: 1
 richie_nginx_htpasswd_secret_name: "richie-htpasswd"
@@ -34,37 +34,19 @@ richie_database_name: "richie"
 richie_database_secret_name: "richie-database-{{ richie_vault_checksum | default('undefined_richie_vault_checksum') }}"
 
 # -- richie
-richie_image_name: "fundocker/richie"
+richie_image_name: "fundocker/richie-demo"
 richie_image_tag: "master"
 # The image pull secret name should match the name of your secret created to
 # login to your private docker registry
 richie_image_pull_secret_name: ""
 richie_django_port: 8000
 richie_app_replicas: 1
-richie_django_settings_module: "settings"
+richie_django_settings_module: "demo.settings"
 richie_django_configuration: "Development"
 richie_secret_name: "richie-{{ richie_vault_checksum | default('undefined_richie_vault_checksum') }}"
-# Customize richie Docker image by installing extra dependencies for a
-# customer/environment. This var is expected to be a list of dependencies
-# following the pip requirement specifier (see example below).
-#
-# NOTA BENE:
-#
-# This is only intended for side packages not directly related to richie and
-# specific to a customer/environment or to the way you handle operations (e.g.
-# log handlers, monitoring agents, etc.).
-richie_extra_dependencies:
-  []
-  # Example values:
-  # - "graypy==0.3.1"
-  # - "raven>=6.0.0"
-  # - "requests"
-
 richie_activate_http_basic_auth: false
 
 # -- volumes
 # volume sizes with power of 2 suffices (Ki, Mi, Gi, Ti...) e.g 2Gi and 0 for no volume.
 richie_media_volume_size: 2Gi
-richie_static_volume_size: 2Gi
 richie_should_activate_media_volume: true
-richie_should_activate_static_volume: true

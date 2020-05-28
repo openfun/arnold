@@ -70,12 +70,11 @@ server {
     access_log off;
     expires {{ richie_nginx_media_cache_expires }};
     add_header Cache-Control public;
-    root /data/media/richie;
+    root /data/media;
     try_files /$file =404;
   }
 {% endif %}
 
-{% if richie_should_activate_static_volume %}
   location ~ ^/static/(?P<file>.*) {
     access_log off;
     gzip on;
@@ -83,9 +82,7 @@ server {
     gzip_types text/plain text/css text/xml text/javascript application/x-javascript application/xml image/svg+xml;
     expires {{ richie_nginx_static_cache_expires }};
     add_header Cache-Control public;
-    root /data/static/richie;
+    root /data/static;
     try_files /$file =404;
   }
-{% endif %}
-
 }
