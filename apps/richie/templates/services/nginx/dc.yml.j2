@@ -43,13 +43,8 @@ spec:
               name: richie-v-nginx
               readOnly: true
 {% if richie_should_activate_media_volume %}
-            - mountPath: /data/media/richie
+            - mountPath: /data/media
               name: richie-v-media
-              readOnly: true
-{% endif %}
-{% if richie_should_activate_static_volume %}
-            - mountPath: /data/static/richie
-              name: richie-v-static
               readOnly: true
 {% endif %}
 {% if activate_http_basic_auth or richie_activate_http_basic_auth %}
@@ -77,11 +72,6 @@ spec:
         - name: richie-v-media
           persistentVolumeClaim:
             claimName: richie-pvc-media
-{% endif %}
-{% if richie_should_activate_static_volume %}
-        - name: richie-v-static
-          persistentVolumeClaim:
-            claimName: richie-pvc-static
 {% endif %}
 {% if activate_http_basic_auth or richie_activate_http_basic_auth %}
         - name: richie-htpasswd

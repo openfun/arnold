@@ -13,6 +13,11 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Recent `openshift-acme` releases require more permissions in the current
   namespace
 
+### Removed
+
+- Use new custom nginx image in the richie app allows to remove the
+  collectstatic job and the static files volume
+
 ## [5.11.1] - 2020-05-27
 
 ### Fixed
