@@ -5,55 +5,60 @@ metadata:
   labels:
     app: openshift-acme
 rules:
-- apiGroups:
-  - "route.openshift.io"
-  resources:
-  - routes
-  verbs:
-  - create
-  - get
-  - list
-  - watch
-  - update
-  - patch
-  - delete
-  - deletecollection
+  - apiGroups:
+      - 'route.openshift.io'
+    resources:
+      - routes
+    verbs:
+      - create
+      - get
+      - list
+      - watch
+      - update
+      - patch
+      - delete
+      - deletecollection
 
-- apiGroups:
-  - "route.openshift.io"
-  resources:
-  - routes/custom-host
-  verbs:
-  - create
-# The following verbs may not be allowed in your cluster
-#  - update
-#  - delete
-#  - patch
+  - apiGroups:
+      - 'route.openshift.io'
+    resources:
+      - routes/custom-host
+    verbs:
+      - create
 
-- apiGroups:
-  - ""
-  resources:
-  - configmaps
-  - services
-  - secrets
-  verbs:
-  - create
-  - get
-  - list
-  - watch
-  - update
-  - patch
-  - delete
+  - apiGroups:
+      - ''
+    resources:
+      - configmaps
+      - services
+      - secrets
+    verbs:
+      - create
+      - get
+      - list
+      - watch
+      - update
+      - patch
+      - delete
 
-- apiGroups:
-  - "apps"
-  resources:
-  - replicasets
-  verbs:
-  - create
-  - get
-  - list
-  - watch
-  - update
-  - patch
-  - delete
+  - apiGroups:
+      - ''
+    resources:
+      - limitranges
+    verbs:
+      - get
+      - list
+      - watch
+
+  - apiGroups:
+      - 'apps'
+    resources:
+      - replicasets
+    verbs:
+      - create
+      - get
+      - list
+      - watch
+      - update
+      - patch
+      - delete

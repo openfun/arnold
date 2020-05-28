@@ -8,6 +8,11 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Fixed
+
+- Recent `openshift-acme` releases require more permissions in the current
+  namespace
+
 ## [5.11.1] - 2020-05-27
 
 ### Fixed
