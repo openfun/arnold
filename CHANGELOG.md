@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Changed
+
+- Upgrade `openshift` to `0.11.2`
+
 ## [5.12.0] - 2020-06-09
 
 ### Fixed
