@@ -11,11 +11,11 @@ requests==2.23.0
 yq==2.10.1
 
 # Quality
-flake8==3.8.2
+flake8==3.8.3
 isort==4.3.21
 pylint==2.5.3
 
 # Tests
 pytest==5.4.3
-pytest-cov==2.9.0
+pytest-cov==2.10.0
 pyfakefs==4.0.2
