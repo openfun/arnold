@@ -1,13 +1,13 @@
 # Core
-ansible==2.9.9
+ansible==2.9.10
 ansible-lint==4.2.0
 deepmerge==0.1.0
 jmespath==0.10.0
 openshift==0.11.2
 passlib==1.7.2
 PyYAML==5.3.1
-netaddr==0.7.19
-requests==2.23.0
+netaddr==0.7.20
+requests==2.24.0
 yq==2.10.1
 
 # Quality
