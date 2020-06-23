@@ -1,0 +1,30 @@
+# customer: {{ customer }}
+# env_type: {{ env_type }}
+
+# Certificates
+# If you have defined a password for your CA certificate, paste it below
+CA_CERTIFICATE_PASSWORD: ""
+CA_CERTIFICATE: |
+  # Paste your CA certificate in PEM format here (see README.md)
+CA_PRIVATE_KEY: |
+  # Paste your CA private key in PEM format here (see README.md)
+SSL_CERTIFICATE_PASSWORD: {{ lookup('password', '/dev/null length=50') }}
+
+# Elastic system users
+ELASTIC_USERNAME: "elastic"
+ELASTIC_PASSWORD: "{{ lookup('password', '/dev/null length=50') }}"
+ELASTIC_BOOTSTRAP_PASSWORD: "{{ lookup('password', '/dev/null length=50') }}"
+KIBANA_USERNAME: "kibana"
+KIBANA_PASSWORD: "{{ lookup('password', '/dev/null length=50') }}"
+LOGSTASH_USERNAME: "logstash_system"
+LOGSTASH_PASSWORD: "{{ lookup('password', '/dev/null length=50') }}"
+BEATS_USERNAME: "beats_system"
+BEATS_PASSWORD: "{{ lookup('password', '/dev/null length=50') }}"
+APM_USERNAME: "apm_system"
+APM_PASSWORD: "{{ lookup('password', '/dev/null length=50') }}"
+REMOTE_MONITORING_USERNAME: "remote_monitoring_user"
+REMOTE_MONITORING_PASSWORD: "{{ lookup('password', '/dev/null length=50') }}"
+
+# Admin account
+ADMIN_USERNAME: admin
+ADMIN_PASSWORD: {{ lookup('password', '/dev/null length=50') }}

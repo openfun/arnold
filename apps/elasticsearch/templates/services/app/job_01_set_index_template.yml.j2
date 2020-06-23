@@ -25,6 +25,11 @@ spec:
         - name: es-index-template
           image: "{{ elasticsearch_image_name }}:{{ elasticsearch_image_tag }}"
           command: [ "/usr/local/bin/set-index-template.sh" ]
+{% if elasticsearch_security_enabled %}
+          envFrom:
+            - secretRef:
+                name: "{{ elasticsearch_credentials_secret_name }}"
+{% endif %}
           volumeMounts:
             - name: set-index-template
               mountPath: /usr/local/bin/set-index-template.sh
@@ -32,6 +37,10 @@ spec:
             - name: index-template
               mountPath: /usr/local/share/elasticsearch/index-template.json
               subPath: index-template.json
+{% if elasticsearch_security_enabled %}
+            - name: elasticsearch-v-bootstrap
+              mountPath: /usr/share/elasticsearch/bootstrap
+{% endif %}
       restartPolicy: Never
       volumes:
         - name: set-index-template
@@ -47,3 +56,8 @@ spec:
             items:
               - key: index-template.json
                 path: index-template.json
+{% if elasticsearch_security_enabled %}
+        - name: elasticsearch-v-bootstrap
+          persistentVolumeClaim:
+            claimName: elasticsearch-pvc-bootstrap
+{% endif %}

@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- Implement support for Elasticsearch cluster secure mode
+
 ### Changed
 
 - Upgrade `openshift` to `0.11.2`

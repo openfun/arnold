@@ -42,6 +42,44 @@ spec:
                       values:
                         - "elasticsearch-node"
                 topologyKey: kubernetes.io/hostname
+{% if elasticsearch_security_enabled %}
+      initContainers:
+        - image: {{ elasticsearch_image_name }}:{{ elasticsearch_image_tag }}
+          name: init-generate-tls-certs
+          command:
+            - "bash"
+            - "-c"
+            - mkdir -p "{{ elasticsearch_ssl_certificates_path }}" &&
+              elasticsearch-certutil cert
+                --name "${HOSTNAME}"
+                --dns "${HOSTNAME},elasticsearch"
+                --ca-cert /tmp/ca/ca.crt
+                --ca-key /tmp/ca/ca.key
+                --pass "${SSL_CERTIFICATE_PASSWORD}"
+                --ca-pass "${CA_CERTIFICATE_PASSWORD}"
+                --out "{{ elasticsearch_ssl_certificates_path }}/{{ elasticsearch_ssl_certificates_name }}" &&
+              echo ${SSL_CERTIFICATE_PASSWORD} | elasticsearch-keystore add -fx xpack.security.transport.ssl.keystore.secure_password &&
+              echo ${SSL_CERTIFICATE_PASSWORD} | elasticsearch-keystore add -fx xpack.security.transport.ssl.truststore.secure_password &&
+              echo ${SSL_CERTIFICATE_PASSWORD} | elasticsearch-keystore add -fx xpack.security.http.ssl.keystore.secure_password &&
+              echo ${SSL_CERTIFICATE_PASSWORD} | elasticsearch-keystore add -fx xpack.security.http.ssl.truststore.secure_password &&
+              ( test -e /usr/share/elasticsearch/bootstrap/done || echo "${ELASTIC_BOOTSTRAP_PASSWORD}" | elasticsearch-keystore add -fx bootstrap.password ) &&
+              cp -R /usr/share/elasticsearch/config/* /tmp/config/
+          envFrom:
+            - secretRef:
+                name: "{{ elasticsearch_certificates_passwords_secret_name }}"
+            - secretRef:
+                name: "{{ elasticsearch_credentials_secret_name }}"
+          volumeMounts:
+            - name: elasticsearch-config-file
+              mountPath: /usr/share/elasticsearch/config/elasticsearch.yml
+              subPath: elasticsearch.yml
+            - name: config-dir
+              mountPath: /tmp/config
+            - name: elasticsearch-v-bootstrap
+              mountPath: /usr/share/elasticsearch/bootstrap
+            - name: ca-certificate
+              mountPath: /tmp/ca
+{% endif %}
       containers:
         - image: {{ elasticsearch_image_name }}:{{ elasticsearch_image_tag }}
           name: elasticsearch
@@ -53,15 +91,30 @@ spec:
               protocol: TCP
               name: "comm-port"
           volumeMounts:
-            - name: elasticsearch-config
+{% if elasticsearch_security_enabled %}
+            - name: config-dir
+              mountPath: /usr/share/elasticsearch/config
+            - name: elasticsearch-v-bootstrap
+              mountPath: /usr/share/elasticsearch/bootstrap
+            - name: liveness-probe
+              mountPath: /usr/local/bin/liveness-probe.sh
+              subPath: liveness-probe.sh
+{% else %}
+            - name: elasticsearch-config-file
               mountPath: /usr/share/elasticsearch/config/elasticsearch.yml
               subPath: elasticsearch.yml
+{% endif %}
             - name: readiness-probe
               mountPath: /usr/local/bin/readiness-probe.sh
               subPath: readiness-probe.sh
           env:
             - name: ES_JAVA_OPTS
               value: "{{ elasticsearch_java_opts | join(' ') }}"
+{% if elasticsearch_security_enabled %}
+          envFrom:
+            - secretRef:
+                name: "{{ elasticsearch_credentials_secret_name }}"
+{% endif %}
           readinessProbe:
             exec:
               command:
@@ -69,13 +122,19 @@ spec:
             initialDelaySeconds: 20
             periodSeconds: 5
           livenessProbe:
+{% if elasticsearch_security_enabled %}
+            exec:
+              command:
+                - /usr/local/bin/liveness-probe.sh
+{% else %}
             httpGet:
               path: /
               port: {{ elasticsearch_api_port }}
+{% endif %}
             initialDelaySeconds: 30
             periodSeconds: 30
       volumes:
-        - name: elasticsearch-config
+        - name: elasticsearch-config-file
           configMap:
             name: elasticsearch-app-{{ deployment_stamp }}
             items:
@@ -88,3 +147,20 @@ spec:
             items:
               - key: readiness-probe.sh
                 path: readiness-probe.sh
+{% if elasticsearch_security_enabled %}
+        - name: liveness-probe
+          configMap:
+            name: elasticsearch-app-{{ deployment_stamp }}
+            defaultMode: 0755
+            items:
+              - key: liveness-probe.sh
+                path: liveness-probe.sh
+        - name: ca-certificate
+          secret:
+            secretName: "{{ elasticsearch_ca_secret_name }}"
+        - name: elasticsearch-v-bootstrap
+          persistentVolumeClaim:
+            claimName: elasticsearch-pvc-bootstrap
+        - name: config-dir
+          emptyDir: {}
+{% endif %}
