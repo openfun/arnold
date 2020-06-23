@@ -2,19 +2,44 @@
 
 set -eo pipefail
 
+{% if elasticsearch_security_enabled %}
+declare elastic_password="${ELASTIC_BOOTSTRAP_PASSWORD}"
+if [[ -e /usr/share/elasticsearch/bootstrap/done ]]; then
+  elastic_password="${ELASTIC_PASSWORD}"
+fi
+declare -r PROTOCOL="https"
+{% else %}
+declare -r PROTOCOL="http"
+{% endif %}
+
+declare -r ES_URL="${PROTOCOL}://elasticsearch.{{ project_name }}.svc:{{ elasticsearch_api_port }}"
 declare -i MAX_RETRY=20
 declare -i RETRY_DELAY=5
 declare -i retry=0
 
 echo -n "Waiting for ES service to be up."
-while ! curl --output /dev/null --silent --max-time 1 --connect-timeout 1 --head --fail "http://elasticsearch.{{ project_name }}.svc:{{ elasticsearch_api_port }}/"
-do
+while ! curl \
+  --output /dev/null \
+  --silent \
+  --max-time 1 \
+  --connect-timeout 1 \
+  --head \
+  --fail \
+  --insecure \
+{% if elasticsearch_security_enabled %}
+  --user "${ELASTIC_USERNAME}:${elastic_password}" \
+{% endif %}
+  "${ES_URL}/" ; do
     echo -n "."
     ((retry++)) && ((retry==MAX_RETRY)) && echo "ERROR: timeout" && exit 62
     sleep ${RETRY_DELAY}
 done
 
-curl -fssL \
-  -X PUT "http://elasticsearch.{{ project_name }}.svc:{{ elasticsearch_api_port }}/_template/default" \
+curl -kfssL \
+{% if elasticsearch_security_enabled %}
+  -u "${ELASTIC_USERNAME}:${elastic_password}" \
+{% endif %}
+  -X PUT \
   -H 'Content-Type: application/json' \
-  -d @/usr/local/share/elasticsearch/index-template.json
+  -d @/usr/local/share/elasticsearch/index-template.json \
+  "${ES_URL}/_template/default"

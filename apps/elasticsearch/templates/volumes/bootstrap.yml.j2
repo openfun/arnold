@@ -1,0 +1,17 @@
+{% if elasticsearch_security_enabled %}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: elasticsearch-pvc-bootstrap
+  namespace: "{{ project_name }}"
+  labels:
+    app: elasticsearch
+    version: "{{ elasticsearch_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ elasticsearch_bootstrap_volume_size }}
+{% endif %}

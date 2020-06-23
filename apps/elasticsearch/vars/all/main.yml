@@ -50,3 +50,14 @@ elasticsearch_index_node_left_delayed_timeout: "30s"
 # (see index.store.type in ES documentation)
 elasticsearch_index_store_type: "niofs"
 
+# Security settings
+elasticsearch_security_enabled: false
+# heketi does not support creating a volume of less than 1Gb. Feel free to
+# change the following value to a much lower one if you don't use GlusterFS
+# (e.g. 2Mi).
+elasticsearch_bootstrap_volume_size: 1Gi
+elasticsearch_ssl_certificates_path: /usr/share/elasticsearch/config/certs
+elasticsearch_ssl_certificates_name: elastic-certificates.p12
+elasticsearch_ca_secret_name: "elasticsearch-ca-{{ elasticsearch_vault_checksum | default('unset-yet') }}"
+elasticsearch_certificates_passwords_secret_name: "elasticsearch-certificates-passwords-{{ elasticsearch_vault_checksum | default('unset-yet') }}"
+elasticsearch_credentials_secret_name: "elasticsearch-credentials-{{ elasticsearch_vault_checksum | default('unset-yet') }}"

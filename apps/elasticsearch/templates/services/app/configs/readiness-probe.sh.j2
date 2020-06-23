@@ -2,9 +2,24 @@
 
 set -eo pipefail
 
+{% if elasticsearch_security_enabled %}
+declare elastic_password="${ELASTIC_BOOTSTRAP_PASSWORD}"
+if [[ -e /usr/share/elasticsearch/bootstrap/done ]]; then
+  elastic_password="${ELASTIC_PASSWORD}"
+fi
+{% endif %}
+
 declare -r ES_HOST="127.0.0.1"
 declare -i ES_PORT={{ elasticsearch_api_port }}
 declare -r ES_STARTED="/tmp/es_started"
+{% if elasticsearch_security_enabled %}
+declare -r CURL="curl -kfsSL -u ${ELASTIC_USERNAME}:${elastic_password}"
+declare -r PROTOCOL="https"
+{% else %}
+declare -r CURL="curl -fsSL"
+declare -r PROTOCOL="http"
+{% endif %}
+declare -r ES_URL="${PROTOCOL}://${ES_HOST}:${ES_PORT}"
 
 function testStatus() {
     status_to_test="${1}"
@@ -30,19 +45,19 @@ function testStatus() {
 
 if [ -f "${ES_STARTED}" ]; then
     echo -n "Elasticsearch is already running. Checking if API is alive..."
-    curl -fsSL "http://${ES_HOST}:${ES_PORT}/" > /dev/null
+    ${CURL} "${ES_URL}/" > /dev/null
     echo "OK"
 else
     echo "Waiting for elasticsearch cluster to be running and in green state..."
     health_status=$(
-      curl -fsSL "http://${ES_HOST}:${ES_PORT}/_cat/health?h=status" | \
+      ${CURL} "${ES_URL}/_cat/health?h=status" | \
       sed -r 's/^[[:space:]]+|[[:space:]]+$//g'
     )
     testStatus "${health_status}" "green"
 
     echo "Waiting for initializing_shards to be 0"
     init_shards=$(
-      curl -fsSL "http://${ES_HOST}:${ES_PORT}/_cat/health?h=init" | \
+      ${CURL} "${ES_URL}/_cat/health?h=init" | \
       sed -r 's/^[[:space:]]+|[[:space:]]+$//g'
     )
 

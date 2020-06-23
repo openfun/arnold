@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+declare elastic_password="${ELASTIC_BOOTSTRAP_PASSWORD}"
+if [[ -e /usr/share/elasticsearch/bootstrap/done ]]; then
+  elastic_password="${ELASTIC_PASSWORD}"
+fi
+
+# Only print response's HTTP code
+curl -kfsSL \
+  -o /dev/null \
+  -w "%{http_code}" \
+  -u "${ELASTIC_USERNAME}:${elastic_password}" \
+  "https://127.0.0.1:{{ elasticsearch_api_port }}/" | grep 200
