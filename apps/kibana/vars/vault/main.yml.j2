@@ -1,6 +1,14 @@
 # customer: {{ customer }}
 # env_type: {{ env_type }}
 
+# elastic
+KIBANA_ELASTIC_USERNAME: kibana
+# Paste the password set for the kibana user in your elasticsearch cluster
+KIBANA_ELASTIC_PASSWORD: null
+
+CA_CERTIFICATE: |
+  # Paste your elasticsearch CA certificate in PEM format here
+
 # kibana
 XPACK_SECURITY_ENCRYPTIONKEY: {{ lookup('password', '/dev/null length=50') }}
 XPACK_REPORTING_ENCRYPTIONKEY: {{ lookup('password', '/dev/null length=50') }}

@@ -37,25 +37,49 @@ spec:
           image: "{{ kibana_image_name }}:{{ kibana_image_tag }}"
           imagePullPolicy: Always
           livenessProbe:
-            httpGet:
-              path: /api/status
-              port: {{ kibana_app_port }}
+            exec:
+              command:
+                - /usr/local/bin/status-probe.sh
             initialDelaySeconds: 60
             periodSeconds: 30
           readinessProbe:
-            httpGet:
-              path: /api/status
-              port: {{ kibana_app_port }}
-            initialDelaySeconds: 10
-            periodSeconds: 5
+            exec:
+              command:
+                - /usr/local/bin/status-probe.sh
+                - check
+            initialDelaySeconds: 30
+            periodSeconds: 10
           envFrom:
             - secretRef:
                 name: "{{ kibana_secret_name }}"
           volumeMounts:
-            - name: kibana-configmap
-              mountPath: "{{ kibana_config_path }}"
+            - name: kibana-config-file
+              mountPath: "{{ kibana_config_path }}/kibana.yml"
+              subPath: kibana.yml
+            - name: status-probe
+              mountPath: /usr/local/bin/status-probe.sh
+              subPath: status-probe.sh
+{% if kibana_security_enabled %}
+            - name: ca-certificate
+              mountPath: {{ kibana_ca_path | dirname }}
+{% endif %}
       volumes:
-        - name: kibana-configmap
+        - name: kibana-config-file
           configMap:
-            defaultMode: 420
             name: kibana-app-{{ deployment_stamp }}
+            defaultMode: 420
+            items:
+              - key: kibana.yml
+                path: kibana.yml
+        - name: status-probe
+          configMap:
+            name: kibana-app-{{ deployment_stamp }}
+            defaultMode: 0755
+            items:
+              - key: status-probe.sh
+                path: status-probe.sh
+{% if kibana_security_enabled %}
+        - name: ca-certificate
+          secret:
+            secretName: "{{ kibana_ca_secret_name }}"
+{% endif %}

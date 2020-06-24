@@ -21,5 +21,8 @@ kibana_app_port: 5601
 kibana_app_replicas: 1
 kibana_es_hosts: [ "http://elasticsearch:9200" ]
 kibana_config_path: "/usr/share/kibana/config"
+kibana_ca_path: "/usr/share/kibana/config/certs/ca.crt"
+kibana_ca_secret_name: "kibana-ca-{{ kibana_vault_checksum | default('undefined_kibana_vault_checksum') }}"
 kibana_secret_name: "kibana-{{ kibana_vault_checksum | default('undefined_kibana_vault_checksum') }}"
 kibana_activate_http_basic_auth: false
+kibana_security_enabled: false

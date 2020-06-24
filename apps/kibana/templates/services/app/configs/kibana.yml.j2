@@ -8,4 +8,11 @@ server.host: 0.0.0.0
 
 elasticsearch.hosts: {{ kibana_es_hosts | to_yaml }}
 
+{% if kibana_security_enabled %}
+elasticsearch.username: "${KIBANA_ELASTIC_USERNAME}"
+elasticsearch.password: "${KIBANA_ELASTIC_PASSWORD}"
+elasticsearch.ssl.certificateAuthorities: ["{{ kibana_ca_path }}"]
+xpack.security.encryptionKey: "${XPACK_SECURITY_ENCRYPTIONKEY}"
+{% endif %}
+
 monitoring.ui.container.elasticsearch.enabled: true
