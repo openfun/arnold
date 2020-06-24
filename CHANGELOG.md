@@ -11,6 +11,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Implement support for Elasticsearch cluster secure mode
+- Implement support for Kibana secure mode
 
 ### Changed
 
