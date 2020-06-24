@@ -554,7 +554,7 @@ jobs:
             oc project ci-eugene
             oc exec -it $(oc get pod -l 'app in (nextcloud),service in (nextcloud),!job_stamp' -o json | jq -r '.items[0].metadata.name') \
               -- php /app/occ maintenance:mode --off
-            bin/ci-test-route "nextcloud" "Nextcloud" "/login" "next" 20
+            bin/ci-test-route "nextcloud" "Nextcloud" "/login" "next" 40
 
       - run:
           name: Test the "nextcloud" application switch
@@ -562,7 +562,7 @@ jobs:
             # Switch next route to current
             bin/ci-ansible-playbook switch.yml "nextcloud"
             # Test service switched to the current route
-            bin/ci-test-route "nextcloud" "Nextcloud" "/login" "current" 20
+            bin/ci-test-route "nextcloud" "Nextcloud" "/login" "current" 40
 
   # Test the bootstrap playbook on the "etherpad" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.

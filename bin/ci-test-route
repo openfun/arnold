@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# usage: ci-test-route [SERVICE] [CONTENT] [PATH] [PREFIX]
+# usage: ci-test-route [SERVICE] [CONTENT] [PATH] [PREFIX] [MAX_RETRY]
 
 # First script argument is the application's service name. It defaults to
 # 'hello'
