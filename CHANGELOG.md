@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [5.13.0] - 2020-07-22
+
 ### Added
 
 - Implement support for Elasticsearch cluster secure mode
@@ -796,7 +798,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v5.12.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v5.13.0...master
+[5.13.0]: https://github.com/openfun/arnold/compare/v5.12.0...v5.13.0
 [5.12.0]: https://github.com/openfun/arnold/compare/v5.11.1...v5.12.0
 [5.11.1]: https://github.com/openfun/arnold/compare/v5.11.0...v5.11.1
 [5.11.0]: https://github.com/openfun/arnold/compare/v5.10.0...v5.11.0
