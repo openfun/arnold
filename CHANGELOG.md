@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Fixed
+
+- Exclude `openshift-acme` routes when looking for app routes
+
 ## [5.13.0] - 2020-07-22
 
 ### Added
