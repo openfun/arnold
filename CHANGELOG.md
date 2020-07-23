@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [5.13.1] - 2020-07-23
+
 ### Fixed
 
 - Exclude `openshift-acme` routes when looking for app routes
@@ -802,7 +804,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v5.13.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v5.13.1...master
+[5.13.1]: https://github.com/openfun/arnold/compare/v5.13.0...v5.13.1
 [5.13.0]: https://github.com/openfun/arnold/compare/v5.12.0...v5.13.0
 [5.12.0]: https://github.com/openfun/arnold/compare/v5.11.1...v5.12.0
 [5.11.1]: https://github.com/openfun/arnold/compare/v5.11.0...v5.11.1
