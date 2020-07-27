@@ -1,5 +1,5 @@
 # Core
-ansible==2.9.10
+ansible==2.9.11
 ansible-lint==4.2.0
 deepmerge==0.1.0
 jmespath==0.10.0
