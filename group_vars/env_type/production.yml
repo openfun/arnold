@@ -1,6 +1,8 @@
 # Variables specific to the production environment
 richie_django_configuration: Production
 acme_env: live
+acme_enabled_route_prefix:
+  - current
 
 # Endpoints IP
 # In production these variables must be set.

@@ -8,6 +8,11 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- new variable `acme_enabled_route_prefix` allowing to activate acme
+  based on route prefix
+
 ## [5.20.0] - 2020-11-05
 
 ## Added
