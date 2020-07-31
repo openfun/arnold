@@ -11,7 +11,9 @@ metadata:
     version: "{{ flower_nginx_image_tag }}"
     route_target_service: "app"
   annotations:
+{% if prefix in acme_enabled_route_prefix %}
     kubernetes.io/tls-acme: "true"
+{% endif %}
     haproxy.router.openshift.io/disable_cookies: "true"
     haproxy.router.openshift.io/balance: "roundrobin"
 spec:

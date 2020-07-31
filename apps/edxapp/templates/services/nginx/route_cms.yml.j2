@@ -12,7 +12,9 @@ metadata:
     route_prefix: "{{ prefix }}"
     route_target_service: "cms"
   annotations:
+{% if prefix in acme_enabled_route_prefix %}
     kubernetes.io/tls-acme: "true"
+{% endif %}
     haproxy.router.openshift.io/disable_cookies: "true"
     haproxy.router.openshift.io/balance: "roundrobin"
     haproxy.router.openshift.io/timeout: "{{ edxapp_routing_timeout | default("60s") }}"
