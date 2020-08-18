@@ -15,6 +15,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Upgrade `ansible` to `2.9.12`
+- Create only required `openshift-acme` CM given the project environment
 
 ## [5.13.1] - 2020-07-23
 
