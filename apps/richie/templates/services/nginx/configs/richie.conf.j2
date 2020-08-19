@@ -84,5 +84,11 @@ server {
     add_header Cache-Control public;
     root /data/static;
     try_files /$file =404;
+
+    add_header Access-Control-Allow-Origin https://{{ richie_host }};
+    add_header Access-Control-Allow-Credentials false;
+    add_header Access-Control-Allow-Methods GET;
+    add_header Access-Control-Allow-Headers 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
+
   }
 }
