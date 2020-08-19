@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- Add CORS headers for richie static files to allow placing them behind a CDN
+
 ### Changed
 
 - Upgrade `ansible` to `2.9.12`
