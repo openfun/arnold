@@ -14,6 +14,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Inject configmap env in all jobs to allow defining settings that are required
 - Upgrade `ansible` to `2.9.12`
 - Create only required `openshift-acme` CM given the project environment
 
