@@ -44,6 +44,8 @@ spec:
           envFrom:
             - secretRef:
                 name: "{{ richie_secret_name }}"
+            - configMapRef:
+                name: "richie-app-dotenv-{{ deployment_stamp }}"
           command:
             - "bash"
             - "-c"
