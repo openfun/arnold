@@ -117,7 +117,6 @@ class TestMergeWithAppFilter(TestCase):
     def test_submitted_apps_same_name_key(self):
         """Submitted apps should have the same ``name`` key"""
 
-        # pylint: disable=bad-continuation
         for args in (
             ({"name": "foo"}, {"name": "bar"}),
             ({"name": "foo"}, {"name": ""}),
@@ -452,7 +451,7 @@ class TestMergeWithDatabaseFilter(TestCase):
         )
 
     @patch("filter_plugins.merge.random_password", return_value="foo")
-    # pylint: disable=unused-argument,bad-continuation
+    # pylint: disable=unused-argument
     def test_database_merge_with_existing_databases_different(
         self, random_password_mock
     ):
@@ -552,7 +551,7 @@ class TestMergeWithDatabaseFilter(TestCase):
         )
 
     @patch("filter_plugins.merge.random_password", return_value="foo")
-    # pylint: disable=unused-argument,bad-continuation
+    # pylint: disable=unused-argument
     def test_database_merge_with_same_database_and_different_release(
         self, random_password_mock
     ):
