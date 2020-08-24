@@ -52,7 +52,7 @@ _plugins() {
   print_green "  -> Flake8 check OK"
 
   echo -e "\\n---> Plugins: isort\\n"
-  _docker_run isort --recursive --diff --check-only filter_plugins lookup_plugins tests
+  _docker_run isort --diff --check-only filter_plugins lookup_plugins tests
   print_green "  -> isort check OK"
 
   echo -e "\\n---> Plugins: Pylint\\n"

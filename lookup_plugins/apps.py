@@ -2,7 +2,6 @@
 """
 Applications lookup
 """
-# pylint: disable=bad-continuation
 from __future__ import absolute_import, division, print_function
 
 from pathlib import Path
