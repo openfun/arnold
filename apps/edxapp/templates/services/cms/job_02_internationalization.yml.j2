@@ -53,7 +53,7 @@ spec:
           command:
             - "bash"
             - "-c"
-            - pip install -I --prefix /tmp transifex-client &&
+            - pip install -I --prefix /tmp transifex-client==0.13.9 &&
               cp -R .tx /tmp &&
 {% for lang in edxapp_i18n_languages %}
               HOME="/tmp" PYTHONPATH=/tmp/lib/python2.7/site-packages/ /tmp/bin/tx --root /tmp pull --mode=reviewed -l {{ lang }} &&

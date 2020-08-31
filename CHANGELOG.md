@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Fixed
+
+- Pin transifex-client version in edx i18n job
+
 ## [5.14.0] - 2020-08-21
 
 ### Added
