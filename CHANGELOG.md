@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [5.14.1] - 2020-08-31
+
 ### Fixed
 
 - Pin transifex-client version in edx i18n job
@@ -820,7 +822,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v5.14.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v5.14.1...master
+[5.14.1]: https://github.com/openfun/arnold/compare/v5.14.0...v5.14.1
 [5.14.0]: https://github.com/openfun/arnold/compare/v5.13.1...v5.14.0
 [5.13.1]: https://github.com/openfun/arnold/compare/v5.13.0...v5.13.1
 [5.13.0]: https://github.com/openfun/arnold/compare/v5.12.0...v5.13.0
