@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Fixed
+
+- Fix the `delete_app` task to avoid timeout errors during a `clean`
+
 ## [5.14.1] - 2020-08-31
 
 ### Fixed
