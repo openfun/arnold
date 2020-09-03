@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [5.14.2] - 2020-09-03
+
 ### Fixed
 
 - Fix the `delete_app` task to avoid timeout errors during a `clean`
@@ -826,7 +828,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v5.14.1...master
+[unreleased]: https://github.com/openfun/arnold/compare/v5.14.2...master
+[5.14.2]: https://github.com/openfun/arnold/compare/v5.14.1...v5.14.2
 [5.14.1]: https://github.com/openfun/arnold/compare/v5.14.0...v5.14.1
 [5.14.0]: https://github.com/openfun/arnold/compare/v5.13.1...v5.14.0
 [5.13.1]: https://github.com/openfun/arnold/compare/v5.13.0...v5.13.1
