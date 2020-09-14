@@ -12,10 +12,10 @@ yq==2.11.0
 
 # Quality
 flake8==3.8.3
-isort==5.5.1
+isort==5.5.2
 pylint==2.6.0
 
 # Tests
-pytest==6.0.1
+pytest==6.0.2
 pytest-cov==2.10.1
 pyfakefs==4.1.0
