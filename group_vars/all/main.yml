@@ -46,6 +46,12 @@ trashable_env_types:
   - "development"
   - "feature"
 
+# To be use with edxapp_sql_dump_url in edxapp config
+# This is useful when migration become too long to execute. We can
+# provide a sql dump of the schema to then load it instead of waiting
+# for migrate to be done (works only with trashable env)
+enable_sql_dump_loading: false
+
 # Blue/Green deployment route prefixes
 blue_green_route_prefixes:
   - "previous"
@@ -105,7 +111,7 @@ force_route: false
 # In trashable environments these endpoints will not be used because everything will
 # run inside OpenShift pods. in Production and Pre-production environments you should consider using a dedicated cluster
 # for your databases.
-# Endpoint IPs are initialized at "null" (except for mongodb we initalize it with an empty list) by default 
+# Endpoint IPs are initialized at "null" (except for mongodb we initalize it with an empty list) by default
 # and you SHOULD overwrite them in the corresponding environment where you will use them.
 endpoint_mongodb_ips:     []
 endpoint_mysql_ip:       null

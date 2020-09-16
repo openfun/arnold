@@ -1,4 +1,4 @@
-{% if env_type in trashable_env_types %}
+{% if env_type in trashable_env_types and enable_sql_dump_loading %}
 apiVersion: batch/v1
 kind: Job
 metadata:

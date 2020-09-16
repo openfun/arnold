@@ -13,6 +13,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Upgrade default `edxapp` image to `ironwood.2-oee-1.0.0`
+- Add `enable_sql_dump_loading` to `main.yml`
 
 ### Changed
 
