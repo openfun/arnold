@@ -8,6 +8,12 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [5.15.0] - 2020-09-16
+
+### Added
+
+- Upgrade default `edxapp` image to `ironwood.2-oee-1.0.0`
+
 ### Changed
 
 - Upgrade `ansible` to `2.9.13`
