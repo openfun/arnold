@@ -1,7 +1,7 @@
 # Fixtures for the `development` and `feature` environments
 
 # edX demo course release (should be compatible with deployed edxapp release)
-demo_course_url: "https://github.com/edx/edx-demo-course/archive/open-release/hawthorn.1.tar.gz"
+demo_course_url: "https://github.com/edx/edx-demo-course/archive/open-release/ironwood.2.tar.gz"
 
 # Demo users
 demo_users:
