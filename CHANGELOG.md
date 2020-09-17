@@ -11,6 +11,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Upgrade `ansible` to `2.9.13`
+- Upgrade default `edxapp` version to `ironwood.2-1.0.1`
 
 ## [5.14.2] - 2020-09-03
 
