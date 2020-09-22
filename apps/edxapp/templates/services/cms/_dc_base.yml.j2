@@ -50,6 +50,10 @@ spec:
   # We want to deploy every target DC even if replicas has been set to zero to
   # be able to scale up/down worker for a deployed stack.
   replicas: {{ replicas | default(1) }} # number of pods we want
+  strategy:
+    rollingParams:
+      timeoutSeconds: 1200
+    type: Rolling
   template:
     metadata:
       labels:
