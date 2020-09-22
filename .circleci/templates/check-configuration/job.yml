@@ -1,0 +1,12 @@
+check-configuration:
+    <<: *defaults
+
+    steps:
+      - checkout
+      - *dind
+      - *ci_env
+      - *attach_workspace
+      - *docker_load
+      - run:
+          name: Check that the circle-ci config.yml file has been updated in the current branch
+          command: bin/ci check_configuration

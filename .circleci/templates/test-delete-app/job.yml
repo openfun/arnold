@@ -1,0 +1,44 @@
+# Test the delete_app tasks for blue-green applications
+# nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
+test-delete-app:
+  machine:
+    docker_layer_caching: false
+
+  working_directory: ~/fun
+
+  steps:
+    - checkout
+    - *attach_workspace
+    - *docker_load
+    - *ci_env
+    - *install_openshift_cluster
+    - *configure_openshift_cluster
+    - *run_openshift_cluster
+
+    - run:
+        name: Prepare "richie" application bootstrapping
+        command: |
+          # Bootstrap app
+          bin/ci-ansible-playbook bootstrap.yml "richie"
+          # Test service deployed with the next route
+          bin/ci-test-route "richie" "Django administration" "/en/admin" "next"
+
+    - run:
+        name: Test "richie"'s next stack substitution (create + delete)
+        command: |
+          # Deploy the next stack a second time
+          bin/ci-ansible-playbook deploy.yml "richie"
+          # Test service re-deployed with the next route
+          bin/ci-test-route "richie" "Django administration" "/en/admin" "next"
+
+    - run:
+        name: Check that only one pod is running Richie's app
+        command: |
+          # Switch to the active project
+          oc project ci-eugene
+          # Select Richie's service pods
+          cmd="oc get pods -l app=richie,service=richie"
+          # Run command to debug output (eventually)
+          eval "${cmd}"
+          # Perform running pods test
+          test $(eval "${cmd} | grep Running | wc -l") -eq 1

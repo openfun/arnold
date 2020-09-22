@@ -1,0 +1,32 @@
+
+# Test the bootstrap playbook on the "edxec" application
+# nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
+test-bootstrap-edxec:
+  machine:
+    docker_layer_caching: false
+
+  working_directory: ~/fun
+
+  steps:
+    - checkout
+    - *attach_workspace
+    - *docker_load
+    - *ci_env
+    - *install_openshift_cluster
+    - *configure_openshift_cluster
+    - *run_openshift_cluster
+
+    - run:
+        name: Test the "edxec" application bootstrapping
+        command: |
+          # Bootstrap edxec
+          bin/ci-ansible-playbook bootstrap.yml "edxec"
+          # Test the service
+          bin/ci-test-route "edxec" "OK" "/health/" "next"
+
+    - run:
+        name: Test the "edxec" application switch
+        command: |
+          # Switch next route to current
+          bin/ci-ansible-playbook switch.yml "edxec"
+          bin/ci-test-route "edxec" "OK" "/health/"

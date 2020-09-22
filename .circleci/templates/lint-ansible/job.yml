@@ -1,0 +1,10 @@
+lint-ansible:
+    <<: *defaults
+
+    steps:
+      - checkout
+      - *dind
+      - *ci_env
+      - *attach_workspace
+      - *docker_load
+      - run: bin/lint ansible

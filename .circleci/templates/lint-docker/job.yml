@@ -1,0 +1,7 @@
+lint-docker:
+    <<: *defaults
+
+    steps:
+      - checkout
+      - *dind
+      - run: bin/lint docker

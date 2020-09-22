@@ -1,0 +1,18 @@
+# Check that the git history is clean and complies with our expectations
+lint-git:
+  <<: *defaults
+
+  steps:
+    - checkout
+    - run:
+        name: Check absence of fixup commits
+        command: |
+          ! git log | grep 'fixup!'
+    - run:
+        name: Install gitlint
+        command: |
+          pip install --user gitlint requests
+    - run:
+        name: lint commit messages added to master
+        command: |
+          ~/.local/bin/gitlint --commits origin/master..HEAD

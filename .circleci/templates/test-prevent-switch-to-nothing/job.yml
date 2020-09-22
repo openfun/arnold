@@ -1,0 +1,40 @@
+test-prevent-switch-to-nothing:
+  machine:
+    docker_layer_caching: false
+
+  working_directory: ~/fun
+
+  steps:
+    - checkout
+    - *attach_workspace
+    - *docker_load
+    - *ci_env
+    - *install_openshift_cluster
+    - *configure_openshift_cluster
+    - *run_openshift_cluster
+
+    - run:
+        name: Prepare "hello" application bootstrapping
+        command: |
+          # Bootstrap app
+          bin/ci-ansible-playbook bootstrap.yml "hello"
+          # Test service deployed with the next route
+          bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "next"
+
+    - run:
+        name: Test "hello"'s switch
+        command: |
+          # Switch next route to current
+          bin/ci-ansible-playbook switch.yml "hello"
+          # Test service on the current route
+          bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "current"
+          # Test that the service is not responding on next route
+          bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "next" && exit 1 || true
+
+    - run:
+        name: Test that a second switch fails to execute with an error
+        command: |
+          # Execute the switch playbook and test that the exit code is not 0
+          bin/ci-ansible-playbook switch.yml "hello" &> /tmp/switch-to-nothing.out && exit 1 || true
+          # Test error message displayed by switch playbook
+          grep "next stack is not deployed, aborting switch" /tmp/switch-to-nothing.out

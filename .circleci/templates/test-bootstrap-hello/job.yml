@@ -1,0 +1,48 @@
+# Test the bootstrap playbook on the "hello" application
+# nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
+test-bootstrap-hello:
+  machine:
+    docker_layer_caching: false
+
+  working_directory: ~/fun
+
+  steps:
+    - checkout
+    - *attach_workspace
+    - *docker_load
+    - *ci_env
+    - *install_openshift_cluster
+    - *configure_openshift_cluster
+    - *run_openshift_cluster
+
+    - run:
+        name: Test the "hello" application bootstrapping
+        command: |
+          # Bootstrap app
+          bin/ci-ansible-playbook bootstrap.yml "hello"
+          # Test service deployed with the next route
+          bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "next"
+
+    - run:
+        name: Test the "hello" application switch
+        command: |
+          # Switch next route to current
+          bin/ci-ansible-playbook switch.yml "hello"
+          # Test service switched to the current route
+          bin/ci-test-route "hello" "Hello OpenShift! by Arnold"
+
+    - run:
+        name: Test the "hello" application rollback
+        command: |
+          # Deploy to next
+          bin/ci-ansible-playbook deploy.yml "hello"
+          # Switch next route to current and current to previous
+          bin/ci-ansible-playbook switch.yml "hello"
+          # Test service switched to the current/previous route
+          bin/ci-test-route "hello" "Hello OpenShift! by Arnold"
+          bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "previous"
+          # Rollback previous to current and current to next
+          bin/ci-ansible-playbook rollback.yml "hello"
+          # Test service switched to the current/next route
+          bin/ci-test-route "hello" "Hello OpenShift! by Arnold"
+          bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "next"

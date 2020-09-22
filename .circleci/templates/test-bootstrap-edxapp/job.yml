@@ -1,0 +1,34 @@
+# Test the bootstrap playbook on the "edxapp" application
+# nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
+test-bootstrap-edxapp:
+  machine:
+    docker_layer_caching: false
+
+  working_directory: ~/fun
+
+  steps:
+    - checkout
+    - *attach_workspace
+    - *docker_load
+    - *ci_env
+    - *install_openshift_cluster
+    - *configure_openshift_cluster
+    - *run_openshift_cluster
+
+    - run:
+        name: Test the "edxapp" application bootstrapping (with redis enabled)
+        command: |
+          # Bootstrap app
+          bin/ci-ansible-playbook bootstrap.yml "edxapp,redis"
+          # Test services deployed with the next route
+          bin/ci-test-route "cms" "Welcome to Your Platform Studio" "/" "next" 20
+          bin/ci-test-route "lms" "It works! This is the default homepage for this Open edX instance." "/" "next" 20
+
+    - run:
+        name: Test the "edxapp" application switch
+        command: |
+          # Switch next route to current
+          bin/ci-ansible-playbook switch.yml "edxapp"
+          # Test service switched to the current route
+          bin/ci-test-route "cms" "Welcome to Your Platform Studio" "/" "current" 20
+          bin/ci-test-route "lms" "It works! This is the default homepage for this Open edX instance." "/" "current" 20

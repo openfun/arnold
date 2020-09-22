@@ -1,0 +1,6 @@
+- lint-plugins:
+    requires:
+      - build
+    filters:
+      tags:
+        only: /.*/

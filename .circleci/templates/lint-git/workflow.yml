@@ -1,0 +1,6 @@
+- lint-git:
+    filters:
+      branches:
+        ignore: master
+      tags:
+        ignore: /.*/

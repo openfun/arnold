@@ -1,0 +1,6 @@
+- test-redirect:
+    requires:
+      - test-bootstrap-hello
+    filters:
+      tags:
+        only: /.*/

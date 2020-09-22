@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+PROJECT_DIRECTORY=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/..
+export PROJECT_DIRECTORY
+
+# shellcheck source=bin/_config.sh
+source "$(dirname "${BASH_SOURCE[0]}")/_config.sh"
+
+# usage: display usage with the appropriate exit code
+#
+# usage: usage [EXIT_CODE]
+#
+#   EXIT_CODE: program exit code (default: 0)
+function usage(){
+
+    declare -i exit_code="${1:-0}"
+
+    echo "Usage: bin/ci COMMAND
+
+Available commands:
+
+  get_changes            get a list of changed files in the current branch compared to master
+  update_config          update the circle-ci config.yml file
+  check_configuration    check that the circle-ci config.yml reflect current changes
+"
+
+    # shellcheck disable=SC2086
+    exit ${exit_code}
+}
+
+
+# Get a list of changed files in the current branch
+function get_changes() {
+  git whatchanged --name-only --pretty="" "origin/master..HEAD" | sort -u
+}
+
+
+function check_changes() {
+  to="${CIRCLE_SHA1:-HEAD}"
+  git whatchanged --name-only --pretty="" origin/master.."${to}" | grep "${1}" &> /dev/null
+}
+
+
+# Utility function that generates a circle configuration file with a job
+# for each modified app (and thus running only the necessary jobs)
+#
+# Usage: update_config
+function update_config() {
+    _docker_run -m .circleci/scripts/update_config.py
+
+    # Check config validity
+    docker run --rm -v "${PROJECT_DIRECTORY}:/data" circleci/circleci-cli:alpine \
+        config validate /data/.circleci/config.yml
+}
+
+
+# Utility function that checks if the circle configuration committed to git
+# corresponds to the state of the project so that the workflows and jobs are
+# run according to what has changed as compared to the "master" branch.
+#
+# Usage: check_configuration
+function check_configuration() {
+    update_config
+    if git diff --name-only | grep "^.circleci/"; then
+        echo "check: the .circleci configuration does not reflect latest changes."
+        exit 1
+    fi
+    exit 0
+}
+
+
+# ---- Main ----
+
+# Check if this script is being sourced or executed. Explanation: Bash allows
+# return statements only from functions and, in a script's top-level scope, only
+# if the script is sourced.
+(return 2> /dev/null) && sourced=1 || sourced=0
+
+if [[ ${sourced} == 0 ]]; then
+
+    action="${1:-usage}"
+
+    # Remove current action from arguments array
+    if [[ -n "${1}" ]]; then
+        shift
+    fi
+
+    "$action" "$@"
+fi

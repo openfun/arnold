@@ -1,0 +1,6 @@
+- test-delete-app:
+    requires:
+      - test-bootstrap-richie
+    filters:
+      tags:
+        only: /.*/

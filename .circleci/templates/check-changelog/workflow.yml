@@ -1,0 +1,6 @@
+- check-changelog:
+    filters:
+      branches:
+        ignore: master
+      tags:
+        ignore: /.*/

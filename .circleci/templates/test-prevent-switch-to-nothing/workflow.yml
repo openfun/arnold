@@ -1,0 +1,6 @@
+- test-prevent-switch-to-nothing:
+    requires:
+      - test-bootstrap-hello
+    filters:
+      tags:
+        only: /.*/

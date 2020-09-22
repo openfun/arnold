@@ -1,0 +1,6 @@
+- lint-docker:
+    requires:
+      - build
+    filters:
+      tags:
+        only: /.*/

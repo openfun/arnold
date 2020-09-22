@@ -1,0 +1,6 @@
+- lint-ansible:
+    requires:
+      - build
+    filters:
+      tags:
+        only: /.*/

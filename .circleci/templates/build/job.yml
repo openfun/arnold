@@ -1,0 +1,25 @@
+# Build Arnold's docker image
+build:
+    # We use the machine executor, i.e. a VM, not a container
+    machine:
+      # Prevent cache-related issues
+      docker_layer_caching: false
+
+    working_directory: ~/fun
+
+    steps:
+      - checkout
+      - *ci_env
+      - run:
+          name: Build arnold production image
+          command: |
+            bin/build
+            mkdir -p /tmp/docker/images
+            docker save -o /tmp/docker/images/arnold.tar "${ARNOLD_IMAGE}"
+      # Save the built to the workspace so that it can be reused in other jobs
+      - persist_to_workspace:
+          # Must be an absolute path, or relative path from working_directory.
+          root: /tmp/docker
+          # Must be relative path from root
+          paths:
+            - images

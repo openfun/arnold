@@ -1,0 +1,32 @@
+# Test the bootstrap playbook on the "forum" application
+# nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
+test-bootstrap-forum:
+  machine:
+    docker_layer_caching: false
+
+  working_directory: ~/fun
+
+  steps:
+    - checkout
+    - *attach_workspace
+    - *docker_load
+    - *ci_env
+    - *install_openshift_cluster
+    - *configure_openshift_cluster
+    - *run_openshift_cluster
+
+    - run:
+        name: Test the "forum" application bootstrapping
+        command: |
+          # Bootstrap app
+          bin/ci-ansible-playbook bootstrap.yml "forum"
+          # Test service deployed with the next route
+          bin/ci-test-route "forum" "collection" "/api/v1/threads?api_key=thisisafakeapikey" "next"
+
+    - run:
+        name: Test the "forum" application switch
+        command: |
+          # Switch next route to current
+          bin/ci-ansible-playbook switch.yml "forum"
+          # Test service switched to the current route
+          bin/ci-test-route "forum" "collection" "/api/v1/threads?api_key=thisisafakeapikey"

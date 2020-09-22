@@ -1,0 +1,8 @@
+- check-configuration:
+    requires:
+      - build
+    filters:
+      branches:
+        ignore: master
+      tags:
+        ignore: /.*/

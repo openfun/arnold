@@ -1,0 +1,50 @@
+# Test the bootstrap playbook on the "nextcloud" application.
+# We also need redis and mailcatcher for this application
+# nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
+test-bootstrap-nextcloud:
+  machine:
+    docker_layer_caching: false
+
+  working_directory: ~/fun
+
+  steps:
+    - checkout
+    - *attach_workspace
+    - *docker_load
+    - *ci_env
+    - *install_openshift_cluster
+    - *configure_openshift_cluster
+    - *run_openshift_cluster
+
+    - run:
+        name: Rebuild Arnold's docker image once the OpenShift project has been created to use the modified USER_ID variable
+        command: |
+          bin/ci-ansible-playbook create_project.yml "redis,mailcatcher,nextcloud"
+          export USER_ID=$(\
+              oc get project ci-eugene -o json | \
+              jq -r '.metadata.annotations."openshift.io/sa.scc.uid-range"' | \
+              sed -r "s|([0-9]+)/([0-9]+)|\\1|" \
+            )
+          sed -i -e "s/REPLACE_USER_ID/$USER_ID/g" group_vars/customer/eugene/ci/main.yml
+          bin/build
+
+    # Once deployed, we need to turn off the maintenance mode in case it is still enabled once
+    # the upgrade command run in the entrypoint.
+    - run:
+        name: Test the "nextcloud" application bootstrapping
+        command: |
+          bin/ci-ansible-playbook init_project.yml "redis,mailcatcher,nextcloud"
+          bin/ci-ansible-playbook build_images.yml "redis,mailcatcher,nextcloud"
+          bin/ci-ansible-playbook deploy.yml "redis,mailcatcher,nextcloud"
+          oc project ci-eugene
+          oc exec -it $(oc get pod -l 'app in (nextcloud),service in (nextcloud),!job_stamp' -o json | jq -r '.items[0].metadata.name') \
+            -- php /app/occ maintenance:mode --off
+          bin/ci-test-route "nextcloud" "Nextcloud" "/login" "next" 40
+
+    - run:
+        name: Test the "nextcloud" application switch
+        command: |
+          # Switch next route to current
+          bin/ci-ansible-playbook switch.yml "nextcloud"
+          # Test service switched to the current route
+          bin/ci-test-route "nextcloud" "Nextcloud" "/login" "current" 40

@@ -1,3 +1,8 @@
+#####################################
+##   THIS FILE IS AUTO-GENERATED   ##
+##  Run bin/update to generate it  ##
+#####################################
+
 # CircleCI's configuration for Arnold
 #
 # Reference: https://circleci.com/docs/2.0/configuration-reference/
@@ -66,796 +71,411 @@ aliases:
 
 version: 2
 jobs:
-  # Build Arnold's docker image
-  build:
-    # We use the machine executor, i.e. a VM, not a container
-    machine:
-      # Prevent cache-related issues
-      docker_layer_caching: false
-
-    working_directory: ~/fun
-
-    steps:
-      - checkout
-      - *ci_env
-      - run:
-          name: Build arnold production image
-          command: |
-            bin/build
-            mkdir -p /tmp/docker/images
-            docker save -o /tmp/docker/images/arnold.tar "${ARNOLD_IMAGE}"
-      # Save the built to the workspace so that it can be reused in other jobs
-      - persist_to_workspace:
-          # Must be an absolute path, or relative path from working_directory.
-          root: /tmp/docker
-          # Must be relative path from root
-          paths:
-            - images
-
-  # Check that the git history is clean and complies with our expectations
-  lint-git:
-    <<: *defaults
-
-    steps:
-      - checkout
-      - run:
-          name: Check absence of fixup commits
-          command: |
-            ! git log | grep 'fixup!'
-      - run:
-          name: Install gitlint
-          command: |
-            pip install --user gitlint requests
-      - run:
-          name: lint commit messages added to master
-          command: |
-            ~/.local/bin/gitlint --commits origin/master..HEAD
-
-  lint-ansible:
-    <<: *defaults
-
-    steps:
-      - checkout
-      - *dind
-      - *ci_env
-      - *attach_workspace
-      - *docker_load
-      - run: bin/lint ansible
-
-  lint-bash:
-    <<: *defaults
-
-    steps:
-      - checkout
-      - *dind
-      - *ci_env
-      - *attach_workspace
-      - *docker_load
-      - run: bin/lint bash
-
-  lint-docker:
-    <<: *defaults
-
-    steps:
-      - checkout
-      - *dind
-      - run: bin/lint docker
-
-  lint-plugins:
-    <<: *defaults
-
-    steps:
-      - checkout
-      - *dind
-      - *ci_env
-      - *attach_workspace
-      - *docker_load
-      - run: bin/lint plugins
-
-  check-changelog:
-    <<: *defaults
-
-    steps:
-      - checkout
-      - run:
-          name: Check that the CHANGELOG has been modified in the current branch
-          command: |
-            git whatchanged --name-only --pretty="" origin..HEAD | grep CHANGELOG
-
-  test-built:
-    <<: *defaults
-
-    steps:
-      - checkout
-      - *dind
-      - *attach_workspace
-      - *docker_load
-      - *ci_env
-      - run:
-          name: Test ansible installation
-          command: |
-            docker run --rm \
-              "${ARNOLD_IMAGE}" \
-              ansible --version
-
-  # Test the bootstrap playbook on the "hello" application
-  # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
-  test-bootstrap-hello:
-    machine:
-      docker_layer_caching: false
-
-    working_directory: ~/fun
-
-    steps:
-      - checkout
-      - *attach_workspace
-      - *docker_load
-      - *ci_env
-      - *install_openshift_cluster
-      - *configure_openshift_cluster
-      - *run_openshift_cluster
-
-      - run:
-          name: Test the "hello" application bootstrapping
-          command: |
-            # Bootstrap app
-            bin/ci-ansible-playbook bootstrap.yml "hello"
-            # Test service deployed with the next route
-            bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "next"
-
-      - run:
-          name: Test the "hello" application switch
-          command: |
-            # Switch next route to current
-            bin/ci-ansible-playbook switch.yml "hello"
-            # Test service switched to the current route
-            bin/ci-test-route "hello" "Hello OpenShift! by Arnold"
-
-      - run:
-          name: Test the "hello" application rollback
-          command: |
-            # Deploy to next
-            bin/ci-ansible-playbook deploy.yml "hello"
-            # Switch next route to current and current to previous
-            bin/ci-ansible-playbook switch.yml "hello"
-            # Test service switched to the current/previous route
-            bin/ci-test-route "hello" "Hello OpenShift! by Arnold"
-            bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "previous"
-            # Rollback previous to current and current to next
-            bin/ci-ansible-playbook rollback.yml "hello"
-            # Test service switched to the current/next route
-            bin/ci-test-route "hello" "Hello OpenShift! by Arnold"
-            bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "next"
-
-  # Test the redirect application
-  test-redirect:
-    machine:
-      docker_layer_caching: false
-
-    working_directory: ~/fun
-
-    steps:
-      - checkout
-      - *attach_workspace
-      - *docker_load
-      - *ci_env
-      - *install_openshift_cluster
-      - *configure_openshift_cluster
-      - *run_openshift_cluster
-
-      - run:
-          name: Bootstrap the hello app and switch
-          command: |
-            # Bootstrap app
-            bin/ci-ansible-playbook bootstrap.yml "hello"
-            # Switch next route to current
-            bin/ci-ansible-playbook switch.yml "hello"
-
-      - run:
-          name: Test the "www" to root domain redirection
-          command: |
-            # Test service switched to the current route
-            bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "www"
-
-  # Test the bootstrap playbook on the "mailcatcher" application
-  # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
-  test-bootstrap-mailcatcher:
-    machine:
-      docker_layer_caching: false
-
-    working_directory: ~/fun
-
-    steps:
-      - checkout
-      - *attach_workspace
-      - *docker_load
-      - *ci_env
-      - *install_openshift_cluster
-      - *configure_openshift_cluster
-      - *run_openshift_cluster
-
-      - run:
-          name: Test the "mailcatcher" application bootstrapping
-          command: |
-            bin/ci-ansible-playbook bootstrap.yml "mailcatcher"
-            bin/ci-test-route "mailcatcher" "MailCatcher"
-
-  # Test the bootstrap playbook on the "richie" application
-  # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
-  test-bootstrap-richie:
-    machine:
-      docker_layer_caching: false
-
-    working_directory: ~/fun
-
-    steps:
-      - checkout
-      - *attach_workspace
-      - *docker_load
-      - *ci_env
-      - *install_openshift_cluster
-      - *configure_openshift_cluster
-      - *run_openshift_cluster
-
-      - run:
-          name: Test the "richie" application bootstrapping
-          command: |
-            # Bootstrap app
-            bin/ci-ansible-playbook bootstrap.yml "richie"
-            # Test service deployed with the next route
-            bin/ci-test-route "richie" "Django administration" "/en/admin" "next"
-
-      - run:
-          name: Test the "richie" application switch
-          command: |
-            # Switch next route to current
-            bin/ci-ansible-playbook switch.yml "richie"
-            # Test service switched to the current route
-            bin/ci-test-route "richie" "Django administration" "/en/admin"
-
-  # Test the bootstrap playbook on the "forum" application
-  # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
-  test-bootstrap-forum:
-    machine:
-      docker_layer_caching: false
-
-    working_directory: ~/fun
-
-    steps:
-      - checkout
-      - *attach_workspace
-      - *docker_load
-      - *ci_env
-      - *install_openshift_cluster
-      - *configure_openshift_cluster
-      - *run_openshift_cluster
-
-      - run:
-          name: Test the "forum" application bootstrapping
-          command: |
-            # Bootstrap app
-            bin/ci-ansible-playbook bootstrap.yml "forum"
-            # Test service deployed with the next route
-            bin/ci-test-route "forum" "collection" "/api/v1/threads?api_key=thisisafakeapikey" "next"
-
-      - run:
-          name: Test the "forum" application switch
-          command: |
-            # Switch next route to current
-            bin/ci-ansible-playbook switch.yml "forum"
-            # Test service switched to the current route
-            bin/ci-test-route "forum" "collection" "/api/v1/threads?api_key=thisisafakeapikey"
-
-  # Test the bootstrap playbook on the "edxapp" application
-  # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
-  test-bootstrap-edxapp:
-    machine:
-      docker_layer_caching: false
-
-    working_directory: ~/fun
-
-    steps:
-      - checkout
-      - *attach_workspace
-      - *docker_load
-      - *ci_env
-      - *install_openshift_cluster
-      - *configure_openshift_cluster
-      - *run_openshift_cluster
-
-      - run:
-          name: Test the "edxapp" application bootstrapping (with redis enabled)
-          command: |
-            # Bootstrap app
-            bin/ci-ansible-playbook bootstrap.yml "edxapp,redis"
-            # Test services deployed with the next route
-            bin/ci-test-route "cms" "Welcome to Your Platform Studio" "/" "next" 20
-            bin/ci-test-route "lms" "It works! This is the default homepage for this Open edX instance." "/" "next" 20
-
-      - run:
-          name: Test the "edxapp" application switch
-          command: |
-            # Switch next route to current
-            bin/ci-ansible-playbook switch.yml "edxapp"
-            # Test service switched to the current route
-            bin/ci-test-route "cms" "Welcome to Your Platform Studio" "/" "current" 20
-            bin/ci-test-route "lms" "It works! This is the default homepage for this Open edX instance." "/" "current" 20
-
-  # Test the bootstrap playbook on the "edxec" application
-  # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
-  test-bootstrap-edxec:
-    machine:
-      docker_layer_caching: false
-
-    working_directory: ~/fun
-
-    steps:
-      - checkout
-      - *attach_workspace
-      - *docker_load
-      - *ci_env
-      - *install_openshift_cluster
-      - *configure_openshift_cluster
-      - *run_openshift_cluster
-
-      - run:
-          name: Test the "edxec" application bootstrapping
-          command: |
-            # Bootstrap edxec
-            bin/ci-ansible-playbook bootstrap.yml "edxec"
-            # Test the service
-            bin/ci-test-route "edxec" "OK" "/health/" "next"
-
-      - run:
-          name: Test the "edxec" application switch
-          command: |
-            # Switch next route to current
-            bin/ci-ansible-playbook switch.yml "edxec"
-            bin/ci-test-route "edxec" "OK" "/health/"
-
-  # Test the bootstrap playbook on the "marsha" application
-  # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
-  test-bootstrap-marsha:
-    machine:
-      docker_layer_caching: false
-
-    working_directory: ~/fun
-
-    steps:
-      - checkout
-      - *attach_workspace
-      - *docker_load
-      - *ci_env
-      - *install_openshift_cluster
-      - *configure_openshift_cluster
-      - *run_openshift_cluster
-
-      - run:
-          name: Test the "marsha" application bootstrapping
-          command: |
-            # Bootstrap app
-            bin/ci-ansible-playbook bootstrap.yml "marsha"
-            # Test services deployed with the next route
-            bin/ci-test-route "marsha" "Api Root" "/api/" "next"
-
-      - run:
-          name: Test the "marsha" application switch
-          command: |
-            # Switch next route to current
-            bin/ci-ansible-playbook switch.yml "marsha"
-            # Test service switched to the current route
-            bin/ci-test-route "marsha" "Api Root" "/api/"
-
-  # Test the bootstrap playbook on the "learninglocker" application.
-  # We also need redis and mailcatcher for this application
-  # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
-  test-bootstrap-learninglocker:
-    machine:
-      docker_layer_caching: false
-
-    working_directory: ~/fun
-
-    steps:
-      - checkout
-      - *attach_workspace
-      - *docker_load
-      - *ci_env
-      - *install_openshift_cluster
-      - *configure_openshift_cluster
-      - *run_openshift_cluster
-
-      - run:
-          name: Test the "learninglocker" application bootstrapping
-          command: |
-            bin/ci-ansible-playbook bootstrap.yml "redis,mailcatcher,learninglocker"
-            bin/ci-test-route "learninglocker" "OK" "/api" "next"
-
-      - run:
-          name: Test the "learninglocker" application switch
-          command: |
-            # Switch next route to current
-            bin/ci-ansible-playbook switch.yml "learninglocker"
-            # Test service switched to the current route
-            bin/ci-test-route "learninglocker" "OK" "/api"
-
-
-  # Test the bootstrap playbook on the "ashley" application
-  # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
-  test-bootstrap-ashley:
-    machine:
-      docker_layer_caching: false
-
-    working_directory: ~/fun
-
-    steps:
-      - checkout
-      - *attach_workspace
-      - *docker_load
-      - *ci_env
-      - *install_openshift_cluster
-      - *configure_openshift_cluster
-      - *run_openshift_cluster
-
-      - run:
-          name: Test the "ashley" application bootstrapping
-          command: |
-            # Bootstrap app
-            bin/ci-ansible-playbook bootstrap.yml "ashley"
-            # Test service deployed with the next route
-            bin/ci-test-route "ashley" "ok" "/__heartbeat__" "next"
-
-      - run:
-          name: Test the "ashley" application switch
-          command: |
-            # Switch next route to current
-            bin/ci-ansible-playbook switch.yml "ashley"
-            # Test service switched to the current route
-            bin/ci-test-route "ashley" "ok" "/__heartbeat__"
-
-
-  # Test the bootstrap playbook on the "nextcloud" application.
-  # We also need redis and mailcatcher for this application
-  # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
-  test-bootstrap-nextcloud:
-    machine:
-      docker_layer_caching: false
-
-    working_directory: ~/fun
-
-    steps:
-      - checkout
-      - *attach_workspace
-      - *docker_load
-      - *ci_env
-      - *install_openshift_cluster
-      - *configure_openshift_cluster
-      - *run_openshift_cluster
-
-      - run:
-          name: Rebuild Arnold's docker image once the OpenShift project has been created to use the modified USER_ID variable
-          command: |
-            bin/ci-ansible-playbook create_project.yml "redis,mailcatcher,nextcloud"
-            export USER_ID=$(\
-                oc get project ci-eugene -o json | \
-                jq -r '.metadata.annotations."openshift.io/sa.scc.uid-range"' | \
-                sed -r "s|([0-9]+)/([0-9]+)|\\1|" \
-              )
-            sed -i -e "s/REPLACE_USER_ID/$USER_ID/g" group_vars/customer/eugene/ci/main.yml
-            bin/build
-
-      # Once deployed, we need to turn off the maintenance mode in case it is still enabled once
-      # the upgrade command run in the entrypoint.
-      - run:
-          name: Test the "nextcloud" application bootstrapping
-          command: |
-            bin/ci-ansible-playbook init_project.yml "redis,mailcatcher,nextcloud"
-            bin/ci-ansible-playbook build_images.yml "redis,mailcatcher,nextcloud"
-            bin/ci-ansible-playbook deploy.yml "redis,mailcatcher,nextcloud"
-            oc project ci-eugene
-            oc exec -it $(oc get pod -l 'app in (nextcloud),service in (nextcloud),!job_stamp' -o json | jq -r '.items[0].metadata.name') \
-              -- php /app/occ maintenance:mode --off
-            bin/ci-test-route "nextcloud" "Nextcloud" "/login" "next" 40
-
-      - run:
-          name: Test the "nextcloud" application switch
-          command: |
-            # Switch next route to current
-            bin/ci-ansible-playbook switch.yml "nextcloud"
-            # Test service switched to the current route
-            bin/ci-test-route "nextcloud" "Nextcloud" "/login" "current" 40
-
-  # Test the bootstrap playbook on the "etherpad" application
-  # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
-  test-bootstrap-etherpad:
-    machine:
-      docker_layer_caching: false
-
-    working_directory: ~/fun
-
-    steps:
-      - checkout
-      - *attach_workspace
-      - *docker_load
-      - *ci_env
-      - *install_openshift_cluster
-      - *configure_openshift_cluster
-      - *run_openshift_cluster
-
-      - run:
-          name: Test the "etherpad" application bootstrapping
-          command: |
-            # Bootstrap app
-            bin/ci-ansible-playbook bootstrap.yml "etherpad"
-            # Test service deployed with the next route
-            bin/ci-test-route "etherpad" "<title>ci-eugene etherpad</title>" "/" "next"
-
-      - run:
-          name: Test the "etherpad" application switch
-          command: |
-            # Switch next route to current
-            bin/ci-ansible-playbook switch.yml "etherpad"
-            # Test service switched to the current route
-            bin/ci-test-route "etherpad" "<title>ci-eugene etherpad</title>" "/"
-
-  # Test the bootstrap playbook on the "kibana" application
-  # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
-  test-bootstrap-kibana:
-    machine:
-      docker_layer_caching: false
-
-    working_directory: ~/fun
-
-    steps:
-      - checkout
-      - *attach_workspace
-      - *docker_load
-      - *ci_env
-      - *install_openshift_cluster
-      - *configure_openshift_cluster
-      - *run_openshift_cluster
-
-      - run:
-          name: Test the "kibana" application bootstrapping
-          command: |
-            # Create OpenShift Project
-            bin/ci-ansible-playbook init_project.yml "kibana"
-            # OC-activate created project
-            oc project ci-eugene
-            # Create ES single-node cluster
-            oc new-app -e discovery.type=single-node elasticsearch:7.7.0
-            # Deploy Kibana
-            bin/ci-ansible-playbook deploy.yml "kibana"
-            # Test service deployed with the next route
-            bin/ci-test-route "kibana" "green" "/api/status" "next"
-
-      - run:
-          name: Test the "kibana" application switch
-          command: |
-            # Switch next route to current
-            bin/ci-ansible-playbook switch.yml "kibana"
-            # Test service switched to the current route
-            bin/ci-test-route "kibana" "green" "/api/status"
-
-  # Test the delete_app tasks for blue-green applications
-  # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
-  test-delete-app:
-    machine:
-      docker_layer_caching: false
-
-    working_directory: ~/fun
-
-    steps:
-      - checkout
-      - *attach_workspace
-      - *docker_load
-      - *ci_env
-      - *install_openshift_cluster
-      - *configure_openshift_cluster
-      - *run_openshift_cluster
-
-      - run:
-          name: Prepare "richie" application bootstrapping
-          command: |
-            # Bootstrap app
-            bin/ci-ansible-playbook bootstrap.yml "richie"
-            # Test service deployed with the next route
-            bin/ci-test-route "richie" "Django administration" "/en/admin" "next"
-
-      - run:
-          name: Test "richie"'s next stack substitution (create + delete)
-          command: |
-            # Deploy the next stack a second time
-            bin/ci-ansible-playbook deploy.yml "richie"
-            # Test service re-deployed with the next route
-            bin/ci-test-route "richie" "Django administration" "/en/admin" "next"
-
-      - run:
-          name: Check that only one pod is running Richie's app
-          command: |
-            # Switch to the active project
-            oc project ci-eugene
-            # Select Richie's service pods
-            cmd="oc get pods -l app=richie,service=richie"
-            # Run command to debug output (eventually)
-            eval "${cmd}"
-            # Perform running pods test
-            test $(eval "${cmd} | grep Running | wc -l") -eq 1
-
-  test-prevent-switch-to-nothing:
-    machine:
-      docker_layer_caching: false
-
-    working_directory: ~/fun
-
-    steps:
-      - checkout
-      - *attach_workspace
-      - *docker_load
-      - *ci_env
-      - *install_openshift_cluster
-      - *configure_openshift_cluster
-      - *run_openshift_cluster
-
-      - run:
-          name: Prepare "hello" application bootstrapping
-          command: |
-            # Bootstrap app
-            bin/ci-ansible-playbook bootstrap.yml "hello"
-            # Test service deployed with the next route
-            bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "next"
-
-      - run:
-          name: Test "hello"'s switch
-          command: |
-            # Switch next route to current
-            bin/ci-ansible-playbook switch.yml "hello"
-            # Test service on the current route
-            bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "current"
-            # Test that the service is not responding on next route
-            bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "next" && exit 1 || true
-
-      - run:
-          name: Test that a second switch fails to execute with an error
-          command: |
-            # Execute the switch playbook and test that the exit code is not 0
-            bin/ci-ansible-playbook switch.yml "hello" &> /tmp/switch-to-nothing.out && exit 1 || true
-            # Test error message displayed by switch playbook
-            grep "next stack is not deployed, aborting switch" /tmp/switch-to-nothing.out
-
-  # FIXME: we have deactivated plugins test coverage as the container user is
-  # not allowed to write to /app/.coverage and CircleCI does not allow to mount
-  # volumes with "docker run" commands.
-  test-plugins:
-    <<: *defaults
-
-    steps:
-      - checkout
-      - *dind
-      - *attach_workspace
-      - *docker_load
-      - *ci_env
-      - run:
-          name: Run unit tests for local plugins
-          command: |
-            docker run --rm \
-              --tmpfs /app/.pytest_cache \
-              "${ARNOLD_IMAGE}" \
-              python -m pytest --no-cov
-
-  # ---- DockerHub publication job ----
-  hub:
-    # We use the machine executor, i.e. a VM, not a container
-    machine:
-      # Prevent cache-related issues
-      docker_layer_caching: false
-
-    working_directory: ~/fun
-
-    steps:
-      - checkout
-      - *attach_workspace
-      - *docker_load
-      - *ci_env
-      # Login to DockerHub to Publish new images
-      #
-      # Nota bene: you'll need to define the following secrets environment vars
-      # in CircleCI interface:
-      #
-      #   - DOCKER_USER
-      #   - DOCKER_PASS
-      - run:
-          name: Login to DockerHub
-          command: echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-
-      # Tag docker images with the same pattern used in Git (Semantic Versioning)
-      #
-      # Git tag: v1.0.1
-      # Docker tag: 1.0.1
-      - run:
-          name: Tag images
-          command: |
-            docker images fundocker/arnold
-            DOCKER_TAG=$([[ -z "$CIRCLE_TAG" ]] && echo $CIRCLE_BRANCH || echo ${CIRCLE_TAG} | sed 's/^v//')
-            RELEASE_TYPE=$([[ -z "$CIRCLE_TAG" ]] && echo "branch" || echo "tag ")
-            # Display either:
-            # - DOCKER_TAG: master (Git branch)
-            # or
-            # - DOCKER_TAG: 1.1.2 (Git tag v1.1.2)
-            echo "DOCKER_TAG: ${DOCKER_TAG} (Git ${RELEASE_TYPE}${CIRCLE_TAG})"
-            docker tag ${ARNOLD_IMAGE} fundocker/arnold:${DOCKER_TAG}
-            if [[ -n "$CIRCLE_TAG" ]]; then
-              docker tag ${ARNOLD_IMAGE} fundocker/arnold:latest
-            fi
-            docker images | grep -E "^fundocker/arnold\s*(${DOCKER_TAG}.*|latest|master)"
-      - run:
-          name: Publish images
-          command: |
-            DOCKER_TAG=$([[ -z "$CIRCLE_TAG" ]] && echo $CIRCLE_BRANCH || echo ${CIRCLE_TAG} | sed 's/^v//')
-            RELEASE_TYPE=$([[ -z "$CIRCLE_TAG" ]] && echo "branch" || echo "tag ")
-            # Display either:
-            # - DOCKER_TAG: master (Git branch)
-            # or
-            # - DOCKER_TAG: 1.1.2 (Git tag v1.1.2)
-            echo "DOCKER_TAG: ${DOCKER_TAG} (Git ${RELEASE_TYPE}${CIRCLE_TAG})"
-            docker push fundocker/arnold:${DOCKER_TAG}
-            if [[ -n "$CIRCLE_TAG" ]]; then
-              docker push fundocker/arnold:latest
-            fi
+
+    # Test the delete_app tasks for blue-green applications
+    # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
+    test-delete-app:
+      machine:
+        docker_layer_caching: false
+
+      working_directory: ~/fun
+
+      steps:
+        - checkout
+        - *attach_workspace
+        - *docker_load
+        - *ci_env
+        - *install_openshift_cluster
+        - *configure_openshift_cluster
+        - *run_openshift_cluster
+
+        - run:
+            name: Prepare "richie" application bootstrapping
+            command: |
+              # Bootstrap app
+              bin/ci-ansible-playbook bootstrap.yml "richie"
+              # Test service deployed with the next route
+              bin/ci-test-route "richie" "Django administration" "/en/admin" "next"
+
+        - run:
+            name: Test "richie"'s next stack substitution (create + delete)
+            command: |
+              # Deploy the next stack a second time
+              bin/ci-ansible-playbook deploy.yml "richie"
+              # Test service re-deployed with the next route
+              bin/ci-test-route "richie" "Django administration" "/en/admin" "next"
+
+        - run:
+            name: Check that only one pod is running Richie's app
+            command: |
+              # Switch to the active project
+              oc project ci-eugene
+              # Select Richie's service pods
+              cmd="oc get pods -l app=richie,service=richie"
+              # Run command to debug output (eventually)
+              eval "${cmd}"
+              # Perform running pods test
+              test $(eval "${cmd} | grep Running | wc -l") -eq 1
+
+    lint-bash:
+        <<: *defaults
+
+        steps:
+          - checkout
+          - *dind
+          - *ci_env
+          - *attach_workspace
+          - *docker_load
+          - run: bin/lint bash
+
+    # Build Arnold's docker image
+    build:
+        # We use the machine executor, i.e. a VM, not a container
+        machine:
+          # Prevent cache-related issues
+          docker_layer_caching: false
+
+        working_directory: ~/fun
+
+        steps:
+          - checkout
+          - *ci_env
+          - run:
+              name: Build arnold production image
+              command: |
+                bin/build
+                mkdir -p /tmp/docker/images
+                docker save -o /tmp/docker/images/arnold.tar "${ARNOLD_IMAGE}"
+          # Save the built to the workspace so that it can be reused in other jobs
+          - persist_to_workspace:
+              # Must be an absolute path, or relative path from working_directory.
+              root: /tmp/docker
+              # Must be relative path from root
+              paths:
+                - images
+
+    # Test the bootstrap playbook on the "hello" application
+    # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
+    test-bootstrap-hello:
+      machine:
+        docker_layer_caching: false
+
+      working_directory: ~/fun
+
+      steps:
+        - checkout
+        - *attach_workspace
+        - *docker_load
+        - *ci_env
+        - *install_openshift_cluster
+        - *configure_openshift_cluster
+        - *run_openshift_cluster
+
+        - run:
+            name: Test the "hello" application bootstrapping
+            command: |
+              # Bootstrap app
+              bin/ci-ansible-playbook bootstrap.yml "hello"
+              # Test service deployed with the next route
+              bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "next"
+
+        - run:
+            name: Test the "hello" application switch
+            command: |
+              # Switch next route to current
+              bin/ci-ansible-playbook switch.yml "hello"
+              # Test service switched to the current route
+              bin/ci-test-route "hello" "Hello OpenShift! by Arnold"
+
+        - run:
+            name: Test the "hello" application rollback
+            command: |
+              # Deploy to next
+              bin/ci-ansible-playbook deploy.yml "hello"
+              # Switch next route to current and current to previous
+              bin/ci-ansible-playbook switch.yml "hello"
+              # Test service switched to the current/previous route
+              bin/ci-test-route "hello" "Hello OpenShift! by Arnold"
+              bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "previous"
+              # Rollback previous to current and current to next
+              bin/ci-ansible-playbook rollback.yml "hello"
+              # Test service switched to the current/next route
+              bin/ci-test-route "hello" "Hello OpenShift! by Arnold"
+              bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "next"
+
+    check-changelog:
+        <<: *defaults
+
+        steps:
+          - checkout
+          - run:
+              name: Check that the CHANGELOG has been modified in the current branch
+              command: |
+                git whatchanged --name-only --pretty="" origin..HEAD | grep CHANGELOG
+
+    # Test the redirect application
+    test-redirect:
+      machine:
+        docker_layer_caching: false
+
+      working_directory: ~/fun
+
+      steps:
+        - checkout
+        - *attach_workspace
+        - *docker_load
+        - *ci_env
+        - *install_openshift_cluster
+        - *configure_openshift_cluster
+        - *run_openshift_cluster
+
+        - run:
+            name: Bootstrap the hello app and switch
+            command: |
+              # Bootstrap app
+              bin/ci-ansible-playbook bootstrap.yml "hello"
+              # Switch next route to current
+              bin/ci-ansible-playbook switch.yml "hello"
+
+        - run:
+            name: Test the "www" to root domain redirection
+            command: |
+              # Test service switched to the current route
+              bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "www"
+
+    # Test the bootstrap playbook on the "richie" application
+    # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
+    test-bootstrap-richie:
+      machine:
+        docker_layer_caching: false
+
+      working_directory: ~/fun
+
+      steps:
+        - checkout
+        - *attach_workspace
+        - *docker_load
+        - *ci_env
+        - *install_openshift_cluster
+        - *configure_openshift_cluster
+        - *run_openshift_cluster
+
+        - run:
+            name: Test the "richie" application bootstrapping
+            command: |
+              # Bootstrap app
+              bin/ci-ansible-playbook bootstrap.yml "richie"
+              # Test service deployed with the next route
+              bin/ci-test-route "richie" "Django administration" "/en/admin" "next"
+
+        - run:
+            name: Test the "richie" application switch
+            command: |
+              # Switch next route to current
+              bin/ci-ansible-playbook switch.yml "richie"
+              # Test service switched to the current route
+              bin/ci-test-route "richie" "Django administration" "/en/admin"
+
+    test-built:
+        <<: *defaults
+
+        steps:
+          - checkout
+          - *dind
+          - *attach_workspace
+          - *docker_load
+          - *ci_env
+          - run:
+              name: Test ansible installation
+              command: |
+                docker run --rm \
+                  "${ARNOLD_IMAGE}" \
+                  ansible --version
+
+    lint-plugins:
+        <<: *defaults
+
+        steps:
+          - checkout
+          - *dind
+          - *ci_env
+          - *attach_workspace
+          - *docker_load
+          - run: bin/lint plugins
+
+    lint-docker:
+        <<: *defaults
+
+        steps:
+          - checkout
+          - *dind
+          - run: bin/lint docker
+
+    # FIXME: we have deactivated plugins test coverage as the container user is
+    # not allowed to write to /app/.coverage and CircleCI does not allow to mount
+    # volumes with "docker run" commands.
+    test-plugins:
+      <<: *defaults
+
+      steps:
+        - checkout
+        - *dind
+        - *attach_workspace
+        - *docker_load
+        - *ci_env
+        - run:
+            name: Run unit tests for local plugins
+            command: |
+              docker run --rm \
+                --tmpfs /app/.pytest_cache \
+                "${ARNOLD_IMAGE}" \
+                python -m pytest --no-cov
+
+    # Check that the git history is clean and complies with our expectations
+    lint-git:
+      <<: *defaults
+
+      steps:
+        - checkout
+        - run:
+            name: Check absence of fixup commits
+            command: |
+              ! git log | grep 'fixup!'
+        - run:
+            name: Install gitlint
+            command: |
+              pip install --user gitlint requests
+        - run:
+            name: lint commit messages added to master
+            command: |
+              ~/.local/bin/gitlint --commits origin/master..HEAD
+
+    check-configuration:
+        <<: *defaults
+
+        steps:
+          - checkout
+          - *dind
+          - *ci_env
+          - *attach_workspace
+          - *docker_load
+          - run:
+              name: Check that the circle-ci config.yml file has been updated in the current branch
+              command: bin/ci check_configuration
+
+    # Test the bootstrap playbook on the "edxapp" application
+    # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
+    test-bootstrap-edxapp:
+      machine:
+        docker_layer_caching: false
+
+      working_directory: ~/fun
+
+      steps:
+        - checkout
+        - *attach_workspace
+        - *docker_load
+        - *ci_env
+        - *install_openshift_cluster
+        - *configure_openshift_cluster
+        - *run_openshift_cluster
+
+        - run:
+            name: Test the "edxapp" application bootstrapping (with redis enabled)
+            command: |
+              # Bootstrap app
+              bin/ci-ansible-playbook bootstrap.yml "edxapp,redis"
+              # Test services deployed with the next route
+              bin/ci-test-route "cms" "Welcome to Your Platform Studio" "/" "next" 20
+              bin/ci-test-route "lms" "It works! This is the default homepage for this Open edX instance." "/" "next" 20
+
+        - run:
+            name: Test the "edxapp" application switch
+            command: |
+              # Switch next route to current
+              bin/ci-ansible-playbook switch.yml "edxapp"
+              # Test service switched to the current route
+              bin/ci-test-route "cms" "Welcome to Your Platform Studio" "/" "current" 20
+              bin/ci-test-route "lms" "It works! This is the default homepage for this Open edX instance." "/" "current" 20
+
+    test-prevent-switch-to-nothing:
+      machine:
+        docker_layer_caching: false
+
+      working_directory: ~/fun
+
+      steps:
+        - checkout
+        - *attach_workspace
+        - *docker_load
+        - *ci_env
+        - *install_openshift_cluster
+        - *configure_openshift_cluster
+        - *run_openshift_cluster
+
+        - run:
+            name: Prepare "hello" application bootstrapping
+            command: |
+              # Bootstrap app
+              bin/ci-ansible-playbook bootstrap.yml "hello"
+              # Test service deployed with the next route
+              bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "next"
+
+        - run:
+            name: Test "hello"'s switch
+            command: |
+              # Switch next route to current
+              bin/ci-ansible-playbook switch.yml "hello"
+              # Test service on the current route
+              bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "current"
+              # Test that the service is not responding on next route
+              bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "next" && exit 1 || true
+
+        - run:
+            name: Test that a second switch fails to execute with an error
+            command: |
+              # Execute the switch playbook and test that the exit code is not 0
+              bin/ci-ansible-playbook switch.yml "hello" &> /tmp/switch-to-nothing.out && exit 1 || true
+              # Test error message displayed by switch playbook
+              grep "next stack is not deployed, aborting switch" /tmp/switch-to-nothing.out
+
+    lint-ansible:
+        <<: *defaults
+
+        steps:
+          - checkout
+          - *dind
+          - *ci_env
+          - *attach_workspace
+          - *docker_load
+          - run: bin/lint ansible
+
 
 workflows:
   version: 2
 
   arnold:
     jobs:
-      - build:
-          filters:
-            tags:
-              only: /.*/
-      - lint-ansible:
+
+      - test-delete-app:
           requires:
-            - build
+            - test-bootstrap-richie
           filters:
             tags:
               only: /.*/
+
       - lint-bash:
           requires:
             - build
           filters:
             tags:
               only: /.*/
-      - lint-docker:
-          requires:
-            - build
+
+      - build:
           filters:
             tags:
               only: /.*/
-      - lint-plugins:
-          requires:
-            - build
-          filters:
-            tags:
-              only: /.*/
-      - lint-git:
-          filters:
-            branches:
-              ignore: master
-            tags:
-              ignore: /.*/
-      - check-changelog:
-          filters:
-            branches:
-              ignore: master
-            tags:
-              ignore: /.*/
-      - test-built:
-          requires:
-            - lint-bash
-            - lint-docker
-            - lint-ansible
-            - lint-plugins
-          filters:
-            tags:
-              only: /.*/
+
       - test-bootstrap-hello:
           requires:
             - lint-bash
@@ -865,12 +485,21 @@ workflows:
           filters:
             tags:
               only: /.*/
+
+      - check-changelog:
+          filters:
+            branches:
+              ignore: master
+            tags:
+              ignore: /.*/
+
       - test-redirect:
           requires:
             - test-bootstrap-hello
           filters:
             tags:
               only: /.*/
+
       - test-bootstrap-richie:
           requires:
             - lint-bash
@@ -880,7 +509,8 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - test-bootstrap-edxapp:
+
+      - test-built:
           requires:
             - lint-bash
             - lint-docker
@@ -889,99 +519,21 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - test-bootstrap-edxec:
+
+      - lint-plugins:
           requires:
-            - lint-bash
-            - lint-docker
-            - lint-ansible
-            - lint-plugins
+            - build
           filters:
             tags:
               only: /.*/
-      - test-bootstrap-mailcatcher:
+
+      - lint-docker:
           requires:
-            - lint-bash
-            - lint-docker
-            - lint-ansible
-            - lint-plugins
+            - build
           filters:
             tags:
               only: /.*/
-      - test-bootstrap-marsha:
-          requires:
-            - lint-bash
-            - lint-docker
-            - lint-ansible
-            - lint-plugins
-          filters:
-            tags:
-              only: /.*/
-      - test-bootstrap-forum:
-          requires:
-            - lint-bash
-            - lint-docker
-            - lint-ansible
-            - lint-plugins
-          filters:
-            tags:
-              only: /.*/
-      - test-bootstrap-learninglocker:
-          requires:
-            - lint-bash
-            - lint-docker
-            - lint-ansible
-            - lint-plugins
-          filters:
-            tags:
-              only: /.*/
-      - test-bootstrap-ashley:
-          requires:
-            - lint-bash
-            - lint-docker
-            - lint-ansible
-            - lint-plugins
-          filters:
-            tags:
-              only: /.*/
-      - test-bootstrap-nextcloud:
-          requires:
-            - lint-bash
-            - lint-docker
-            - lint-ansible
-            - lint-plugins
-          filters:
-            tags:
-              only: /.*/
-      - test-bootstrap-etherpad:
-          requires:
-            - lint-bash
-            - lint-docker
-            - lint-ansible
-            - lint-plugins
-          filters:
-            tags:
-              only: /.*/
-      - test-bootstrap-kibana:
-          requires:
-            - lint-bash
-            - lint-docker
-            - lint-ansible
-            - lint-plugins
-          filters:
-            tags:
-              only: /.*/
-      - test-delete-app:
-          requires:
-            - test-bootstrap-richie
-          filters:
-            tags:
-              only: /.*/
-      - test-prevent-switch-to-nothing:
-          requires:
-            - test-bootstrap-hello
-          filters:
-            tags:
-              only: /.*/
+
       - test-plugins:
           requires:
             - lint-bash
@@ -992,30 +544,43 @@ workflows:
             tags:
               only: /.*/
 
-      # DockerHub publication.
-      #
-      # Publish docker images only if all build, lint and test jobs succeed and
-      # it has been tagged with a tag starting with the letter v
-      - hub:
-          requires:
-            - test-built
-            - test-plugins
-            - test-bootstrap-hello
-            - test-bootstrap-richie
-            - test-bootstrap-edxapp
-            - test-bootstrap-mailcatcher
-            - test-bootstrap-marsha
-            - test-bootstrap-forum
-            - test-bootstrap-learninglocker
-            - test-bootstrap-ashley
-            - test-bootstrap-nextcloud
-            - test-bootstrap-etherpad
-            - test-bootstrap-kibana
-            - test-redirect
-            - test-delete-app
-            - test-prevent-switch-to-nothing
+      - lint-git:
           filters:
             branches:
-              only: master
+              ignore: master
             tags:
-              only: /^v.*/
+              ignore: /.*/
+
+      - check-configuration:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore: master
+            tags:
+              ignore: /.*/
+
+      - test-bootstrap-edxapp:
+          requires:
+            - lint-bash
+            - lint-docker
+            - lint-ansible
+            - lint-plugins
+          filters:
+            tags:
+              only: /.*/
+
+      - test-prevent-switch-to-nothing:
+          requires:
+            - test-bootstrap-hello
+          filters:
+            tags:
+              only: /.*/
+
+      - lint-ansible:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /.*/
+

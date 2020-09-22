@@ -1,0 +1,29 @@
+# Test the redirect application
+test-redirect:
+  machine:
+    docker_layer_caching: false
+
+  working_directory: ~/fun
+
+  steps:
+    - checkout
+    - *attach_workspace
+    - *docker_load
+    - *ci_env
+    - *install_openshift_cluster
+    - *configure_openshift_cluster
+    - *run_openshift_cluster
+
+    - run:
+        name: Bootstrap the hello app and switch
+        command: |
+          # Bootstrap app
+          bin/ci-ansible-playbook bootstrap.yml "hello"
+          # Switch next route to current
+          bin/ci-ansible-playbook switch.yml "hello"
+
+    - run:
+        name: Test the "www" to root domain redirection
+        command: |
+          # Test service switched to the current route
+          bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "www"

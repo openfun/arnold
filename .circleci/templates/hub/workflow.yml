@@ -1,0 +1,27 @@
+# DockerHub publication.
+#
+# Publish docker images only if all build, lint and test jobs succeed and
+# it has been tagged with a tag starting with the letter v
+- hub:
+    requires:
+      - test-built
+      - test-plugins
+      - test-bootstrap-hello
+      - test-bootstrap-richie
+      - test-bootstrap-edxapp
+      - test-bootstrap-mailcatcher
+      - test-bootstrap-marsha
+      - test-bootstrap-forum
+      - test-bootstrap-learninglocker
+      - test-bootstrap-ashley
+      - test-bootstrap-nextcloud
+      - test-bootstrap-etherpad
+      - test-bootstrap-kibana
+      - test-redirect
+      - test-delete-app
+      - test-prevent-switch-to-nothing
+    filters:
+      branches:
+        only: master
+      tags:
+        only: /^v.*/

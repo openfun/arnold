@@ -1,0 +1,38 @@
+# Test the bootstrap playbook on the "kibana" application
+# nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
+test-bootstrap-kibana:
+  machine:
+    docker_layer_caching: false
+
+  working_directory: ~/fun
+
+  steps:
+    - checkout
+    - *attach_workspace
+    - *docker_load
+    - *ci_env
+    - *install_openshift_cluster
+    - *configure_openshift_cluster
+    - *run_openshift_cluster
+
+    - run:
+        name: Test the "kibana" application bootstrapping
+        command: |
+          # Create OpenShift Project
+          bin/ci-ansible-playbook init_project.yml "kibana"
+          # OC-activate created project
+          oc project ci-eugene
+          # Create ES single-node cluster
+          oc new-app -e discovery.type=single-node elasticsearch:7.7.0
+          # Deploy Kibana
+          bin/ci-ansible-playbook deploy.yml "kibana"
+          # Test service deployed with the next route
+          bin/ci-test-route "kibana" "green" "/api/status" "next"
+
+    - run:
+        name: Test the "kibana" application switch
+        command: |
+          # Switch next route to current
+          bin/ci-ansible-playbook switch.yml "kibana"
+          # Test service switched to the current route
+          bin/ci-test-route "kibana" "green" "/api/status"

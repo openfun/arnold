@@ -1,0 +1,9 @@
+- test-bootstrap-marsha:
+    requires:
+      - lint-bash
+      - lint-docker
+      - lint-ansible
+      - lint-plugins
+    filters:
+      tags:
+        only: /.*/

@@ -1,0 +1,6 @@
+- lint-bash:
+    requires:
+      - build
+    filters:
+      tags:
+        only: /.*/

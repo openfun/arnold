@@ -1,0 +1,32 @@
+# Test the bootstrap playbook on the "richie" application
+# nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
+test-bootstrap-richie:
+  machine:
+    docker_layer_caching: false
+
+  working_directory: ~/fun
+
+  steps:
+    - checkout
+    - *attach_workspace
+    - *docker_load
+    - *ci_env
+    - *install_openshift_cluster
+    - *configure_openshift_cluster
+    - *run_openshift_cluster
+
+    - run:
+        name: Test the "richie" application bootstrapping
+        command: |
+          # Bootstrap app
+          bin/ci-ansible-playbook bootstrap.yml "richie"
+          # Test service deployed with the next route
+          bin/ci-test-route "richie" "Django administration" "/en/admin" "next"
+
+    - run:
+        name: Test the "richie" application switch
+        command: |
+          # Switch next route to current
+          bin/ci-ansible-playbook switch.yml "richie"
+          # Test service switched to the current route
+          bin/ci-test-route "richie" "Django administration" "/en/admin"

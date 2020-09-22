@@ -1,0 +1,32 @@
+# Test the bootstrap playbook on the "ashley" application
+# nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
+test-bootstrap-ashley:
+  machine:
+    docker_layer_caching: false
+
+  working_directory: ~/fun
+
+  steps:
+    - checkout
+    - *attach_workspace
+    - *docker_load
+    - *ci_env
+    - *install_openshift_cluster
+    - *configure_openshift_cluster
+    - *run_openshift_cluster
+
+    - run:
+        name: Test the "ashley" application bootstrapping
+        command: |
+          # Bootstrap app
+          bin/ci-ansible-playbook bootstrap.yml "ashley"
+          # Test service deployed with the next route
+          bin/ci-test-route "ashley" "ok" "/__heartbeat__" "next"
+
+    - run:
+        name: Test the "ashley" application switch
+        command: |
+          # Switch next route to current
+          bin/ci-ansible-playbook switch.yml "ashley"
+          # Test service switched to the current route
+          bin/ci-test-route "ashley" "ok" "/__heartbeat__"
