@@ -12,7 +12,7 @@ yq==2.11.1
 
 # Quality
 flake8==3.8.3
-isort==5.5.2
+isort==5.5.3
 pylint==2.6.0
 
 # Tests
