@@ -31,6 +31,7 @@ server {
 
   # Disables server version feedback on pages and in headers
   server_tokens off;
+  {% block server_extra %}{% endblock %}
 
   location @proxy_to_lms_app {
     proxy_set_header Host $http_host;

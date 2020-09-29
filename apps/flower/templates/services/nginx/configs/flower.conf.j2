@@ -6,6 +6,7 @@ server {
   listen {{ flower_nginx_app_port }};
   server_name localhost;
   charset utf-8;
+  {% block server_extra %}{% endblock %}
 
   location @proxy_to_flower {
     proxy_pass http://flower;

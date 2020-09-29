@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- Allow extending nginx configuration templates on all sites
+
 ## [5.15.0] - 2020-09-22
 
 ### Changed
