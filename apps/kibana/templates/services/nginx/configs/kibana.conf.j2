@@ -10,6 +10,7 @@ server {
 
   # Disables server version feedback on pages and in headers
   server_tokens off;
+  {% block server_extra %}{% endblock %}
 
 {% if http_basic_auth_enabled %}
 {% if bypass_htaccess %}

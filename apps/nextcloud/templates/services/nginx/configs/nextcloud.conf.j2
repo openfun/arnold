@@ -29,6 +29,7 @@ server {
 
     # Path to the root of your installation
     root {{ nextcloud_nginx_root }};
+    {% block server_extra %}{% endblock %}
 
     location = /robots.txt {
         allow all;
