@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [5.16.0] - 2020-09-30
+
 ### Added
 
 - Allow extending nginx configuration templates on all sites
@@ -839,8 +841,9 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v5.15.0...master
-[5.14.3]: https://github.com/openfun/arnold/compare/v5.14.2...v5.15.0
+[unreleased]: https://github.com/openfun/arnold/compare/v5.16.0...master
+[5.16.0]: https://github.com/openfun/arnold/compare/v5.15.0...v5.16.0
+[5.15.0]: https://github.com/openfun/arnold/compare/v5.14.2...v5.15.0
 [5.14.2]: https://github.com/openfun/arnold/compare/v5.14.1...v5.14.2
 [5.14.1]: https://github.com/openfun/arnold/compare/v5.14.0...v5.14.1
 [5.14.0]: https://github.com/openfun/arnold/compare/v5.13.1...v5.14.0
