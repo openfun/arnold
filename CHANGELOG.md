@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- Allow to change PVC media name
+
 ## [5.16.0] - 2020-09-30
 
 ### Added
