@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [5.17.0] - 2020-10-09
+
 ### Added
 
 - Allow to change PVC media name
@@ -845,7 +847,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v5.16.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v5.17.0...master
+[5.17.0]: https://github.com/openfun/arnold/compare/v5.16.0...v5.17.0
 [5.16.0]: https://github.com/openfun/arnold/compare/v5.15.0...v5.16.0
 [5.15.0]: https://github.com/openfun/arnold/compare/v5.14.2...v5.15.0
 [5.14.2]: https://github.com/openfun/arnold/compare/v5.14.1...v5.14.2
