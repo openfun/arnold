@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- Allow extending kibana configuration template
+
 ## [5.17.0] - 2020-10-09
 
 ### Added
