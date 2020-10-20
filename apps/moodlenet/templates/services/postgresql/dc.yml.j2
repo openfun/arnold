@@ -1,0 +1,35 @@
+{% if env_type in trashable_env_types %}
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: moodlenet
+    service: postgresql
+    version: "{{ moodlenet_postgresql_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: "moodlenet-postgresql-{{ deployment_stamp }}"
+  namespace: "{{ project_name }}"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: moodlenet
+        service: postgresql
+        version: "{{ moodlenet_postgresql_image_tag }}"
+        deploymentconfig: "moodlenet-postgresql-{{ deployment_stamp }}"
+        deployment_stamp: "{{ deployment_stamp }}"
+    spec:
+      containers:
+        - image: {{ moodlenet_postgresql_image_name }}:{{ moodlenet_postgresql_image_tag }}
+          name: postgresql
+          ports:
+            - containerPort: {{ moodlenet_postgresql_port }}
+              protocol: TCP
+          env:
+            - name: POSTGRESQL_DATABASE
+              value: "{{ moodlenet_postgresql_database }}"
+          envFrom:
+            - secretRef:
+                name: "{{ moodlenet_postgresql_secret_name }}"
+{% endif %}

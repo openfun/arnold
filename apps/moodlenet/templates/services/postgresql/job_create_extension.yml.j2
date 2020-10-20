@@ -1,0 +1,52 @@
+{% if env_type in trashable_env_types %}
+# Moodlenet requires the `citext` extension in the PostgreSQL database.
+#
+# The `CREATE EXTENSION IF NOT EXIST citext` query, which can only be
+# executed by a superuser, is part of the migration files provided with
+# moodlenet backend. We can't execute it with our regular database user.
+#
+# This job enables the extension with a superuser. It is only run in
+# trashable environments. In production, the extension must be created
+# manually by a superuser before deploying the application.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: postgresql-create-extensions-{{ job_stamp }}
+  namespace: "{{ project_name }}"
+  labels:
+    app: moodlenet
+    service: postgresql
+    version: "{{ moodlenet_postgresql_image_tag }}"
+    # Jobs with the "pre" job type will be executed prior to deployments
+    job_type: "post"
+    deployment_stamp: "{{ deployment_stamp }}"
+spec:
+  template:
+    metadata:
+      name: postgresql-create-extensions-{{ job_stamp }}
+      labels:
+        app: moodlenet
+        service: postgresql
+        version: "{{ moodlenet_postgresql_image_tag }}"
+        deploymentconfig: "moodlenet-postgresql-{{ deployment_stamp }}"
+        job_stamp: "{{ job_stamp }}"
+        deployment_stamp: "{{ deployment_stamp }}"
+    spec:
+      restartPolicy: Never
+      containers:
+        - image: {{ moodlenet_postgresql_image_name }}:{{ moodlenet_postgresql_image_tag }}
+          name: postgresql
+          ports:
+            - containerPort: {{ moodlenet_postgresql_port }}
+              protocol: TCP
+          env:
+            - name: POSTGRESQL_DATABASE
+              value: "{{ moodlenet_postgresql_database }}"
+          envFrom:
+            - secretRef:
+                name: "{{ moodlenet_postgresql_secret_name }}"
+          command:
+            - "bash"
+            - "-c"
+            - "echo 'CREATE EXTENSION IF NOT EXISTS citext;' | PGPASSWORD=\"$POSTGRESQL_ADMIN_PASSWORD\" psql -h 'moodlenet-postgresql-{{ deployment_stamp }}' '{{moodlenet_postgresql_database}}'"
+{% endif %}

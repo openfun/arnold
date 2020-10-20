@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## Added
+
+- Add `moodlenet` application
+
 ## Fixed
 
 - Move `acme` ConfigMap annotation type to string

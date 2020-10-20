@@ -1,0 +1,13 @@
+# customer: {{ customer }}
+# env_type: {{ env_type }}
+
+# postgresql
+{% set postgresql_credentials = databases.postgresql | json_query("[?release=='" ~ moodlenet_postgresql_version ~ "'].databases | [0][?application=='moodlenet'].{user: user, password: password} | [0]") %}
+POSTGRESQL_USER: {{ postgresql_credentials.user }}
+POSTGRESQL_PASSWORD: {{ postgresql_credentials.password }}
+{% if env_type in trashable_env_types %}
+POSTGRESQL_ADMIN_PASSWORD: "lookup('password', '/dev/null length=20')"
+{% endif %}
+
+# Moodlenet backend
+SECRET_KEY_BASE: {{ lookup('password', '/dev/null length=50') }}
