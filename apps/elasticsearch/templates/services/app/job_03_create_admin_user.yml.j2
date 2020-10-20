@@ -31,10 +31,10 @@ spec:
             - curl -kfsSL
                 -X PUT "https://elasticsearch:9200/_security/user/${ADMIN_USERNAME}?pretty"
                 -u "${ELASTIC_USERNAME}:${ELASTIC_PASSWORD}"
-                -H "Content-Type: application/json"
+                -H "Content-Type:application/json"
                 -d "{
-                    \"password\" : \"${ADMIN_PASSWORD}\",
-                    \"roles\" : [ \"superuser\" ]
+                    \"password\":\"${ADMIN_PASSWORD}\",
+                    \"roles\":[ \"superuser\" ]
                 }"
           envFrom:
             - secretRef:

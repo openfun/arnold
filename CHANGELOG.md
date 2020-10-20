@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Fixed
+
+- YAML syntax errors in ES job template
+
 ## [5.18.0] - 2020-10-16
 
 ### Added
