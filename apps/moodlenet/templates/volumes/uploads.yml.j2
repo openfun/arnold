@@ -1,0 +1,17 @@
+{% if env_type in trashable_env_types %}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: moodlenet-pvc-uploads
+  namespace: "{{ project_name }}"
+  labels:
+    app: moodlenet
+    version: "{{ moodlenet_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ moodlenet_upload_volume_size }}
+{% endif %}

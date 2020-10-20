@@ -17,5 +17,6 @@ apps:
   - name: learninglocker
   - name: mailcatcher
   - name: marsha
+  - name: moodlenet
   - name: redis
   - name: richie

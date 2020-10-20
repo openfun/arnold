@@ -462,6 +462,40 @@ jobs:
             # Test service switched to the current route
             bin/ci-test-route "marsha" "Api Root" "/api/"
 
+  # Test the bootstrap playbook on the "moodlenet" application
+  # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
+  test-bootstrap-moodlenet:
+    machine:
+      docker_layer_caching: false
+
+    working_directory: ~/fun
+
+    steps:
+      - checkout
+      - *attach_workspace
+      - *docker_load
+      - *ci_env
+      - *install_openshift_cluster
+      - *configure_openshift_cluster
+      - *run_openshift_cluster
+
+      - run:
+          name: Test the "moodlenet" application bootstrapping
+          command: |
+            # Bootstrap app
+            bin/ci-ansible-playbook bootstrap.yml "moodlenet"
+            # Test services deployed with the next route
+            bin/ci-test-route "moodlenet" "schema" "/.well-known/nodeinfo" "next" 10 "application/json"
+
+      - run:
+          name: Test the "moodlenet" application switch
+          command: |
+            # Switch next route to current
+            bin/ci-ansible-playbook switch.yml "moodlenet"
+            # Test service switched to the current route
+            bin/ci-test-route "moodlenet" "schema" "/.well-known/nodeinfo" "current" 10 "application/json"
+
+
   # Test the bootstrap playbook on the "learninglocker" application.
   # We also need redis and mailcatcher for this application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
@@ -915,6 +949,15 @@ workflows:
             tags:
               only: /.*/
       - test-bootstrap-marsha:
+          requires:
+            - lint-bash
+            - lint-docker
+            - lint-ansible
+            - lint-plugins
+          filters:
+            tags:
+              only: /.*/
+      - test-bootstrap-moodlenet:
           requires:
             - lint-bash
             - lint-docker

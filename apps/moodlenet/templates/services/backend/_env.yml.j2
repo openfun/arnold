@@ -1,0 +1,57 @@
+# server domain name:
+HOSTNAME: "{{ moodlenet_host }}"
+
+# full backend URL - server protocol, domain name, and port
+# (if it isn't the default for protocol like 80 or 443):
+BASE_URL: "https://{{ moodlenet_host }}"
+
+# cc public activities to the mothership for indexing
+CONNECT_WITH_MOTHERSHIP: "{{ moodlenet_mothership_connect }}"
+
+# which mothership environment to search (defaults to a test index, change this in production)
+REACT_APP_MOTHERSHIP_ENV: "moodlenet_mothership_next"
+
+# a tagline for your instance
+INSTANCE_DESCRIPTION: "{{ moodlenet_instance_description }}"
+
+# whether to require an email address to first be invited (or access-listed with MoodleNet.Access) before being able to sign up
+INVITE_ONLY: "{{ moodlenet_invite_only }}"
+
+# whether to automatically alter the database schema when you upgrade the app
+AUTORUN_DB_MIGRATIONS: "true"
+
+# This variable defines the system locale used to run the moodlenet container
+# It will be used by the elixir application as the default language, if the
+# corresponding translations are available.
+LANG: "{{ moodlenet_lang }}"
+
+# max file upload size (default is 20MB)
+UPLOAD_LIMIT: "{{ moodlenet_upload_limit }}"
+
+# erlang server port
+PORT: "{{ moodlenet_backend_port }}"
+
+REPLACE_OS_VARS: "true"
+CI: "false"
+
+DATABASE_NAME: "{{ moodlenet_postgresql_database }}"
+DATABASE_HOST: "moodlenet-{{ moodlenet_postgresql_host }}-{{ deployment_stamp }}"
+# Warning : DATABASE_PORT environment variable is not yet supported by moodlenet-backend
+DATABASE_PORT: "{{ moodlenet_postgresql_port }}"
+
+# - Email configuration
+# -- common settings
+MAIL_DOMAIN: "{{ moodlenet_email_domain }}"
+MAIL_FROM: "{{ moodlenet_email_from }}"
+# (supported backends are "smtp" and "mailgun")
+MAIL_BACKEND: "{{ moodlenet_email_backend }}"
+# -- smtp backend specific
+{% if moodlenet_email_backend == "smtp" %}
+MAIL_SERVER: "{{ moodlenet_email_smtp_host }}"
+MAIL_USER: "{{ moodlenet_email_smtp_user }}"
+MAIL_PASSWORD: "{{ moodlenet_email_smtp_password }}"
+{% endif %}
+# -- mailgun backend specific
+{% if moodlenet_email_backend == "mailgun" %}
+MAIL_KEY: "{{ moodlenet_email_mailgun_key }}"
+{% endif %}
