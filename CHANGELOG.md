@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- Allow extending ElasticSearch configuration template
+
 ### Fixed
 
 - YAML syntax errors in ES job template
