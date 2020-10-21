@@ -43,3 +43,5 @@ xpack.security.http.ssl.keystore.path: "{{ elasticsearch_ssl_certificates_path }
 # Monitoring is not supported in this arnold application yet
 xpack.monitoring.enabled: false
 {% endif %}
+
+{% block elasticsearch_extra %}{% endblock %}
