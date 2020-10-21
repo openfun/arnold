@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [5.19.0] - 2020-10-21
+
 ### Added
 
 - Allow extending ElasticSearch configuration template
@@ -861,7 +863,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v5.18.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v5.19.0...master
+[5.19.0]: https://github.com/openfun/arnold/compare/v5.18.0...v5.19.0
 [5.18.0]: https://github.com/openfun/arnold/compare/v5.17.0...v5.18.0
 [5.17.0]: https://github.com/openfun/arnold/compare/v5.16.0...v5.17.0
 [5.16.0]: https://github.com/openfun/arnold/compare/v5.15.0...v5.16.0
