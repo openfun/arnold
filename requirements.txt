@@ -1,7 +1,7 @@
 # Core
 ansible==2.10.1
 ansible-lint==4.3.6
-deepmerge==0.1.0
+deepmerge==0.1.1
 jmespath==0.10.0
 openshift==0.11.2
 passlib==1.7.2
