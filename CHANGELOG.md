@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## Fixed
+
+- Move `acme` ConfigMap annotation type to string
+
 ## [5.19.0] - 2020-10-21
 
 ### Added
