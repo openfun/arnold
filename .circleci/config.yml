@@ -485,7 +485,7 @@ jobs:
             # Bootstrap app
             bin/ci-ansible-playbook bootstrap.yml "moodlenet"
             # Test services deployed with the next route
-            bin/ci-test-route "moodlenet" "schema" "/.well-known/nodeinfo" "next" 10 "application/json"
+            bin/ci-test-route "api" "schema" "/.well-known/nodeinfo" "next" 10 "application/json"
 
       - run:
           name: Test the "moodlenet" application switch
@@ -493,7 +493,7 @@ jobs:
             # Switch next route to current
             bin/ci-ansible-playbook switch.yml "moodlenet"
             # Test service switched to the current route
-            bin/ci-test-route "moodlenet" "schema" "/.well-known/nodeinfo" "current" 10 "application/json"
+            bin/ci-test-route "api" "schema" "/.well-known/nodeinfo" "current" 10 "application/json"
 
 
   # Test the bootstrap playbook on the "learninglocker" application.
