@@ -39,9 +39,6 @@ moodlenet_email_domain: "example.com"
 moodlenet_email_from: "contact@example.com"
 moodlenet_email_backend: "smtp"
 moodlenet_email_smtp_host: "localhost"
-moodlenet_email_smtp_user: ""
-moodlenet_email_smtp_password: ""
-moodlenet_email_mailgun_key: ""
 
 moodlenet_instance_description: "An instance of MoodleNet, a federated network for educators."
 moodlenet_invite_only: true

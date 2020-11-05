@@ -51,10 +51,4 @@ MAIL_BACKEND: "{{ moodlenet_email_backend }}"
 # -- smtp backend specific
 {% if moodlenet_email_backend == "smtp" %}
 MAIL_SERVER: "{{ moodlenet_email_smtp_host }}"
-MAIL_USER: "{{ moodlenet_email_smtp_user }}"
-MAIL_PASSWORD: "{{ moodlenet_email_smtp_password }}"
-{% endif %}
-# -- mailgun backend specific
-{% if moodlenet_email_backend == "mailgun" %}
-MAIL_KEY: "{{ moodlenet_email_mailgun_key }}"
 {% endif %}
