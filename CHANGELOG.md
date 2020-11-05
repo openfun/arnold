@@ -17,6 +17,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 - Add missing FRONTEND_BASE_URL variable in moodlenet
 - Fix moodlenet-pvc-uploads PVC declaration in moodlenet
+- Fix basic auth in moodlenet nginx configuration
 
 ## [5.20.0] - 2020-11-05
 

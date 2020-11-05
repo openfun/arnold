@@ -52,19 +52,45 @@ server {
   }
 
   location /api {
+    {% if http_basic_auth_enabled and bypass_htaccess %}
+        if ($http_x_forwarded_for !~ ^({{ moodlenet_nginx_bypass_htaccess_ip_whitelist | join("|") }})) {
+          error_page 401 = @basicauth;
+          return 401;
+        }
+    {% endif %}
+
     client_max_body_size {{ moodlenet_upload_limit }};
     try_files $uri @proxy_to_backend;
   }
 
   location /pub {
+    {% if http_basic_auth_enabled and bypass_htaccess %}
+        if ($http_x_forwarded_for !~ ^({{ moodlenet_nginx_bypass_htaccess_ip_whitelist | join("|") }})) {
+          error_page 401 = @basicauth;
+          return 401;
+        }
+    {% endif %}
+
     try_files $uri @proxy_to_backend;
   }
 
   location /oauth {
+    {% if http_basic_auth_enabled and bypass_htaccess %}
+        if ($http_x_forwarded_for !~ ^({{ moodlenet_nginx_bypass_htaccess_ip_whitelist | join("|") }})) {
+          error_page 401 = @basicauth;
+          return 401;
+        }
+    {% endif %}
     try_files $uri @proxy_to_backend;
   }
 
   location /.well-known {
+    {% if http_basic_auth_enabled and bypass_htaccess %}
+        if ($http_x_forwarded_for !~ ^({{ moodlenet_nginx_bypass_htaccess_ip_whitelist | join("|") }})) {
+          error_page 401 = @basicauth;
+          return 401;
+        }
+    {% endif %}
     try_files $uri @proxy_to_backend;
   }
 
