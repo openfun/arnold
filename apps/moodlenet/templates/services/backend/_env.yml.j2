@@ -5,6 +5,9 @@ HOSTNAME: "{{ moodlenet_host }}"
 # (if it isn't the default for protocol like 80 or 443):
 BASE_URL: "https://{{ moodlenet_host }}"
 
+# full client app URL, where users will browse the site
+FRONTEND_BASE_URL: "{{ moodlenet_frontend_base_url }}"
+
 # cc public activities to the mothership for indexing
 CONNECT_WITH_MOTHERSHIP: "{{ moodlenet_mothership_connect }}"
 

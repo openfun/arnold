@@ -13,6 +13,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - new variable `acme_enabled_route_prefix` allowing to activate acme
   based on route prefix
 
+## Fixes
+
+- Add missing FRONTEND_BASE_URL variable in moodlenet
+
 ## [5.20.0] - 2020-11-05
 
 ## Added
