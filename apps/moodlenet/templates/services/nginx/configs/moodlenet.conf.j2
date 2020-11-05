@@ -38,6 +38,18 @@ server {
     return 404;
   }
 
+  # uploaded resources
+  location /uploads {
+    {% if http_basic_auth_enabled and bypass_htaccess %}
+        if ($http_x_forwarded_for !~ ^({{ moodlenet_nginx_bypass_htaccess_ip_whitelist | join("|") }})) {
+          error_page 401 = @basicauth;
+          return 401;
+        }
+    {% endif %}
+
+    try_files $uri =404;
+  }
+
   ## Backend routes
   location @proxy_to_backend {
     proxy_set_header X-Forwarded-Proto $scheme;

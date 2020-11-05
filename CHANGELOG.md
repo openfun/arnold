@@ -19,6 +19,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Fix moodlenet-pvc-uploads PVC declaration in moodlenet
 - Fix basic auth in moodlenet nginx configuration
 - Move moodlenet email credentials to vault and secret files
+- Add missing location in moodlnet nginx configuration
 
 ## [5.20.0] - 2020-11-05
 
