@@ -1,4 +1,3 @@
-{% if env_type in trashable_env_types %}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -14,4 +13,3 @@ spec:
   resources:
     requests:
       storage: {{ moodlenet_upload_volume_size }}
-{% endif %}
