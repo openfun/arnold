@@ -12,6 +12,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 - new variable `acme_enabled_route_prefix` allowing to activate acme
   based on route prefix
+- cronjob in Marsha to stop live streaming still living and unused
 
 ## Fixes
 
