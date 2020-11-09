@@ -1,7 +1,6 @@
 # Core
 ansible==2.10.3
-ansible-lint==4.3.5
-deepmerge==0.1.0
+ansible-lint==4.3.7
 jmespath==0.10.0
 openshift==0.11.2
 passlib==1.7.4
@@ -12,10 +11,10 @@ yq==2.11.1
 
 # Quality
 flake8==3.8.4
-isort==5.5.4
+isort==5.6.4
 pylint==2.6.0
 
 # Tests
-pytest==6.1.1
+pytest==6.1.2
 pytest-cov==2.10.1
-pyfakefs==4.1.0
+pyfakefs==4.2.1
