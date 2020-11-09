@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Changed
+
+- Upgrade Ansible to 2.10.3
+
 ## [5.21.1] - 2020-11-10
 
 ## Removed
