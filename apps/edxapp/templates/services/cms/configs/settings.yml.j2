@@ -29,10 +29,6 @@ CELERY_QUEUES:
   {{ edxapp_celery_cms_low_priority_queue }}-{{ deployment_stamp }}: {}
   {{ edxapp_celery_lms_default_priority_queue }}-{{ deployment_stamp }}: {}
 
-# Memcached
-MEMCACHED_HOST: "edxapp-memcached-{{ deployment_stamp }}"
-MEMCACHED_PORT: {{ edxapp_memcached_port }}
-
 # MySQL
 DATABASE_HOST: "edxapp-mysql-{{ deployment_stamp }}"
 DATABASE_PORT: {{ edxapp_mysql_port }}

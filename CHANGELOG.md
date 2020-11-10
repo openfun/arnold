@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## Removed
+
+- Obsolete "memcached" service from edxapp app (cache now runs on Redis)
+
 ## [5.21.0] - 2020-11-06
 
 ### Added
