@@ -34,11 +34,6 @@ edxapp_export_volume_path: /edx/var/edxapp/export
 edxapp_required_directories:
   - /edx/app/edxapp/data/openassessment_submissions
 
-# -- memcached
-edxapp_memcached_image_name: memcached
-edxapp_memcached_image_tag: latest
-edxapp_memcached_port: 11211
-
 # -- mongo
 edxapp_mongodb_version: "3.2"
 edxapp_mongodb_image_name: "centos/mongodb-32-centos7"
