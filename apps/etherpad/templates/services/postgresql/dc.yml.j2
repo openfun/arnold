@@ -20,6 +20,11 @@ spec:
         deploymentconfig: "etherpad-postgresql-{{ deployment_stamp }}"
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
+{% set image_pull_secret_name = etherpad_database_image_pull_secret_name | default(none) or default_image_pull_secret_name %}
+{% if image_pull_secret_name is not none %}
+      imagePullSecrets:
+        - name: "{{ image_pull_secret_name }}"
+{% endif %}
       containers:
         - image: {{ etherpad_database_image_name }}:{{ etherpad_database_image_tag }}
           name: postgresql

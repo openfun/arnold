@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Fixed
+
+- Allow authenticating to pull images everywhere it is missing
+
 ### Removed
 
 - Forum app build config and directly use image from external registry
@@ -20,7 +24,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [5.21.1] - 2020-11-10
 
-## Removed
+### Removed
 
 - Obsolete "memcached" service from edxapp app (cache now runs on Redis)
 
@@ -32,7 +36,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
   based on route prefix
 - cronjob in Marsha to stop live streaming still living and unused
 
-## Fixes
+### Fixed
 
 - Add missing FRONTEND_BASE_URL variable in moodlenet
 - Fix moodlenet-pvc-uploads PVC declaration in moodlenet
@@ -42,11 +46,11 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [5.20.0] - 2020-11-05
 
-## Added
+### Added
 
 - Add `moodlenet` application
 
-## Fixed
+### Fixed
 
 - Move `acme` ConfigMap annotation type to string
 

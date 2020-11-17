@@ -22,6 +22,11 @@ spec:
         deployment_stamp: "{{ deployment_stamp }}"
         job_stamp: "{{ job_stamp }}"
     spec:
+{% set image_pull_secret_name = elasticsearch_image_pull_secret_name | default(none) or default_image_pull_secret_name %}
+{% if image_pull_secret_name is not none %}
+      imagePullSecrets:
+        - name: "{{ image_pull_secret_name }}"
+{% endif %}
       containers:
         - name: es-admin-user
           image: "{{ elasticsearch_image_name }}:{{ elasticsearch_image_tag }}"

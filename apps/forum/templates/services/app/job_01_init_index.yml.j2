@@ -21,6 +21,11 @@ spec:
         job_stamp: "{{ job_stamp }}"
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
+{% set image_pull_secret_name = forum_image_pull_secret_name | default(none) or default_image_pull_secret_name %}
+{% if image_pull_secret_name is not none %}
+      imagePullSecrets:
+        - name: "{{ image_pull_secret_name }}"
+{% endif %}
       containers:
         - name: elasticsearch-init-index-{{ job_stamp }}
           image: "{{ forum_image_name }}:{{ forum_image_tag }}"
