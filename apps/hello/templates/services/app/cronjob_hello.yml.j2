@@ -23,6 +23,11 @@ spec:
             service: app
             deployment_stamp: "{{ deployment_stamp }}"
         spec:
+{% set image_pull_secret_name = busybox_image_pull_secret_name | default(none) or default_image_pull_secret_name %}
+{% if image_pull_secret_name is not none %}
+          imagePullSecrets:
+            - name: "{{ image_pull_secret_name }}"
+{% endif %}
           containers:
             - name: hello-world
               image: busybox:1.31.1

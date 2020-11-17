@@ -20,6 +20,11 @@ spec:
         deployment_stamp: "{{ deployment_stamp }}"
         deploymentconfig: "edxapp-mysql-{{ deployment_stamp }}"
     spec:
+{% set image_pull_secret_name = edxapp_mysql_image_pull_secret_name | default(none) or default_image_pull_secret_name %}
+{% if image_pull_secret_name is not none %}
+      imagePullSecrets:
+        - name: "{{ image_pull_secret_name }}"
+{% endif %}
       containers:
         - image: "{{ edxapp_mysql_image_name }}:{{ edxapp_mysql_image_tag }}"
           name: mysql

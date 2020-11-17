@@ -19,6 +19,11 @@ spec:
         deployment_stamp: "{{ deployment_stamp }}"
         deploymentconfig: "flower-app"
     spec:
+{% set image_pull_secret_name = flower_image_pull_secret_name | default(none) or default_image_pull_secret_name %}
+{% if image_pull_secret_name is not none %}
+      imagePullSecrets:
+        - name: "{{ image_pull_secret_name }}"
+{% endif %}
       containers:
         - image: "{{ flower_image_name }}:{{ flower_image_tag }}"
           name: flower

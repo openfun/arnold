@@ -17,6 +17,11 @@ spec:
         version: "{{ mailcatcher_image_tag }}"
         deploymentconfig: "mailcatcher-app"
     spec:
+{% set image_pull_secret_name = mailcatcher_image_pull_secret_name | default(none) or default_image_pull_secret_name %}
+{% if image_pull_secret_name is not none %}
+      imagePullSecrets:
+        - name: "{{ image_pull_secret_name }}"
+{% endif %}
       containers:
       - name: mailcatcher
         image: "{{ mailcatcher_image_name }}:{{ mailcatcher_image_tag }}"

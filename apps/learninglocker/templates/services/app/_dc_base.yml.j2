@@ -36,6 +36,11 @@ spec:
                       values:
                         - "{{ dc_name }}-{{ deployment_stamp }}"
                 topologyKey: kubernetes.io/hostname
+{% set image_pull_secret_name = learninglocker_image_pull_secret_name | default(none) or default_image_pull_secret_name %}
+{% if image_pull_secret_name is not none %}
+      imagePullSecrets:
+        - name: "{{ image_pull_secret_name }}"
+{% endif %}
       containers:
         - name: "{{ service_variant }}"
           image: "{{ learninglocker_image_name }}:{{ learninglocker_image_tag }}"

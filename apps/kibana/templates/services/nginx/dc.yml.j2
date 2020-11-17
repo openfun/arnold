@@ -32,6 +32,11 @@ spec:
                   values:
                   - "kibana-nginx-{{ deployment_stamp }}"
               topologyKey: kubernetes.io/hostname
+{% set image_pull_secret_name = kibana_nginx_image_pull_secret_name | default(none) or default_image_pull_secret_name %}
+{% if image_pull_secret_name is not none %}
+      imagePullSecrets:
+        - name: "{{ image_pull_secret_name }}"
+{% endif %}
       containers:
         - image: "{{ kibana_nginx_image_name }}:{{ kibana_nginx_image_tag }}"
           name: nginx

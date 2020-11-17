@@ -22,6 +22,11 @@ spec:
         job_stamp: "{{ job_stamp }}"
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
+{% set image_pull_secret_name = edxec_image_pull_secret_name | default(none) or default_image_pull_secret_name %}
+{% if image_pull_secret_name is not none %}
+      imagePullSecrets:
+        - name: "{{ image_pull_secret_name }}"
+{% endif %}
       containers:
         - name: edxec-collectstatic-{{ job_stamp }}
           image: "{{ edxec_image_name }}:{{ edxec_image_tag }}"

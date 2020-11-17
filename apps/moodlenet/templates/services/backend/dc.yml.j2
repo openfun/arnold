@@ -32,9 +32,10 @@ spec:
                       values:
                         - "moodlenet-backend-{{ deployment_stamp }}"
                 topologyKey: kubernetes.io/hostname
-{% if moodlenet_image_pull_secret_name is defined and moodlenet_image_pull_secret_name is not none %}
+{% set image_pull_secret_name = moodlenet_image_pull_secret_name | default(none) or default_image_pull_secret_name %}
+{% if image_pull_secret_name is not none %}
       imagePullSecrets:
-        - name: "{{ moodlenet_image_pull_secret_name }}"
+        - name: "{{ image_pull_secret_name }}"
 {% endif %}
       containers:
         - name: moodlenet

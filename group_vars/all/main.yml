@@ -115,3 +115,10 @@ force_route: false
 endpoint_mongodb_ips:     []
 endpoint_mysql_ip:       null
 endpoint_postgresql_ip:  null
+
+# Images
+# It is recommended to pull images with an authenticated user (in particular, Docker Hub now
+# applies stringent rate limits on image pulls by anonymous users).
+# The secret name should correspond to the name of a secret added to your project.
+# If necessary, the pull secret names can also be configured at the level of each app.
+default_image_pull_secret_name: ""

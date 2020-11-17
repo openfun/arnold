@@ -33,7 +33,12 @@ spec:
                       operator: In
                       values:
                         - "learninglocker-xapi-{{ deployment_stamp }}"
-                topologyKey: kubernetes.io/hostname
+                topologyKey: kubernetes.io/hostname  
+{% set image_pull_secret_name = learninglocker_xapi_image_pull_secret_name | default(none) or default_image_pull_secret_name %}
+{% if image_pull_secret_name is not none %}
+      imagePullSecrets:
+        - name: "{{ image_pull_secret_name }}"
+{% endif %}
       containers:
         - image: "{{ learninglocker_xapi_image_name }}:{{ learninglocker_xapi_image_tag }}"
           imagePullPolicy: Always

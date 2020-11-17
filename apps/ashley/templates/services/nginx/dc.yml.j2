@@ -32,6 +32,11 @@ spec:
                   values:
                   - "ashley-nginx-{{ deployment_stamp }}"
               topologyKey: kubernetes.io/hostname
+{% set image_pull_secret_name = ashley_nginx_image_pull_secret_name | default(none) or default_image_pull_secret_name %}
+{% if image_pull_secret_name is not none %}
+      imagePullSecrets:
+        - name: "{{ image_pull_secret_name }}"
+{% endif %}
       containers:
         - image: "{{ ashley_nginx_image_name }}:{{ ashley_nginx_image_tag }}"
           name: nginx

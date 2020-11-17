@@ -32,9 +32,10 @@ spec:
                       values:
                         - "richie-app-{{ deployment_stamp }}"
                 topologyKey: kubernetes.io/hostname
-{% if richie_image_pull_secret_name is defined and richie_image_pull_secret_name is not none %}
+{% set image_pull_secret_name = richie_image_pull_secret_name | default(none) or default_image_pull_secret_name %}
+{% if image_pull_secret_name is not none %}
       imagePullSecrets:
-        - name: "{{ richie_image_pull_secret_name }}"
+        - name: "{{ image_pull_secret_name }}"
 {% endif %}
       containers:
         - name: richie

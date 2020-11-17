@@ -19,6 +19,11 @@ spec:
         deploymentconfig: "learninglocker-nginx-{{ deployment_stamp }}"
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
+{% set image_pull_secret_name = learninglocker_nginx_image_pull_secret_name | default(none) or default_image_pull_secret_name %}
+{% if image_pull_secret_name is not none %}
+      imagePullSecrets:
+        - name: "{{ image_pull_secret_name }}"
+{% endif %}
       containers:
         - image: "{{ learninglocker_nginx_image_name }}:{{ learninglocker_nginx_image_tag }}"
           imagePullPolicy: Always
