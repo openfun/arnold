@@ -4,6 +4,12 @@ upstream lms-backend {
   server edxapp-lms-{{ deployment_stamp }}:{{ edxapp_django_port }} fail_timeout=0;
 }
 
+# Set refere header with origin header when empty
+map $http_referer $referer {
+    default   $http_referer;
+    ""        $http_origin;
+}
+
 server {
   listen {{ edxapp_nginx_lms_port }};
   server_name localhost;
@@ -35,7 +41,7 @@ server {
 
   location @proxy_to_lms_app {
     proxy_set_header Host $http_host;
-    proxy_set_header Referer $http_referer;
+    proxy_set_header Referer $referer;
 
     proxy_read_timeout {{ edxapp_routing_timeout | default("60s") }};
 

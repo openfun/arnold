@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## Fixed
+
+- Set Referer header with Origin header when empty in edxapp's lms nginx
+
 ## [5.21.1] - 2020-11-10
 
 ## Removed
