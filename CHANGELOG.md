@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [5.21.2] - 2020-11-18
+
 ## Fixed
 
 - Set Referer header with Origin header when empty in edxapp's lms nginx
@@ -899,7 +901,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v5.21.1...master
+[unreleased]: https://github.com/openfun/arnold/compare/v5.21.2...master
+[5.21.2]: https://github.com/openfun/arnold/compare/v5.21.1...v5.21.2
 [5.21.1]: https://github.com/openfun/arnold/compare/v5.21.0...v5.21.1
 [5.21.0]: https://github.com/openfun/arnold/compare/v5.20.0...v5.21.0
 [5.20.0]: https://github.com/openfun/arnold/compare/v5.19.0...v5.20.0

@@ -4,7 +4,7 @@ upstream lms-backend {
   server edxapp-lms-{{ deployment_stamp }}:{{ edxapp_django_port }} fail_timeout=0;
 }
 
-# Set refere header with origin header when empty
+# Set "Referer" header with "Origin" header when empty
 map $http_referer $referer {
     default   $http_referer;
     ""        $http_origin;
