@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [5.21.3] - 2020-11-19
+
 ### Fixed
 
 - Fix Docker lint error by passing --no-cache-dir option on pip install
@@ -910,7 +912,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v5.21.2...master
+[unreleased]: https://github.com/openfun/arnold/compare/v5.21.3...master
+[5.21.3]: https://github.com/openfun/arnold/compare/v5.21.2...v5.21.3
 [5.21.2]: https://github.com/openfun/arnold/compare/v5.21.1...v5.21.2
 [5.21.1]: https://github.com/openfun/arnold/compare/v5.21.0...v5.21.1
 [5.21.0]: https://github.com/openfun/arnold/compare/v5.20.0...v5.21.0
