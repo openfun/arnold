@@ -10,6 +10,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Fix Docker lint error by passing --no-cache-dir option on pip install
 - Allow authenticating to pull images everywhere it is missing
 
 ### Removed
