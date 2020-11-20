@@ -27,7 +27,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 COPY ./requirements.txt /app/
-RUN pip install -r /app/requirements.txt
+RUN pip install -r /app/requirements.txt --no-cache-dir
 
 # Install more ansible_lint_rules
 ENV ANSIBLE_LINT_RULES_DIR="/tmp/_ansible_lint_rules"
