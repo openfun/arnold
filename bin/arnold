@@ -1,0 +1,1040 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+# Docker
+declare -r ARNOLD_IMAGE_NAME="${ARNOLD_IMAGE_NAME:-fundocker/arnold}"
+declare -r ARNOLD_IMAGE_TAG="${ARNOLD_IMAGE_TAG:-5.22.1}"
+declare -r ARNOLD_IMAGE="${ARNOLD_IMAGE:-${ARNOLD_IMAGE_NAME}:${ARNOLD_IMAGE_TAG}}"
+declare -r ARNOLD_PROJECT_PATH="${PWD}"
+declare -r ARNOLD_TRAY_FILE="arnold.yml"
+declare -r DOCKER_USER="${DOCKER_USER:-$(id -u)}"
+
+# Arnold release info
+declare LATEST_RELEASE
+declare LATEST_VERSION
+
+# Script infos
+declare SCRIPT_NAME
+SCRIPT_NAME=$(basename "$0")
+declare SCRIPT_PATH
+SCRIPT_PATH="$(dirname "$(readlink -f "$0")")/${SCRIPT_NAME}"
+
+# The team file lists emails corresponding to public gpg keys that will be used
+# to encrypt ansible vault password using gpg.
+declare -r TEAM_FILE="${ARNOLD_PROJECT_PATH}/.team"
+
+# Set ansible vault password default to the corresponding environment variable
+# value (insecure mode, while not using gpg or --ask-vault-pass argument in
+# ansible-playbook command calls).
+declare ANSIBLE_VAULT_PASSWORD="${ANSIBLE_VAULT_PASSWORD}"
+
+# Terminal colors
+declare -r COLOR_BLUE='\033[0;36m'
+declare -r COLOR_DEFAULT='\033[0;39m'
+declare -r COLOR_GREEN='\033[0;32m'
+declare -r COLOR_ORANGE='\033[0;33m'
+declare -r COLOR_RED='\033[0;31m'
+declare -r COLOR_RESET='\033[0m'
+
+# Log levels
+declare -i LOG_LEVEL_CRITICAL=50
+declare -i LOG_LEVEL_ERROR=40
+declare -i LOG_LEVEL_WARNING=30
+declare -i LOG_LEVEL_SUCCESS=25
+declare -i LOG_LEVEL_INFO=20
+declare -i LOG_LEVEL_DEBUG=10
+declare -i LOG_LEVEL_NOTSET=0
+declare -i DEFAULT_LOG_LEVEL=${LOG_LEVEL_INFO}
+declare -i LOG_LEVEL=${DEFAULT_LOG_LEVEL}
+declare -A LOG_LEVELS=(
+  ["critical"]=${LOG_LEVEL_CRITICAL}
+  ["error"]=${LOG_LEVEL_ERROR}
+  ["warning"]=${LOG_LEVEL_WARNING}
+  ["success"]=${LOG_LEVEL_SUCCESS}
+  ["info"]=${LOG_LEVEL_INFO}
+  ["debug"]=${LOG_LEVEL_DEBUG}
+  ["notset"]=${LOG_LEVEL_NOTSET}
+)
+declare -A LOG_LEVEL_COLORS=(
+  ["critical"]=${COLOR_RED}
+  ["error"]=${COLOR_RED}
+  ["warning"]=${COLOR_ORANGE}
+  ["success"]=${COLOR_GREEN}
+  ["info"]=${COLOR_BLUE}
+  ["debug"]=${COLOR_DEFAULT}
+  ["notset"]=${COLOR_DEFAULT}
+)
+
+# Directories
+declare -r RELATIVE_COMMON_DIR="group_vars/common"
+declare -r RELATIVE_CUSTOMER_DIR="group_vars/customer"
+declare -r COMMON_DIR="${ARNOLD_PROJECT_PATH}/${RELATIVE_COMMON_DIR}"
+declare -r CUSTOMER_DIR="${ARNOLD_PROJECT_PATH}/${RELATIVE_CUSTOMER_DIR}"
+
+# Files
+declare -r VAULT_PASSWORD_FILE_NAME="password.gpg"
+
+# Dependencies
+declare -r JQ="docker run --rm -i fundocker/jq:1.6"
+declare -r KUBECTL="oc"
+declare -r YQ="docker run --rm -i -v ${ARNOLD_PROJECT_PATH}:/workdir mikefarah/yq yq"
+
+# Hosts
+
+# K8S_DOMAIN is only used in development and the CI to set the project's
+# 'domain_name' to "${K8S_DOMAIN}.nip.io"
+declare K8S_DOMAIN="${K8S_DOMAIN:-$(hostname -I | awk '{print $1}')}"
+
+# Flags
+declare -i DEV_MODE=0
+declare -i USE_GPG=${ARNOLD_USE_GPG:-0}
+
+# Tray development
+declare ARNOLD_TRAY_PATH
+declare ARNOLD_TRAY_NAME
+
+# Basic logging (with colors 🎉)
+function log() {
+
+    declare -i level
+    declare level_name="${1}"
+    declare message="${2}"
+    declare color=${LOG_LEVEL_COLORS["notset"]}
+
+    level=${LOG_LEVELS[${level_name}]}
+    color=${LOG_LEVEL_COLORS[${level_name}]}
+
+    if [[ ${level} -ge ${LOG_LEVEL} ]]; then
+      echo -e "${color}$(printf "%-7s" "${level_name}" | tr "[:lower:]" "[:upper:]") ${message}${COLOR_RESET}" 1>&2
+    fi
+}
+
+
+# usage: display usage with the appropriate exit code
+#
+# usage: usage [EXIT_CODE]
+#
+#   EXIT_CODE: program exit code (default: 0)
+function usage(){
+
+    declare -i exit_code="${1:-0}"
+
+    echo "Usage: arnold [OPTIONS] COMMAND
+
+OPTIONS:
+
+  -a, --application
+         set target application (e.g. edxapp)
+  -c, --customer
+         set active customer (e.g. eugene)
+  -e, --environment
+         set active environment (e.g. staging)
+  -k, --k8s-domain
+         set k8s domain (server)
+  -d, --dev
+         application development mode
+  -D, --debug
+         debug mode
+  -g, --gpg
+         use gpg to safely store ansible vaults passwords (recommanded)
+  -h, --help
+         print this message
+  -n, --dry-run
+         dry-run mode (display commands only)
+
+COMMANDS:
+
+> Prepare current project:
+
+  create_app_vaults create a vault file for each application
+  create_db_vault   create or update a vault file with databases credentials
+  htpasswd          initialize a project's htpassword files
+  info              display current configuration
+  redirect          create (or update) project's HTTP redirections
+  reset_vault_pw    reset vault password for a project (and update all vaults)
+  run               run any command in the container
+  setup             create arnold-required folders and files
+  vault             wrapper around Ansible's vault command
+  vaults            perform global actions for all project vaults
+  vault_pw          set a password to encrypt vault files with Ansible Vault
+
+> Deploy current project:
+
+  bootstrap             shortcut for the init + deploy commands
+  build_images          create a build configuration for each application
+  create                create a k8s object
+  create_image_streams  create image streams for each application
+  create_project        create project (namespace)
+  create_volumes        create volumes for every application
+  deploy                deploy all objects defined in all applications
+  init                  initialize a project with all its volumes and configmaps
+  rollback              switch back the previous stack as current
+  routes                create project routes and redirections (if any)
+  secrets               update project secrets
+  switch                perform blue/green switch
+
+> Manage current project:
+
+  clean             remove orphan objects (for blue-green apps)
+  delete_previous   remove the previous stack (for blue-green apps)
+
+> Project management:
+
+  upgrade           upgrade arnold to the latest release
+"
+
+    # shellcheck disable=SC2086
+    exit ${exit_code}
+}
+
+
+# ---- Utils library ----
+
+# Get the log level name given its numerical value
+function _get_log_level_name() {
+  for name in in "${!LOG_LEVELS[@]}"; do
+    if [[ ${LOG_LEVELS[${name}]} -eq ${LOG_LEVEL} ]]; then
+      echo "${name}"
+      break
+    fi
+  done
+}
+
+# Get the latest Arnold release by querying Github's API
+function _get_latest_release() {
+  if ! curl \
+      -s \
+      -H "Accept: application/vnd.github.v3+json" \
+      "https://api.github.com/repos/openfun/arnold/releases?per_page=1" ; then
+    log debug "Cannot get latest release from GitHub.com"
+  fi
+}
+
+# Get version from the latest release
+function _get_latest_version() {
+
+  if [[ -z ${LATEST_RELEASE} ]]; then
+    LATEST_RELEASE=$(_get_latest_release)
+
+    # GitHub is probably down or we are offline
+    if [[ -z ${LATEST_RELEASE} ]]; then
+      log debug "Cannot get latest version"
+      return
+    fi
+  fi
+
+  echo "${LATEST_RELEASE}" | \
+    ${JQ} .[0].tag_name | \
+    sed 's/v//' | \
+    sed 's/"//g'
+}
+
+# Check if a new Arnold release is available
+function _check_new_release_availability() {
+
+  if [[ -z ${LATEST_VERSION} ]]; then
+    log info "We cannot check new release availability for now (working offline?)"
+    return 0
+  fi
+
+  log debug "Latest version: ${LATEST_VERSION}"
+
+  if [[ "${ARNOLD_IMAGE_TAG}" != "${LATEST_VERSION}" ]] && echo -e "${ARNOLD_IMAGE_TAG}\\n${LATEST_VERSION}" | sort -CV ; then
+    log warning "A new Arnold release is available: ${LATEST_VERSION}"
+    return 1
+  else
+    log info "You are using the latest Arnold release 🎉"
+  fi
+  return 0
+}
+
+# Download latest release to a temporary file and return its path
+function _download_latest_release() {
+
+  declare release_url
+  declare upgraded_bin
+
+  if [[ -z ${LATEST_RELEASE} ]]; then
+    LATEST_RELEASE=$(_get_latest_release)
+  fi
+
+  if [[ -z ${LATEST_VERSION} ]]; then
+    LATEST_VERSION=$(_get_latest_version)
+  fi
+
+  release_url=$(
+    echo "${LATEST_RELEASE}" | \
+    ${JQ} .[0].tarball_url | \
+    sed 's/"//g'
+  )
+  upgraded_bin=$(mktemp -q)
+
+  log info "Downloading latest release from ${release_url}"
+  curl -qL "${release_url}" | \
+    tar xzfO - --wildcards --no-anchored '*/bin/arnold' \
+    > "${upgraded_bin}"
+
+  # Check downloaded script
+  if ! head -n 1 "${upgraded_bin}" | grep bash > /dev/null ; then
+    log error "Downloaded file is corrupted"
+    exit 22
+  fi
+
+  log debug "Arnold upgrade temporary download path: ${upgraded_bin}"
+  echo "${upgraded_bin}"
+}
+
+# Compute K8S_AUTH_HOST from its host
+function _get_k8s_auth_host() {
+    echo "https://${K8S_DOMAIN}:8443"
+}
+
+function _login() {
+    k8s_auth_host=$(_get_k8s_auth_host)
+    log info "Login to k8s: ${k8s_auth_host}"
+
+    # Force verbose mode to off to avoid printing authentication tokens
+    VERBOSE=0 ${KUBECTL} login "${k8s_auth_host}" --token="${K8S_SA_TOKEN}"
+}
+
+# _set_k8s_env: set k8s's environment
+#
+# Use this function to configure the k8s environment whenever your docker
+# run commands require access to an k8s server.
+function _set_k8s_env() {
+
+    _ensure_k8s_namespace_is_set
+
+    # Allow overriding config per customer
+    customer_vars="$(dirname "${BASH_SOURCE[0]}")/../${CUSTOMER_DIR}/${ARNOLD_CUSTOMER}/vars.inc.sh"
+    if [ -e "${customer_vars}" ]; then
+        # shellcheck source=/dev/null
+        source "${customer_vars}"
+    fi
+
+    # Check that the current user is already logged in k8s. Note that the
+    # `whoami` command is only compatible with openshift and should be adapted
+    # for k8s.
+    if ! ${KUBECTL} whoami &> /dev/null ; then
+        if [[ -z "${K8S_SA_TOKEN}" ]] ; then
+
+          log error "
+Error: you need to login to a k8s server first or set the K8S_SA_TOKEN
+environment variable with a service account authentication token.
+"
+            exit 1
+        else
+            _login
+        fi
+    fi
+
+    # Ansible's k8s module requires the following two environment variables to
+    # be defined
+    K8S_AUTH_API_KEY="$(${KUBECTL} whoami -t)"
+    export K8S_AUTH_API_KEY
+    K8S_AUTH_HOST="$(_get_k8s_auth_host)"
+    export K8S_AUTH_HOST
+}
+
+# _ensure_k8s_namespace_is_set: ensure that k8s's target project has
+# been set via the ARNOLD_CUSTOMER & ARNOLD_ENVIRONMENT environment variables
+function _ensure_k8s_namespace_is_set() {
+
+    if ! env | grep ARNOLD_CUSTOMER > /dev/null || ! env | grep ARNOLD_ENVIRONMENT > /dev/null ; then
+        log error "You need to set both the ARNOLD_CUSTOMER and ARNOLD_ENVIRONMENT environment variables (see usage)."
+        exit 1
+    fi
+}
+
+# _get_project: get the project name given ARNOLD_CUSTOMER & ARNOLD_ENVIRONMENT
+# environment variables definitions
+function _get_project() {
+
+    echo "${ARNOLD_ENVIRONMENT}-${ARNOLD_CUSTOMER}"
+}
+
+# _get_vault_password_file: get vault password file path
+#
+# This function computes the path of a gpg encrypted password file for a
+# particular customer in a particular environment.
+function _get_vault_password_file() {
+
+    echo "$(_get_secrets_directory)/${VAULT_PASSWORD_FILE_NAME}"
+}
+
+# _get_secrets_directory: get secrets directory for a project
+#
+# This function computes the path to the secrets directory for a
+# particular customer in a particular environment.
+function _get_secrets_directory() {
+
+    echo "${CUSTOMER_DIR}/${ARNOLD_CUSTOMER}/${ARNOLD_ENVIRONMENT}/secrets"
+}
+
+# _get_vault_password: get vault password from a gpg encrypted file
+#
+# This function prints the content of a gpg encrypted password file for a
+# particular customer in a particular environment.
+function _get_vault_password() {
+
+    # Echo the password here if set from the shell or cli argument
+    if [[ ${USE_GPG} -eq 0 ]]; then
+      echo -n "${ANSIBLE_VAULT_PASSWORD}"
+      return
+    fi
+
+    GPG_PASSWORD_FILE=$(_get_vault_password_file)
+
+    # If gpg is not installed nor configured (e.g. in the CI environment),
+    # return a fake password with a message hoping that the vault password is
+    # not required for this action.
+    if ! command -v gpg > /dev/null; then
+        log warning "gpg command not found. Arnold won't be able to decrypt project's vaults."
+        return
+    fi
+
+    if [ -e "${GPG_PASSWORD_FILE}" ]; then
+        gpg -d --quiet --batch "${GPG_PASSWORD_FILE}"
+    else
+        log error "Vault password file for configured project is missing. Expected path is:\\n${GPG_PASSWORD_FILE}"
+        exit 10
+    fi
+}
+
+# _set_vault_password: set vault password to a gpg encrypted file
+#
+# This function generates a random password and saves it in a gpg-encrypted file
+# for a particular customer in a particular environment.
+function _set_vault_password() {
+
+    local force=${1:0};
+    local skip=${1:0};
+
+    if [ ! -e "${TEAM_FILE}" ]; then
+        log error ".team file does not exist"
+        exit 12
+    fi
+
+    SECRETS_PATH=$(_get_secrets_directory)
+
+    if [[ ! -d ${SECRETS_PATH} && ${skip} -eq 1 ]]; then
+        log error "The 'secrets' directory does not exist and skip option is being used"
+        log error "Vault password file will not be generated"
+        return
+    fi
+
+    # Make a recipients list from emails in $TEAM_FILE. Lines starting with a
+    # '#' will be treated as comments.
+    recipients=$(grep -vE "^\\s*#" "${TEAM_FILE}" | sed 's/\s*\(\S*@\S*\)\s*/-r \1 /g' | tr -d '\n')
+
+    GPG_PASSWORD_FILE=$(_get_vault_password_file)
+
+    if [[ -z "${recipients}" ]]; then
+        log error "No recipient provided, please populate expected .team file"
+        exit 10
+    fi
+
+    if [[ -e "${GPG_PASSWORD_FILE}" && $force -eq 0 ]]; then
+        log error "Vault password file already exists: ${GPG_PASSWORD_FILE}"
+        exit 11
+    else
+        # Generate a 128 characters long random password, encrypt it and save it
+        # to $GPG_PASSWORD_FILE
+        #
+        # shellcheck disable=SC2086
+        # (☝ we want word splitting on the recipients variable)
+        gpg -a --gen-random 2 128 | gpg --yes -e ${recipients} -o "${GPG_PASSWORD_FILE}"
+    fi
+
+    log success "Generated ansible vault password file: ${GPG_PASSWORD_FILE}"
+}
+
+
+# _set_tray_vars: set in-development tray variables
+function _set_tray_vars() {
+
+  if [[ ! -f ${ARNOLD_TRAY_FILE} ]]; then
+    log info "Tray file is missing, supposing you are not developing a local tray"
+    return
+  fi
+
+  ARNOLD_TRAY_PATH=$(${YQ} r "${ARNOLD_TRAY_FILE}" source.path)
+  export ARNOLD_TRAY_PATH
+  log debug "Tray path: ${ARNOLD_TRAY_PATH}"
+
+  ARNOLD_TRAY_NAME=$(${YQ} r "${ARNOLD_TRAY_FILE}" metadata.name)
+  export ARNOLD_TRAY_NAME
+  log debug "Tray name: ${ARNOLD_TRAY_NAME}"
+}
+
+
+# _docker_run: wrap docker run command
+#
+# usage: _docker_run [OPTIONS] [COMMAND]
+#
+#   COMMAND: command to be run in Arnold container (_e.g._ deploy)
+#
+# NB: the docker run call overrides Arnold's default `${CUSTOMER_DIR}` directory
+# by Matsuo's definitions.
+function _docker_run() {
+
+    declare extras_volumes="\
+      -v ${COMMON_DIR}:/app/${RELATIVE_COMMON_DIR} \
+      -v ${CUSTOMER_DIR}:/app/${RELATIVE_CUSTOMER_DIR}"
+
+    # Get password from gpg-encrypted vault password
+    ANSIBLE_VAULT_PASSWORD=$(_get_vault_password)
+    export ANSIBLE_VAULT_PASSWORD
+
+    if [[ DEV_MODE -eq 1 ]]; then
+      _set_tray_vars
+
+      if [[ -e ${ARNOLD_TRAY_PATH} ]]; then
+        extras_volumes="${extras_volumes} \
+          -v ${PWD}/${ARNOLD_TRAY_PATH}:/app/apps/${ARNOLD_TRAY_NAME}"
+        log info "Development mode activated for tray: ${ARNOLD_TRAY_NAME}"
+      else
+        extras_volumes="-v ${PWD}:/app"
+        log info "Full development mode activated"
+      fi
+    fi
+
+    # shellcheck disable=SC2086
+    docker run --rm -ti \
+        -u "${DOCKER_USER}" \
+        --env K8S_AUTH_API_KEY \
+        --env K8S_AUTH_HOST \
+        --env K8S_AUTH_VERIFY_SSL \
+        --env K8S_DOMAIN \
+        --env ANSIBLE_VAULT_PASSWORD \
+        -v "${HOME}/.kube:/home/arnold/.kube" \
+        ${extras_volumes} \
+        "${ARNOLD_IMAGE}" \
+        "$@"
+}
+
+# _ansible_playbook: wrap ansible-playbook execution in docker
+#
+# usage: _ansible_playbook [PLAYBOOK] [ARGUMENTS]
+#
+#   PLAYBOOK: the playbook to run (file name)
+#   ARGUMENTS: ansible-playbook command other arguments
+function _ansible_playbook() {
+
+    playbook="$1"
+
+    # Remove first argument from the arguments array
+    shift
+
+    _ensure_k8s_namespace_is_set
+    _docker_run ansible-playbook "${playbook}" \
+        -e "customer=${ARNOLD_CUSTOMER}" \
+        -e "env_type=${ARNOLD_ENVIRONMENT}" \
+        -e "apps_filter=${ARNOLD_APP}" \
+        "$@"
+}
+
+# _get_project_vaults: get all vaults for a project
+function _get_project_vaults() {
+
+    vaults_path="${CUSTOMER_DIR}/${ARNOLD_CUSTOMER}/${ARNOLD_ENVIRONMENT}/secrets"
+
+    if [ -d "${vaults_path}" ]; then
+        find "${vaults_path}" -type f | grep -Ev "(${VAULT_PASSWORD_FILE_NAME}$|htpasswd$|.gpg$)"
+    fi
+}
+
+# _vault: ansible-vault shortcut
+function _vault(){
+
+    local action="${1}"
+    local vault_path="${2}"
+
+    if [[ ! -e "${vault_path}" ]]; then
+        log warning "Ignore missing vault file (see usage with -h): ${vault_path}"
+        # Ignore this event as there is no big deal and this avoids breaking a
+        # bulk script loop.
+        return
+    fi
+
+    _docker_run ansible-vault "${action}" "${vault_path}"
+}
+
+
+# ---- Commands ----
+
+# create image streams for each application
+function create_image_streams() {
+
+    _set_k8s_env
+    _ansible_playbook create_image_streams.yml "$@"
+}
+
+# create project (namespace)
+function create_project() {
+
+    _set_k8s_env
+    _ansible_playbook create_project.yml "$@"
+}
+
+# create image streams for each application
+function create_image_streams() {
+
+    _set_k8s_env
+    _ansible_playbook create_image_streams.yml "$@"
+}
+# Create a build configuration for each application
+function build_images() {
+
+    _set_k8s_env
+    _ansible_playbook build_images.yml "$@"
+}
+
+# Initialize and project and deploy its active applications
+function bootstrap() {
+
+    _set_k8s_env
+    _ansible_playbook bootstrap.yml "$@"
+}
+
+# Create or update an k8s object
+function create() {
+
+    OPTS=$(getopt -o "d:ht:" --long "deployment-stamp,help,template" -n "create" -- "$@")
+    eval set -- "$OPTS"
+
+    local deployment
+    local template
+    local usage="Usage: create [OPTIONS] [ARGUMENTS]
+
+OPTIONS:
+  -h, --help                 print this message
+
+ARGUMENTS:
+  -d, --deployement-stamp    target deployment stamp
+  -t, --template             template path of the object to create
+"
+
+    while true; do
+        case "${1}" in
+            -d|--deployment-stamp)
+                deployment="${2}"; shift 2;;
+            -h|--help)
+                echo -e "${usage}" 1>&2
+                return;;
+            -t|--template)
+                template="${2}"; shift 2;;
+            --)
+                shift; break;;
+            *)
+                log error "Invalid option, see usage (-h)."
+                exit 1;;
+        esac
+    done
+
+    if [[ -z ${deployment} || -z ${template} ]]; then
+        log error "You should provide a deployment stamp AND a template path. See usage (-h)."
+        return
+    fi
+
+    _set_k8s_env
+    _ansible_playbook create_object.yml -e "object_template=${template}" -e "deployment_stamp=${deployment}"
+}
+
+# Clean blue-green apps orphan stacks
+function clean() {
+
+    _set_k8s_env
+    _ansible_playbook clean.yml "$@"
+}
+
+# create a vault file for each application
+function create_app_vaults() {
+
+    _ansible_playbook create_vaults.yml "$@"
+}
+
+# Create or update a vault file with databases credentials
+function create_db_vault() {
+
+    _ansible_playbook create_databases_vault.yml "$@"
+}
+
+# create volumes for each application
+function create_volumes() {
+
+    _set_k8s_env
+    _ansible_playbook create_volumes.yml "$@"
+}
+
+# Delete blue-green apps previous stack
+function delete_previous() {
+
+    _set_k8s_env
+    _ansible_playbook delete_previous.yml "$@"
+}
+
+# Deploy all objects defined in all applications
+function deploy() {
+
+    _set_k8s_env
+    _ansible_playbook deploy.yml "$@"
+}
+
+# Initialize a project's htpassword files
+function htpasswd() {
+
+    _ansible_playbook create_htpasswds.yml "$@"
+}
+
+# Display current configuration
+function info() {
+
+    _ensure_k8s_namespace_is_set
+    log info "Project: $(_get_project)"
+}
+
+# Initialize a project with all its volumes and configmaps
+function init() {
+
+    _set_k8s_env
+    _ansible_playbook init_project.yml "$@"
+}
+
+# Create (or updade) project's redirections
+function redirect() {
+
+    _set_k8s_env
+    _ansible_playbook create_redirect.yml "$@"
+}
+
+# Reset vault password for a project (and update all vaults)
+#
+# 1. decrypt all project's vaults
+# 2. remove the encrypted vault password
+# 3. generate a new password
+# 4. encrypt all project's vaults
+function reset_vault_pw() {
+
+    _ensure_k8s_namespace_is_set
+
+    vaults decrypt
+    vault_pw -fs
+    vaults encrypt
+}
+
+# Switch back the previous stack as current
+function rollback() {
+
+    _set_k8s_env
+    _ansible_playbook rollback.yml "$@"
+}
+
+# Create project routes and redirections (if any)
+function routes() {
+
+    _set_k8s_env
+    _ansible_playbook create_routes.yml "$@"
+}
+
+# Run any command in arnold's container
+function run() {
+
+    _docker_run "$@"
+}
+
+# Update project secrets
+function secrets() {
+
+    _set_k8s_env
+    _ansible_playbook create_secrets.yml "$@"
+}
+
+
+# Create arnold-required folders and files
+function setup() {
+
+  declare secrets_directory
+
+  _ensure_k8s_namespace_is_set
+
+  mkdir -p "${COMMON_DIR}"
+  mkdir -p "${CUSTOMER_DIR}/${ARNOLD_CUSTOMER}/${ARNOLD_ENVIRONMENT}"
+
+  log info "Created application directories for ${ARNOLD_CUSTOMER} customer and ${ARNOLD_ENVIRONMENT} environment"
+
+  touch "${CUSTOMER_DIR}/${ARNOLD_CUSTOMER}/main.yml"
+  touch "${CUSTOMER_DIR}/${ARNOLD_CUSTOMER}/${ARNOLD_ENVIRONMENT}/main.yml"
+
+  log info "Created configuration files for ${ARNOLD_CUSTOMER} customer and ${ARNOLD_ENVIRONMENT} environment"
+
+  if [[ ${USE_GPG} -eq 1 ]]; then
+    echo "What is the email attached with your main gpg key used to encrypt documents?"
+    read -r email
+
+    echo "${email}" > .team
+    log info "Created .team file with the following content:\\n$(cat .team)"
+  fi
+
+  secrets_directory=$(_get_secrets_directory)
+
+  mkdir -p "${secrets_directory}"
+  log info "Created secrets directory"
+
+  touch "${secrets_directory}/databases.vault.yml"
+  log info "Created empty databases vault"
+
+  log success "Project has been setup"
+}
+
+# Perform blue/green switch
+function switch() {
+
+    _set_k8s_env
+    _ansible_playbook switch.yml "$@"
+}
+
+# Upgrade Arnold script to the latest release
+function upgrade() {
+
+  declare upgraded_bin
+  declare -i force=0
+
+  OPTS=$(getopt -o "fh" --long "force,help" -n "upgrade" -- "$@")
+  eval set -- "$OPTS"
+
+  while true; do
+      case "${1}" in
+          -f|--force)
+              force=1; shift;;
+          -h|--help)
+              echo -e "Usage: upgrade [OPTIONS]
+
+OPTIONS:
+  -f, --force
+         force overwrite if the file already exists
+  -h, --help
+         print this message
+" 1>&2
+              return;;
+          --)
+              shift; break;;
+          *)
+              log error "Invalid option, see usage (-h)."
+              exit 1;;
+      esac
+  done
+
+  if [[ ("${LATEST_VERSION}" = "${ARNOLD_IMAGE_TAG}") && (${force} -eq 0) ]]; then
+    log error "You are already up-to-date"
+    exit 10
+  fi
+
+  log debug "Current arnold script path: ${SCRIPT_PATH}"
+
+  upgraded_bin=$(_download_latest_release)
+
+  chmod +x "${upgraded_bin}"
+
+  if [[ ${force} -eq 1 ]]; then
+    mv -f "${upgraded_bin}" "${SCRIPT_PATH}"
+  else
+    mv -i "${upgraded_bin}" "${SCRIPT_PATH}"
+  fi
+
+  log success "Arnold has been upgraded with success to the latest ${LATEST_VERSION} release 🎉"
+}
+
+# Wrapper around Ansible's vault command
+#
+# usage: vault [OPTIONS] ACTION
+#
+# OPTIONS:
+#   -a APPLICATION  perform ACTION on the application's vault
+#   -p VAULT_PATH   perform ACTION on the given vault path
+#
+# ACTION:
+#   Any valid ansible-vault action
+function vault() {
+
+    local action
+    local application
+    local vault_path
+
+    _ensure_k8s_namespace_is_set
+
+    OPTS=$(getopt -o "a:p:h" --long "application:,path:,help" -n "vault" -- "$@")
+    eval set -- "$OPTS"
+
+    # Parse options
+    while true; do
+        case "${1}" in
+            -a|--application)
+                application="${2}"
+                vault_path="${RELATIVE_CUSTOMER_DIR}/${ARNOLD_CUSTOMER}/${ARNOLD_ENVIRONMENT}/secrets/${application}.vault.yml"
+                shift 2;;
+            -p|--path)
+                vault_path="${2}"
+                shift 2;;
+            -h|--help)
+                echo -e "Usage: vault [OPTIONS] ACTION
+
+OPTIONS:
+  -a, --application APPLICATION
+         perform ACTION on the application's vault
+  -p, --path VAULT_PATH
+         perform ACTION on the given vault path
+  -h, --help
+         print this message
+
+ACTION:
+  Any valid ansible-vault action (view, encrypt, decrypt, etc.)
+" 1>&2
+                return;;
+            --)
+                shift; break;;
+            *)
+                echo "Invalid option, see usage (-h)." 1>&2
+                exit 1;;
+        esac
+    done
+
+    action="${1}"
+
+    _vault "${action}" "${vault_path}"
+}
+
+# Perform global actions for all project vaults
+function vaults(){
+    local action="${1}"
+
+    _ensure_k8s_namespace_is_set
+
+    vaults="$(_get_project_vaults)"
+    log info "Vaults found for the current project:\\n${vaults}"
+
+    for vault in ${vaults}; do
+        log info "Processing ${vault} with action ${action}"
+        _vault "${action}" "${vault}"
+    done
+}
+
+# Set a password to encrypt vault files with Ansible Vault
+function vault_pw() {
+
+    local force=0
+    local skip=0
+
+    _ensure_k8s_namespace_is_set
+
+    OPTS=$(getopt -o "fsh" --long "force,skip,help" -n "vault_pw" -- "$@")
+    eval set -- "$OPTS"
+
+    while true; do
+        case "${1}" in
+            -f|--force)
+                force=1; shift;;
+            -s|--skip)
+                skip=1; shift;;
+            -h|--help)
+                echo -e "Usage: vault_pw [OPTIONS]
+
+OPTIONS:
+  -f, --force
+         force overwrite if the file already exists
+  -s, --skip
+         skip a project if the secrets directory does not exist
+  -h, --help
+         print this message
+" 1>&2
+                return;;
+            --)
+                shift; break;;
+            *)
+                log error "Invalid option, see usage (-h)."
+                exit 1;;
+        esac
+    done
+
+    _set_vault_password "${force}"
+}
+
+# ---- Main ----
+
+
+OPTS=$(getopt -o "a:c:e:dDgh" --long "application:,customer:,environment:,dev,debug,gpg,help" -n "arnold" -- "$@")
+eval set -- "$OPTS"
+
+# Parse options to the `arnold` command
+while true; do
+    case "${1}" in
+        -a|--application)
+            export ARNOLD_APP="${2}"
+            shift 2;;
+        -c|--customer)
+            export ARNOLD_CUSTOMER="${2}"
+            shift 2;;
+        -e|--environment)
+            export ARNOLD_ENVIRONMENT="${2}"
+            shift 2;;
+        -d|--dev)
+            DEV_MODE=1
+            shift;;
+        -D|--debug)
+            LOG_LEVEL=LOG_LEVEL_DEBUG
+            shift;;
+        -g|--gpg)
+            USE_GPG=1
+            shift;;
+        -h|--help)
+            usage 0;;
+        --)
+            shift; break;;
+        *)
+            log error "Invalid option, see usage (-h)."
+            exit 1;;
+    esac
+done
+
+# Print usage if no COMMAND has been passed
+if [[ -z "${1}" ]]; then
+    usage 1
+fi
+
+# Check dependencies
+if ! command -v curl ; then
+  log error "curl is not installed."
+  log info "Please refer to the project's documentation to install curl: https://curl.se"
+  exit 15
+fi
+
+echo -e "
+  O   o--o  o   o  o-o  o     o-o
+ / \\  |   | |\\  | o   o |     |  \\
+o---o O-Oo  | \\ | |   | |     |   O
+|   | |  \\  |  \\| o   o |     |  /
+o   o o   o o   o  o-o  O---o o-o
+
+Command: ${COLOR_BLUE}${*}${COLOR_RESET}
+
+Parameters:
+  application: ${COLOR_BLUE}${ARNOLD_APP}${COLOR_RESET}
+  customer   : ${COLOR_BLUE}${ARNOLD_CUSTOMER}${COLOR_RESET}
+  environment: ${COLOR_BLUE}${ARNOLD_ENVIRONMENT}${COLOR_RESET}
+  gpg enabled: ${COLOR_BLUE}${USE_GPG}${COLOR_RESET}
+  dev mode   : ${COLOR_BLUE}${DEV_MODE}${COLOR_RESET}
+  log level  : ${COLOR_BLUE}$(_get_log_level_name)${COLOR_RESET}
+  CLI release: ${COLOR_BLUE}${ARNOLD_IMAGE_TAG}${COLOR_RESET}
+  image      : ${COLOR_BLUE}${ARNOLD_IMAGE}${COLOR_RESET}
+"
+
+LATEST_RELEASE=$(_get_latest_release)
+LATEST_VERSION=$(_get_latest_version)
+
+if ! _check_new_release_availability ; then
+  log info "Consider upgrading Arnold using the 'upgrade' command"
+fi
+
+# Perform action
+"$@"

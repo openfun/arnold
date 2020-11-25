@@ -1,6 +1,6 @@
 # CI environment variables
 project_description: "A minimal project to test apps bootstrapping ({{ env_type }})"
-domain_name: "{{ lookup('env', 'OPENSHIFT_DOMAIN') }}.nip.io"
+domain_name: "{{ lookup('env', 'K8S_DOMAIN') }}.nip.io"
 
 # OpenShift's internal docker registry server
 #

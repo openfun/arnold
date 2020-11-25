@@ -67,10 +67,10 @@ function _start_cluster() {
 
     echo "Local IP address used for OpenShift: ${LOCAL_IP}"
 
-    OPENSHIFT_DOMAIN="${LOCAL_IP}"
-    K8S_AUTH_HOST="https://${OPENSHIFT_DOMAIN}:8443"
+    K8S_DOMAIN="${LOCAL_IP}"
+    K8S_AUTH_HOST="https://${K8S_DOMAIN}:8443"
 
-    oc cluster up --server-loglevel=5 --public-hostname="${OPENSHIFT_DOMAIN}"
+    oc cluster up --server-loglevel=5 --public-hostname="${K8S_DOMAIN}"
     oc login "${K8S_AUTH_HOST}" -u "${OC_USER}" -p "${OC_PASSWORD}" --insecure-skip-tls-verify=true
 }
 
