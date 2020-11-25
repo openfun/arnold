@@ -1,12 +1,29 @@
 # -- ARNOLD
-ARNOLD_IMAGE_NAME = arnold
-ARNOLD_IMAGE_TAG  = $(shell tr -d '\n' < VERSION)
+ARNOLD_IMAGE_NAME      ?= arnold
+ARNOLD_IMAGE_TAG       ?= $(shell tr -d '\n' < VERSION)
+ARNOLD_IMAGE_TAG_DEV   ?= $(ARNOLD_IMAGE_TAG)-dev
+ARNOLD_IMAGE           ?= $(ARNOLD_IMAGE_NAME):$(ARNOLD_IMAGE_TAG)
+ARNOLD_IMAGE_DEV       ?= $(ARNOLD_IMAGE_NAME):$(ARNOLD_IMAGE_TAG_DEV)
+ANSIBLE_VAULT_PASSWORD ?= $(ARNOLD_DEFAULT_VAULT_PASSWORD)
+
+# -- Commands
+ARNOLD = \
+  ARNOLD_IMAGE_NAME=$(ARNOLD_IMAGE_NAME) \
+  ARNOLD_IMAGE_TAG=$(ARNOLD_IMAGE_TAG_DEV) \
+  ARNOLD_IMAGE=$(ARNOLD_IMAGE_DEV) \
+  ANSIBLE_VAULT_PASSWORD=$(ANSIBLE_VAULT_PASSWORD) \
+  bin/arnold
+ARNOLD_RUN_DEV = $(ARNOLD) -d -- run
 
 # -- Docker
 # Get the current user ID to use for docker run and docker exec commands
 DOCKER_UID  = $(shell id -u)
 DOCKER_GID  = $(shell id -g)
 DOCKER_USER = $(DOCKER_UID):$(DOCKER_GID)
+
+# -- Linters
+ANSIBLE_LINT_RULES_DIR  = /usr/local/share/ansible-lint/rules
+ANSIBLE_LINT_SKIP_RULES = E602
 
 # ==============================================================================
 # RULES
@@ -19,8 +36,55 @@ build: ## build Arnold's image (production)
 .PHONY: build
 
 build-dev: ## build Arnold's image (development)
-	DOCKER_USER=$(DOCKER_USER) docker build --target=development -t $(ARNOLD_IMAGE_NAME):$(ARNOLD_IMAGE_TAG)-dev .
+	DOCKER_USER=$(DOCKER_USER) docker build --target=development -t $(ARNOLD_IMAGE_DEV) .
 .PHONY: build-dev
+
+lint: ## run all linters
+lint: \
+  lint-ansible \
+  lint-docker \
+  lint-bash \
+  lint-isort \
+  lint-flake8 \
+  lint-pylint
+.PHONY: lint
+
+lint-ansible: ## lint ansible sources
+	@echo 'lint:ansible started…'
+	@echo 'Checking syntax…'
+	$(ARNOLD_RUN_DEV) ansible-playbook --syntax-check ./*.yml
+	@echo 'Linting sources…'
+	$(ARNOLD_RUN_DEV) ansible-lint -R -r $(ANSIBLE_LINT_RULES_DIR) -x $(ANSIBLE_LINT_SKIP_RULES) ./*.yml
+.PHONY: lint-ansible
+
+lint-bash: ## lint bash scripts with shellcheck
+	@echo 'lint:bash started…'
+	$(ARNOLD_RUN_DEV) shellcheck --shell=bash bin/*
+.PHONY: lint-bash
+
+lint-docker: ## lint Dockerfile
+	@echo 'lint:docker started…'
+	docker run --rm -i hadolint/hadolint < Dockerfile
+.PHONY: lint-docker
+
+lint-flake8: ## lint back-end python sources with flake8
+	@echo 'lint:flake8 started…'
+	$(ARNOLD_RUN_DEV) flake8 filter_plugins lookup_plugins tests
+.PHONY: lint-flake8
+
+lint-isort: ## automatically re-arrange python imports in back-end code base
+	@echo 'lint:isort started…'
+	$(ARNOLD_RUN_DEV) isort --diff --check-only filter_plugins lookup_plugins tests
+.PHONY: lint-isort
+
+lint-pylint: ## lint back-end python sources with pylint
+	@echo 'lint:pylint started…'
+	$(ARNOLD_RUN_DEV) pylint filter_plugins lookup_plugins tests
+.PHONY: lint-pylint
+
+test: ## run plugins tests
+	$(ARNOLD_RUN_DEV) pytest
+.PHONY: test
 
 # -- Misc
 help:
