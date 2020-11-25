@@ -20,3 +20,7 @@ env.d/*
 
 # OpenShift
 openshift.local.clusterup
+
+# Ignore local customers except eugene
+group_vars/customer/*
+!group_vars/customer/eugene
