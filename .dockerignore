@@ -1,6 +1,52 @@
+# Python
+__pycache__
+*.pyc
+**/__pycache__
+**/*.pyc
+
+# System-specific files
+.DS_Store
+**/.DS_Store
+
+# Docker
+.dockerignore
+Dockerfile
+
+# Docs
+docs
+*.md
+*.log
+
+# Project
 .ansible/
+.circleci
 .git/
 .gitignore
+.github
+
+# Development
+.cache
+.coverage
+.flake8
+.pytest_cache
+.pylint.d
+.pylintrc
+.pyup.yml
+.gitlint
+bin/
+!bin/arnold
+!bin/entrypoint
+!bin/vault-password
+env.d
+gitlint
+Makefile
+pytest.ini
+tests
+
+# Editors
+*.sw[p,o]
+.vscode
+
 openshift.local.clusterup/
 group_vars/customer/*
 !group_vars/customer/eugene
