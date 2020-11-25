@@ -32,7 +32,7 @@ default: help
 
 # -- Docker
 build: ## build Arnold's image (production)
-	DOCKER_USER=$(DOCKER_USER) docker build --target=production -t $(ARNOLD_IMAGE_NAME):$(ARNOLD_IMAGE_TAG) .
+	DOCKER_USER=$(DOCKER_USER) docker build --target=production -t $(ARNOLD_IMAGE) .
 .PHONY: build
 
 build-dev: ## build Arnold's image (development)
@@ -76,6 +76,13 @@ lint-isort: ## automatically re-arrange python imports in back-end code base
 	@echo 'lint:isort started…'
 	$(ARNOLD_RUN_DEV) isort --diff --check-only filter_plugins lookup_plugins tests
 .PHONY: lint-isort
+
+lint-plugins: ## run python linters for plugins
+lint-plugins: \
+  lint-isort \
+  lint-flake8 \
+  lint-pylint
+.PHONY: lint-plugins
 
 lint-pylint: ## lint back-end python sources with pylint
 	@echo 'lint:pylint started…'

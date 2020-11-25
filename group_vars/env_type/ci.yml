@@ -2,6 +2,9 @@
 project_description: "A minimal project to test apps bootstrapping ({{ env_type }})"
 domain_name: "{{ lookup('env', 'K8S_DOMAIN') }}.nip.io"
 
+# The CI environment is not supposed to be interactive
+skip_verification: True
+
 # OpenShift's internal docker registry server
 #
 # FIXME: use docker registry server IP address instead of the service name (i.e.

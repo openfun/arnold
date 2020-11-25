@@ -36,7 +36,7 @@ fi
 # Wait for the application to respond
 for try in $(seq "${max_retry}"); do
   echo "Testing ${service} application http response ($try)"
-  curl -vLk --header "Accept: ${accept_header}" "https://${prefix}${service}.ci-eugene.${OPENSHIFT_DOMAIN}.nip.io${path}" 2> "/tmp/${service}.err" > "/tmp/${service}.out"
+  curl -vLk --header "Accept: ${accept_header}" "https://${prefix}${service}.ci-eugene.${K8S_DOMAIN}.nip.io${path}" 2> "/tmp/${service}.err" > "/tmp/${service}.out"
   if grep "HTTP/1.1 200 OK" "/tmp/${service}.err" && grep "${content}" "/tmp/${service}.out"; then
     exit 0
   fi
