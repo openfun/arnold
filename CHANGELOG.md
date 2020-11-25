@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- Add `arnold` CLI
+
 ## [5.22.1] - 2020-12-10
 
 ### Changed

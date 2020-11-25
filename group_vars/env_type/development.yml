@@ -1,5 +1,5 @@
 # Variables specific to development environments
-domain_name: "{{ lookup('env', 'OPENSHIFT_DOMAIN') }}.nip.io"
+domain_name: "{{ lookup('env', 'K8S_DOMAIN') }}.nip.io"
 
 # OpenShift's internal docker registry server
 #
