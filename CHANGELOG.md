@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Removed
+
+- Forum app build config and directly use image from external registry
+
 ## [5.21.2] - 2020-11-18
 
 ## Fixed
