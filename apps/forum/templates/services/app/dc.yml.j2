@@ -35,9 +35,7 @@ spec:
               topologyKey: kubernetes.io/hostname
       containers:
         - name: forum
-          # We point to a local registry image build for this "live" image (see
-          # ImageStream and BuildConfig templates)
-          image: "{{ internal_docker_registry }}/{{ project_name }}/forum:{{ forum_image_tag }}-live"
+          image: "{{ forum_image_name }}:{{ forum_image_tag }}"
           imagePullPolicy: Always
           livenessProbe:
             httpGet:
