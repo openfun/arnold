@@ -1,6 +1,0 @@
-# ---- Ansible settings ----
-# ANSIBLE_RETRY_FILES_SAVE_PATH=
-
-# ---- OpenShift ----
-# Whether or not to verify the API server's SSL certificates:
-K8S_AUTH_VERIFY_SSL=no

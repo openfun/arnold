@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+declare -i sourced
+
+# Check if this script is being sourced or executed. Explanation: Bash allows
+# return statements only from functions and, in a script's top-level scope,
+# only if the script is sourced.
+(return 2> /dev/null) && sourced=1 || sourced=0
+
+if [[ ${sourced} -eq 0 ]]; then
+  echo -e "
+⚠️   WARNING:
+⚠️
+⚠️   This script is supposed to be sourced to define Arnold's
+⚠️   development environment, executing it will have not effect.\\n"
+    exit 1
+fi
+
+export ARNOLD_IMAGE_NAME="arnold"
+ARNOLD_IMAGE_TAG="$(tr -d '\n' < VERSION)"
+export ARNOLD_IMAGE_TAG
+export ARNOLD_IMAGE="${ARNOLD_IMAGE_NAME}:${ARNOLD_IMAGE_TAG}"
+export ANSIBLE_VAULT_PASSWORD="arnold"
+export K8S_AUTH_VERIFY_SSL="no"
+
+echo -e "Development environment activated ✅\\n"
+
+echo "ARNOLD_IMAGE_NAME     : ${ARNOLD_IMAGE_NAME}"
+echo "ARNOLD_IMAGE_TAG      : ${ARNOLD_IMAGE_TAG}"
+echo "ARNOLD_IMAGE          : ${ARNOLD_IMAGE}"
+echo "ANSIBLE_VAULT_PASSWORD: ${ANSIBLE_VAULT_PASSWORD}"
+echo "K8S_AUTH_VERIFY_SSL   : ${K8S_AUTH_VERIFY_SSL}"
