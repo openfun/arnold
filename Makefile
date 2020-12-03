@@ -21,6 +21,9 @@ DOCKER_UID  = $(shell id -u)
 DOCKER_GID  = $(shell id -g)
 DOCKER_USER = $(DOCKER_UID):$(DOCKER_GID)
 
+# -- k8s
+K8S_DOMAIN ?= "$(shell hostname -I | awk '{print $$1}')"
+
 # -- Linters
 ANSIBLE_LINT_RULES_DIR  = /usr/local/share/ansible-lint/rules
 ANSIBLE_LINT_SKIP_RULES = E602
@@ -38,6 +41,11 @@ build: ## build Arnold's image (production)
 build-dev: ## build Arnold's image (development)
 	DOCKER_USER=$(DOCKER_USER) docker build --target=development -t $(ARNOLD_IMAGE_DEV) .
 .PHONY: build-dev
+
+cluster: ## start a local k8s cluster for development
+	oc cluster up --server-loglevel=5 --public-hostname=$(K8S_DOMAIN)
+	oc login https://$(K8S_DOMAIN):8443 -u developer -p developer --insecure-skip-tls-verify=true
+.PHONY: cluster
 
 lint: ## run all linters
 lint: \
@@ -88,6 +96,14 @@ lint-pylint: ## lint back-end python sources with pylint
 	@echo 'lint:pylint started…'
 	$(ARNOLD_RUN_DEV) pylint filter_plugins lookup_plugins tests
 .PHONY: lint-pylint
+
+status: ## get local k8s cluster status
+	oc cluster status
+.PHONY: status
+
+stop: ## stop local k8s cluster
+	oc cluster down
+.PHONY: stop
 
 test: ## run plugins tests
 	$(ARNOLD_RUN_DEV) pytest

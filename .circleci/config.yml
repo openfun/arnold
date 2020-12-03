@@ -52,16 +52,11 @@ aliases:
     run:
       name: Run local OpenShift cluster & configure environment
       command: |
-        export K8S_DOMAIN=$(hostname -I | awk '{print $1}')
-        export K8S_AUTH_HOST="https://${K8S_DOMAIN}:8443"
-        oc cluster up --server-loglevel=5 --public-hostname="${K8S_DOMAIN}"
-        oc login "${K8S_AUTH_HOST}" -u developer -p developer --insecure-skip-tls-verify=true
-        export K8S_AUTH_API_KEY="$(oc whoami -t)"
-        # Set OpenShift's environment variables for future steps
-        echo "export K8S_DOMAIN=${K8S_DOMAIN}" >> $BASH_ENV
-        echo "export K8S_AUTH_HOST=${K8S_AUTH_HOST}" >> $BASH_ENV
-        echo "export K8S_AUTH_API_KEY=${K8S_AUTH_API_KEY}" >> $BASH_ENV
+        make cluster
+        # Set environment variables for the CI
+        echo "export K8S_DOMAIN=$(hostname -I | awk '{print $1}')" >> $BASH_ENV
         echo "export ANSIBLE_VAULT_PASSWORD=arnold" >> $BASH_ENV
+        echo "export K8S_AUTH_VERIFY_SSL=no" >> $BASH_ENV
         source $BASH_ENV
 
   - &docker_login
