@@ -1,0 +1,174 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+declare -i MAX_TRIES=20
+declare -i PORT=80
+declare ACCEPT_HEADER="text/html"
+declare ARNOLD_PROJECT="ci-eugene"
+declare CONTENT
+declare PROTOCOL="http"
+declare ROUTE_PREFIX="current"
+declare SERVICE
+declare URL_PATH="/"
+
+# usage: display usage with the appropriate exit code
+#
+# usage: usage [EXIT_CODE]
+#
+#   EXIT_CODE: program exit code (default: 0)
+function usage(){
+
+    declare -i exit_code="${1:-0}"
+
+    echo "Usage: ci [OPTIONS] COMMAND
+
+OPTIONS:
+
+  -c, --content
+         response expected content [required]
+  -H, --accept-header
+         request accept-header (default: ${ACCEPT_HEADER})
+  -h, --help
+         print this message
+  -L, --protocol
+         protocol used in requests (default: ${PROTOCOL})
+  -m, --max-tries
+         number of attempts before considering failure (default: ${MAX_TRIES})
+  -N, --port
+         port used in requests (default: ${PORT})
+  -P, --prefix
+         application route prefix (default: ${ROUTE_PREFIX})
+  -p, --path
+         application URL path (default: ${URL_PATH})
+  -s, --service
+         set target application name [required]
+
+COMMANDS:
+
+  route     test target service route response
+"
+    # shellcheck disable=SC2086
+    exit ${exit_code}
+}
+
+# ---- Utils ----
+
+# _try: execute a command until it succeeds or MAX_TRIES attempts have been tried
+#
+# usage: _try COMMAND TEST
+function _try(){
+
+  declare -i pause=4
+  declare -i random=${RANDOM}
+  declare -i try
+  declare cmd="${1}"
+  declare test_="${2}"
+
+  for try in $(seq "${MAX_TRIES}"); do
+    echo -en "\\r cmd: ${cmd}"
+
+    if (eval "${cmd}" 2> /tmp/${random}.err > /tmp/${random}.out) && \
+       (eval "${test_}" &> /dev/null) ; then
+      echo -e " >>> Success 🎉"
+      return
+    else
+      printf " >>> Try: %03d / %03d" "${try}" ${MAX_TRIES}
+      sleep ${pause}
+    fi
+  done
+
+  echo -e "\\nMax tries reached...\\n"
+
+  echo "DEBUG info:"
+  echo ">>> STDOUT"
+  cat /tmp/${random}.out
+  echo ">>> STDERR"
+  cat /tmp/${random}.err
+
+  exit 10
+}
+
+# ---- Commands ----
+
+# Test application route
+function route(){
+
+  declare cmd
+  declare subdomain
+  declare test_
+  declare url
+
+  echo -n "Testing route ... "
+
+  if [[ "${ROUTE_PREFIX}" != "current" ]]; then
+    subdomain="${ROUTE_PREFIX}."
+  fi
+
+  url="${PROTOCOL}://${subdomain}${SERVICE}.${ARNOLD_PROJECT}.${K8S_DOMAIN}.nip.io:${PORT}${URL_PATH}"
+  cmd="curl -vLk --header 'Accept: ${ACCEPT_HEADER}' ${url}"
+  # shellcheck disable=SC2016
+  test_='grep "HTTP/1.1 200 OK" /tmp/${random}.err && grep "${CONTENT}" /tmp/${random}.out'
+
+  echo "with url : ${url}"
+
+  _try "${cmd}" "${test_}"
+}
+
+
+# ---- Main ----
+
+OPTS=$(getopt -o "s:c:p:P:L:N:m:H:h" --long "service:,content:,path:,prefix:,protocol:,port:,max-tries:,accept-header:,help" -n "ci" -- "$@")
+eval set -- "$OPTS"
+
+# Parse options to the `ci` command
+while true; do
+    case "${1}" in
+        -c|--content)
+            CONTENT="${2}"
+            shift 2;;
+        -H|--accept-header)
+            ACCEPT_HEADER="${2}"
+            shift 2;;
+        -h|--help)
+            usage 0;;
+        -L|--protocol)
+            PROTOCOL="${2}"
+            shift 2;;
+        -m|--max-tries)
+            MAX_TRIES=${2}
+            shift 2;;
+        -P|--prefix)
+            ROUTE_PREFIX="${2}"
+            shift 2;;
+        -p|--path)
+            URL_PATH="${2}"
+            shift 2;;
+        -N|--port)
+            PORT="${2}"
+            shift 2;;
+        -s|--service)
+            SERVICE="${2}"
+            shift 2;;
+        --)
+            shift; break;;
+        *)
+            echo "Invalid option, see usage (-h)." 1>&2
+            exit 1;;
+    esac
+done
+
+# Print usage if no COMMAND has been passed
+if [[ -z "${1}" ]]; then
+  usage 1
+fi
+
+if [[ -z "${SERVICE}" || -z "${CONTENT}" ]]; then
+  echo "Both service and content options are required! See usage (-h)."
+  exit 2
+fi
+
+echo ">>> CI started <<<"
+
+# Perform action
+"$@"

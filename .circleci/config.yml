@@ -194,7 +194,7 @@ jobs:
             # Bootstrap app
             bin/arnold -c eugene -e ci -a hello bootstrap
             # Test service deployed with the next route
-            bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "next"
+            bin/ci route -s hello -c "Hello OpenShift! by Arnold" -P next
 
       - run:
           name: Test the "hello" application switch
@@ -202,7 +202,7 @@ jobs:
             # Switch next route to current
             bin/arnold -c eugene -e ci -a hello switch
             # Test service switched to the current route
-            bin/ci-test-route "hello" "Hello OpenShift! by Arnold"
+            bin/ci route -s hello -c "Hello OpenShift! by Arnold"
 
       - run:
           name: Test the "hello" application rollback
@@ -212,13 +212,13 @@ jobs:
             # Switch next route to current and current to previous
             bin/arnold -c eugene -e ci -a hello switch
             # Test service switched to the current/previous route
-            bin/ci-test-route "hello" "Hello OpenShift! by Arnold"
-            bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "previous"
+            bin/ci route -s hello -c "Hello OpenShift! by Arnold"
+            bin/ci route -s hello -c "Hello OpenShift! by Arnold" -P previous
             # Rollback previous to current and current to next
             bin/arnold -c eugene -e ci -a hello rollback
             # Test service switched to the current/next route
-            bin/ci-test-route "hello" "Hello OpenShift! by Arnold"
-            bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "next"
+            bin/ci route -s hello -c "Hello OpenShift! by Arnold"
+            bin/ci route -s hello -c "Hello OpenShift! by Arnold" -P next
 
   # Test the redirect application
   test-redirect:
@@ -245,7 +245,7 @@ jobs:
           name: Test the "www" to root domain redirection
           command: |
             # Test service switched to the current route
-            bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "www"
+            bin/ci route -s hello -c "Hello OpenShift! by Arnold" -P www
 
   # Test the bootstrap playbook on the "mailcatcher" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
@@ -265,7 +265,7 @@ jobs:
           name: Test the "mailcatcher" application bootstrapping
           command: |
             bin/arnold -c eugene -e ci -a mailcatcher bootstrap
-            bin/ci-test-route "mailcatcher" "MailCatcher"
+            bin/ci route -s mailcatcher -c MailCatcher
 
   # Test the bootstrap playbook on the "richie" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
@@ -287,7 +287,7 @@ jobs:
             # Bootstrap app
             bin/arnold -c eugene -e ci -a richie bootstrap
             # Test service deployed with the next route
-            bin/ci-test-route "richie" "Django administration" "/en/admin" "next"
+            bin/ci route -s richie -c "Django administration" -p "/en/admin" -P next
 
       - run:
           name: Test the "richie" application switch
@@ -295,7 +295,7 @@ jobs:
             # Switch next route to current
             bin/arnold -c eugene -e ci -a richie switch
             # Test service switched to the current route
-            bin/ci-test-route "richie" "Django administration" "/en/admin"
+            bin/ci route -s richie -c "Django administration" -p /en/admin
 
   # Test the bootstrap playbook on the "forum" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
@@ -317,7 +317,7 @@ jobs:
             # Bootstrap app
             bin/arnold -c eugene -e ci -a forum bootstrap
             # Test service deployed with the next route
-            bin/ci-test-route "forum" "collection" "/api/v1/threads?api_key=thisisafakeapikey" "next"
+            bin/ci route -s forum -c collection -p "/api/v1/threads?api_key=thisisafakeapikey" -P next
 
       - run:
           name: Test the "forum" application switch
@@ -325,7 +325,7 @@ jobs:
             # Switch next route to current
             bin/arnold -c eugene -e ci -a forum switch
             # Test service switched to the current route
-            bin/ci-test-route "forum" "collection" "/api/v1/threads?api_key=thisisafakeapikey"
+            bin/ci route -s forum -c collection -p "/api/v1/threads?api_key=thisisafakeapikey"
 
   # Test the bootstrap playbook on the "edxapp" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
@@ -347,8 +347,8 @@ jobs:
             # Bootstrap app
             bin/arnold -c eugene -e ci -a edxapp,redis bootstrap
             # Test services deployed with the next route
-            bin/ci-test-route "cms" "Welcome to Your Platform Studio" "/" "next" 20
-            bin/ci-test-route "lms" "It works!" "/" "next" 20
+            bin/ci route -s cms -c "Welcome to Your Platform Studio" -P next -m 50
+            bin/ci route -s lms -c "It works!" -P next -m 50
 
       - run:
           name: Test the "edxapp" application switch
@@ -356,8 +356,8 @@ jobs:
             # Switch next route to current
             bin/arnold -c eugene -e ci -a edxapp switch
             # Test service switched to the current route
-            bin/ci-test-route "cms" "Welcome to Your Platform Studio" "/" "current" 20
-            bin/ci-test-route "lms" "It works!" "/" "current" 20
+            bin/ci route -s cms -c "Welcome to Your Platform Studio" -m 50
+            bin/ci route -s lms -c "It works!" -m 50
 
   # Test the bootstrap playbook on the "edxec" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
@@ -379,14 +379,14 @@ jobs:
             # Bootstrap edxec
             bin/arnold -c eugene -e ci -a edxec bootstrap
             # Test the service
-            bin/ci-test-route "edxec" "OK" "/health/" "next"
+            bin/ci route -s edxec -c OK -p "/health/" -P next
 
       - run:
           name: Test the "edxec" application switch
           command: |
             # Switch next route to current
             bin/arnold -c eugene -e ci -a edxec switch
-            bin/ci-test-route "edxec" "OK" "/health/"
+            bin/ci route -s edxec -c OK -p "/health/"
 
   # Test the bootstrap playbook on the "marsha" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
@@ -408,7 +408,7 @@ jobs:
             # Bootstrap app
             bin/arnold -c eugene -e ci -a marsha bootstrap
             # Test services deployed with the next route
-            bin/ci-test-route "marsha" "Api Root" "/api/" "next"
+            bin/ci route -s marsha -c "Api Root" -p "/api/" -P next
 
       - run:
           name: Test the "marsha" application switch
@@ -416,7 +416,7 @@ jobs:
             # Switch next route to current
             bin/arnold -c eugene -e ci -a marsha switch
             # Test service switched to the current route
-            bin/ci-test-route "marsha" "Api Root" "/api/"
+            bin/ci route -s marsha -c "Api Root" -p "/api/"
 
   # Test the bootstrap playbook on the "moodlenet" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
@@ -438,7 +438,7 @@ jobs:
             # Bootstrap app
             bin/arnold -c eugene -e ci -a moodlenet bootstrap
             # Test services deployed with the next route
-            bin/ci-test-route "api" "schema" "/.well-known/nodeinfo" "next" 10 "application/json"
+            bin/ci route -s api -c "schema" -p "/.well-known/nodeinfo" -P next -H "application/json"
 
       - run:
           name: Test the "moodlenet" application switch
@@ -446,7 +446,7 @@ jobs:
             # Switch next route to current
             bin/arnold -c eugene -e ci -a moodlenet switch
             # Test service switched to the current route
-            bin/ci-test-route "api" "schema" "/.well-known/nodeinfo" "current" 10 "application/json"
+            bin/ci route -s api -c "schema" -p "/.well-known/nodeinfo" -H "application/json"
 
 
   # Test the bootstrap playbook on the "learninglocker" application.
@@ -468,7 +468,7 @@ jobs:
           name: Test the "learninglocker" application bootstrapping
           command: |
             bin/arnold -c eugene -e ci -a redis,mailcatcher,learninglocker bootstrap
-            bin/ci-test-route "learninglocker" "OK" "/api" "next"
+            bin/ci route -s learninglocker -c OK -p "/api" -P next
 
       - run:
           name: Test the "learninglocker" application switch
@@ -476,7 +476,7 @@ jobs:
             # Switch next route to current
             bin/arnold -c eugene -e ci -a learninglocker switch
             # Test service switched to the current route
-            bin/ci-test-route "learninglocker" "OK" "/api"
+            bin/ci route -s learninglocker -c OK -p "/api"
 
 
   # Test the bootstrap playbook on the "ashley" application
@@ -499,7 +499,7 @@ jobs:
             # Bootstrap app
             bin/arnold -c eugene -e ci -a ashley bootstrap
             # Test service deployed with the next route
-            bin/ci-test-route "ashley" "ok" "/__heartbeat__" "next"
+            bin/ci route -s ashley -c ok -p "/__heartbeat__" -P next
 
       - run:
           name: Test the "ashley" application switch
@@ -507,7 +507,7 @@ jobs:
             # Switch next route to current
             bin/arnold -c eugene -e ci -a ashley switch
             # Test service switched to the current route
-            bin/ci-test-route "ashley" "ok" "/__heartbeat__"
+            bin/ci route -s ashley -c ok -p "/__heartbeat__"
 
 
   # Test the bootstrap playbook on the "nextcloud" application.
@@ -548,7 +548,7 @@ jobs:
             oc project ci-eugene
             oc exec -it $(oc get pod -l 'app in (nextcloud),service in (nextcloud),!job_stamp' -o json | jq -r '.items[0].metadata.name') \
               -- php /app/occ maintenance:mode --off
-            bin/ci-test-route "nextcloud" "Nextcloud" "/login" "next" 40
+            bin/ci route -s nextcloud -c Nextcloud -p "/login" -P next -m 80
 
       - run:
           name: Test the "nextcloud" application switch
@@ -556,7 +556,7 @@ jobs:
             # Switch next route to current
             bin/arnold -c eugene -e ci -a nextcloud switch
             # Test service switched to the current route
-            bin/ci-test-route "nextcloud" "Nextcloud" "/login" "current" 40
+            bin/ci route -s nextcloud -c Nextcloud -p "/login" -P current -m 40
 
   # Test the bootstrap playbook on the "etherpad" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
@@ -578,7 +578,7 @@ jobs:
             # Bootstrap app
             bin/arnold -c eugene -e ci -a etherpad bootstrap
             # Test service deployed with the next route
-            bin/ci-test-route "etherpad" "<title>ci-eugene etherpad</title>" "/" "next"
+            bin/ci route -s etherpad -c "<title>ci-eugene etherpad</title>" -P next
 
       - run:
           name: Test the "etherpad" application switch
@@ -586,7 +586,7 @@ jobs:
             # Switch next route to current
             bin/arnold -c eugene -e ci -a etherpad switch
             # Test service switched to the current route
-            bin/ci-test-route "etherpad" "<title>ci-eugene etherpad</title>" "/"
+            bin/ci route -s etherpad -c "<title>ci-eugene etherpad</title>"
 
   # Test the bootstrap playbook on the "kibana" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
@@ -614,7 +614,7 @@ jobs:
             # Deploy Kibana
             bin/arnold -c eugene -e ci -a kibana deploy
             # Test service deployed with the next route
-            bin/ci-test-route "kibana" "green" "/api/status" "next"
+            bin/ci route -s kibana -c green -p "/api/status" -P next
 
       - run:
           name: Test the "kibana" application switch
@@ -622,7 +622,7 @@ jobs:
             # Switch next route to current
             bin/arnold -c eugene -e ci -a kibana switch
             # Test service switched to the current route
-            bin/ci-test-route "kibana" "green" "/api/status"
+            bin/ci route -s kibana -c green -p "/api/status"
 
   # Test the delete_app tasks for blue-green applications
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
@@ -644,7 +644,7 @@ jobs:
             # Bootstrap app
             bin/arnold -c eugene -e ci -a richie bootstrap
             # Test service deployed with the next route
-            bin/ci-test-route "richie" "Django administration" "/en/admin" "next"
+            bin/ci route -s richie -c "Django administration" -p "/en/admin" -P next
 
       - run:
           name: Test "richie"'s next stack substitution (create + delete)
@@ -652,7 +652,7 @@ jobs:
             # Deploy the next stack a second time
             bin/arnold -c eugene -e ci -a richie deploy
             # Test service re-deployed with the next route
-            bin/ci-test-route "richie" "Django administration" "/en/admin" "next"
+            bin/ci route -s richie -c "Django administration" -p "/en/admin" -P next
 
       - run:
           name: Check that only one pod is running Richie's app
@@ -684,7 +684,7 @@ jobs:
             # Bootstrap app
             bin/arnold -c eugene -e ci -a hello bootstrap
             # Test service deployed with the next route
-            bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "next"
+            bin/ci route -s hello -c "Hello OpenShift! by Arnold" -P next
 
       - run:
           name: Test "hello"'s switch
@@ -692,9 +692,9 @@ jobs:
             # Switch next route to current
             bin/arnold -c eugene -e ci -a hello switch
             # Test service on the current route
-            bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "current"
+            bin/ci route -s hello -c "Hello OpenShift! by Arnold"
             # Test that the service is not responding on next route
-            bin/ci-test-route "hello" "Hello OpenShift! by Arnold" "/" "next" && exit 1 || true
+            bin/ci route -s hello -c "Hello OpenShift! by Arnold" -P next && exit 1 || true
 
       - run:
           name: Test that a second switch fails to execute with an error
