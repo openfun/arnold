@@ -37,6 +37,14 @@ ashley_django_settings_module: "settings"
 ashley_django_configuration: "Development"
 ashley_secret_name: "ashley-{{ ashley_vault_checksum | default('undefined_ashley_vault_checksum') }}"
 
+# -- haystack / elasticsearch settings
+ashley_elasticsearch_host: "elasticsearch"
+ashley_elasticsearch_port: "9200"
+ashley_elasticsearch_index: "ashley"
+# Schedule for the cronjob that updates the search index, using crontab format.
+# By default: once per hour.
+ashley_cron_reindex_schedule: "0 * * * *"
+
 ashley_activate_http_basic_auth: false
 
 # -- volumes
