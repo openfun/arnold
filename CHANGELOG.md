@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- Add support for ashley 1.0.0-beta.3
+
 ## [5.21.3] - 2020-11-19
 
 ### Fixed

@@ -1,0 +1,46 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  labels:
+    app: ashley
+    service: app
+    version: "{{ ashley_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: "update-index-{{ deployment_stamp }}"
+  namespace: "{{ project_name }}"
+spec:
+  schedule: "{{ ashley_cron_reindex_schedule }}"
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 1
+  concurrencyPolicy: Forbid
+  suspend: {{ suspend_cronjob | default(false) }}
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          name: "update-index-{{ deployment_stamp }}"
+          labels:
+            app: ashley
+            service: app
+            version: "{{ ashley_image_tag }}"
+            deployment_stamp: "{{ deployment_stamp }}"
+        spec:
+{% set image_pull_secret_name = ashley_image_pull_secret_name | default(none) or default_image_pull_secret_name %}
+{% if image_pull_secret_name is not none %}
+          imagePullSecrets:
+            - name: "{{ image_pull_secret_name }}"
+{% endif %}
+          containers:
+            - name: ashley
+              image: "{{ ashley_image_name }}:{{ ashley_image_tag }}"
+              imagePullPolicy: Always
+              command:
+                - "/bin/bash"
+                - "-c"
+                - python manage.py update_index
+              envFrom:
+                - secretRef:
+                    name: "{{ ashley_secret_name }}"
+                - configMapRef:
+                    name: "ashley-app-dotenv-{{ deployment_stamp }}"
+          restartPolicy: Never

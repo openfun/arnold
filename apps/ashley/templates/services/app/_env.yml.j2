@@ -5,4 +5,6 @@ DB_NAME: "{{ ashley_database_name }}"
 DB_HOST: "ashley-{{ ashley_database_host }}-{{ deployment_stamp }}"
 DB_PORT: "{{ ashley_database_port }}"
 DJANGO_ALLOWED_HOSTS: "{{ ashley_host | blue_green_hosts }}"
-
+ELASTICSEARCH_HOST: "{{ ashley_elasticsearch_host }}"
+ELASTICSEARCH_PORT: "{{ ashley_elasticsearch_port }}"
+ELASTICSEARCH_INDEX_NAME: "{{ ashley_elasticsearch_index }}"
