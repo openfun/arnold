@@ -12,6 +12,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 - Add support for ashley 1.0.0-beta.3
 
+### Fixed
+
+- Fix memory lock configuration for elasticsearch 5.x
+
 ## [5.21.3] - 2020-11-19
 
 ### Fixed
