@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [5.22.0] - 2020-12-08
+
 ### Added
 
 - Add support for ashley 1.0.0-beta.3
@@ -920,7 +922,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v5.21.3...master
+[unreleased]: https://github.com/openfun/arnold/compare/v5.22.0...master
+[5.22.0]: https://github.com/openfun/arnold/compare/v5.21.3...v5.22.0
 [5.21.3]: https://github.com/openfun/arnold/compare/v5.21.2...v5.21.3
 [5.21.2]: https://github.com/openfun/arnold/compare/v5.21.1...v5.21.2
 [5.21.1]: https://github.com/openfun/arnold/compare/v5.21.0...v5.21.1
