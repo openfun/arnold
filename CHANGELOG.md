@@ -8,6 +8,11 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Changed
+
+- nextcloud tests have been removed from requirements to publish the arnold
+  docker image with CircleCI
+
 ## [5.22.0] - 2020-12-08
 
 ### Added

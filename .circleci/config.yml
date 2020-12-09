@@ -1058,7 +1058,6 @@ workflows:
             - test-bootstrap-forum
             - test-bootstrap-learninglocker
             - test-bootstrap-ashley
-            - test-bootstrap-nextcloud
             - test-bootstrap-etherpad
             - test-bootstrap-kibana
             - test-redirect
