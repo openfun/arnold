@@ -7,8 +7,8 @@ aliases:
     docker:
       - image: circleci/python:3.6.5-stretch-node-browsers
         auth:
-          username: $DOCKER_USER
-          password: $DOCKER_PASS
+          username: $DOCKER_HUB_USERNAME
+          password: $DOCKER_HUB_PASSWORD
     working_directory: ~/fun
 
   # Activate Docker in Docker (aka dind)
@@ -73,11 +73,11 @@ aliases:
     # Nota bene: you'll need to define the following secrets environment vars
     # in CircleCI interface:
     #
-    #   - DOCKER_USER
-    #   - DOCKER_PASS
+    #   - DOCKER_HUB_USERNAME
+    #   - DOCKER_HUB_PASSWORD
     run:
       name: Login to DockerHub
-      command: echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+      command: echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
 
 version: 2
 jobs:
