@@ -1,3 +1,6 @@
+# Load defaults
+include bin/_defaults
+
 # -- ARNOLD
 ARNOLD_IMAGE_NAME      ?= arnold
 ARNOLD_IMAGE_TAG       ?= $(shell tr -d '\n' < VERSION)
@@ -67,7 +70,7 @@ lint-ansible: ## lint ansible sources
 
 lint-bash: ## lint bash scripts with shellcheck
 	@echo 'lint:bash started…'
-	$(ARNOLD_RUN_DEV) shellcheck --shell=bash bin/*
+	$(ARNOLD_RUN_DEV) shellcheck -x --shell=bash bin/*
 .PHONY: lint-bash
 
 lint-docker: ## lint Dockerfile

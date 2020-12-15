@@ -16,11 +16,15 @@ if [[ ${sourced} -eq 0 ]]; then
     exit 1
 fi
 
+# Load defaults
+# shellcheck source=bin/_defaults
+source "$(dirname "$(readlink -f "$0")")/_defaults"
+
 export ARNOLD_IMAGE_NAME="arnold"
 ARNOLD_IMAGE_TAG="$(tr -d '\n' < VERSION)"
 export ARNOLD_IMAGE_TAG
 export ARNOLD_IMAGE="${ARNOLD_IMAGE_NAME}:${ARNOLD_IMAGE_TAG}"
-export ANSIBLE_VAULT_PASSWORD="arnold"
+export ANSIBLE_VAULT_PASSWORD="${ARNOLD_DEFAULT_VAULT_PASSWORD}"
 export K8S_AUTH_VERIFY_SSL="no"
 
 echo -e "Development environment activated ✅\\n"

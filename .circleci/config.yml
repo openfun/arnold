@@ -55,7 +55,8 @@ aliases:
         make cluster
         # Set environment variables for the CI
         echo "export K8S_DOMAIN=$(hostname -I | awk '{print $1}')" >> $BASH_ENV
-        echo "export ANSIBLE_VAULT_PASSWORD=arnold" >> $BASH_ENV
+        cat bin/_defaults >> $BASH_ENV
+        echo 'export ANSIBLE_VAULT_PASSWORD="${ARNOLD_DEFAULT_VAULT_PASSWORD}"' >> $BASH_ENV
         echo "export K8S_AUTH_VERIFY_SSL=no" >> $BASH_ENV
         source $BASH_ENV
 
