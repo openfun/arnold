@@ -106,7 +106,7 @@ function log() {
     color=${LOG_LEVEL_COLORS[${level_name}]}
 
     if [[ ${level} -ge ${LOG_LEVEL} ]]; then
-      echo -e "${color}$(printf "%-7s" "${level_name}" | tr "[:lower:]" "[:upper:]") ${message}${COLOR_RESET}" 1>&2
+      echo -e "${color}$(printf "%-8s" "${level_name}" | tr "[:lower:]" "[:upper:]") ${message}${COLOR_RESET}" 1>&2
     fi
 }
 
@@ -479,6 +479,9 @@ function _set_tray_vars() {
 # by Matsuo's definitions.
 function _docker_run() {
 
+    declare _defaults
+    _defaults="$(dirname "$(readlink -f "$0")")/_defaults"
+
     declare extras_volumes="\
       -v ${COMMON_DIR}:/app/${RELATIVE_COMMON_DIR} \
       -v ${CUSTOMER_DIR}:/app/${RELATIVE_CUSTOMER_DIR}"
@@ -486,6 +489,16 @@ function _docker_run() {
     # Get password from gpg-encrypted vault password
     ANSIBLE_VAULT_PASSWORD=$(_get_vault_password)
     export ANSIBLE_VAULT_PASSWORD
+
+    # Check we are not using arnold's default insecure vault password
+    if [[ -f "${_defaults}"  ]]; then
+      # shellcheck source=bin/_defaults
+      source "${_defaults}"
+      if [[ "${ANSIBLE_VAULT_PASSWORD}" == "${ARNOLD_DEFAULT_VAULT_PASSWORD}" ]]; then
+        log critical "Using Arnold's default password in production is highly insecure!"
+        log critical "Set the ANSIBLE_VAULT_PASSWORD environment variable to a different value"
+      fi
+    fi
 
     if [[ DEV_MODE -eq 1 ]]; then
       _set_tray_vars
@@ -1034,6 +1047,10 @@ LATEST_VERSION=$(_get_latest_version)
 
 if ! _check_new_release_availability ; then
   log info "Consider upgrading Arnold using the 'upgrade' command"
+fi
+
+if [[ USE_GPG -eq 0 ]]; then
+  log warning "We strongly recommend to activate the GPG mode to secure your vault passwords"
 fi
 
 # Perform action

@@ -1,0 +1,4 @@
+#
+# Arnold defaults
+#
+export ARNOLD_DEFAULT_VAULT_PASSWORD="arnold"
