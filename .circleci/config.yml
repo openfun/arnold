@@ -729,6 +729,7 @@ jobs:
     steps:
       - checkout
       - *attach_workspace
+      - *ci_env
       - *docker_login
       - *docker_load
 
