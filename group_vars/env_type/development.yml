@@ -6,17 +6,3 @@ domain_name: "{{ lookup('env', 'K8S_DOMAIN') }}.nip.io"
 # FIXME: use docker registry server IP address instead of the service name (i.e.
 # docker-registry.default.svc) to prevent oc cluster DNS issues
 internal_docker_registry: "172.30.1.1:5000"
-
-apps:
-  - name: ashley
-  - name: edxapp
-  - name: edxec
-  - name: elasticsearch
-  - name: etherpad
-  - name: hello
-  - name: learninglocker
-  - name: mailcatcher
-  - name: marsha
-  - name: moodlenet
-  - name: redis
-  - name: richie
