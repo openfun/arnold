@@ -82,8 +82,9 @@ declare -r YQ="docker run --rm -i -v ${ARNOLD_PROJECT_PATH}:/workdir mikefarah/y
 
 # Hosts
 
-# K8S_DOMAIN is only used in development and the CI to set the project's
-# 'domain_name' to "${K8S_DOMAIN}.nip.io"
+# K8S_DOMAIN is used in development and the CI to set the project's
+# 'domain_name' to "${K8S_DOMAIN}.nip.io". Otherwhise it should be set to
+# target your web console.
 declare K8S_DOMAIN="${K8S_DOMAIN:-$(hostname -I | awk '{print $1}')}"
 
 # Flags
@@ -1032,6 +1033,7 @@ o   o o   o o   o  o-o  O---o o-o
 Command: ${COLOR_BLUE}${*}${COLOR_RESET}
 
 Parameters:
+  K8S_DOMAIN : ${COLOR_BLUE}${K8S_DOMAIN}${COLOR_RESET}
   application: ${COLOR_BLUE}${ARNOLD_APP}${COLOR_RESET}
   customer   : ${COLOR_BLUE}${ARNOLD_CUSTOMER}${COLOR_RESET}
   environment: ${COLOR_BLUE}${ARNOLD_ENVIRONMENT}${COLOR_RESET}
