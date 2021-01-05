@@ -3,9 +3,6 @@
 project_display_name: "Eugene ({{ env_type }})"
 project_description: "A demo project with a typical installation ({{ env_type }})"
 
-apps:
-  - name: richie
-
 # Marsha
 # We don't want to require an AWS SSH key for testing
 marsha_should_sign_requests: false
