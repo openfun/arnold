@@ -78,7 +78,7 @@ declare -r VAULT_PASSWORD_FILE_NAME="password.gpg"
 # Dependencies
 declare -r JQ="docker run --rm -i fundocker/jq:1.6"
 declare -r KUBECTL="oc"
-declare -r YQ="docker run --rm -i -v ${ARNOLD_PROJECT_PATH}:/workdir mikefarah/yq yq"
+declare -r YQ="docker run --rm -i -v ${ARNOLD_PROJECT_PATH}:/workdir mikefarah/yq:3.4.1 yq"
 
 # Hosts
 
