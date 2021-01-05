@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [5.23.0] - 2021-01-05
+
 ### Added
 
 - Add `arnold` CLI
@@ -933,7 +935,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v5.22.1...master
+[unreleased]: https://github.com/openfun/arnold/compare/v5.23.0...master
+[5.23.0]: https://github.com/openfun/arnold/compare/v5.22.1...v5.23.0
 [5.22.1]: https://github.com/openfun/arnold/compare/v5.22.0...v5.22.1
 [5.22.0]: https://github.com/openfun/arnold/compare/v5.21.3...v5.22.0
 [5.21.3]: https://github.com/openfun/arnold/compare/v5.21.2...v5.21.3
