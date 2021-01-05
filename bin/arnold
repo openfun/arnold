@@ -1017,7 +1017,7 @@ if [[ -z "${1}" ]]; then
 fi
 
 # Check dependencies
-if ! command -v curl ; then
+if ! command -v curl > /dev/null ; then
   log error "curl is not installed."
   log info "Please refer to the project's documentation to install curl: https://curl.se"
   exit 15
