@@ -13,7 +13,7 @@ moodlenet_nginx_htpasswd_secret_name: "moodlenet-htpasswd"
 moodlenet_nginx_healthcheck_port: 5000
 moodlenet_nginx_healthcheck_endpoint: "/__healthcheck__"
 moodlenet_nginx_status_endpoint: "/__status__"
-moodlenet_nginx_admin_ip_withelist: []
+moodlenet_nginx_admin_ip_whitelist: []
 moodlenet_nginx_bypass_htaccess_ip_whitelist: []
 
 # -- postgresql
