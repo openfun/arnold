@@ -15,7 +15,7 @@ learninglocker_ui_replicas: 1
 learninglocker_api_pm2_instances: 2
 learninglocker_ui_pm2_instances: 2
 learninglocker_worker_pm2_instances: 2
-learninglocker_nginx_admin_ip_withelist: []
+learninglocker_nginx_admin_ip_whitelist: []
 
 
 # -- xapi

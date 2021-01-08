@@ -12,7 +12,7 @@ nextcloud_nginx_htpasswd_secret_name: "nextcloud-htpasswd"
 nextcloud_nginx_healthcheck_port: 5000
 nextcloud_nginx_healthcheck_endpoint: "/__healthcheck__"
 nextcloud_nginx_status_endpoint: "/__status__"
-nextcloud_nginx_ip_withelist: []
+nextcloud_nginx_ip_whitelist: []
 nextcloud_nginx_static_cache_expires: "1M"
 nextcloud_nginx_root: "/app"
 nextcloud_nginx_max_body_size: 512M

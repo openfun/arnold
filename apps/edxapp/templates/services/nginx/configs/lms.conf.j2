@@ -69,7 +69,7 @@ server {
     try_files $uri @proxy_to_lms_app;
   }
 
-{% if edxapp_nginx_lms_admin_ip_withelist | length > 0 %}
+{% if edxapp_nginx_lms_admin_ip_whitelist | length > 0 %}
   location /admin {
     {#
       We want to limit access to a list of whitelisted IP addresses.
@@ -79,7 +79,7 @@ server {
       which is of interest (other ones have been added by subsequent proxies),
       hence we restrict our comparison with the beginning of this list (this is why our regex starts with a ^).
     #}
-    if ($http_x_forwarded_for !~ ^({{ edxapp_nginx_lms_admin_ip_withelist | join("|") }})) {
+    if ($http_x_forwarded_for !~ ^({{ edxapp_nginx_lms_admin_ip_whitelist | join("|") }})) {
       return 403;
     }
 

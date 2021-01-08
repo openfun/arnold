@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Fixed
+
+- Fix typos in setting names: `withelist` vs `whitelist` (BC)
+
 ## [5.23.0] - 2021-01-05
 
 ### Added
