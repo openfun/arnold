@@ -69,8 +69,10 @@ declare -A LOG_LEVEL_COLORS=(
 # Directories
 declare -r RELATIVE_COMMON_DIR="group_vars/common"
 declare -r RELATIVE_CUSTOMER_DIR="group_vars/customer"
+declare -r RELATIVE_ENV_TYPE_DIR="group_vars/env_type"
 declare -r COMMON_DIR="${ARNOLD_PROJECT_PATH}/${RELATIVE_COMMON_DIR}"
 declare -r CUSTOMER_DIR="${ARNOLD_PROJECT_PATH}/${RELATIVE_CUSTOMER_DIR}"
+declare -r ENV_TYPE_DIR="${ARNOLD_PROJECT_PATH}/${RELATIVE_ENV_TYPE_DIR}"
 
 # Files
 declare -r VAULT_PASSWORD_FILE_NAME="password.gpg"
@@ -94,6 +96,9 @@ declare -i USE_GPG=${ARNOLD_USE_GPG:-0}
 # Tray development
 declare ARNOLD_TRAY_PATH
 declare ARNOLD_TRAY_NAME
+
+# Extras
+declare -a ARNOLD_EXTRA_VOLUMES
 
 # Basic logging (with colors 🎉)
 function log() {
@@ -129,20 +134,23 @@ OPTIONS:
          set target application (e.g. edxapp)
   -c, --customer
          set active customer (e.g. eugene)
-  -e, --environment
-         set active environment (e.g. staging)
-  -k, --k8s-domain
-         set k8s domain (server)
   -d, --dev
          application development mode
   -D, --debug
          debug mode
+  -e, --environment
+         set active environment (e.g. staging)
   -g, --gpg
          use gpg to safely store ansible vaults passwords (recommanded)
   -h, --help
          print this message
+  -k, --k8s-domain
+         set k8s domain (server)
   -n, --dry-run
          dry-run mode (display commands only)
+  -v, --extra-volume
+         mount extra volume in the container (follows docker volumes syntax,
+         e.g. /local/path:/target/path)
 
 COMMANDS:
 
@@ -483,9 +491,21 @@ function _docker_run() {
     declare _defaults
     _defaults="$(dirname "$(readlink -f "$0")")/_defaults"
 
-    declare extras_volumes="\
+    declare extra_volumes="\
       -v ${COMMON_DIR}:/app/${RELATIVE_COMMON_DIR} \
       -v ${CUSTOMER_DIR}:/app/${RELATIVE_CUSTOMER_DIR}"
+
+    # Override default env_types if the local env_type dir exists
+    if [[ -e ${ENV_TYPE_DIR} ]]; then
+      extra_volumes="${extra_volumes} \
+        -v ${ENV_TYPE_DIR}:/app/${RELATIVE_ENV_TYPE_DIR}"
+    fi
+
+    # Add extra volumes to override apps or whatever we will need
+    for volume in "${ARNOLD_EXTRA_VOLUMES[@]}"; do
+      extra_volumes="${extra_volumes} \
+        -v ${volume}"
+    done
 
     # Get password from gpg-encrypted vault password
     ANSIBLE_VAULT_PASSWORD=$(_get_vault_password)
@@ -505,11 +525,11 @@ function _docker_run() {
       _set_tray_vars
 
       if [[ -e ${ARNOLD_TRAY_PATH} ]]; then
-        extras_volumes="${extras_volumes} \
+        extra_volumes="${extra_volumes} \
           -v ${PWD}/${ARNOLD_TRAY_PATH}:/app/apps/${ARNOLD_TRAY_NAME}"
         log info "Development mode activated for tray: ${ARNOLD_TRAY_NAME}"
       else
-        extras_volumes="-v ${PWD}:/app"
+        extra_volumes="-v ${PWD}:/app"
         log info "Full development mode activated"
       fi
     fi
@@ -523,7 +543,7 @@ function _docker_run() {
         --env K8S_DOMAIN \
         --env ANSIBLE_VAULT_PASSWORD \
         -v "${HOME}/.kube:/home/arnold/.kube" \
-        ${extras_volumes} \
+        ${extra_volumes} \
         "${ARNOLD_IMAGE}" \
         "$@"
 }
@@ -977,7 +997,7 @@ OPTIONS:
 # ---- Main ----
 
 
-OPTS=$(getopt -o "a:c:e:dDgh" --long "application:,customer:,environment:,dev,debug,gpg,help" -n "arnold" -- "$@")
+OPTS=$(getopt -o "a:c:e:k:v:dDgh" --long "application:,customer:,environment:,k8s-domain:,extra-volume:,dev,debug,gpg,help" -n "arnold" -- "$@")
 eval set -- "$OPTS"
 
 # Parse options to the `arnold` command
@@ -1003,6 +1023,12 @@ while true; do
             shift;;
         -h|--help)
             usage 0;;
+        -k|--k8s-domain)
+            export K8S_DOMAIN="${2}"
+            shift 2;;
+        -v|--extra-volume)
+            ARNOLD_EXTRA_VOLUMES+=("${2}")
+            shift 2;;
         --)
             shift; break;;
         *)
@@ -1033,15 +1059,16 @@ o   o o   o o   o  o-o  O---o o-o
 Command: ${COLOR_BLUE}${*}${COLOR_RESET}
 
 Parameters:
-  K8S_DOMAIN : ${COLOR_BLUE}${K8S_DOMAIN}${COLOR_RESET}
-  application: ${COLOR_BLUE}${ARNOLD_APP}${COLOR_RESET}
-  customer   : ${COLOR_BLUE}${ARNOLD_CUSTOMER}${COLOR_RESET}
-  environment: ${COLOR_BLUE}${ARNOLD_ENVIRONMENT}${COLOR_RESET}
-  gpg enabled: ${COLOR_BLUE}${USE_GPG}${COLOR_RESET}
-  dev mode   : ${COLOR_BLUE}${DEV_MODE}${COLOR_RESET}
-  log level  : ${COLOR_BLUE}$(_get_log_level_name)${COLOR_RESET}
-  CLI release: ${COLOR_BLUE}${ARNOLD_IMAGE_TAG}${COLOR_RESET}
-  image      : ${COLOR_BLUE}${ARNOLD_IMAGE}${COLOR_RESET}
+  K8S_DOMAIN  : ${COLOR_BLUE}${K8S_DOMAIN}${COLOR_RESET}
+  application : ${COLOR_BLUE}${ARNOLD_APP}${COLOR_RESET}
+  customer    : ${COLOR_BLUE}${ARNOLD_CUSTOMER}${COLOR_RESET}
+  environment : ${COLOR_BLUE}${ARNOLD_ENVIRONMENT}${COLOR_RESET}
+  gpg enabled : ${COLOR_BLUE}${USE_GPG}${COLOR_RESET}
+  dev mode    : ${COLOR_BLUE}${DEV_MODE}${COLOR_RESET}
+  log level   : ${COLOR_BLUE}$(_get_log_level_name)${COLOR_RESET}
+  CLI release : ${COLOR_BLUE}${ARNOLD_IMAGE_TAG}${COLOR_RESET}
+  image       : ${COLOR_BLUE}${ARNOLD_IMAGE}${COLOR_RESET}
+  extra volume: ${COLOR_BLUE}${volume}${COLOR_RESET}
 "
 
 LATEST_RELEASE=$(_get_latest_release)
