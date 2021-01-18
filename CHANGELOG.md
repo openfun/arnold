@@ -8,6 +8,13 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Changed
+
+- CLI: mount local `env_type` directory if it exists
+- CLI: the new `--extra-volume` option allows to mount an extra volume in the
+  arnold container
+- CLI: implement `--k8s-domain` option support
+
 ### Fixed
 
 - Fix typos in setting names: `withelist` vs `whitelist` (BC)
