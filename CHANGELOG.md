@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [6.0.0] - 2021-01-19
+
 ### Changed
 
 - CLI: mount local `env_type` directory if it exists
@@ -946,7 +948,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v5.23.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v6.0.0...master
+[6.0.0]: https://github.com/openfun/arnold/compare/v5.23.0...v6.0.0
 [5.23.0]: https://github.com/openfun/arnold/compare/v5.22.1...v5.23.0
 [5.22.1]: https://github.com/openfun/arnold/compare/v5.22.0...v5.22.1
 [5.22.0]: https://github.com/openfun/arnold/compare/v5.21.3...v5.22.0
