@@ -4,7 +4,7 @@ set -eo pipefail
 
 # Docker
 declare -r ARNOLD_IMAGE_NAME="${ARNOLD_IMAGE_NAME:-fundocker/arnold}"
-declare -r ARNOLD_IMAGE_TAG="${ARNOLD_IMAGE_TAG:-5.23.0}"
+declare -r ARNOLD_IMAGE_TAG="${ARNOLD_IMAGE_TAG:-5.24.0}"
 declare -r ARNOLD_IMAGE="${ARNOLD_IMAGE:-${ARNOLD_IMAGE_NAME}:${ARNOLD_IMAGE_TAG}}"
 declare -r ARNOLD_PROJECT_PATH="${PWD}"
 declare -r ARNOLD_TRAY_FILE="arnold.yml"
