@@ -91,9 +91,9 @@
 
 - name: Add meta-data to available applications
   set_fact:
-    _app: '{{ available_apps | json_query("[?name==`" + item.name + "`]") | first | merge_with_app(item) }}'
+    _app: '{{ [ available_apps ] | flatten | json_query("[?name==`" + item.name + "`]") | first | merge_with_app(item) }}'
   register: merged_apps
-  with_items: "{{ apps | default(available_apps) }}"
+  with_items: "{{ apps | default([ available_apps ] | flatten) }}"
 
 - name: Set applications for this project
   set_fact:
