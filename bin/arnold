@@ -1068,7 +1068,7 @@ Parameters:
   log level   : ${COLOR_BLUE}$(_get_log_level_name)${COLOR_RESET}
   CLI release : ${COLOR_BLUE}${ARNOLD_IMAGE_TAG}${COLOR_RESET}
   image       : ${COLOR_BLUE}${ARNOLD_IMAGE}${COLOR_RESET}
-  extra volume: ${COLOR_BLUE}${volume}${COLOR_RESET}
+  extra volume: ${COLOR_BLUE}${ARNOLD_EXTRA_VOLUMES[*]}${COLOR_RESET}
 "
 
 LATEST_RELEASE=$(_get_latest_release)
