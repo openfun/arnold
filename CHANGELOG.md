@@ -18,6 +18,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - Fix typos in setting names: `withelist` vs `whitelist` (BC)
+- Fix apps management when only a single app is available
 
 ## [5.23.0] - 2021-01-05
 
