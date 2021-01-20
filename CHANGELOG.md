@@ -8,6 +8,11 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Removed
+
+- Nextcloud: remove usage of BuildConfig and ImageStream objects
+- Build image and image stream playbooks
+
 ## [5.24.0] - 2021-01-19
 
 ### Changed

@@ -32,10 +32,16 @@ spec:
                   values:
                   - "nextcloud-nginx-{{ deployment_stamp }}"
               topologyKey: kubernetes.io/hostname
-{% set image_pull_secret_name = nextcloud_nginx_image_pull_secret_name | default(none) or default_image_pull_secret_name %}
-{% if image_pull_secret_name is not none %}
+{% set image_nginx_pull_secret_name = nextcloud_nginx_image_pull_secret_name | default(none) or default_image_pull_secret_name %}
+{% set image_nextcloud_pull_secret_name = nextcloud_image_pull_secret_name | default(none) or default_image_pull_secret_name %}
+{% if image_nginx_pull_secret_name is not none or image_nextcloud_pull_secret_name is not none %}
       imagePullSecrets:
-        - name: "{{ image_pull_secret_name }}"
+{% if image_nginx_pull_secret_name is not none %}
+        - name: "{{ image_nginx_pull_secret_name }}"
+{% endif %}
+{% if image_nextcloud_pull_secret_name is not none %}
+        - name: "{{ image_nextcloud_pull_secret_name }}"
+{% endif %}
 {% endif %}
       containers:
         - image: "{{ nextcloud_nginx_image_name }}:{{ nextcloud_nginx_image_tag }}"
@@ -69,7 +75,7 @@ spec:
             periodSeconds: 5
 
       initContainers:
-        - image: "{{ internal_docker_registry }}/{{ project_name }}/nextcloud:{{ nextcloud_image_tag }}"
+        - image: {{ nextcloud_image_name }}:{{ nextcloud_image_tag }}
           name: init-copy-src
           imagePullPolicy: Always
           command:

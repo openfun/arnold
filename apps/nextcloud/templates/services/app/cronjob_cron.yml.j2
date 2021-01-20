@@ -25,9 +25,14 @@ spec:
             version: "{{ nextcloud_version }}"
             deployment_stamp: "{{ deployment_stamp }}"
         spec:
+{% set image_pull_secret_name = nextcloud_image_pull_secret_name | default(none) or default_image_pull_secret_name %}
+{% if image_pull_secret_name is not none %}
+          imagePullSecrets:
+            - name: "{{ image_pull_secret_name }}"
+{% endif %}
           containers:
             - name: nextcloud
-              image: "{{ internal_docker_registry }}/{{ project_name }}/nextcloud:{{ nextcloud_image_tag }}"
+              image: {{ nextcloud_image_name }}:{{ nextcloud_image_tag }}
               imagePullPolicy: Always
               securityContext:
                 runAsUser: "{{ nextcloud_user_id }}"

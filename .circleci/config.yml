@@ -526,26 +526,12 @@ jobs:
       - *configure_openshift_cluster
       - *run_openshift_cluster
 
-      - run:
-          name: Rebuild Arnold's docker image once the OpenShift project has been created to use the modified USER_ID variable
-          command: |
-            bin/arnold -c eugene -e ci -a redis,mailcatcher,nextcloud create_project
-            export USER_ID=$(\
-                oc get project ci-eugene -o json | \
-                jq -r '.metadata.annotations."openshift.io/sa.scc.uid-range"' | \
-                sed -r "s|([0-9]+)/([0-9]+)|\\1|" \
-              )
-            sed -i -e "s/REPLACE_USER_ID/$USER_ID/g" group_vars/customer/eugene/ci/main.yml
-            make build
-
       # Once deployed, we need to turn off the maintenance mode in case it is still enabled once
       # the upgrade command run in the entrypoint.
       - run:
           name: Test the "nextcloud" application bootstrapping
           command: |
-            bin/arnold -c eugene -e ci -a redis,mailcatcher,nextcloud init
-            bin/arnold -c eugene -e ci -a redis,mailcatcher,nextcloud build_images
-            bin/arnold -c eugene -e ci -a redis,mailcatcher,nextcloud deploy
+            bin/arnold -c eugene -e ci -a redis,mailcatcher,nextcloud bootstrap
             oc project ci-eugene
             oc exec -it $(oc get pod -l 'app in (nextcloud),service in (nextcloud),!job_stamp' -o json | jq -r '.items[0].metadata.name') \
               -- php /app/occ maintenance:mode --off
