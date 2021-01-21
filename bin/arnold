@@ -171,9 +171,7 @@ COMMANDS:
 > Deploy current project:
 
   bootstrap             shortcut for the init + deploy commands
-  build_images          create a build configuration for each application
   create                create a k8s object
-  create_image_streams  create image streams for each application
   create_project        create project (namespace)
   create_volumes        create volumes for every application
   deploy                deploy all objects defined in all applications
@@ -598,31 +596,11 @@ function _vault(){
 
 # ---- Commands ----
 
-# create image streams for each application
-function create_image_streams() {
-
-    _set_k8s_env
-    _ansible_playbook create_image_streams.yml "$@"
-}
-
 # create project (namespace)
 function create_project() {
 
     _set_k8s_env
     _ansible_playbook create_project.yml "$@"
-}
-
-# create image streams for each application
-function create_image_streams() {
-
-    _set_k8s_env
-    _ansible_playbook create_image_streams.yml "$@"
-}
-# Create a build configuration for each application
-function build_images() {
-
-    _set_k8s_env
-    _ansible_playbook build_images.yml "$@"
 }
 
 # Initialize and project and deploy its active applications

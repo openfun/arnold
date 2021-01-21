@@ -97,7 +97,6 @@ It executes sequentially the following playbooks:
 - `create_secrets.yml`
 - `create_acme.yml`
 - `create_routes.yml`
-- `create_image_streams.yml`
 
 ### Usage
 
@@ -266,14 +265,4 @@ any).
 
 ```bash
 $ bin/run ansible-playbook create_routes.yml
-```
-
-## `create_image_streams.yml`
-
-This playbook creates image streams for all active applications.
-
-### Usage
-
-```bash
-$ bin/run ansible-playbook create_image_streams.yml
 ```

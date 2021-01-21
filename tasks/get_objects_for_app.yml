@@ -14,18 +14,15 @@
 
 - name: Set OpenShift objects to manage
   set_fact:
-    builds: "{{ templates | map('regex_search', '.*/bc.*\\.yml\\.j2$') | select('string') | list }}"
     configmaps: "{{ templates | map('regex_search', '.*/cm.*\\.yml\\.j2$') | select('string') | list }}"
     deployments: "{{ templates | map('regex_search', '.*/dc.*\\.yml\\.j2$') | select('string') | list }}"
     endpoints: "{{ templates | map('regex_search', '.*/ep.*\\.yml\\.j2$') | select('string') | list }}"
     services: "{{ templates | map('regex_search', '.*/svc.*\\.yml\\.j2$') | select('string') | list }}"
     statefulsets: "{{ templates | map('regex_search', '.*/sts.*\\.yml\\.j2$') | select('string') | list }}"
-    streams: "{{ templates | map('regex_search', '.*/is.*\\.yml\\.j2$') | select('string') | list }}"
     jobs: "{{ templates | map('regex_search', '.*/job_.*\\.yml\\.j2$') | select('string') | list }}"
     cronjobs: "{{ templates | map('regex_search', '.*/cronjob_.*\\.yml\\.j2$') | select('string') | list }}"
     routes: "{{ templates | map('regex_search', '.*/route.*\\.yml\\.j2$') | select('string') | list }}"
   tags:
-    - build
     - configmap
     - deploy
     - deployment
@@ -34,16 +31,6 @@
     - route
     - service
     - statefulset
-    - stream
-
-- name: Display OpenShift's builds for this app
-  debug:
-    var: builds
-    verbosity: 2
-  when: builds is defined
-  tags:
-    - deploy
-    - build
 
 - name: Display OpenShift's configmaps for this app
   debug:
@@ -89,15 +76,6 @@
   tags:
     - deploy
     - service
-
-- name: Display OpenShift's image streams for this app
-  debug:
-    var: streams
-    verbosity: 2
-  when: streams is defined
-  tags:
-    - deploy
-    - stream
 
 - name: Display OpenShift's jobs for this app
   debug:
