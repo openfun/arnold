@@ -1,5 +1,5 @@
 ---
-# Create static routes for services of an app
+# Create static services for services of an app
 
 - name: "Make sure static service exists for the '{{ app.name }}' app with all prefixes"
   include_tasks: tasks/deploy_patch_static_service.yml

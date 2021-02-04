@@ -1,5 +1,5 @@
 ---
-# This playbook creates an OpenShift project for a particular
+# This playbook creates a K8S namespace for a particular
 # customer/environment
 
 - hosts: local
@@ -10,22 +10,21 @@
 
   tasks:
     - name: Display playbook name
-      debug: msg="==== Starting create_project playbook ===="
+      debug: msg="==== Starting create_namespace playbook ===="
       tags: deploy
 
     - import_tasks: tasks/set_vars.yml
 
-    - name: Make sure the project exists in OpenShift and is up-to-date
+    - name: Make sure the namespace exists in K8S and is up-to-date
       k8s:
         state: present
         definition:
-          apiVersion: project.openshift.io/v1
-          kind: Project
-          description: "{{ project_description | default(project_display_name) | default(project_name) }}"
-          displayName: "{{ project_display_name | default(project_name) }}"
+          apiVersion: v1
+          kind: Namespace
           metadata:
             name: "{{ project_name }}"
-      register: new_project
-      until: new_project.result is defined and new_project.result.status is success
+            labels: "{{ k8s_namespace_labels | default({}) | combine({ 'name': project_name }) }}"
+      register: new_namespace
+      until: new_namespace.result is defined and new_namespace.result.status is success
       retries: 30
       delay: 10

@@ -6,7 +6,7 @@
 
   tasks:
     - name: Display playbook name
-      debug: msg="==== Starting create_routes playbook ===="
+      debug: msg="==== Starting create_ingresses playbook ===="
       tags: deploy
 
     - import_tasks: tasks/set_vars.yml
@@ -15,6 +15,6 @@
       vars:
         tasks:
           - get_objects_for_app
-          - create_static_services_routes
+          - create_app_ingresses
       tags:
-        - route
+        - ingress

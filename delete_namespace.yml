@@ -1,0 +1,46 @@
+---
+# This playbook deletes a K8S namespace for a particular
+# customer/environment
+
+- hosts: local
+  gather_facts: False
+
+  pre_tasks:
+    - import_tasks: tasks/check_configuration.yml
+
+  tasks:
+    - name: Display playbook name
+      debug: msg="==== Starting delete_namespace playbook ===="
+      tags: deploy
+
+    - import_tasks: tasks/set_vars.yml
+
+    # We must check if the namespace exists first. Without this condition, k8s
+    # will try to delete a missing namespace and returns a 403 ¯\_(ツ)_/¯
+    - name: Check if namespace exists
+      k8s_info:
+        api_version: v1
+        kind: Namespace
+        field_selectors:
+          - metadata.name={{ project_name }}
+      register: namespace
+
+    - name: Delete the namespace
+      k8s:
+        api_version: v1
+        kind: Namespace
+        name: "{{ project_name }}"
+        state: absent
+      when: namespace.resources | length > 0
+
+    - name: Wait for namespace to be terminated
+      k8s_info:
+        api_version: "v1"
+        kind: Namespace
+        field_selectors:
+          - metadata.name={{ project_name }}
+      register: terminating_namespaces
+      until: terminating_namespaces.resources is defined and ( terminating_namespaces.resources | length ) == 0
+      retries: 120
+      delay: 5
+      when: namespace.resources | length > 0

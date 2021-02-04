@@ -15,21 +15,21 @@
 - name: Set OpenShift objects to manage
   set_fact:
     configmaps: "{{ templates | map('regex_search', '.*/cm.*\\.yml\\.j2$') | select('string') | list }}"
-    deployments: "{{ templates | map('regex_search', '.*/dc.*\\.yml\\.j2$') | select('string') | list }}"
+    deployments: "{{ templates | map('regex_search', '.*/deploy.*\\.yml\\.j2$') | select('string') | list }}"
     endpoints: "{{ templates | map('regex_search', '.*/ep.*\\.yml\\.j2$') | select('string') | list }}"
     services: "{{ templates | map('regex_search', '.*/svc.*\\.yml\\.j2$') | select('string') | list }}"
     statefulsets: "{{ templates | map('regex_search', '.*/sts.*\\.yml\\.j2$') | select('string') | list }}"
     static_services: "{{ templates | map('regex_search', '.*/static-svc.*\\.yml\\.j2$') | select('string') | list }}"
     jobs: "{{ templates | map('regex_search', '.*/job_.*\\.yml\\.j2$') | select('string') | list }}"
     cronjobs: "{{ templates | map('regex_search', '.*/cronjob_.*\\.yml\\.j2$') | select('string') | list }}"
-    routes: "{{ templates | map('regex_search', '.*/route.*\\.yml\\.j2$') | select('string') | list }}"
+    ingresses: "{{ templates | map('regex_search', '.*/ingress.*\\.yml\\.j2$') | select('string') | list }}"
   tags:
     - configmap
     - deploy
     - deployment
     - endpoint
     - job
-    - route
+    - ingress
     - service
     - statefulset
 
@@ -96,11 +96,11 @@
     - deploy
     - cronjob
 
-- name: Display OpenShift's routes for this app
+- name: Display K8S ingresses for this app
   debug:
-    var: routes
+    var: ingresses
     verbosity: 2
-  when: routes is defined
+  when: ingresses is defined
   tags:
     - deploy
-    - route
+    - ingress
