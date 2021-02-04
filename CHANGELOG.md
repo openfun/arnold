@@ -8,6 +8,12 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Changed
+
+- Use `kubectl` instead of `oc` in `arnold` CLI
+- Authentication in `arnold` CLI must be done with a service account
+- Replace `oc cluster` with k3d for local development
+
 ## [5.25.0] - 2021-03-05
 
 ### Added
