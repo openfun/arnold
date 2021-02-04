@@ -1,8 +1,8 @@
 ---
 # This playbook removes objects that are no longer used. By used, we mean
 # objects labelled with a deployment stamp that is no longer active, i.e.
-# neither the previous, current or next routes are pointing to a service
-# labelled with this deployment stamp.
+# neither the previous, current or next static-services are pointing to a
+# service labelled with this deployment stamp.
 #
 # Warning: this playbook has only effects on blue-green compatible apps.
 
@@ -27,5 +27,5 @@
           - get_objects_for_app
           - clean_app_orphans
       tags:
-        - route
+        - static_service
         - clean

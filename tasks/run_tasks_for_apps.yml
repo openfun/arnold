@@ -7,11 +7,10 @@
 #   vars:
 #     tasks:
 #       - myGreateTask
-#   tags: route
+#   tags: ingress
 
 - include_tasks: run_tasks_for_app.yml
   loop: "{{ apps }}"
   loop_control:
     loop_var: app
   when: apps is defined
-  tags: route

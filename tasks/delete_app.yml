@@ -6,7 +6,7 @@
 - name: Iterate over objects to delete with deployment_stamp {{ targeted_deployment_stamp }} for app {{ app.name }}
   include_tasks: tasks/delete_app_objects_kind.yml
   loop:
-    - { kind: "DeploymentConfig", api_version: "v1" }
+    - { kind: "Deployment", api_version: "v1" }
     # Manually handle deletion cascade as the k8s module won't
     # https://github.com/ansible/ansible/issues/42302
     - { kind:  "ReplicationController", api_version: "v1" }

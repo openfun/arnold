@@ -1,7 +1,9 @@
 ---
-# This playbook creates the ACME controler in a project.
-# The definition files are lookups targeting openshift-acme GitHub repository.
-# https://github.com/tnozicka/openshift-acme
+# This playbook creates a cert-manager ACME Issuer for a namespace.
+#
+# It assumes that cert-manager is already installed on the K8S cluster.
+# See the official documentation on how to install it :
+# https://cert-manager.io/docs/installation/kubernetes/
 
 - hosts: local
   gather_facts: False
@@ -34,55 +36,11 @@
         var: acme_templates
         verbosity: 2
 
-    - name: Set rolebinding template
-      set_fact:
-        rb_template: "{{ acme_templates | map('regex_search', '.*/rb\\.yml\\.j2$') | select('string') | first }}"
-
-    - name: Print rb_template
-      debug:
-        var: rb_template
-        verbosity: 2
-
-    - name: Set role template
-      set_fact:
-        role_template: "{{ acme_templates | map('regex_search', '.*/role\\.yml\\.j2$') | select('string') | first }}"
-      when: has_acme_cluster_role
-
-    - name: Print role_template
-      debug:
-        var: role_template
-        verbosity: 2
-      when: has_acme_cluster_role
-
-    - name: Set base_acme_templates
-      set_fact:
-        base_acme_templates: "{{ acme_templates | reject('eq', rb_template) | select('string') | list }}"
-
-    - name: Remove role from base_acme_templates
-      set_fact:
-        base_acme_templates: "{{ base_acme_templates | reject('eq', role_template) | select('string') | list }}"
-      when: has_acme_cluster_role
-
-    - name: Print base_acme_templates
-      debug:
-        var: base_acme_templates
-        verbosity: 2
-
-    - name: Create all openshift-acme OpenShift objects
+    - name: Create K8s entities
       k8s:
         force: True
         namespace: "{{ project_name }}"
         definition: "{{ lookup('template', item) | from_yaml }}"
       with_items:
-        - "{{ base_acme_templates }}"
+        - "{{ acme_templates }}"
       when: env_type not in ('development', 'ci')
-
-    - name: Add role to serviceaccount
-      k8s:
-        force: True
-        state: present
-        definition: "{{ lookup('template', rb_template) | from_yaml }}"
-      ignore_errors: True
-      when: env_type not in ('development', 'ci')
-      # The rolebinding is created but openshift_raw fail see this issue
-      # https://github.com/ansible/ansible/issues/36845

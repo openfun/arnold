@@ -10,6 +10,9 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Replace DeploymentConfig with Deployment in Ansible core tasks
+- Replace Route with Ingress in Ansible core tasks
+- Use `cert-manager` instead of `openshift-acme` for TLS certificates generation
 - Use `kubectl` instead of `oc` in `arnold` CLI
 - Authentication in `arnold` CLI must be done with a service account
 - Replace `oc cluster` with k3d for local development
