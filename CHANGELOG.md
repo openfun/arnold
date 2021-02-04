@@ -10,6 +10,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Update `hello` app to be compatible with k8s
 - Replace DeploymentConfig with Deployment in Ansible core tasks
 - Replace Route with Ingress in Ansible core tasks
 - Use `cert-manager` instead of `openshift-acme` for TLS certificates generation
