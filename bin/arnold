@@ -205,7 +205,7 @@ COMMANDS:
   deploy                deploy all objects defined in all applications
   init                  initialize a project with all its volumes and configmaps
   rollback              switch back the previous stack as current
-  routes                create project routes and redirections (if any)
+  ingresses             create project ingresses and redirections (if any)
   secrets               update project secrets
   switch                perform blue/green switch
 
@@ -808,11 +808,11 @@ function rollback() {
     _ansible_playbook rollback.yml "$@"
 }
 
-# Create project routes and redirections (if any)
-function routes() {
+# Create project ingresses and redirections (if any)
+function ingresses() {
 
     _set_k8s_env
-    _ansible_playbook create_routes.yml "$@"
+    _ansible_playbook create_ingresses.yml "$@"
 }
 
 # Run any command in arnold's container

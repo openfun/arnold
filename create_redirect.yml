@@ -67,4 +67,4 @@
         loop_var: service
       when: redirect_nginx_service.resources | length == 0
 
-    - import_tasks: tasks/create_redirection_routes.yml
+    - import_tasks: tasks/create_redirection_ingresses.yml

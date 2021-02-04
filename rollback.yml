@@ -1,7 +1,7 @@
 ---
-# This playbook rolls back all routes:
-# 1. point the "current" route to the stack that was pointed by the "previous" route,
-# 2. point the "next" route to the stack that was pointed by the "current" route,
+# This playbook rolls back all static services:
+# 1. point the "current" static service to the stack that was pointed by the "previous" static service,
+# 2. point the "next" static service to the stack that was pointed by the "current" static service,
 
 - hosts: local
   gather_facts: False
@@ -24,5 +24,5 @@
           - get_objects_for_app
           - rollback_static_services
       tags:
-        - route
+        - static_service
         - rollback
