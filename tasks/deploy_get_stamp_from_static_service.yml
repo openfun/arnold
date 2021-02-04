@@ -2,7 +2,7 @@
 # Get deployment_stamp from a static service
 
 # An application can define several static services. (e.g. two static services with
-# two different routes). Our goal here is to get the deployment_stamp of a
+# two different ingresses). Our goal here is to get the deployment_stamp of a
 # deployed stack by getting a service object. We retrieve the service and it will
 # be labelled with the deploy_stamp we are looking for.
 - name: Get static service for application {{ app.name }} with prefix {{ prefix }}

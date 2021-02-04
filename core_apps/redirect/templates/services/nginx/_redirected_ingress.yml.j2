@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: "redirect-{{ redirection_from | default('unknown') }}"
+  namespace: "{{ project_name }}"
+  labels:
+    app: redirect
+    service: nginx
+    version: "{{ redirect_nginx_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  annotations:
+    cert-manager.io/cluster-issuer: "{{ acme_issuer_name }}"
+spec:
+  rules:
+  - host: "{{ redirection_from | default('unknown') }}"
+    http:
+      paths:
+      - backend:
+          serviceName: "redirect-nginx"
+          servicePort: {{ redirect_nginx_port }}
+        path: /
+  tls:
+  - hosts:
+    - "{{ redirection_from | default('unknown') }}"
+    secretName: "redirect-app-{{ redirection_from | default('unknown')}}"

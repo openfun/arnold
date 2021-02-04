@@ -1,15 +1,15 @@
 ---
-# Create route aliases
+# Create ingress aliases
 
 - name: Build a list of all aliases
   set_fact:
     redirections_from: "{{ redirections | json_query('[*].from') | flatten }}"
   when: redirections is not none and redirections is iterable
 
-- name: Make sure all redirected routes exist
+- name: Make sure all redirected ingresses exist
   k8s:
     force: "{{ force_route | bool }}"
-    definition: "{{ lookup('template', 'core_apps/redirect/templates/services/nginx/_redirected_route.yml.j2') | from_yaml }}"
+    definition: "{{ lookup('template', 'core_apps/redirect/templates/services/nginx/_redirected_ingress.yml.j2') | from_yaml }}"
     state: present
   loop: "{{ redirections_from }}"
   loop_control:
