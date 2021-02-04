@@ -88,6 +88,7 @@ declare -r YQ="docker run --rm -i -v ${ARNOLD_PROJECT_PATH}:/workdir mikefarah/y
 # 'domain_name' to "${K8S_DOMAIN}.nip.io". Otherwhise it should be set to
 # target your web console.
 declare K8S_DOMAIN="${K8S_DOMAIN:-$(hostname -I | awk '{print $1}')}"
+export K8S_DOMAIN
 
 # Flags
 declare -i DEV_MODE=0
