@@ -1,0 +1,85 @@
+#!/usr/bin/env bash
+
+# This script is a helper to initialize a local kubernetes cluster using k3d
+# (https://github.com/rancher/k3d).
+# It assumes that you have k3d and kubectl installed on your workstation.
+
+set -eo pipefail
+
+K3D_CLUSTER_NAME="${1:-arnold}"
+
+K3D_BIND_HOST_PORT_HTTP="${K3D_BIND_HOST_PORT_HTTP:-8080}"
+K3D_BIND_HOST_PORT_HTTPS="${K3D_BIND_HOST_PORT_HTTPS:-8443}"
+
+declare -r INGRESS_NGINX_DEPLOYMENT="https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.43.0/deploy/static/provider/cloud/deploy.yaml"
+declare -r INGRESS_NGINX_DEPLOYMENT_SHA256="03d80b59660a1818dea0f1b3482aa59cfae2bebcc755b150920ddfa26017adc3"
+
+
+if [[ -z "${K3D_CLUSTER_NAME}" ]] ; then
+  echo "Usage: init-cluster cluster-name" 1>&2
+  exit 1
+fi
+
+
+if ! k3d cluster list "${K3D_CLUSTER_NAME}" &> /dev/null ; then
+  # Initialize the cluster without the default ingress controller (traefik)
+  k3d cluster create "${K3D_CLUSTER_NAME}" \
+    -p "${K3D_BIND_HOST_PORT_HTTP}:80@loadbalancer" \
+    -p "${K3D_BIND_HOST_PORT_HTTPS}:443@loadbalancer" \
+    --k3s-server-arg '--no-deploy=traefik'
+else
+  k3d cluster start "${K3D_CLUSTER_NAME}"
+fi
+
+KUBECONFIG=$(k3d kubeconfig write "${K3D_CLUSTER_NAME}")
+echo "K3d cluster configuration exported to ${KUBECONFIG}"
+
+echo -n "Checking ingress-nginx controller status... "
+if ! kubectl get ns ingress-nginx &> /dev/null ; then
+  echo "not installed"
+  # Download ingress-nginx controller
+  nginx_controller=$(mktemp -q)
+  echo "Downloading ${INGRESS_NGINX_DEPLOYMENT}"
+  curl -sqLS "${INGRESS_NGINX_DEPLOYMENT}" > "${nginx_controller}"
+  echo "Checking integrity"
+  echo "${INGRESS_NGINX_DEPLOYMENT_SHA256} ${nginx_controller}" | sha256sum -c -
+  echo "Installing nginx controller"
+  kubectl apply -f "${nginx_controller}"
+  echo "Waiting for nginx-controller to be up and running... "
+  kubectl --namespace ingress-nginx wait --for=condition=available deploy/ingress-nginx-controller --timeout=90s \
+    && echo "nginx-controller is ready" \
+    || echo "timeout! Please wait a little before deploying an app with arnold."
+else
+  echo "installed"
+fi
+
+echo "Updating service account for arnold..."
+kubectl --kubeconfig="${KUBECONFIG}" apply -f - <<EOF
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    name: arnold
+    namespace: default
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: ClusterRoleBinding
+  metadata:
+    name: arnold-cluster-admin
+  roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: cluster-admin
+  subjects:
+  - kind: ServiceAccount
+    name: arnold
+    namespace: default
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""
+EOF
+
+echo "Done: your cluster is up and ready to go!"
+echo " - Ingress HTTP port is bound to port ${K3D_BIND_HOST_PORT_HTTP}"
+echo " - Ingress HTTPS port is bound to port ${K3D_BIND_HOST_PORT_HTTPS}"

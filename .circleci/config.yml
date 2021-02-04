@@ -31,33 +31,40 @@ aliases:
       # Must be absolute path or relative path from working_directory
       at: /tmp/docker
 
-  - &install_openshift_cluster
+  - &install_k8s_requirements
     run:
-      name: Install the OC client
+      name: Install the kubectl client and k3d
       command: |
-        wget https://github.com/openshift/origin/releases/download/v3.11.0/openshift-origin-client-tools-v3.11.0-0cbc58b-linux-64bit.tar.gz -P /tmp/openshift/
-        tar xzf /tmp/openshift/openshift*.tar.gz --strip-components=1 -C /tmp/openshift/
-        cp /tmp/openshift/oc $HOME/bin/
+        export KUBECTL_RELEASE="v1.20.2"
+        curl -Lo "${HOME}/bin/kubectl" "https://dl.k8s.io/release/${KUBECTL_RELEASE}/bin/linux/amd64/kubectl"
+        curl -Lo /tmp/kubectl.sha256 "https://dl.k8s.io/${KUBECTL_RELEASE}/bin/linux/amd64/kubectl.sha256"
+        echo "$(</tmp/kubectl.sha256) ${HOME}/bin/kubectl" | sha256sum --check
+        chmod 755 "${HOME}/bin/kubectl"
 
-  - &configure_openshift_cluster
+        export K3D_RELEASE="v4.2.0"
+        curl -Lo "${HOME}/bin/k3d" "https://github.com/rancher/k3d/releases/download/${K3D_RELEASE}/k3d-linux-amd64"
+        curl -sL https://github.com/rancher/k3d/releases/download/${K3D_RELEASE}/sha256sum.txt | \
+          grep _dist/k3d-linux-amd64 | \
+          sed "s|_dist/k3d-linux-amd64|${HOME}/bin/k3d|" | \
+          sha256sum --check
+        chmod 755 "${HOME}/bin/k3d"
+
+  - &configure_sysctl_limits
     run:
-      name: Configure Docker for OpenShift cluster
+      name: Configure sysctl limits for Elasticsearch
       command: |
         # Elasticsearch requires to increase this setting's default value
         sudo sysctl -w vm/max_map_count=262144
-        sudo bash -c "echo '{\"insecure-registries\": [\"172.30.0.0/16\"]}' > /etc/docker/daemon.json"
-        sudo service docker restart
 
-  - &run_openshift_cluster
+  - &run_k3d_cluster
     run:
       name: Run local OpenShift cluster & configure environment
       command: |
-        make cluster
+        K3D_BIND_HOST_PORT_HTTP=80 K3D_BIND_HOST_PORT_HTTPS=443 make cluster
         # Set environment variables for the CI
         echo "export K8S_DOMAIN=$(hostname -I | awk '{print $1}')" >> $BASH_ENV
         cat bin/_defaults >> $BASH_ENV
         echo 'export ANSIBLE_VAULT_PASSWORD="${ARNOLD_DEFAULT_VAULT_PASSWORD}"' >> $BASH_ENV
-        echo "export K8S_AUTH_VERIFY_SSL=no" >> $BASH_ENV
         source $BASH_ENV
 
   - &docker_login
@@ -185,9 +192,9 @@ jobs:
       - *attach_workspace
       - *ci_env
       - *docker_load
-      - *install_openshift_cluster
-      - *configure_openshift_cluster
-      - *run_openshift_cluster
+      - *install_k8s_requirements
+      - *configure_sysctl_limits
+      - *run_k3d_cluster
 
       - run:
           name: Test the "hello" application bootstrapping
@@ -195,7 +202,7 @@ jobs:
             # Bootstrap app
             bin/arnold -c eugene -e ci -a hello bootstrap
             # Test service deployed with the next route
-            bin/ci route -s hello -c "Hello OpenShift! by Arnold" -P next
+            bin/ci route -s hello -c "Hello Kubernetes! by Arnold" -P next
 
       - run:
           name: Test the "hello" application switch
@@ -203,7 +210,7 @@ jobs:
             # Switch next route to current
             bin/arnold -c eugene -e ci -a hello switch
             # Test service switched to the current route
-            bin/ci route -s hello -c "Hello OpenShift! by Arnold"
+            bin/ci route -s hello -c "Hello Kubernetes! by Arnold"
 
       - run:
           name: Test the "hello" application rollback
@@ -213,13 +220,13 @@ jobs:
             # Switch next route to current and current to previous
             bin/arnold -c eugene -e ci -a hello switch
             # Test service switched to the current/previous route
-            bin/ci route -s hello -c "Hello OpenShift! by Arnold"
-            bin/ci route -s hello -c "Hello OpenShift! by Arnold" -P previous
+            bin/ci route -s hello -c "Hello Kubernetes! by Arnold"
+            bin/ci route -s hello -c "Hello Kubernetes! by Arnold" -P previous
             # Rollback previous to current and current to next
             bin/arnold -c eugene -e ci -a hello rollback
             # Test service switched to the current/next route
-            bin/ci route -s hello -c "Hello OpenShift! by Arnold"
-            bin/ci route -s hello -c "Hello OpenShift! by Arnold" -P next
+            bin/ci route -s hello -c "Hello Kubernetes! by Arnold"
+            bin/ci route -s hello -c "Hello Kubernetes! by Arnold" -P next
 
   # Test the redirect application
   test-redirect:
@@ -230,9 +237,9 @@ jobs:
       - *attach_workspace
       - *ci_env
       - *docker_load
-      - *install_openshift_cluster
-      - *configure_openshift_cluster
-      - *run_openshift_cluster
+      - *install_k8s_requirements
+      - *configure_sysctl_limits
+      - *run_k3d_cluster
 
       - run:
           name: Bootstrap the hello app and switch
@@ -246,7 +253,7 @@ jobs:
           name: Test the "www" to root domain redirection
           command: |
             # Test service switched to the current route
-            bin/ci route -s hello -c "Hello OpenShift! by Arnold" -P www
+            bin/ci route -s hello -c "Hello Kubernetes! by Arnold" -P www
 
   # Test the bootstrap playbook on the "mailcatcher" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
@@ -258,9 +265,9 @@ jobs:
       - *attach_workspace
       - *ci_env
       - *docker_load
-      - *install_openshift_cluster
-      - *configure_openshift_cluster
-      - *run_openshift_cluster
+      - *install_k8s_requirements
+      - *configure_sysctl_limits
+      - *run_k3d_cluster
 
       - run:
           name: Test the "mailcatcher" application bootstrapping
@@ -278,9 +285,9 @@ jobs:
       - *attach_workspace
       - *ci_env
       - *docker_load
-      - *install_openshift_cluster
-      - *configure_openshift_cluster
-      - *run_openshift_cluster
+      - *install_k8s_requirements
+      - *configure_sysctl_limits
+      - *run_k3d_cluster
 
       - run:
           name: Test the "richie" application bootstrapping
@@ -308,9 +315,9 @@ jobs:
       - *attach_workspace
       - *ci_env
       - *docker_load
-      - *install_openshift_cluster
-      - *configure_openshift_cluster
-      - *run_openshift_cluster
+      - *install_k8s_requirements
+      - *configure_sysctl_limits
+      - *run_k3d_cluster
 
       - run:
           name: Test the "forum" application bootstrapping
@@ -338,9 +345,9 @@ jobs:
       - *attach_workspace
       - *ci_env
       - *docker_load
-      - *install_openshift_cluster
-      - *configure_openshift_cluster
-      - *run_openshift_cluster
+      - *install_k8s_requirements
+      - *configure_sysctl_limits
+      - *run_k3d_cluster
 
       - run:
           name: Test the "edxapp" application bootstrapping (with redis enabled)
@@ -370,9 +377,9 @@ jobs:
       - *attach_workspace
       - *ci_env
       - *docker_load
-      - *install_openshift_cluster
-      - *configure_openshift_cluster
-      - *run_openshift_cluster
+      - *install_k8s_requirements
+      - *configure_sysctl_limits
+      - *run_k3d_cluster
 
       - run:
           name: Test the "edxec" application bootstrapping
@@ -399,9 +406,9 @@ jobs:
       - *attach_workspace
       - *ci_env
       - *docker_load
-      - *install_openshift_cluster
-      - *configure_openshift_cluster
-      - *run_openshift_cluster
+      - *install_k8s_requirements
+      - *configure_sysctl_limits
+      - *run_k3d_cluster
 
       - run:
           name: Test the "marsha" application bootstrapping
@@ -429,9 +436,9 @@ jobs:
       - *attach_workspace
       - *ci_env
       - *docker_load
-      - *install_openshift_cluster
-      - *configure_openshift_cluster
-      - *run_openshift_cluster
+      - *install_k8s_requirements
+      - *configure_sysctl_limits
+      - *run_k3d_cluster
 
       - run:
           name: Test the "moodlenet" application bootstrapping
@@ -461,9 +468,9 @@ jobs:
       - *attach_workspace
       - *ci_env
       - *docker_load
-      - *install_openshift_cluster
-      - *configure_openshift_cluster
-      - *run_openshift_cluster
+      - *install_k8s_requirements
+      - *configure_sysctl_limits
+      - *run_k3d_cluster
 
       - run:
           name: Test the "learninglocker" application bootstrapping
@@ -490,9 +497,9 @@ jobs:
       - *attach_workspace
       - *ci_env
       - *docker_load
-      - *install_openshift_cluster
-      - *configure_openshift_cluster
-      - *run_openshift_cluster
+      - *install_k8s_requirements
+      - *configure_sysctl_limits
+      - *run_k3d_cluster
 
       - run:
           name: Test the "ashley" application bootstrapping
@@ -522,9 +529,9 @@ jobs:
       - *attach_workspace
       - *ci_env
       - *docker_load
-      - *install_openshift_cluster
-      - *configure_openshift_cluster
-      - *run_openshift_cluster
+      - *install_k8s_requirements
+      - *configure_sysctl_limits
+      - *run_k3d_cluster
 
       # Once deployed, we need to turn off the maintenance mode in case it is still enabled once
       # the upgrade command run in the entrypoint.
@@ -555,9 +562,9 @@ jobs:
       - *attach_workspace
       - *ci_env
       - *docker_load
-      - *install_openshift_cluster
-      - *configure_openshift_cluster
-      - *run_openshift_cluster
+      - *install_k8s_requirements
+      - *configure_sysctl_limits
+      - *run_k3d_cluster
 
       - run:
           name: Test the "etherpad" application bootstrapping
@@ -585,9 +592,9 @@ jobs:
       - *attach_workspace
       - *ci_env
       - *docker_load
-      - *install_openshift_cluster
-      - *configure_openshift_cluster
-      - *run_openshift_cluster
+      - *install_k8s_requirements
+      - *configure_sysctl_limits
+      - *run_k3d_cluster
 
       - run:
           name: Test the "kibana" application bootstrapping
@@ -621,9 +628,9 @@ jobs:
       - *attach_workspace
       - *ci_env
       - *docker_load
-      - *install_openshift_cluster
-      - *configure_openshift_cluster
-      - *run_openshift_cluster
+      - *install_k8s_requirements
+      - *configure_sysctl_limits
+      - *run_k3d_cluster
 
       - run:
           name: Prepare "richie" application bootstrapping
@@ -661,9 +668,9 @@ jobs:
       - *attach_workspace
       - *ci_env
       - *docker_load
-      - *install_openshift_cluster
-      - *configure_openshift_cluster
-      - *run_openshift_cluster
+      - *install_k8s_requirements
+      - *configure_sysctl_limits
+      - *run_k3d_cluster
 
       - run:
           name: Prepare "hello" application bootstrapping
@@ -671,7 +678,7 @@ jobs:
             # Bootstrap app
             bin/arnold -c eugene -e ci -a hello bootstrap
             # Test service deployed with the next route
-            bin/ci route -s hello -c "Hello OpenShift! by Arnold" -P next
+            bin/ci route -s hello -c "Hello Kubernetes! by Arnold" -P next
 
       - run:
           name: Test "hello"'s switch
@@ -679,9 +686,9 @@ jobs:
             # Switch next route to current
             bin/arnold -c eugene -e ci -a hello switch
             # Test service on the current route
-            bin/ci route -s hello -c "Hello OpenShift! by Arnold"
+            bin/ci route -s hello -c "Hello Kubernetes! by Arnold"
             # Test that the service is not responding on next route
-            bin/ci route -s hello -c "Hello OpenShift! by Arnold" -P next && exit 1 || true
+            bin/ci route -s hello -c "Hello Kubernetes! by Arnold" -P next && exit 1 || true
 
       - run:
           name: Test that a second switch fails to execute with an error
@@ -823,120 +830,120 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - test-bootstrap-richie:
-          requires:
-            - lint-bash
-            - lint-docker
-            - lint-ansible
-            - lint-plugins
-          filters:
-            tags:
-              only: /.*/
-      - test-bootstrap-edxapp:
-          requires:
-            - lint-bash
-            - lint-docker
-            - lint-ansible
-            - lint-plugins
-          filters:
-            tags:
-              only: /.*/
-      - test-bootstrap-edxec:
-          requires:
-            - lint-bash
-            - lint-docker
-            - lint-ansible
-            - lint-plugins
-          filters:
-            tags:
-              only: /.*/
-      - test-bootstrap-mailcatcher:
-          requires:
-            - lint-bash
-            - lint-docker
-            - lint-ansible
-            - lint-plugins
-          filters:
-            tags:
-              only: /.*/
-      - test-bootstrap-marsha:
-          requires:
-            - lint-bash
-            - lint-docker
-            - lint-ansible
-            - lint-plugins
-          filters:
-            tags:
-              only: /.*/
-      - test-bootstrap-moodlenet:
-          requires:
-            - lint-bash
-            - lint-docker
-            - lint-ansible
-            - lint-plugins
-          filters:
-            tags:
-              only: /.*/
-      - test-bootstrap-forum:
-          requires:
-            - lint-bash
-            - lint-docker
-            - lint-ansible
-            - lint-plugins
-          filters:
-            tags:
-              only: /.*/
-      - test-bootstrap-learninglocker:
-          requires:
-            - lint-bash
-            - lint-docker
-            - lint-ansible
-            - lint-plugins
-          filters:
-            tags:
-              only: /.*/
-      - test-bootstrap-ashley:
-          requires:
-            - lint-bash
-            - lint-docker
-            - lint-ansible
-            - lint-plugins
-          filters:
-            tags:
-              only: /.*/
-      - test-bootstrap-nextcloud:
-          requires:
-            - lint-bash
-            - lint-docker
-            - lint-ansible
-            - lint-plugins
-          filters:
-            tags:
-              only: /.*/
-      - test-bootstrap-etherpad:
-          requires:
-            - lint-bash
-            - lint-docker
-            - lint-ansible
-            - lint-plugins
-          filters:
-            tags:
-              only: /.*/
-      - test-bootstrap-kibana:
-          requires:
-            - lint-bash
-            - lint-docker
-            - lint-ansible
-            - lint-plugins
-          filters:
-            tags:
-              only: /.*/
-      - test-delete-app:
-          requires:
-            - test-bootstrap-richie
-          filters:
-            tags:
-              only: /.*/
+#      - test-bootstrap-richie:
+#          requires:
+#            - lint-bash
+#            - lint-docker
+#            - lint-ansible
+#            - lint-plugins
+#          filters:
+#            tags:
+#              only: /.*/
+#      - test-bootstrap-edxapp:
+#          requires:
+#            - lint-bash
+#            - lint-docker
+#            - lint-ansible
+#            - lint-plugins
+#          filters:
+#            tags:
+#              only: /.*/
+#      - test-bootstrap-edxec:
+#          requires:
+#            - lint-bash
+#            - lint-docker
+#            - lint-ansible
+#            - lint-plugins
+#          filters:
+#            tags:
+#              only: /.*/
+#      - test-bootstrap-mailcatcher:
+#          requires:
+#            - lint-bash
+#            - lint-docker
+#            - lint-ansible
+#            - lint-plugins
+#          filters:
+#            tags:
+#              only: /.*/
+#      - test-bootstrap-marsha:
+#          requires:
+#            - lint-bash
+#            - lint-docker
+#            - lint-ansible
+#            - lint-plugins
+#          filters:
+#            tags:
+#              only: /.*/
+#      - test-bootstrap-moodlenet:
+#          requires:
+#            - lint-bash
+#            - lint-docker
+#            - lint-ansible
+#            - lint-plugins
+#          filters:
+#            tags:
+#              only: /.*/
+#      - test-bootstrap-forum:
+#          requires:
+#            - lint-bash
+#            - lint-docker
+#            - lint-ansible
+#            - lint-plugins
+#          filters:
+#            tags:
+#              only: /.*/
+#      - test-bootstrap-learninglocker:
+#          requires:
+#            - lint-bash
+#            - lint-docker
+#            - lint-ansible
+#            - lint-plugins
+#          filters:
+#            tags:
+#              only: /.*/
+#      - test-bootstrap-ashley:
+#          requires:
+#            - lint-bash
+#            - lint-docker
+#            - lint-ansible
+#            - lint-plugins
+#          filters:
+#            tags:
+#              only: /.*/
+#      - test-bootstrap-nextcloud:
+#          requires:
+#            - lint-bash
+#            - lint-docker
+#            - lint-ansible
+#            - lint-plugins
+#          filters:
+#            tags:
+#              only: /.*/
+#      - test-bootstrap-etherpad:
+#          requires:
+#            - lint-bash
+#            - lint-docker
+#            - lint-ansible
+#            - lint-plugins
+#          filters:
+#            tags:
+#              only: /.*/
+#      - test-bootstrap-kibana:
+#          requires:
+#            - lint-bash
+#            - lint-docker
+#            - lint-ansible
+#            - lint-plugins
+#          filters:
+#            tags:
+#              only: /.*/
+#      - test-delete-app:
+#          requires:
+#            - test-bootstrap-richie
+#          filters:
+#            tags:
+#              only: /.*/
       - test-prevent-switch-to-nothing:
           requires:
             - test-bootstrap-hello
@@ -962,18 +969,18 @@ workflows:
             - test-build
             - test-plugins
             - test-bootstrap-hello
-            - test-bootstrap-richie
-            - test-bootstrap-edxapp
-            - test-bootstrap-mailcatcher
-            - test-bootstrap-marsha
-            - test-bootstrap-forum
-            - test-bootstrap-learninglocker
-            - test-bootstrap-ashley
-            - test-bootstrap-etherpad
-            - test-bootstrap-kibana
+#            - test-bootstrap-richie
+#            - test-bootstrap-edxapp
+#            - test-bootstrap-mailcatcher
+#            - test-bootstrap-marsha
+#            - test-bootstrap-forum
+#            - test-bootstrap-learninglocker
+#            - test-bootstrap-ashley
+#            - test-bootstrap-etherpad
+#            - test-bootstrap-kibana
             - test-redirect
-            - test-delete-app
-            - test-prevent-switch-to-nothing
+#            - test-delete-app
+#            - test-prevent-switch-to-nothing
           filters:
             branches:
               only: master
