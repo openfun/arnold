@@ -1,0 +1,27 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: "hello-app-{{ prefix }}"
+  namespace: "{{ project_name }}"
+  labels:
+    env_type: "{{ env_type }}"
+    customer: "{{ customer }}"
+    app: "hello"
+    service: "app"
+    route_prefix: "{{ prefix }}"
+    route_target_service: "app"
+  annotations:
+    cert-manager.io/cluster-issuer: "{{ acme_issuer_name }}"
+spec:
+  rules:
+  - host: "{{ hello_host | blue_green_host(prefix) }}"
+    http:
+      paths:
+      - backend:
+          serviceName: "hello-app-{{ prefix }}"
+          servicePort: {{ hello_app_port }}
+        path: /
+  tls:
+  - hosts:
+    - "{{ hello_host | blue_green_host(prefix) }}"
+    secretName: hello-app-tls
