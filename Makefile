@@ -26,6 +26,7 @@ DOCKER_USER = $(DOCKER_UID):$(DOCKER_GID)
 
 # -- k8s
 K8S_DOMAIN ?= "$(shell hostname -I | awk '{print $$1}')"
+K3D_CLUSTER_NAME ?= arnold
 
 # -- Linters
 ANSIBLE_LINT_RULES_DIR  = /usr/local/share/ansible-lint/rules
@@ -45,9 +46,8 @@ build-dev: ## build Arnold's image (development)
 	DOCKER_USER=$(DOCKER_USER) docker build --target=development -t $(ARNOLD_IMAGE_DEV) .
 .PHONY: build-dev
 
-cluster: ## start a local k8s cluster for development
-	oc cluster up --server-loglevel=5 --public-hostname=$(K8S_DOMAIN)
-	oc login https://$(K8S_DOMAIN):8443 -u developer -p developer --insecure-skip-tls-verify=true
+cluster: ## start a local k8s cluster for development (with k3d)
+	@bin/init-cluster "$(K3D_CLUSTER_NAME)"
 .PHONY: cluster
 
 lint: ## run all linters
@@ -101,11 +101,11 @@ lint-pylint: ## lint back-end python sources with pylint
 .PHONY: lint-pylint
 
 status: ## get local k8s cluster status
-	oc cluster status
+	k3d cluster list "$(K3D_CLUSTER_NAME)"
 .PHONY: status
 
 stop: ## stop local k8s cluster
-	oc cluster down
+	k3d cluster stop "$(K3D_CLUSTER_NAME)"
 .PHONY: stop
 
 test: ## run plugins tests

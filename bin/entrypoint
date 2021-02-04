@@ -14,4 +14,14 @@ if ! whoami &> /dev/null; then
   fi
 fi
 
+# To authenticate against K8S API, a certificate file can be passed in a base64
+# encoded environment variable named K8S_AUTH_SSL_CA_CERT_B64. If this variable
+# is detected, we decode it, store it in a temporary file and set the environment
+# variable K8S_AUTH_SSL_CA_CERT with its path.
+if [[ -n "${K8S_AUTH_SSL_CA_CERT_B64}" ]] ; then
+  K8S_AUTH_SSL_CA_CERT=$(mktemp)
+  export K8S_AUTH_SSL_CA_CERT
+  echo "${K8S_AUTH_SSL_CA_CERT_B64}" | base64 --decode > "${K8S_AUTH_SSL_CA_CERT}"
+fi
+
 exec "${@}"
