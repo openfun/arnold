@@ -79,16 +79,43 @@ declare -r VAULT_PASSWORD_FILE_NAME="password.gpg"
 
 # Dependencies
 declare -r JQ="docker run --rm -i fundocker/jq:1.6"
-declare -r KUBECTL="oc"
+declare -r KUBECTL="kubectl"
 declare -r YQ="docker run --rm -i -v ${ARNOLD_PROJECT_PATH}:/workdir mikefarah/yq:3.4.1 yq"
 
 # Hosts
 
 # K8S_DOMAIN is used in development and the CI to set the project's
 # 'domain_name' to "${K8S_DOMAIN}.nip.io". Otherwhise it should be set to
-# target your web console.
+# target your K8S API.
 declare K8S_DOMAIN="${K8S_DOMAIN:-$(hostname -I | awk '{print $1}')}"
 export K8S_DOMAIN
+
+# K8S authentication :
+# To authenticate against the K8S cluster, there are 2 options:
+#
+# 1) Provide the following environment variables to this script:
+#     - K8S_AUTH_API_KEY: a service account token
+#     - K8S_AUTH_HOST: the k8s api host (e.g. https://192.168.1.1:6550)
+#
+# 2) We can discover the service account authentication information based on
+#    your local kubectl configuration. You just have to provide the following
+#    environment variables:
+#
+#    - K8S_CONTEXT: the context name to use in your default kubectl configuration file
+#    - K8S_SERVICE_ACCOUNT: the service account to use for authentication
+#    - K8S_SERVICE_ACCOUNT_NAMESPACE: the namespace in which the service account is created
+#
+#    If you used `make cluster` to setup your local development environment,
+#    it will work with the default values.
+#
+#    If you work on a specific k8s cluster, you need to create a serviceaccount with
+#    enough permissions to be able to run the Ansible playbook tasks, and adjust these
+#    variables to match your configuration.
+
+declare K3D_CLUSTER_NAME=${K3D_CLUSTER_NAME:-arnold}
+declare K8S_CONTEXT="${K8S_CONTEXT:-"k3d-${K3D_CLUSTER_NAME}"}"
+declare K8S_SERVICE_ACCOUNT="${K8S_SERVICE_ACCOUNT:-"arnold"}"
+declare K8S_SERVICE_ACCOUNT_NAMESPACE="${K8S_SERVICE_ACCOUNT_NAMESPACE:-"default"}"
 
 # Flags
 declare -i DEV_MODE=0
@@ -293,19 +320,6 @@ function _download_latest_release() {
   echo "${upgraded_bin}"
 }
 
-# Compute K8S_AUTH_HOST from its host
-function _get_k8s_auth_host() {
-    echo "https://${K8S_DOMAIN}:8443"
-}
-
-function _login() {
-    k8s_auth_host=$(_get_k8s_auth_host)
-    log info "Login to k8s: ${k8s_auth_host}"
-
-    # Force verbose mode to off to avoid printing authentication tokens
-    VERBOSE=0 ${KUBECTL} login "${k8s_auth_host}" --token="${K8S_SA_TOKEN}"
-}
-
 # _set_k8s_env: set k8s's environment
 #
 # Use this function to configure the k8s environment whenever your docker
@@ -321,27 +335,75 @@ function _set_k8s_env() {
         source "${customer_vars}"
     fi
 
-    # Check that the current user is already logged in k8s. Note that the
-    # `whoami` command is only compatible with openshift and should be adapted
-    # for k8s.
-    if ! ${KUBECTL} whoami &> /dev/null ; then
-        if [[ -z "${K8S_SA_TOKEN}" ]] ; then
-
-          log error "
-Error: you need to login to a k8s server first or set the K8S_SA_TOKEN
-environment variable with a service account authentication token.
-"
-            exit 1
-        else
-            _login
-        fi
+    # If an authentication token is provided, check that the K8S_AUTH_HOST is also provided.
+    if [[ -n "${K8S_AUTH_API_KEY}" && -z "${K8S_AUTH_HOST}" ]] ; then
+      log error "You should provide K8S_AUTH_API_KEY and K8S_AUTH_HOST"
+      exit 1
     fi
 
-    # Ansible's k8s module requires the following two environment variables to
-    # be defined
-    K8S_AUTH_API_KEY="$(${KUBECTL} whoami -t)"
+    # If no authentication token is provided, we'll get it from the K8S_SERVICE_ACCOUNT
+    # service account in the K8S_CONTEXT configuration context.
+    if [[ -z "${K8S_AUTH_API_KEY}" ]] ; then
+      if [[ -z "${K8S_CONTEXT}" ]]; then
+        log error "You should provide a K8S_CONTEXT or K8S_AUTH_API_KEY + K8S_AUTH_HOST."
+        exit 1
+      fi
+
+      # Ensure that the context K8S_CONTEXT exists
+      if ! ${KUBECTL} config get-contexts -o=name | grep -q "^${K8S_CONTEXT}\$" ; then
+        log error "Unable to find context ${K8S_CONTEXT} in kubernetes configuration."
+        exit 1
+      fi
+
+      # Get K8S_AUTH_HOST from configuration
+      K8S_AUTH_HOST=$(${KUBECTL} --namespace "${K8S_SERVICE_ACCOUNT_NAMESPACE}" config view -o jsonpath="{.clusters[?(@.name==\"$K8S_CONTEXT\")].cluster.server}")
+      # Sometimes, the server declared in kubeconfig is a loopback IP address
+      # (e.g. 127.0.0.1 or 0.0.0.0). This is the case when the configuration
+      # is created by k3d, for example. We cannot use this address from inside
+      # a docker container to reach K8S API, so we have to fix it to point to
+      # K8S_DOMAIN instead.
+      K8S_AUTH_HOST=$(echo "${K8S_AUTH_HOST}" | sed -r 's/localhost|0(\.0){3}|127(\.[0-9]+){3}/'"${K8S_DOMAIN}"'/')
+
+      if [[ -z "${K8S_AUTH_HOST}" ]] ; then
+        log error "Unable to find server address for cluster ${K8S_CONTEXT}"
+        exit 1
+      fi
+
+      # Switch to the context K8S_CONTEXT
+      ${KUBECTL} config use-context "${K8S_CONTEXT}"
+
+      # Get authentication token from the K8S_SERVICE_ACCOUNT service account
+      K8S_AUTH_API_KEY=$(${KUBECTL} --namespace "${K8S_SERVICE_ACCOUNT_NAMESPACE}" get secrets -o jsonpath="{.items[?(@.metadata.annotations['kubernetes\\.io/service-account\\.name']=='${K8S_SERVICE_ACCOUNT}')].data.token}"|base64 --decode)
+
+      # Get certificate authority data
+      K8S_AUTH_SSL_CA_CERT_B64=$(${KUBECTL} --namespace "${K8S_SERVICE_ACCOUNT_NAMESPACE}" get secrets -o jsonpath="{.items[?(@.metadata.annotations['kubernetes\\.io/service-account\\.name']=='${K8S_SERVICE_ACCOUNT}')].data.ca\\.crt}")
+      if [[ -n "${K8S_AUTH_SSL_CA_CERT_B64}" ]] ; then
+        export K8S_AUTH_SSL_CA_CERT_B64
+      fi
+
+      if [[ -z "${K8S_AUTH_API_KEY}" ]] ; then
+        log error "
+Unable to get authentication token for the ${K8S_SERVICE_ACCOUNT}
+service account in context ${K8S_CONTEXT}. Do you have a ${K8S_SERVICE_ACCOUNT}
+service account defined in the default namespace? If not, you might want to
+check your local cluster configuration or authenticate using
+K8S_AUTH_API_KEY and K8S_AUTH_HOST.
+"
+        exit 1
+      fi
+
+    fi
+
+    set -e
+
+    # Test authentication with K8S_AUTH_HOST and K8S_AUTH_API_KEY
+    if ! curl -sf -X GET "${K8S_AUTH_HOST}/api" --header "Authorization: Bearer ${K8S_AUTH_API_KEY}" --insecure > /dev/null ; then
+      log error "Unable to authenticate to ${K8S_AUTH_HOST} with the K8S_AUTH_API_KEY".
+      exit 1
+    fi
+
+    # Ansible's k8s module requires the following two environment variables to be defined
     export K8S_AUTH_API_KEY
-    K8S_AUTH_HOST="$(_get_k8s_auth_host)"
     export K8S_AUTH_HOST
 }
 
@@ -539,9 +601,10 @@ function _docker_run() {
         --env K8S_AUTH_API_KEY \
         --env K8S_AUTH_HOST \
         --env K8S_AUTH_VERIFY_SSL \
+        --env K8S_AUTH_SSL_CA_CERT \
+        --env K8S_AUTH_SSL_CA_CERT_B64 \
         --env K8S_DOMAIN \
         --env ANSIBLE_VAULT_PASSWORD \
-        -v "${HOME}/.kube:/home/arnold/.kube" \
         ${extra_volumes} \
         "${ARNOLD_IMAGE}" \
         "$@"
@@ -707,6 +770,7 @@ function info() {
     _ensure_k8s_namespace_is_set
     log info "Project: $(_get_project)"
 }
+
 
 # Initialize a project with all its volumes and configmaps
 function init() {
