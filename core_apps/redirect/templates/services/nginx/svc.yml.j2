@@ -19,5 +19,5 @@ spec:
       targetPort: {{ redirect_nginx_healthcheck_port }}
   selector:
     app: redirect
-    deploymentconfig: "redirect-nginx"
+    deployment: "redirect-nginx"
   type: ClusterIP

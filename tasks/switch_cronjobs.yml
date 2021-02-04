@@ -1,8 +1,8 @@
 ---
 # In a switch, cronjobs from the previous stack must be suspended
 # and those from  the current stack must be activated.
-# At this point routes are already switched, the next stack is empty and only
-# the current and previous are alive.
+# At this point, static services are already switched, the next stack is
+# empty and only the current and previous are alive.
 
 - include_tasks: deploy_get_stamp_from_static_service.yml
   vars:

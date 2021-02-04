@@ -1,23 +1,30 @@
 apiVersion: v1
-kind: DeploymentConfig
+kind: Deployment
 metadata:
   labels:
     app: redirect
     service: nginx
     version: "{{ redirect_nginx_image_tag }}"
-    deploymentconfig: redirect-nginx
+    deployment: redirect-nginx
     deployment_stamp: "{{ deployment_stamp }}"
   name: redirect-nginx
   namespace: "{{ project_name }}"
 spec:
   replicas: {{ redirect_nginx_replicas }}
+  selector:
+    matchLabels:
+      app: redirect
+      service: nginx
+      version: "{{ redirect_nginx_image_tag }}"
+      deployment: redirect-nginx
+      deployment_stamp: "{{ deployment_stamp }}"
   template:
     metadata:
       labels:
         app: redirect
         service: nginx
         version: "{{ redirect_nginx_image_tag }}"
-        deploymentconfig: redirect-nginx
+        deployment: redirect-nginx
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
       # Prefer running pods on different nodes for redundancy
@@ -28,7 +35,7 @@ spec:
               podAffinityTerm:
                 labelSelector:
                   matchExpressions:
-                    - key: deploymentconfig
+                    - key: deployment
                       operator: In
                       values:
                         - "redirect-nginx"

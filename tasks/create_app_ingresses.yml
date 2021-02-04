@@ -1,0 +1,15 @@
+---
+# Create ingresses for an app
+
+- name: "Make sure ingress exists for the '{{ app.name }}' app with all prefixes"
+  include_tasks: tasks/deploy_patch_ingress.yml
+  loop: "{{ blue_green_prefixes }}"
+  loop_control:
+    loop_var: prefix
+  when: ingresses | length > 0 and app.settings.is_blue_green_compatible | default(True)
+  tags: ingresses
+
+- name: "Make sure ingress exists for the '{{ app.name }}' app"
+  include_tasks: tasks/deploy_patch_ingress.yml
+  when: ingresses | length > 0 and not app.settings.is_blue_green_compatible | default(True)
+  tags: ingresses
