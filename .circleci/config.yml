@@ -815,21 +815,21 @@ workflows:
           filters:
             tags:
               only: /.*/
-#      - test-bootstrap-hello:
-#          requires:
-#            - lint-bash
-#            - lint-docker
-#            - lint-ansible
-#            - lint-plugins
-#          filters:
-#            tags:
-#              only: /.*/
-#      - test-redirect:
-#          requires:
-#            - test-bootstrap-hello
-#          filters:
-#            tags:
-#              only: /.*/
+      - test-bootstrap-hello:
+          requires:
+            - lint-bash
+            - lint-docker
+            - lint-ansible
+            - lint-plugins
+          filters:
+            tags:
+              only: /.*/
+      - test-redirect:
+          requires:
+            - test-bootstrap-hello
+          filters:
+            tags:
+              only: /.*/
 #      - test-bootstrap-richie:
 #          requires:
 #            - lint-bash
@@ -944,12 +944,12 @@ workflows:
 #          filters:
 #            tags:
 #              only: /.*/
-#      - test-prevent-switch-to-nothing:
-#          requires:
-#            - test-bootstrap-hello
-#          filters:
-#            tags:
-#              only: /.*/
+      - test-prevent-switch-to-nothing:
+          requires:
+            - test-bootstrap-hello
+          filters:
+            tags:
+              only: /.*/
       - test-plugins:
           requires:
             - lint-bash
@@ -968,7 +968,7 @@ workflows:
           requires:
             - test-build
             - test-plugins
-#            - test-bootstrap-hello
+            - test-bootstrap-hello
 #            - test-bootstrap-richie
 #            - test-bootstrap-edxapp
 #            - test-bootstrap-mailcatcher
@@ -978,7 +978,7 @@ workflows:
 #            - test-bootstrap-ashley
 #            - test-bootstrap-etherpad
 #            - test-bootstrap-kibana
-#            - test-redirect
+            - test-redirect
 #            - test-delete-app
 #            - test-prevent-switch-to-nothing
           filters:
