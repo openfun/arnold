@@ -17,3 +17,7 @@ elasticsearch_java_opts:
   - "-Xmx64m"
 elasticsearch_image_name: "elasticsearch"
 elasticsearch_image_tag: "7.7.0"
+
+
+# Network policy
+network_policy_per_namespace_enabled: true

@@ -1,9 +1,16 @@
 # ACME (Automated Certificate Management Environment)
 # We use the letsencrypt staging-environment except in production
 # https://letsencrypt.org/docs/staging-environment/
+# Set this value to "live" to use the live environment.
 acme_env: staging
 
-# If the openshift-acme role has been created globally (ClusterRole), we don't
-# need to create it for each project. Hence set "has_acme_cluster_role" to
-# "true"
-has_acme_cluster_role: false
+# (optional) Email address linked to the ACME account.
+# It will be used to receive certificate expiration notice.
+# Note that one ACME account is created per namespace and
+# that multiple accounts can share the same email address.
+acme_contact_email: ""
+
+
+# (required) Name of the cert-manager Issuer entity created
+# by arnold for the project.
+acme_issuer_name: "arnold-acme-issuer"
