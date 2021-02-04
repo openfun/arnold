@@ -13,5 +13,5 @@ spec:
     protocol: TCP
     targetPort: {{ hello_app_port }}
   selector:
-    deploymentconfig: "hello-app-{{ deployment_stamp }}"
+    deployment: "hello-app-{{ deployment_stamp }}"
   type: ClusterIP
