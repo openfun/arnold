@@ -17,4 +17,4 @@ spec:
     targetPort: {{ hello_app_port }}
   type: ClusterIP
   selector:
-    deploymentconfig: "hello-app-{{ deployment_stamp | default('undefined', true) }}"
+    deployment: "hello-app-{{ deployment_stamp | default('undefined', true) }}"
