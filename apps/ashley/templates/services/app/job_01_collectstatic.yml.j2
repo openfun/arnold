@@ -50,3 +50,6 @@ spec:
           persistentVolumeClaim:
             claimName: ashley-pvc-static
 {% endif %}
+      securityContext:
+        runAsUser: {{ container_uid }}
+        runAsGroup: {{ container_gid }}
