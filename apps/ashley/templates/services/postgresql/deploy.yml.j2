@@ -1,6 +1,6 @@
 {% if env_type in trashable_env_types %}
 apiVersion: v1
-kind: DeploymentConfig
+kind: Deployment
 metadata:
   labels:
     app: ashley
@@ -11,13 +11,20 @@ metadata:
   namespace: "{{ namespace_name }}"
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: ashley
+      service: postgresql
+      version: "{{ ashley_database_image_tag }}"
+      deployment: "ashley-postgresql-{{ deployment_stamp }}"
+      deployment_stamp: "{{ deployment_stamp }}"
   template:
     metadata:
       labels:
         app: ashley
         service: postgresql
         version: "{{ ashley_database_image_tag }}"
-        deploymentconfig: "ashley-postgresql-{{ deployment_stamp }}"
+        deployment: "ashley-postgresql-{{ deployment_stamp }}"
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
 {% set image_pull_secret_name = ashley_database_image_pull_secret_name | default(none) or default_image_pull_secret_name %}
@@ -38,3 +45,6 @@ spec:
             - secretRef:
                 name: "{{ ashley_database_secret_name }}"
 {% endif%}
+      securityContext:
+        runAsUser: {{ container_uid }}
+        runAsGroup: {{ container_gid }}
