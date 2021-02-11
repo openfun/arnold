@@ -48,5 +48,7 @@ tests
 .vscode
 
 openshift.local.clusterup/
+k3d-storage/
+
 group_vars/customer/*
 !group_vars/customer/eugene
