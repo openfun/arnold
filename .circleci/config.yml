@@ -58,9 +58,12 @@ aliases:
 
   - &run_k3d_cluster
     run:
-      name: Run local OpenShift cluster & configure environment
+      name: Run local k3d cluster & configure environment
       command: |
-        K3D_BIND_HOST_PORT_HTTP=80 K3D_BIND_HOST_PORT_HTTPS=443 make cluster
+        # Bootstrap the k3d cluster with the following specific settings :
+        # - use standard HTTP and HTTPS ports
+        # - pre-provision 15 volumes instead of 100
+        MINIMUM_AVAILABLE_RWX_VOLUME=15 K3D_BIND_HOST_PORT_HTTP=80 K3D_BIND_HOST_PORT_HTTPS=443 make cluster
         # Set environment variables for the CI
         echo "export K8S_DOMAIN=$(hostname -I | awk '{print $1}')" >> $BASH_ENV
         cat bin/_defaults >> $BASH_ENV

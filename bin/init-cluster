@@ -11,8 +11,37 @@ K3D_CLUSTER_NAME="${1:-arnold}"
 K3D_BIND_HOST_PORT_HTTP="${K3D_BIND_HOST_PORT_HTTP:-8080}"
 K3D_BIND_HOST_PORT_HTTPS="${K3D_BIND_HOST_PORT_HTTPS:-8443}"
 
+# Arnold project root directory
+declare ARNOLD_ROOT
+ARNOLD_ROOT="$(dirname "$(dirname "$(readlink -f "$0")")")"
+
+# Path to the directory that will store the persistent volume inside k3d
+declare -r PERSISTENT_VOLUME_PATH="${ARNOLD_ROOT}/k3d-storage"
+
+# Dependencies to download
 declare -r INGRESS_NGINX_DEPLOYMENT="https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.43.0/deploy/static/provider/cloud/deploy.yaml"
 declare -r INGRESS_NGINX_DEPLOYMENT_SHA256="03d80b59660a1818dea0f1b3482aa59cfae2bebcc755b150920ddfa26017adc3"
+
+# PersistentVolume provisionning.
+#
+# Some Arnold apps require PersistentVolume with
+# ReadWriteMany (RWX) acces mode.
+#
+# k3d is bundled with a "local-path" StorageClass using a dynamic
+# provisionner. But it can only provision PersistentVolumes with
+# ReadWriteOnce access mode.
+#
+# Since this single node k3d cluster is only used for development
+# and CI purpose, we pre-provision a certain amount of
+# PersistentVolumes that will be mounted in subdirectories
+# of the docker volume PERSISTENT_VOLUME_PATH.
+#
+# Each time the k3d cluster starts, we ensure that there is
+# at least MINIMUM_AVAILABLE_RWX_VOLUME PVs available.
+#
+# These pre-provisionned PVs are virtual, no resources are reserved
+# for them. And no disk space is consumed until they are bound to a PVC.
+MINIMUM_AVAILABLE_RWX_VOLUME=${MINIMUM_AVAILABLE_RWX_VOLUME:-100}
 
 
 if [[ -z "${K3D_CLUSTER_NAME}" ]] ; then
@@ -22,10 +51,17 @@ fi
 
 
 if ! k3d cluster list "${K3D_CLUSTER_NAME}" &> /dev/null ; then
+
+  # Ensure that the persistent volume storage directory exists on the host
+  if [[ ! -d "${PERSISTENT_VOLUME_PATH}" ]] ; then
+    mkdir -p "${PERSISTENT_VOLUME_PATH}"
+  fi
+
   # Initialize the cluster without the default ingress controller (traefik)
   k3d cluster create "${K3D_CLUSTER_NAME}" \
     -p "${K3D_BIND_HOST_PORT_HTTP}:80@loadbalancer" \
     -p "${K3D_BIND_HOST_PORT_HTTPS}:443@loadbalancer" \
+    -v "${PERSISTENT_VOLUME_PATH}:/data/pv" \
     --k3s-server-arg '--no-deploy=traefik'
 else
   k3d cluster start "${K3D_CLUSTER_NAME}"
@@ -33,6 +69,49 @@ fi
 
 KUBECONFIG=$(k3d kubeconfig write "${K3D_CLUSTER_NAME}")
 echo "K3d cluster configuration exported to ${KUBECONFIG}"
+
+
+# Pre-provision PersistentVolumes with RWX accessModes
+
+# Count the number of PVs with RWX accessMode and with the status Available
+AVAILABLE_PV_COUNT=$(kubectl get pv \
+  -l type=arnold-rwx \
+  -o jsonpath='{range .items[?(@.status.phase=="Available")]}{.metadata.name}{"\n"}{end}' \
+  | wc -l)
+
+# Ensure that there are at least MINIMUM_AVAILABLE_RWX_VOLUME PVs available
+if [[ $AVAILABLE_PV_COUNT -lt $MINIMUM_AVAILABLE_RWX_VOLUME ]] ; then
+  PV_TO_PROVISION=$(( MINIMUM_AVAILABLE_RWX_VOLUME -  AVAILABLE_PV_COUNT ))
+  echo "Provisionning ${PV_TO_PROVISION} PersistentVolumes with RWX accessMode"
+  for _ in $(seq 1 $PV_TO_PROVISION) ; do
+    # Generate an unique identifier for the PV
+    PV_ID=$(uuidgen)
+    # Pre-create the directory with enough permissions so that an unprivileged container
+    # can write into it. For that, we give write permission to the group 0 and assume that
+    # containers are launched with `runAsGroup: 0`.
+    # We do this because if the directory was created by the hostPath handler, only privileged
+    # containers would be able to write into it.
+    # Note: we use docker to create the directory as root:root to avoid using sudo.
+    docker run --rm -u 0:0 -v "${PERSISTENT_VOLUME_PATH}:/data" busybox mkdir -m 770 "/data/${PV_ID}"
+    # Create the PV in k8s
+    kubectl apply -f - <<EOF
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: arnold-${PV_ID}
+  labels:
+    type: arnold-rwx
+spec:
+  storageClassName: local-path
+  capacity:
+    storage: 1000Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/data/pv/${PV_ID}"
+EOF
+  done
+fi
 
 echo -n "Checking ingress-nginx controller status... "
 if ! kubectl get ns ingress-nginx &> /dev/null ; then
