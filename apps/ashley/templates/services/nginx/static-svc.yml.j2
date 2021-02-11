@@ -22,5 +22,5 @@ spec:
       targetPort: {{ ashley_nginx_healthcheck_port }}
   selector:
     app: ashley
-    deploymentconfig: "ashley-nginx-{{ deployment_stamp | default('undefined', true) }}"
+    deployment: "ashley-nginx-{{ deployment_stamp | default('undefined', true) }}"
   type: ClusterIP
