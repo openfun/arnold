@@ -18,8 +18,9 @@ env.d/*
 .pytest_cache
 .pylint.d
 
-# OpenShift
+# local storage
 openshift.local.clusterup
+k3d-storage
 
 # Ignore local customers except eugene
 group_vars/customer/*

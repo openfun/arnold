@@ -1,0 +1,45 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "hello-job-writevolume-{{ job_stamp }}"
+  namespace: "{{ project_name }}"
+  labels:
+    app: hello
+    job_stamp: "{{ job_stamp }}"
+    # Jobs with the "pre" job type will be executed prior to deployments
+    job_type: "pre"
+    deployment_stamp: "{{ deployment_stamp }}"
+spec:
+  template:
+    metadata:
+      name: "hello-job-writevolume-{{ job_stamp }}"
+      labels:
+        app: hello
+        deployment: "hello-app-{{ deployment_stamp }}"
+        deployment_stamp: "{{ deployment_stamp }}"
+        job_stamp: "{{ job_stamp }}"
+    spec:
+      securityContext:
+        runAsUser: 4242
+{% set image_pull_secret_name = openshift_hello_image_pull_secret_name | default(none) or default_image_pull_secret_name %}
+{% if image_pull_secret_name is not none %}
+      imagePullSecrets:
+        - name: "{{ image_pull_secret_name }}"
+{% endif %}
+      containers:
+        - name: test-write
+          image: "ubuntu:20.04"
+          command:
+            - /bin/bash
+            - -c
+            - |
+              id
+              echo test > /data/volume/test
+          volumeMounts:
+            - mountPath: /data/volume
+              name: hello-volume
+      volumes:
+        - name: hello-volume
+          persistentVolumeClaim:
+            claimName: hello-pvc
+      restartPolicy: Never
