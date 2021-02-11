@@ -905,15 +905,15 @@ workflows:
 #          filters:
 #            tags:
 #              only: /.*/
-#      - test-bootstrap-ashley:
-#          requires:
-#            - lint-bash
-#            - lint-docker
-#            - lint-ansible
-#            - lint-plugins
-#          filters:
-#            tags:
-#              only: /.*/
+      - test-bootstrap-ashley:
+          requires:
+            - lint-bash
+            - lint-docker
+            - lint-ansible
+            - lint-plugins
+          filters:
+            tags:
+              only: /.*/
 #      - test-bootstrap-nextcloud:
 #          requires:
 #            - lint-bash
@@ -978,7 +978,7 @@ workflows:
 #            - test-bootstrap-marsha
 #            - test-bootstrap-forum
 #            - test-bootstrap-learninglocker
-#            - test-bootstrap-ashley
+            - test-bootstrap-ashley
 #            - test-bootstrap-etherpad
 #            - test-bootstrap-kibana
             - test-redirect

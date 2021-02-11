@@ -12,7 +12,7 @@ metadata:
 spec:
   ports:
     - name: "{{ ashley_database_port }}-tcp"
-      port: "{{ ashley_database_port }}"
+      port: {{ ashley_database_port }}
       protocol: TCP
       targetPort: {{ ashley_database_port }}
 # As commented in the ad hoc endpoint, the endpoint name points to this service
@@ -23,6 +23,6 @@ spec:
   selector:
     app: ashley
     service: postgresql
-    deploymentconfig: "ashley-postgresql-{{ deployment_stamp }}"
+    deployment: "ashley-postgresql-{{ deployment_stamp }}"
   type: ClusterIP
 {% endif%}
