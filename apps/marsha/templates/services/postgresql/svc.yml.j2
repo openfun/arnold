@@ -12,7 +12,7 @@ metadata:
 spec:
   ports:
     - name: "{{ marsha_postgresql_port }}-tcp"
-      port: "{{ marsha_postgresql_port }}"
+      port: {{ marsha_postgresql_port }}
       protocol: TCP
       targetPort: {{ marsha_postgresql_port }}
 # As commented in the ad hoc endpoint, the endpoint name points to this service
@@ -23,6 +23,6 @@ spec:
   selector:
     app: marsha
     service: postgresql
-    deploymentconfig: "marsha-postgresql-{{ deployment_stamp }}"
+    deployment: "marsha-postgresql-{{ deployment_stamp }}"
   type: ClusterIP
 {% endif%}
