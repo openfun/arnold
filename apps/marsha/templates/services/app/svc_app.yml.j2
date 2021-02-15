@@ -16,5 +16,5 @@ spec:
     targetPort: {{ marsha_django_port }}
   selector:
     app: marsha
-    deploymentconfig: "marsha-app-{{ deployment_stamp }}"
+    deployment: "marsha-app-{{ deployment_stamp }}"
   type: ClusterIP

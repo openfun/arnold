@@ -7,7 +7,7 @@ metadata:
     version: "{{ marsha_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
   name: "check-live-idle-{{ deployment_stamp }}"
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 spec:
   schedule: "{{ marsha_check_idle_state_cronjob_schedule }}"
   successfulJobsHistoryLimit: 2
@@ -61,6 +61,9 @@ spec:
               volumeMounts:
                 - name: marsha-configmap
                   mountPath: /app/src/backend/marsha/configs
+          securityContext:
+            runAsUser: {{ container_uid }}
+            runAsGroup: {{ container_gid }}
           volumes:
             - name: marsha-configmap
               configMap:

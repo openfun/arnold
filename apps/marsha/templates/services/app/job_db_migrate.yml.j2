@@ -47,3 +47,6 @@ spec:
                 name: "{{ marsha_secret_name }}"
           command: ["python", "manage.py", "migrate"]
       restartPolicy: Never
+      securityContext:
+        runAsUser: {{ container_uid }}
+        runAsGroup: {{ container_gid }}
