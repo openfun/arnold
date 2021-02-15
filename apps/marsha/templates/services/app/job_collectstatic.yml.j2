@@ -58,3 +58,6 @@ spec:
             claimName: marsha-pvc-static
 {% endif %}
       restartPolicy: Never
+      securityContext:
+        runAsUser: {{ container_uid }}
+        runAsGroup: {{ container_gid }}

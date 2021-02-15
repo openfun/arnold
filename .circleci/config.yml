@@ -400,7 +400,7 @@ jobs:
             bin/ci route -s edxec -c OK -p "/health/"
 
   # Test the bootstrap playbook on the "marsha" application
-  # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
+  # nota bene: we use a real k8s cluster installed in CircleCI's VM.
   test-bootstrap-marsha:
     <<: *defaults
 
@@ -869,15 +869,15 @@ workflows:
 #          filters:
 #            tags:
 #              only: /.*/
-#      - test-bootstrap-marsha:
-#          requires:
-#            - lint-bash
-#            - lint-docker
-#            - lint-ansible
-#            - lint-plugins
-#          filters:
-#            tags:
-#              only: /.*/
+      - test-bootstrap-marsha:
+          requires:
+            - lint-bash
+            - lint-docker
+            - lint-ansible
+            - lint-plugins
+          filters:
+            tags:
+              only: /.*/
 #      - test-bootstrap-moodlenet:
 #          requires:
 #            - lint-bash
@@ -975,7 +975,7 @@ workflows:
 #            - test-bootstrap-richie
 #            - test-bootstrap-edxapp
 #            - test-bootstrap-mailcatcher
-#            - test-bootstrap-marsha
+            - test-bootstrap-marsha
 #            - test-bootstrap-forum
 #            - test-bootstrap-learninglocker
 #            - test-bootstrap-ashley
