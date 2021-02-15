@@ -1,7 +1,7 @@
 {%- set dc_name = "marsha-%s" | format(service_variant) -%}
 
 apiVersion: v1
-kind: DeploymentConfig
+kind: Deployment
 metadata:
   labels:
     app: marsha
@@ -12,13 +12,20 @@ metadata:
   namespace: "{{ namespace_name }}"
 spec:
   replicas: {{ marsha_replicas }}
+  selector:
+    matchLabels:
+      app: marsha
+      service: "{{ service_variant }}"
+      version: "{{ marsha_image_tag }}"
+      deployment: "{{ dc_name }}-{{ deployment_stamp }}"
+      deployment_stamp: "{{ deployment_stamp }}"
   template:
     metadata:
       labels:
         app: marsha
         service: "{{ service_variant }}"
         version: "{{ marsha_image_tag }}"
-        deploymentconfig: "{{ dc_name }}-{{ deployment_stamp }}"
+        deployment: "{{ dc_name }}-{{ deployment_stamp }}"
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
       # Prefer running pods on different nodes for redundancy
@@ -29,7 +36,7 @@ spec:
               podAffinityTerm:
                 labelSelector:
                   matchExpressions:
-                    - key: deploymentconfig
+                    - key: deployment
                       operator: In
                       values:
                         - "{{ dc_name }}-{{ deployment_stamp }}"
@@ -94,6 +101,9 @@ spec:
             - mountPath: "{{ marsha_cloudfront_private_key_path | dirname }}"
               name: marsha-cloudfront-private-key-secret
 {% endif %}
+      securityContext:
+        runAsUser: {{ container_uid }}
+        runAsGroup: {{ container_gid }}
       volumes:
         - name: marsha-configmap
           configMap:
