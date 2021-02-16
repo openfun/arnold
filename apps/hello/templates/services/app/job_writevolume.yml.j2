@@ -19,8 +19,6 @@ spec:
         deployment_stamp: "{{ deployment_stamp }}"
         job_stamp: "{{ job_stamp }}"
     spec:
-      securityContext:
-        runAsUser: 4242
 {% set image_pull_secret_name = openshift_hello_image_pull_secret_name | default(none) or default_image_pull_secret_name %}
 {% if image_pull_secret_name is not none %}
       imagePullSecrets:
@@ -43,3 +41,6 @@ spec:
           persistentVolumeClaim:
             claimName: hello-pvc
       restartPolicy: Never
+      securityContext:
+        runAsUser: {{ container_uid }}
+        runAsGroup: {{ container_gid }}

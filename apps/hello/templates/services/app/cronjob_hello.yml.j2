@@ -8,7 +8,7 @@ metadata:
     service: app
     deployment_stamp: "{{ deployment_stamp }}"
 spec:
-  schedule: "*/3 * * * *"  
+  schedule: "*/3 * * * *"
   successfulJobsHistoryLimit: 2
   failedJobsHistoryLimit: 1
   concurrencyPolicy: Forbid
@@ -36,3 +36,6 @@ spec:
                 - "-c"
                 - echo "Hello World!"
           restartPolicy: Never
+          securityContext:
+            runAsUser: {{ container_uid }}
+            runAsGroup: {{ container_gid }}
