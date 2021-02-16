@@ -49,3 +49,6 @@ spec:
           emptyDir: {}
       restartPolicy: Always
       dnsPolicy: ClusterFirst
+      securityContext:
+        runAsUser: {{ container_uid }}
+        runAsGroup: {{ container_gid }}
