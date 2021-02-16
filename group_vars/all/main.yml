@@ -163,3 +163,18 @@ network_policy_rule_ingress_controller:
       matchLabels:
         "app.kubernetes.io/component": controller
         "app.kubernetes.io/name": ingress-nginx
+
+
+# UID to use for running containers on k8s.
+#
+# It will be used in k8s templates to specify the SecurityContext.RunAsUser
+# field, to force pods to run with this specific UID.
+#
+# It prevents from running a container as root.
+#
+# We recommend that you specify a unique UID per customer/environment.
+container_uid: 10000
+
+# GID to use for running containers on k8s.
+# This value should be set to 0 (root).
+container_gid: 0
