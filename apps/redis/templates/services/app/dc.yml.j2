@@ -6,7 +6,7 @@ metadata:
     service: app
     version: "{{ redis_app_image_tag }}"
   name: redis-app
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 spec:
   replicas: 1  # number of pods we want
   # When upgrading, we don't want OpenShift to run several pods mounted on the same volume

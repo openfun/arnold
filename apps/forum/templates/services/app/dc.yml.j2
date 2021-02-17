@@ -8,7 +8,7 @@ metadata:
     version: "{{ forum_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
   name: "forum-app-{{ deployment_stamp }}"
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 spec:
   replicas: {{ forum_app_replicas }}
   template:

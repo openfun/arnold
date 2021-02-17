@@ -8,7 +8,7 @@ metadata:
     deployment_stamp: "{{ deployment_stamp }}"
   # name of the endpoint should be the same as the corresponding service
   name: "{{ forum_mongodb_host }}-{{ deployment_stamp }}"
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 subsets:
 {% for ip in forum_endpoint_mongodb_ips -%}
   - 

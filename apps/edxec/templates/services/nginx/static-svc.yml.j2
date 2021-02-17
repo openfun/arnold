@@ -9,7 +9,7 @@ metadata:
     type: static-service
     removable: "no"
   name: "edxec-nginx-{{ prefix }}"
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 spec:
   ports:
     - name: {{ edxec_nginx_port }}-tcp

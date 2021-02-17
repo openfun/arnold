@@ -7,7 +7,7 @@ metadata:
     version: "{{ moodlenet_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
   name: "moodlenet-backend-{{ deployment_stamp }}"
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 spec:
   replicas: {{ moodlenet_backend_replicas }}
   template:

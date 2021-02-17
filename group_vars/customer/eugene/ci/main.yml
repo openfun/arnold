@@ -1,8 +1,8 @@
 # Redirections
 redirections:
-  - to: "hello.{{ project_name}}.{{ domain_name }}"
+  - to: "hello.{{ namespace_name }}.{{ domain_name }}"
     from:
-      - "www.hello.{{ project_name}}.{{ domain_name }}"
+      - "www.hello.{{ namespace_name }}.{{ domain_name }}"
 
 nextcloud_user_id: REPLACE_USER_ID
 

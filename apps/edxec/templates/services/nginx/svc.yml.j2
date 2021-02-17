@@ -7,7 +7,7 @@ metadata:
     version: "{{ edxec_nginx_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
   name: "edxec-nginx-{{ deployment_stamp }}"
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 spec:
   ports:
     - name: {{ edxec_nginx_port }}-tcp

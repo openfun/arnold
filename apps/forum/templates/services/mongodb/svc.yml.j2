@@ -8,7 +8,7 @@ metadata:
     deployment_stamp: "{{ deployment_stamp }}"
   # name of the service should be mongodb host name in settings
   name: "{{ forum_mongodb_host }}-{{ deployment_stamp }}"
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 spec:
   ports:
 {% if env_type in trashable_env_types %}

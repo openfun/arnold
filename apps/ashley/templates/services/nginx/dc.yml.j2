@@ -7,7 +7,7 @@ metadata:
     version: "{{ ashley_nginx_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
   name: "ashley-nginx-{{ deployment_stamp }}"
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 spec:
   replicas: {{ ashley_nginx_replicas }}
   template:

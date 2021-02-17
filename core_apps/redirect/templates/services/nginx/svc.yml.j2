@@ -6,7 +6,7 @@ metadata:
     service: nginx
     version: "{{ redirect_nginx_image_tag }}"
   name: "redirect-nginx"
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 spec:
   ports:
     - name: "{{ redirect_nginx_port }}-tcp"

@@ -40,7 +40,7 @@
     - name: Create redirect deployments
       k8s:
         force: True
-        namespace: "{{ project_name }}"
+        namespace: "{{ namespace_name }}"
         definition: "{{ lookup('template', deployment) | from_yaml }}"
         state: present
       loop: "{{ deployments }}"
@@ -52,14 +52,14 @@
     - name: Check if the redirect nginx service already exists
       k8s_info:
         api_version: "v1"
-        namespace: "{{ project_name }}"
+        namespace: "{{ namespace_name }}"
         kind: "Service"
         name: "redirect-nginx"
       register: redirect_nginx_service
 
     - name: Create redirect services
       k8s:
-        namespace: "{{ project_name }}"
+        namespace: "{{ namespace_name }}"
         definition: "{{ lookup('template', service) | from_yaml }}"
         state: present
       loop: "{{ services }}"

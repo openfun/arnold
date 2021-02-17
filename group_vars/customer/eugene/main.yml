@@ -1,7 +1,5 @@
 # Variables specific to the eugene customer
 # Eugene is a demo site with default configuration
-project_display_name: "Eugene ({{ env_type }})"
-project_description: "A demo project with a typical installation ({{ env_type }})"
 
 # Marsha
 # We don't want to require an AWS SSH key for testing
