@@ -7,7 +7,7 @@ metadata:
     version: "{{ learninglocker_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
   name: learninglocker-ui-{{ deployment_stamp }}
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 spec:
   ports:
   - name: "{{ learninglocker_ui_port }}-tcp"

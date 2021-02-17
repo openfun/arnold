@@ -9,7 +9,7 @@ metadata:
     type: static-service
     removable: "no"
   name: "moodlenet-nginx-{{ deployment_stamp }}"
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 spec:
   ports:
     - name: {{ moodlenet_nginx_port }}-tcp

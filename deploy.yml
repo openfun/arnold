@@ -27,7 +27,7 @@
       tags: deploy
 
     - name: Display deployment details
-      debug: msg="Deploying {{ project_name }}-{{ domain_name }} (deployment stamp '{{ deployment_stamp }}' job stamp '{{ job_stamp }}')"
+      debug: msg="Deploying {{ namespace_name }}-{{ domain_name }} (deployment stamp '{{ deployment_stamp }}' job stamp '{{ job_stamp }}')"
       tags: deploy
 
     - name: Display apps to deploy

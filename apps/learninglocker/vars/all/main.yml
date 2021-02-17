@@ -1,7 +1,7 @@
 # Application default configuration
 
 # -- route
-learninglocker_host: "learninglocker.{{ project_name}}.{{ domain_name }}"
+learninglocker_host: "learninglocker.{{ namespace_name }}.{{ domain_name }}"
 
 # -- learninglocker
 learninglocker_image_name: "fundocker/learninglocker"

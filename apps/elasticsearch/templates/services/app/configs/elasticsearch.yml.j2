@@ -12,9 +12,9 @@ bootstrap.memory_lock: {{ elasticsearch_memory_lock | lower }}
 # Cluster discovery address, to get the peer list. This is a kubernetes
 # service that target every ES running nodes, even if they are not ready yet.
 {% if elasticsearch_image_tag is version('7.8', '<') %}
-discovery.zen.ping.unicast.hosts: elasticsearch-discovery.{{ project_name }}.svc
+discovery.zen.ping.unicast.hosts: elasticsearch-discovery.{{ namespace_name }}.svc
 {% else %}
-discovery.seed_hosts: elasticsearch-discovery.{{ project_name }}.svc
+discovery.seed_hosts: elasticsearch-discovery.{{ namespace_name }}.svc
 {% endif %}
 
 {% if elasticsearch_image_tag is version('7.0', '>=') %}

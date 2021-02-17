@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: learninglocker-pvc-storage
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
   labels:
     app: learninglocker
     version: "{{ learninglocker_image_tag }}"

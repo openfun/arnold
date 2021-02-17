@@ -3,7 +3,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: edxapp-mysql-load-sql-dump-{{ job_stamp }}
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
   labels:
     app: edxapp
     service: mysql

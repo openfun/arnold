@@ -7,7 +7,7 @@ metadata:
     version: "{{ ashley_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
   name: "ashley-app-{{ deployment_stamp }}"
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 spec:
   replicas: {{ ashley_app_replicas }}
   template:

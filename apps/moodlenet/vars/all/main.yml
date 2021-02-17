@@ -1,8 +1,8 @@
 # Application default configuration
 
 # -- route / urls
-moodlenet_host: "api.{{ project_name}}.{{ domain_name }}"
-moodlenet_frontend_base_url: "app.{{ project_name}}.{{ domain_name }}"
+moodlenet_host: "api.{{ namespace_name }}.{{ domain_name }}"
+moodlenet_frontend_base_url: "app.{{ namespace_name }}.{{ domain_name }}"
 
 # -- nginx
 moodlenet_nginx_image_name: "fundocker/openshift-nginx"

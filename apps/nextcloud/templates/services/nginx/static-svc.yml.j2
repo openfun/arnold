@@ -9,7 +9,7 @@ metadata:
     type: static-service
     removable: "no"
   name: "nextcloud-nginx-{{ deployment_stamp }}"
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 spec:
   ports:
     - name: {{ nextcloud_nginx_port }}-tcp

@@ -8,7 +8,7 @@
 - name: Get static service for application {{ app.name }} with prefix {{ prefix }}
   k8s_info:
     api_version: "v1"
-    namespace: "{{ project_name }}"
+    namespace: "{{ namespace_name }}"
     kind: "Service"
     label_selectors:
       - type=static-service

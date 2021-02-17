@@ -1,7 +1,7 @@
 # Application default configuration
 
 # -- route
-hello_host: "hello.{{ project_name }}.{{ domain_name }}"
+hello_host: "hello.{{ namespace_name }}.{{ domain_name }}"
 
 # -- misc
 hello_app_port: "8080"
