@@ -6,7 +6,7 @@ metadata:
     service: app
     version: "{{ elasticsearch_image_tag }}"
   name: elasticsearch
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 spec:
   selector:
     app: elasticsearch

@@ -22,14 +22,14 @@
         api_version: v1
         kind: Namespace
         field_selectors:
-          - metadata.name={{ project_name }}
+          - metadata.name={{ namespace_name }}
       register: namespace
 
     - name: Delete the namespace
       k8s:
         api_version: v1
         kind: Namespace
-        name: "{{ project_name }}"
+        name: "{{ namespace_name }}"
         state: absent
       when: namespace.resources | length > 0
 
@@ -38,7 +38,7 @@
         api_version: "v1"
         kind: Namespace
         field_selectors:
-          - metadata.name={{ project_name }}
+          - metadata.name={{ namespace_name }}
       register: terminating_namespaces
       until: terminating_namespaces.resources is defined and ( terminating_namespaces.resources | length ) == 0
       retries: 120

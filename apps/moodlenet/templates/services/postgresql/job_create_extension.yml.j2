@@ -12,7 +12,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: postgresql-create-extensions-{{ job_stamp }}
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
   labels:
     app: moodlenet
     service: postgresql

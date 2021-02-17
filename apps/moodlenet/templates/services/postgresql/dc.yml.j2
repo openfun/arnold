@@ -8,7 +8,7 @@ metadata:
     version: "{{ moodlenet_postgresql_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
   name: "moodlenet-postgresql-{{ deployment_stamp }}"
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 spec:
   replicas: 1
   template:

@@ -1,7 +1,7 @@
 # Application default configuration
 
 # -- route
-mailcatcher_host: "mailcatcher.{{ project_name}}.{{ domain_name }}"
+mailcatcher_host: "mailcatcher.{{ namespace_name }}.{{ domain_name }}"
 
 # -- mailcatcher
 mailcatcher_image_name: "sj26/mailcatcher"

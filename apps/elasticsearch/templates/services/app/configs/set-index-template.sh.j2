@@ -12,7 +12,7 @@ declare -r PROTOCOL="https"
 declare -r PROTOCOL="http"
 {% endif %}
 
-declare -r ES_URL="${PROTOCOL}://elasticsearch.{{ project_name }}.svc:{{ elasticsearch_api_port }}"
+declare -r ES_URL="${PROTOCOL}://elasticsearch.{{ namespace_name }}.svc:{{ elasticsearch_api_port }}"
 declare -i MAX_RETRY=20
 declare -i RETRY_DELAY=5
 declare -i retry=0

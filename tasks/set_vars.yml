@@ -95,7 +95,7 @@
   register: merged_apps
   with_items: "{{ apps | default([ available_apps ] | flatten) }}"
 
-- name: Set applications for this project
+- name: Set applications for this namespace
   set_fact:
     apps: "{{ merged_apps | json_query('results[*].ansible_facts._app') }}"
 
@@ -141,7 +141,7 @@
     file: "{{ item.path }}"
   with_items: '{{ apps | json_query("[*].vars[?type==`all`]") | flatten }}'
 
-- name: Print project details
+- name: Print namespace details
   debug:
-    msg: "Project name {{ project_name }} - domain {{ domain_name }}"
+    msg: "Namespace {{ namespace_name }} - domain {{ domain_name }}"
     verbosity: 1

@@ -1,7 +1,7 @@
 # Application default configuration
 
 # -- routes
-edxec_host: "edxec.{{ project_name}}.{{ domain_name }}"
+edxec_host: "edxec.{{ namespace_name }}.{{ domain_name }}"
 
 # -- edxec
 edxec_image_name: "fundocker/edxec"

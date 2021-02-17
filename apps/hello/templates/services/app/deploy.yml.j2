@@ -5,7 +5,7 @@ metadata:
     app: hello
     deployment_stamp: "{{ deployment_stamp }}"
   name: "hello-app-{{ deployment_stamp }}"
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 spec:
   replicas: 1 # number of pods we want
   selector:

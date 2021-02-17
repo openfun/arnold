@@ -39,7 +39,7 @@
     - name: Create K8s entities
       k8s:
         force: True
-        namespace: "{{ project_name }}"
+        namespace: "{{ namespace_name }}"
         definition: "{{ lookup('template', item) | from_yaml }}"
       with_items:
         - "{{ acme_templates }}"

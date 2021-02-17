@@ -11,7 +11,7 @@ metadata:
     deployment_stamp: "{{ deployment_stamp }}"
     version: "{{ learninglocker_image_tag }}"
   name: "{{ dc_name }}-{{ deployment_stamp }}"
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 spec:
   replicas: {{ learninglocker_replicas }}
   template:

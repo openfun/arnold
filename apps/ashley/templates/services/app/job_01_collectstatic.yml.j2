@@ -2,7 +2,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: "ashley-app-collectstatic-{{ job_stamp }}"
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
   labels:
     app: ashley
     service: app

@@ -2,7 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: "hello-app-{{ prefix }}"
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
   labels:
     env_type: "{{ env_type }}"
     customer: "{{ customer }}"

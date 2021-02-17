@@ -32,7 +32,7 @@ apps:
 
 # While deploying edxapp separately from the forum, those vars are required to
 # compile custom configMaps
-forum_host: "forum.{{ project_name}}.{{ domain_name }}"
+forum_host: "forum.{{ namespace_name }}.{{ domain_name }}"
 forum_port: 9292
 
 # increase edxapp data volume size
