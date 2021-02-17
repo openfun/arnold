@@ -8,7 +8,7 @@ metadata:
     deployment_stamp: "{{ deployment_stamp }}"
   # name of the service should be database host name in settings
   name: "ashley-postgresql-{{ deployment_stamp }}"
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 spec:
   ports:
     - name: "{{ ashley_database_port }}-tcp"

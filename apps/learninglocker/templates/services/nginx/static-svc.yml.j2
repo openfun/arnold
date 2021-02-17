@@ -9,7 +9,7 @@ metadata:
     type: static-service
     removable: "no"
   name: "learninglocker-nginx-{{ prefix }}"
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 spec:
   ports:
     - name: "{{ learninglocker_nginx_port }}-tcp"

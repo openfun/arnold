@@ -5,7 +5,7 @@ metadata:
     app: hello
     deployment_stamp: "{{ deployment_stamp }}"
   name: "hello-app-{{ deployment_stamp }}"  # name of the service should be host name in nginx
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 spec:
   ports:
   - name: {{ hello_app_port }}-tcp

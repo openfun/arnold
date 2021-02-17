@@ -2,7 +2,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: nextcloud-cron-{{ deployment_stamp }}
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
   labels:
     app: nextcloud
     service: nextcloud

@@ -1,7 +1,7 @@
 # Application default configuration
 
 # -- route
-nextcloud_host: "nextcloud.{{ project_name}}.{{ domain_name }}"
+nextcloud_host: "nextcloud.{{ namespace_name }}.{{ domain_name }}"
 
 # -- nginx
 nextcloud_nginx_image_name: "fundocker/openshift-nginx"

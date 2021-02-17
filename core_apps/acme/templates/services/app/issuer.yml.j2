@@ -2,7 +2,7 @@ apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: "{{ acme_issuer_name }}"
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 spec:
   acme:
 {% if acme_contact_email is defined and acme_contact_email != "" %}

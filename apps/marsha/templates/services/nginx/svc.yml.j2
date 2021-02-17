@@ -7,7 +7,7 @@ metadata:
     version: "{{ marsha_nginx_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
   name: "marsha-nginx-{{ deployment_stamp }}"
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 spec:
   ports:
     - name: {{ marsha_nginx_port }}-tcp

@@ -7,7 +7,7 @@ metadata:
     version: "{{ redis_app_image_tag }}"
   # name of the service should be host name in edxapp configuration
   name: redis
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 spec:
   ports:
   - name: "{{ redis_app_port }}-tcp"

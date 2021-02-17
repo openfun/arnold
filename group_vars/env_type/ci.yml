@@ -1,5 +1,4 @@
 # CI environment variables
-project_description: "A minimal project to test apps bootstrapping ({{ env_type }})"
 domain_name: "{{ lookup('env', 'K8S_DOMAIN') }}.nip.io"
 
 # The CI environment is not supposed to be interactive

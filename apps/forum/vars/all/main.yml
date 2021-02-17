@@ -1,7 +1,7 @@
 # Application default configuration
 
 # -- route
-forum_host: "forum.{{ project_name}}.{{ domain_name }}"
+forum_host: "forum.{{ namespace_name }}.{{ domain_name }}"
 
 # -- forum
 forum_image_name: "fundocker/forum"

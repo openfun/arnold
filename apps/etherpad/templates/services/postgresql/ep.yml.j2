@@ -8,7 +8,7 @@ metadata:
     deployment_stamp: "{{ deployment_stamp }}"
   # name of the endpoint should be the same as the corresponding service
   name: "etherpad-postgresql-{{ deployment_stamp }}"
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 subsets:
   - addresses:
     - ip: "{{ endpoint_postgresql_ip }}"

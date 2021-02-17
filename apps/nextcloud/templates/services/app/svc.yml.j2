@@ -7,7 +7,7 @@ metadata:
     version: "{{ nextcloud_version }}"
     deployment_stamp: "{{ deployment_stamp }}"
   name: nextcloud-app-{{ deployment_stamp }}  # name of the service should be host name in nginx
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 spec:
   ports:
   - name: 9000-tcp

@@ -8,7 +8,7 @@ metadata:
     deployment: redirect-nginx
     deployment_stamp: "{{ deployment_stamp }}"
   name: redirect-nginx
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 spec:
   replicas: {{ redirect_nginx_replicas }}
   selector:

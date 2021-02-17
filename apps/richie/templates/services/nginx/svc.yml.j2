@@ -7,7 +7,7 @@ metadata:
     version: "{{ richie_nginx_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
   name: "richie-nginx-{{ deployment_stamp }}"
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 spec:
   ports:
     - name: {{ richie_nginx_port }}-tcp

@@ -12,5 +12,5 @@
 
 - name: Check if the "apps_filter" variable is defined
   fail:
-    msg: "This project contains several apps, the `apps_filter` variable should be defined"
+    msg: "This namespace contains several apps, the `apps_filter` variable should be defined"
   when: apps_filter is not defined and apps | length > 1

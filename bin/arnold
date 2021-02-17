@@ -182,34 +182,34 @@ OPTIONS:
 
 COMMANDS:
 
-> Prepare current project:
+> Prepare current namespace:
 
   create_app_vaults create a vault file for each application
   create_db_vault   create or update a vault file with databases credentials
-  htpasswd          initialize a project's htpassword files
+  htpasswd          initialize a namespace's htpassword files
   info              display current configuration
-  redirect          create (or update) project's HTTP redirections
-  reset_vault_pw    reset vault password for a project (and update all vaults)
+  redirect          create (or update) HTTP redirections
+  reset_vault_pw    reset vault password for a namespace (and update all vaults)
   run               run any command in the container
   setup             create arnold-required folders and files
   vault             wrapper around Ansible's vault command
-  vaults            perform global actions for all project vaults
+  vaults            perform global actions for all namespace vaults
   vault_pw          set a password to encrypt vault files with Ansible Vault
 
-> Deploy current project:
+> Deploy current namespace:
 
   bootstrap             shortcut for the init + deploy commands
   create                create a k8s object
-  create_project        create project (namespace)
+  create_namespace      create namespace
   create_volumes        create volumes for every application
   deploy                deploy all objects defined in all applications
-  init                  initialize a project with all its volumes and configmaps
+  init                  initialize a namespace with all its volumes and configmaps
   rollback              switch back the previous stack as current
-  ingresses             create project ingresses and redirections (if any)
-  secrets               update project secrets
+  ingresses             create ingresses and redirections (if any)
+  secrets               update namespace secrets
   switch                perform blue/green switch
 
-> Manage current project:
+> Manage current namespace:
 
   clean             remove orphan objects (for blue-green apps)
   delete_previous   remove the previous stack (for blue-green apps)
@@ -407,7 +407,7 @@ K8S_AUTH_API_KEY and K8S_AUTH_HOST.
     export K8S_AUTH_HOST
 }
 
-# _ensure_k8s_namespace_is_set: ensure that k8s's target project has
+# _ensure_k8s_namespace_is_set: ensure that k8s's target namespace has
 # been set via the ARNOLD_CUSTOMER & ARNOLD_ENVIRONMENT environment variables
 function _ensure_k8s_namespace_is_set() {
 
@@ -417,9 +417,9 @@ function _ensure_k8s_namespace_is_set() {
     fi
 }
 
-# _get_project: get the project name given ARNOLD_CUSTOMER & ARNOLD_ENVIRONMENT
+# _get_namespace: get the namespace given ARNOLD_CUSTOMER & ARNOLD_ENVIRONMENT
 # environment variables definitions
-function _get_project() {
+function _get_namespace() {
 
     echo "${ARNOLD_ENVIRONMENT}-${ARNOLD_CUSTOMER}"
 }
@@ -460,14 +460,14 @@ function _get_vault_password() {
     # return a fake password with a message hoping that the vault password is
     # not required for this action.
     if ! command -v gpg > /dev/null; then
-        log warning "gpg command not found. Arnold won't be able to decrypt project's vaults."
+        log warning "gpg command not found. Arnold won't be able to decrypt vaults."
         return
     fi
 
     if [ -e "${GPG_PASSWORD_FILE}" ]; then
         gpg -d --quiet --batch "${GPG_PASSWORD_FILE}"
     else
-        log error "Vault password file for configured project is missing. Expected path is:\\n${GPG_PASSWORD_FILE}"
+        log error "Vault password file for configured namespase is missing. Expected path is:\\n${GPG_PASSWORD_FILE}"
         exit 10
     fi
 }
@@ -631,8 +631,8 @@ function _ansible_playbook() {
         "$@"
 }
 
-# _get_project_vaults: get all vaults for a project
-function _get_project_vaults() {
+# _get_vaults: get all vaults for a namespace
+function _get_vaults() {
 
     vaults_path="${CUSTOMER_DIR}/${ARNOLD_CUSTOMER}/${ARNOLD_ENVIRONMENT}/secrets"
 
@@ -660,14 +660,14 @@ function _vault(){
 
 # ---- Commands ----
 
-# create project (namespace)
-function create_project() {
+# create the namespace
+function create_namespace() {
 
     _set_k8s_env
-    _ansible_playbook create_project.yml "$@"
+    _ansible_playbook create_namespace.yml "$@"
 }
 
-# Initialize and project and deploy its active applications
+# Initialize the namespace and deploy its active applications
 function bootstrap() {
 
     _set_k8s_env
@@ -768,7 +768,7 @@ function htpasswd() {
 function info() {
 
     _ensure_k8s_namespace_is_set
-    log info "Project: $(_get_project)"
+    log info "Project: $(_get_namespace)"
 }
 
 
@@ -776,7 +776,7 @@ function info() {
 function init() {
 
     _set_k8s_env
-    _ansible_playbook init_project.yml "$@"
+    _ansible_playbook init_namespace.yml "$@"
 }
 
 # Create (or updade) project's redirections
@@ -988,7 +988,7 @@ function vaults(){
 
     _ensure_k8s_namespace_is_set
 
-    vaults="$(_get_project_vaults)"
+    vaults="$(_get_vaults)"
     log info "Vaults found for the current project:\\n${vaults}"
 
     for vault in ${vaults}; do

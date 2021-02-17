@@ -2,5 +2,5 @@
 richie_django_configuration: "Feature"
 
 # Only in feature environment do we add the feature title to the hosts
-edxapp_cms_host: "{{ feature_title }}.cms.{{ project_name}}.{{ domain_name }}"
-edxapp_lms_host: "{{ feature_title }}.lms.{{ project_name}}.{{ domain_name }}"
+edxapp_cms_host: "{{ feature_title }}.cms.{{ namespace_name }}.{{ domain_name }}"
+edxapp_lms_host: "{{ feature_title }}.lms.{{ namespace_name }}.{{ domain_name }}"
