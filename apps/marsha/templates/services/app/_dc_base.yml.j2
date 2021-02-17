@@ -9,7 +9,7 @@ metadata:
     version: "{{ marsha_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
   name: "{{ dc_name }}-{{ deployment_stamp }}"
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 spec:
   replicas: {{ marsha_replicas }}
   template:

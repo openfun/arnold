@@ -1,7 +1,7 @@
 # Application default configuration
 
 # -- route
-richie_host: "richie.{{ project_name}}.{{ domain_name }}"
+richie_host: "richie.{{ namespace_name }}.{{ domain_name }}"
 
 # -- nginx
 richie_nginx_image_name: "fundocker/richie-demo-nginx"

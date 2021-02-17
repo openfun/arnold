@@ -61,7 +61,7 @@
   k8s:
     state: present
     name: "{{ app.name }}-{{ item.key }}{{ deployment_stamp is none | ternary('', '-') }}{{ deployment_stamp }}"
-    namespace: "{{ project_name }}"
+    namespace: "{{ namespace_name }}"
     definition:
       apiVersion: v1
       kind: ConfigMap
@@ -84,7 +84,7 @@
   k8s:
     state: present
     name: "{{ app.name }}-{{ item.name }}-dotenv{{ deployment_stamp is none | ternary('', '-') }}{{ deployment_stamp }}"
-    namespace: "{{ project_name }}"
+    namespace: "{{ namespace_name }}"
     definition:
       apiVersion: v1
       kind: ConfigMap

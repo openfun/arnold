@@ -8,7 +8,7 @@ metadata:
     deployment_stamp: "{{ deployment_stamp }}"
   # name of the service should be database host name in settings
   name: "moodlenet-postgresql-{{ deployment_stamp }}"
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 spec:
   ports:
     - name: "{{ moodlenet_postgresql_port }}-tcp"

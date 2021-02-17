@@ -1,9 +1,9 @@
 # Application default configuration
 
 # -- routes
-edxapp_cms_host: "cms.{{ project_name}}.{{ domain_name }}"
-edxapp_lms_host: "lms.{{ project_name}}.{{ domain_name }}"
-edxapp_preview_host: "preview.{{ project_name}}.{{ domain_name }}"
+edxapp_cms_host: "cms.{{ namespace_name }}.{{ domain_name }}"
+edxapp_lms_host: "lms.{{ namespace_name }}.{{ domain_name }}"
+edxapp_preview_host: "preview.{{ namespace_name }}.{{ domain_name }}"
 
 # -- edxapp (cms/lms)
 edxapp_image_name: "fundocker/edxapp"

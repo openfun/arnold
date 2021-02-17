@@ -7,7 +7,7 @@ metadata:
     version: "{{ flower_nginx_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
   name: "flower-nginx"
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 spec:
   ports:
     - name: "{{ flower_nginx_app_port }}-tcp"

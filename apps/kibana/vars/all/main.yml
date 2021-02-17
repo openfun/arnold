@@ -1,7 +1,7 @@
 # Application default configuration
 
 # -- route
-kibana_host: "kibana.{{ project_name}}.{{ domain_name }}"
+kibana_host: "kibana.{{ namespace_name }}.{{ domain_name }}"
 
 # -- nginx
 kibana_nginx_image_name: "fundocker/openshift-nginx"

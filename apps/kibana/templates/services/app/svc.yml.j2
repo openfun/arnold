@@ -7,7 +7,7 @@ metadata:
     version: "{{ kibana_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
   name: "kibana-app-{{ deployment_stamp }}"
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 spec:
   selector:
     app: kibana

@@ -5,7 +5,7 @@ set -eo pipefail
 declare -i MAX_TRIES=20
 declare -i PORT=80
 declare ACCEPT_HEADER="text/html"
-declare ARNOLD_PROJECT="ci-eugene"
+declare ARNOLD_NAMESPACE="ci-eugene"
 declare CONTENT
 declare PROTOCOL="http"
 declare ROUTE_PREFIX="current"
@@ -105,7 +105,7 @@ function route(){
     subdomain="${ROUTE_PREFIX}."
   fi
 
-  url="${PROTOCOL}://${subdomain}${SERVICE}.${ARNOLD_PROJECT}.${K8S_DOMAIN}.nip.io:${PORT}${URL_PATH}"
+  url="${PROTOCOL}://${subdomain}${SERVICE}.${ARNOLD_NAMESPACE}.${K8S_DOMAIN}.nip.io:${PORT}${URL_PATH}"
   cmd="curl -vLk --header 'Accept: ${ACCEPT_HEADER}' ${url}"
   # shellcheck disable=SC2016
   test_='grep "HTTP/1.1 200 OK" /tmp/${random}.err && grep "${CONTENT}" /tmp/${random}.out'

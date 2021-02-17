@@ -25,7 +25,7 @@
           kind: NetworkPolicy
           metadata:
             name: default-deny-external-ns-ingress
-            namespace: "{{ project_name }}"
+            namespace: "{{ namespace_name }}"
           spec:
             podSelector: {}
             policyTypes:
@@ -34,5 +34,5 @@
               - from:
                 - namespaceSelector:
                     matchLabels:
-                      name: "{{ project_name }}"
+                      name: "{{ namespace_name }}"
               - from: "{{ network_policy_rule_ingress_controller }}"

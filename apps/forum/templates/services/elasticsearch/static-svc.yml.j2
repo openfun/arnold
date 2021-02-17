@@ -10,7 +10,7 @@ metadata:
     removable: "no"
   # name of the service should be database host name in settings
   name: "{{ forum_elasticsearch_host }}-{{ prefix }}"
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 spec:
   ports:
   - name: {{ forum_elasticsearch_port }}-tcp

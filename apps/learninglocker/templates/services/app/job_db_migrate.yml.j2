@@ -4,7 +4,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: "learninglocker-job-db-migrate-{{ job_stamp }}"
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
   labels:
     app: learninglocker
     service: learninglocker

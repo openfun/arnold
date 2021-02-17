@@ -20,7 +20,7 @@
 - name: "Select objects (CM + pods) for app {{ app.name }}"
   k8s_info:
     api_version: "v1"
-    namespace: "{{ project_name }}"
+    namespace: "{{ namespace_name }}"
     kind: "{{ item }}"
     label_selectors:
       - app={{ app.name }}

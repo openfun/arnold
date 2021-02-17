@@ -6,7 +6,7 @@ metadata:
     service: app
     version: "{{ elasticsearch_image_tag }}"
   name: elasticsearch-discovery
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
   annotations:
     # Deprecated annotation replaced by publishNotReadyAddresses
     # Needed to be compatible with openshift < 3.11

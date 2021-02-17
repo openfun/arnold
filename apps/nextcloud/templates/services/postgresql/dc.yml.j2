@@ -8,7 +8,7 @@ metadata:
     version: "{{ nextcloud_database_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
   name: "nextcloud-postgresql-{{ deployment_stamp }}"
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 spec:
   replicas: 1
   template:

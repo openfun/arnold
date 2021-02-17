@@ -1,4 +1,4 @@
-- import_playbook: create_project.yml
+- import_playbook: create_namespace.yml
 - import_playbook: create_network_policy.yml
 - import_playbook: create_volumes.yml
 - import_playbook: create_htpasswds.yml

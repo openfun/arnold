@@ -45,7 +45,7 @@ metadata:
     worker_type: "{{ worker_type }}"
     deployment_stamp: "{{ deployment_stamp }}"
   name: "{{ dc_name }}"
-  namespace: "{{ project_name }}"
+  namespace: "{{ namespace_name }}"
 spec:
   # We want to deploy every target DC even if replicas has been set to zero to
   # be able to scale up/down worker for a deployed stack.
