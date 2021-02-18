@@ -16,5 +16,5 @@ spec:
     targetPort: {{ redis_app_port }}
   selector:
     app: redis
-    deploymentconfig: "redis-app"
+    deployment: "redis-app"
   type: ClusterIP
