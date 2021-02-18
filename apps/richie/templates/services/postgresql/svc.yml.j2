@@ -12,7 +12,7 @@ metadata:
 spec:
   ports:
     - name: "{{ richie_database_port }}-tcp"
-      port: "{{ richie_database_port }}"
+      port: {{ richie_database_port }}
       protocol: TCP
       targetPort: {{ richie_database_port }}
 # As commented in the ad hoc endpoint, the endpoint name points to this service
@@ -23,6 +23,6 @@ spec:
   selector:
     app: richie
     service: postgresql
-    deploymentconfig: "richie-postgresql-{{ deployment_stamp }}"
+    deployment: "richie-postgresql-{{ deployment_stamp }}"
   type: ClusterIP
 {% endif%}
