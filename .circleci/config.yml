@@ -622,7 +622,7 @@ jobs:
             bin/ci route -s kibana -c green -p "/api/status"
 
   # Test the delete_app tasks for blue-green applications
-  # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
+  # nota bene: we use a real k8s cluster installed in CircleCI's VM.
   test-delete-app:
     <<: *defaults
 
@@ -654,10 +654,8 @@ jobs:
       - run:
           name: Check that only one pod is running Richie's app
           command: |
-            # Switch to the active project
-            oc project ci-eugene
             # Select Richie's service pods
-            cmd="oc get pods -l app=richie,service=richie"
+            cmd="kubectl get pods -n ci-eugene -l app=richie,service=richie"
             # Run command to debug output (eventually)
             eval "${cmd}"
             # Perform running pods test
@@ -833,15 +831,15 @@ workflows:
           filters:
             tags:
               only: /.*/
-#      - test-bootstrap-richie:
-#          requires:
-#            - lint-bash
-#            - lint-docker
-#            - lint-ansible
-#            - lint-plugins
-#          filters:
-#            tags:
-#              only: /.*/
+      - test-bootstrap-richie:
+          requires:
+            - lint-bash
+            - lint-docker
+            - lint-ansible
+            - lint-plugins
+          filters:
+            tags:
+              only: /.*/
       - test-bootstrap-edxapp:
           requires:
             - lint-bash
@@ -941,12 +939,12 @@ workflows:
 #          filters:
 #            tags:
 #              only: /.*/
-#      - test-delete-app:
-#          requires:
-#            - test-bootstrap-richie
-#          filters:
-#            tags:
-#              only: /.*/
+      - test-delete-app:
+          requires:
+            - test-bootstrap-richie
+          filters:
+            tags:
+              only: /.*/
       - test-prevent-switch-to-nothing:
           requires:
             - test-bootstrap-hello
@@ -972,7 +970,7 @@ workflows:
             - test-build
             - test-plugins
             - test-bootstrap-hello
-#            - test-bootstrap-richie
+            - test-bootstrap-richie
             - test-bootstrap-edxapp
 #            - test-bootstrap-mailcatcher
             - test-bootstrap-marsha
@@ -982,8 +980,8 @@ workflows:
 #            - test-bootstrap-etherpad
 #            - test-bootstrap-kibana
             - test-redirect
-#            - test-delete-app
-#            - test-prevent-switch-to-nothing
+            - test-delete-app
+            - test-prevent-switch-to-nothing
           filters:
             branches:
               only: master
