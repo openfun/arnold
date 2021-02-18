@@ -36,7 +36,7 @@
 {%- endmacro -%}
 
 apiVersion: v1
-kind: DeploymentConfig
+kind: Deployment
 metadata:
   labels:
     app: edxapp
@@ -50,10 +50,14 @@ spec:
   # We want to deploy every target DC even if replicas has been set to zero to
   # be able to scale up/down worker for a deployed stack.
   replicas: {{ replicas | default(1) }} # number of pods we want
-  strategy:
-    rollingParams:
-      timeoutSeconds: 1200
-    type: Rolling
+  selector:
+    matchLabels:
+      app: edxapp
+      service: {{ service_variant }}
+      version: "{{ edxapp_image_tag }}"
+      worker_type: "{{ worker_type }}"
+      deployment_stamp: "{{ deployment_stamp }}"
+      deployment: "{{ dc_name }}"
   template:
     metadata:
       labels:
@@ -62,7 +66,7 @@ spec:
         version: "{{ edxapp_image_tag }}"
         worker_type: "{{ worker_type }}"
         deployment_stamp: "{{ deployment_stamp }}"
-        deploymentconfig: "{{ dc_name }}"
+        deployment: "{{ dc_name }}"
     spec:
       # Prefer running pods on different nodes for redundancy
       affinity:
@@ -72,7 +76,7 @@ spec:
             podAffinityTerm:
               labelSelector:
                 matchExpressions:
-                - key: deploymentconfig
+                - key: deployment
                   operator: In
                   values:
                   - "{{ dc_name }}"
@@ -154,6 +158,9 @@ spec:
               name: edxapp-configmap-{{ service_variant }}
             - mountPath: /tmp/secret
               name: edxapp-secret
+      securityContext:
+        runAsUser: {{ container_uid }}
+        runAsGroup: {{ container_gid }}
       volumes:
         - name: edxapp-configmap-{{ service_variant }}
           configMap:
