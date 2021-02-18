@@ -16,5 +16,5 @@ spec:
       targetPort: {{ flower_nginx_app_port }}
   selector:
     app: flower
-    deploymentconfig: "flower-nginx"
+    deployment: "flower-nginx"
   type: ClusterIP
