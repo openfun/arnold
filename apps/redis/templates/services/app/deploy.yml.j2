@@ -56,7 +56,6 @@ spec:
                 - "/bin/bash"
                 - "-c"
                 - "redis-cli ping && touch /data/healthcheck"
-            initialDelaySeconds: 60
             periodSeconds: 10
           volumeMounts:
             - mountPath: /data
