@@ -885,15 +885,15 @@ workflows:
 #          filters:
 #            tags:
 #              only: /.*/
-#      - test-bootstrap-forum:
-#          requires:
-#            - lint-bash
-#            - lint-docker
-#            - lint-ansible
-#            - lint-plugins
-#          filters:
-#            tags:
-#              only: /.*/
+      - test-bootstrap-forum:
+          requires:
+            - lint-bash
+            - lint-docker
+            - lint-ansible
+            - lint-plugins
+          filters:
+            tags:
+              only: /.*/
 #      - test-bootstrap-learninglocker:
 #          requires:
 #            - lint-bash
@@ -974,7 +974,7 @@ workflows:
             - test-bootstrap-edxapp
             - test-bootstrap-mailcatcher
             - test-bootstrap-marsha
-#            - test-bootstrap-forum
+            - test-bootstrap-forum
 #            - test-bootstrap-learninglocker
             - test-bootstrap-ashley
 #            - test-bootstrap-etherpad

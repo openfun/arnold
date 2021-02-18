@@ -18,5 +18,5 @@ spec:
       targetPort: {{ forum_port }}
   selector:
     app: forum
-    deploymentconfig: "forum-app-{{ deployment_stamp | default('undefined', true) }}"
+    deployment: "forum-app-{{ deployment_stamp | default('undefined', true) }}"
   type: ClusterIP

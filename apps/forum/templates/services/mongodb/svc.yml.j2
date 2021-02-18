@@ -22,13 +22,13 @@ spec:
 # OpenShift.
   selector:
     app: forum
-    deploymentconfig: "{{ forum_mongodb_host }}-{{ deployment_stamp }}"
+    deployment: "{{ forum_mongodb_host }}-{{ deployment_stamp }}"
   type: ClusterIP
 {% else %}
 {% for ip in forum_endpoint_mongodb_ips %}
-  - 
+  -
     name: "mongodb-{{ ip | regex_replace("\.", "-") }}-tcp"
-    port: {{ forum_mongodb_port | int + loop.index0 }} 
+    port: {{ forum_mongodb_port | int + loop.index0 }}
     protocol: TCP
     targetPort: {{ forum_mongodb_port }}
 {% endfor %}
