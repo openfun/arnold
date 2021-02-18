@@ -16,5 +16,5 @@ spec:
     targetPort: {{ edxapp_django_port }}
   selector:
     app: edxapp
-    deploymentconfig: "edxapp-cms-wsgi-{{ deployment_stamp }}"
+    deployment: "edxapp-cms-wsgi-{{ deployment_stamp }}"
   type: ClusterIP

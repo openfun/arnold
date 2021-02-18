@@ -82,6 +82,9 @@ spec:
               name: edxapp-configmap-cms
             - mountPath: /tmp/secret
               name: edxapp-secret
+      securityContext:
+        runAsUser: {{ container_uid }}
+        runAsGroup: {{ container_gid }}
       volumes:
         - name: edxapp-configmap-fixtures
           configMap:

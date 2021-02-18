@@ -22,13 +22,13 @@ spec:
 # OpenShift.
   selector:
     app: edxapp
-    deploymentconfig: "{{ edxapp_mongodb_host }}-{{ deployment_stamp }}"
+    deployment: "{{ edxapp_mongodb_host }}-{{ deployment_stamp }}"
   type: ClusterIP
 {% else %}
 {% for ip in edxapp_endpoint_mongodb_ips %}
   -
     name: "mongodb-{{ ip | regex_replace("\.", "-") }}-tcp"
-    port: {{ edxapp_mongodb_port | int + loop.index0 }} 
+    port: {{ edxapp_mongodb_port | int + loop.index0 }}
     protocol: TCP
     targetPort: {{ edxapp_mongodb_port }}
 {% endfor %}
