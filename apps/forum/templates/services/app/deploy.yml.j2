@@ -1,6 +1,6 @@
 {%- from "apps/forum/templates/services/app/macros/mongodb_uri.yml.j2" import mongodb_uri with context -%}
 apiVersion: v1
-kind: DeploymentConfig
+kind: Deployment
 metadata:
   labels:
     app: forum
@@ -11,13 +11,20 @@ metadata:
   namespace: "{{ namespace_name }}"
 spec:
   replicas: {{ forum_app_replicas }}
+  selector:
+    matchLabels:
+      app: forum
+      service: forum
+      version: "{{ forum_image_tag }}"
+      deployment: "forum-app-{{ deployment_stamp }}"
+      deployment_stamp: "{{ deployment_stamp }}"
   template:
     metadata:
       labels:
         app: forum
         service: forum
         version: "{{ forum_image_tag }}"
-        deploymentconfig: "forum-app-{{ deployment_stamp }}"
+        deployment: "forum-app-{{ deployment_stamp }}"
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
       # Prefer running pods on different nodes for redundancy
@@ -28,7 +35,7 @@ spec:
             podAffinityTerm:
               labelSelector:
                 matchExpressions:
-                - key: deploymentconfig
+                - key: deployment
                   operator: In
                   values:
                   - "forum-app-{{ deployment_stamp }}"
@@ -61,7 +68,7 @@ spec:
             initialDelaySeconds: 10
             periodSeconds: 5
           ports:
-            - containerPort: "{{ forum_port }}"
+            - containerPort: {{ forum_port }}
               protocol: TCP
           envFrom:
             - secretRef:
@@ -75,3 +82,6 @@ spec:
             - "/bin/bash"
             - "-c"
             - bundle exec puma
+      securityContext:
+        runAsUser: {{ container_uid }}
+        runAsGroup: {{ container_gid }}

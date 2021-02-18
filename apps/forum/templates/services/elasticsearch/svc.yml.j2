@@ -17,5 +17,5 @@ spec:
     targetPort: {{ forum_elasticsearch_port }}
   selector:
     app: forum
-    deploymentconfig: "forum-elasticsearch-{{ deployment_stamp }}"
+    deployment: "forum-elasticsearch-{{ deployment_stamp }}"
   type: ClusterIP
