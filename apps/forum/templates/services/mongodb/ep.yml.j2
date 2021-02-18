@@ -11,13 +11,13 @@ metadata:
   namespace: "{{ namespace_name }}"
 subsets:
 {% for ip in forum_endpoint_mongodb_ips -%}
-  - 
+  -
     addresses:
-      - 
+      -
         ip: "{{ ip }}"
     ports:
-      - 
-        port: "{{ forum_mongodb_port }}"
+      -
+        port: {{ forum_mongodb_port }}
         name: "mongodb-{{ ip | regex_replace("\.", "-") }}-tcp"
 {% endfor -%}
 {% endif %}

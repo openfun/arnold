@@ -16,5 +16,5 @@ spec:
       targetPort: {{ forum_port }}
   selector:
     app: forum
-    deploymentconfig: "forum-app-{{ deployment_stamp }}"
+    deployment: "forum-app-{{ deployment_stamp }}"
   type: ClusterIP
