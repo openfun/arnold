@@ -11,7 +11,7 @@ metadata:
 spec:
   selector:
     app: kibana
-    deploymentconfig: "kibana-app-{{ deployment_stamp }}"
+    deployment: "kibana-app-{{ deployment_stamp }}"
   ports:
     - name: http
       port: {{ kibana_app_port }}

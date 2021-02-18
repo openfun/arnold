@@ -20,5 +20,5 @@ spec:
       targetPort: {{ kibana_nginx_healthcheck_port }}
   selector:
     app: kibana
-    deploymentconfig: "kibana-nginx-{{ deployment_stamp }}"
+    deployment: "kibana-nginx-{{ deployment_stamp }}"
   type: ClusterIP
