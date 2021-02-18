@@ -12,7 +12,7 @@ metadata:
 spec:
   ports:
     - name: "{{ etherpad_database_port }}-tcp"
-      port: "{{ etherpad_database_port }}"
+      port: {{ etherpad_database_port }}
       protocol: TCP
       targetPort: {{ etherpad_database_port }}
 # As commented in the ad hoc endpoint, the endpoint name points to this service
@@ -23,6 +23,6 @@ spec:
   selector:
     app: etherpad
     service: postgresql
-    deploymentconfig: "etherpad-postgresql-{{ deployment_stamp }}"
+    deployment: "etherpad-postgresql-{{ deployment_stamp }}"
   type: ClusterIP
 {% endif%}
