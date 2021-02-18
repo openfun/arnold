@@ -1,5 +1,5 @@
 apiVersion: v1
-kind: DeploymentConfig
+kind: Deployment
 metadata:
   labels:
     app: flower
@@ -10,14 +10,17 @@ metadata:
   namespace: "{{ namespace_name }}"
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: flower
+      service: app
+      deployment: "flower-app"
   template:
     metadata:
       labels:
         app: flower
         service: app
-        version: "{{ flower_image_tag }}"
-        deployment_stamp: "{{ deployment_stamp }}"
-        deploymentconfig: "flower-app"
+        deployment: "flower-app"
     spec:
 {% set image_pull_secret_name = flower_image_pull_secret_name | default(none) or default_image_pull_secret_name %}
 {% if image_pull_secret_name is not none %}
@@ -41,6 +44,9 @@ spec:
           volumeMounts:
             - mountPath: /app
               name: flower-configmap
+      securityContext:
+        runAsUser: {{ container_uid }}
+        runAsGroup: {{ container_gid }}
       volumes:
         - name: flower-configmap
           configMap:
