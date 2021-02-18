@@ -1,6 +1,6 @@
 {% if env_type in trashable_env_types %}
 apiVersion: v1
-kind: DeploymentConfig
+kind: Deployment
 metadata:
   labels:
     app: edxapp
@@ -11,6 +11,13 @@ metadata:
   namespace: "{{ namespace_name }}"
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: edxapp
+      service: mysql
+      version: "{{ edxapp_mysql_image_tag }}"
+      deployment_stamp: "{{ deployment_stamp }}"
+      deployment: "edxapp-mysql-{{ deployment_stamp }}"
   template:
     metadata:
       labels:
@@ -18,7 +25,7 @@ spec:
         service: mysql
         version: "{{ edxapp_mysql_image_tag }}"
         deployment_stamp: "{{ deployment_stamp }}"
-        deploymentconfig: "edxapp-mysql-{{ deployment_stamp }}"
+        deployment: "edxapp-mysql-{{ deployment_stamp }}"
     spec:
 {% set image_pull_secret_name = edxapp_mysql_image_pull_secret_name | default(none) or default_image_pull_secret_name %}
 {% if image_pull_secret_name is not none %}
@@ -29,9 +36,12 @@ spec:
         - image: "{{ edxapp_mysql_image_name }}:{{ edxapp_mysql_image_tag }}"
           name: mysql
           ports:
-            - containerPort: "{{ edxapp_mysql_port }}"
+            - containerPort: {{ edxapp_mysql_port }}
               protocol: TCP
           envFrom:
             - secretRef:
                 name: "{{ edxapp_mysql_secret_name }}"
+      securityContext:
+        runAsUser: {{ container_uid }}
+        runAsGroup: {{ container_gid }}
 {% endif %}

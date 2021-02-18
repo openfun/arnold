@@ -35,7 +35,7 @@ server {
   location @proxy_to_cms_app {
     proxy_set_header Host $http_host;
 
-    proxy_read_timeout {{ edxapp_routing_timeout | default("60s") }};
+    proxy_read_timeout {{ edxapp_routing_timeout | default("60") }}s;
 
     proxy_redirect off;
     proxy_pass http://cms-backend;
@@ -47,7 +47,7 @@ server {
       error_page 401 = @basicauth;
       return 401;
     }
-{% endif %} 
+{% endif %}
 
     try_files $uri @proxy_to_cms_app;
   }
