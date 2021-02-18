@@ -20,5 +20,5 @@ spec:
       targetPort: {{ etherpad_nginx_healthcheck_port }}
   selector:
     app: etherpad
-    deploymentconfig: "etherpad-nginx-{{ deployment_stamp }}"
+    deployment: "etherpad-nginx-{{ deployment_stamp }}"
   type: ClusterIP

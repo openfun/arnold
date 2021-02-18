@@ -556,7 +556,7 @@ jobs:
             bin/ci route -s nextcloud -c Nextcloud -p "/login" -P current -m 40
 
   # Test the bootstrap playbook on the "etherpad" application
-  # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
+  # nota bene: we use a real k8s cluster installed in CircleCI's VM.
   test-bootstrap-etherpad:
     <<: *defaults
 
@@ -920,15 +920,15 @@ workflows:
 #          filters:
 #            tags:
 #              only: /.*/
-#      - test-bootstrap-etherpad:
-#          requires:
-#            - lint-bash
-#            - lint-docker
-#            - lint-ansible
-#            - lint-plugins
-#          filters:
-#            tags:
-#              only: /.*/
+      - test-bootstrap-etherpad:
+          requires:
+            - lint-bash
+            - lint-docker
+            - lint-ansible
+            - lint-plugins
+          filters:
+            tags:
+              only: /.*/
       - test-bootstrap-kibana:
           requires:
             - lint-bash
@@ -976,7 +976,7 @@ workflows:
             - test-bootstrap-forum
 #            - test-bootstrap-learninglocker
             - test-bootstrap-ashley
-#            - test-bootstrap-etherpad
+            - test-bootstrap-etherpad
             - test-bootstrap-kibana
             - test-redirect
             - test-delete-app
