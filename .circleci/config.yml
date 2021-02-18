@@ -371,7 +371,7 @@ jobs:
             bin/ci route -s lms -c "It works!" -m 50
 
   # Test the bootstrap playbook on the "edxec" application
-  # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
+  # nota bene: we use a real k8s cluster installed in CircleCI's VM.
   test-bootstrap-edxec:
     <<: *defaults
 
@@ -848,15 +848,15 @@ workflows:
           filters:
             tags:
               only: /.*/
-#      - test-bootstrap-edxec:
-#          requires:
-#            - lint-bash
-#            - lint-docker
-#            - lint-ansible
-#            - lint-plugins
-#          filters:
-#            tags:
-#              only: /.*/
+      - test-bootstrap-edxec:
+          requires:
+            - lint-bash
+            - lint-docker
+            - lint-ansible
+            - lint-plugins
+          filters:
+            tags:
+              only: /.*/
       - test-bootstrap-mailcatcher:
           requires:
             - lint-bash

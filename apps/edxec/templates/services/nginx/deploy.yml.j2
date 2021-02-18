@@ -1,5 +1,5 @@
 apiVersion: v1
-kind: DeploymentConfig
+kind: Deployment
 metadata:
   labels:
     app: edxec
@@ -10,13 +10,20 @@ metadata:
   namespace: "{{ namespace_name }}"
 spec:
   replicas: {{ edxec_nginx_replicas }}
+  selector:
+    matchLabels:
+      app: edxec
+      service: nginx
+      version: "{{ edxec_nginx_image_tag }}"
+      deployment: "edxec-nginx-{{ deployment_stamp }}"
+      deployment_stamp: "{{ deployment_stamp }}"
   template:
     metadata:
       labels:
         app: edxec
         service: nginx
         version: "{{ edxec_nginx_image_tag }}"
-        deploymentconfig: "edxec-nginx-{{ deployment_stamp }}"
+        deployment: "edxec-nginx-{{ deployment_stamp }}"
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
       # Prefer running pods on different nodes for redundancy
@@ -27,7 +34,7 @@ spec:
             podAffinityTerm:
               labelSelector:
                 matchExpressions:
-                - key: deploymentconfig
+                - key: deployment
                   operator: In
                   values:
                   - "edxec-nginx-{{ deployment_stamp }}"
@@ -70,6 +77,9 @@ spec:
               port: {{ edxec_nginx_healthcheck_port }}
             initialDelaySeconds: 10
             periodSeconds: 5
+      securityContext:
+        runAsUser: {{ container_uid }}
+        runAsGroup: {{ container_gid }}
       volumes:
         - name: edxec-v-nginx
           configMap:
