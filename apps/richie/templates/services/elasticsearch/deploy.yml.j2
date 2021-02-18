@@ -1,5 +1,5 @@
 apiVersion: v1
-kind: DeploymentConfig
+kind: Deployment
 metadata:
   labels:
     app: richie
@@ -10,13 +10,20 @@ metadata:
   namespace: "{{ namespace_name }}"
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: richie
+      service: elasticsearch
+      version: "{{ richie_elasticsearch_image_tag }}"
+      deployment: "richie-elasticsearch-{{ deployment_stamp }}"
+      deployment_stamp: "{{ deployment_stamp }}"
   template:
     metadata:
       labels:
         app: richie
         service: elasticsearch
         version: "{{ richie_elasticsearch_image_tag }}"
-        deploymentconfig: "richie-elasticsearch-{{ deployment_stamp }}"
+        deployment: "richie-elasticsearch-{{ deployment_stamp }}"
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
 {% set image_pull_secret_name = richie_elasticsearch_image_pull_secret_name | default(none) or default_image_pull_secret_name %}
@@ -30,3 +37,6 @@ spec:
           ports:
             - containerPort: {{ richie_elasticsearch_port }}
               protocol: TCP
+      securityContext:
+        runAsUser: {{ container_uid }}
+        runAsGroup: {{ container_gid }}

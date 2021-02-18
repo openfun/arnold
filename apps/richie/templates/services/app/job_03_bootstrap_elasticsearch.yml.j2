@@ -63,3 +63,6 @@ spec:
           persistentVolumeClaim:
             claimName: richie-pvc-media
 {% endif %}
+      securityContext:
+        runAsUser: {{ container_uid }}
+        runAsGroup: {{ container_gid }}

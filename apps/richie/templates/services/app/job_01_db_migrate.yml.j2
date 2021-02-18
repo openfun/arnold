@@ -52,3 +52,6 @@ spec:
             - "-c"
             - python manage.py migrate
       restartPolicy: Never
+      securityContext:
+        runAsUser: {{ container_uid }}
+        runAsGroup: {{ container_gid }}
