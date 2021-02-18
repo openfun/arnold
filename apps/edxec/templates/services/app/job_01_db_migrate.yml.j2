@@ -59,6 +59,9 @@ spec:
               mountPath: /tmp/config
             - name: edxec-secret
               mountPath: /tmp/secret
+      securityContext:
+        runAsUser: {{ container_uid }}
+        runAsGroup: {{ container_gid }}
       volumes:
         - name: edxec-local
           emptyDir: {}  # volume that lives as long as the pod lives
