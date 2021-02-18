@@ -68,6 +68,9 @@ spec:
           volumeMounts:
             - mountPath: /edx/app/edxapp/edx-platform/conf/locale
               name: edxapp-v-locale
+      securityContext:
+        runAsUser: {{ container_uid }}
+        runAsGroup: {{ container_gid }}
       volumes:
         - name: edxapp-v-locale
           persistentVolumeClaim:

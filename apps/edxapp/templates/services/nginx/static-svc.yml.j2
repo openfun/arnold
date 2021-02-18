@@ -26,5 +26,5 @@ spec:
       targetPort: {{ edxapp_nginx_healthcheck_port }}
   selector:
     app: edxapp
-    deploymentconfig: "edxapp-nginx-{{ deployment_stamp | default('undefined', true) }}"
+    deployment: "edxapp-nginx-{{ deployment_stamp | default('undefined', true) }}"
   type: ClusterIP
