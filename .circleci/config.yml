@@ -259,7 +259,7 @@ jobs:
             bin/ci route -s hello -c "Hello Kubernetes! by Arnold" -P www
 
   # Test the bootstrap playbook on the "mailcatcher" application
-  # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
+  # nota bene: we use a real k8s cluster installed in CircleCI's VM.
   test-bootstrap-mailcatcher:
     <<: *defaults
 
@@ -858,15 +858,15 @@ workflows:
 #          filters:
 #            tags:
 #              only: /.*/
-#      - test-bootstrap-mailcatcher:
-#          requires:
-#            - lint-bash
-#            - lint-docker
-#            - lint-ansible
-#            - lint-plugins
-#          filters:
-#            tags:
-#              only: /.*/
+      - test-bootstrap-mailcatcher:
+          requires:
+            - lint-bash
+            - lint-docker
+            - lint-ansible
+            - lint-plugins
+          filters:
+            tags:
+              only: /.*/
       - test-bootstrap-marsha:
           requires:
             - lint-bash
@@ -972,7 +972,7 @@ workflows:
             - test-bootstrap-hello
             - test-bootstrap-richie
             - test-bootstrap-edxapp
-#            - test-bootstrap-mailcatcher
+            - test-bootstrap-mailcatcher
             - test-bootstrap-marsha
 #            - test-bootstrap-forum
 #            - test-bootstrap-learninglocker
