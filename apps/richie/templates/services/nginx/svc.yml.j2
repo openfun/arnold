@@ -20,5 +20,5 @@ spec:
       targetPort: {{ richie_nginx_healthcheck_port }}
   selector:
     app: richie
-    deploymentconfig: "richie-nginx-{{ deployment_stamp }}"
+    deployment: "richie-nginx-{{ deployment_stamp }}"
   type: ClusterIP

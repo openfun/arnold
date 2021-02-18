@@ -17,5 +17,5 @@ spec:
     targetPort: {{ richie_elasticsearch_port }}
   selector:
     app: richie
-    deploymentconfig: "richie-elasticsearch-{{ deployment_stamp }}"
+    deployment: "richie-elasticsearch-{{ deployment_stamp }}"
   type: ClusterIP

@@ -23,4 +23,4 @@ spec:
   type: ClusterIP
   selector:
     app: richie
-    deploymentconfig: "richie-nginx-{{ deployment_stamp | default('undefined', true) }}"
+    deployment: "richie-nginx-{{ deployment_stamp | default('undefined', true) }}"
