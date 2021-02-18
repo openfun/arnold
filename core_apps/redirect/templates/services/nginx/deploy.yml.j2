@@ -4,9 +4,7 @@ metadata:
   labels:
     app: redirect
     service: nginx
-    version: "{{ redirect_nginx_image_tag }}"
     deployment: redirect-nginx
-    deployment_stamp: "{{ deployment_stamp }}"
   name: redirect-nginx
   namespace: "{{ namespace_name }}"
 spec:
@@ -15,17 +13,13 @@ spec:
     matchLabels:
       app: redirect
       service: nginx
-      version: "{{ redirect_nginx_image_tag }}"
       deployment: redirect-nginx
-      deployment_stamp: "{{ deployment_stamp }}"
   template:
     metadata:
       labels:
         app: redirect
         service: nginx
-        version: "{{ redirect_nginx_image_tag }}"
         deployment: redirect-nginx
-        deployment_stamp: "{{ deployment_stamp }}"
     spec:
       # Prefer running pods on different nodes for redundancy
       affinity:
