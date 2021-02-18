@@ -8,7 +8,7 @@ metadata:
     service_prefix: "{{ prefix }}"
     type: static-service
     removable: "no"
-  name: "etherpad-nginx-{{ deployment_stamp }}"
+  name: "etherpad-nginx-{{ prefix }}"
   namespace: "{{ namespace_name }}"
 spec:
   ports:
@@ -22,5 +22,5 @@ spec:
       targetPort: {{ etherpad_nginx_healthcheck_port }}
   selector:
     app: etherpad
-    deploymentconfig: "etherpad-nginx-{{ deployment_stamp | default('undefined', true) }}"
+    deployment: "etherpad-nginx-{{ deployment_stamp | default('undefined', true) }}"
   type: ClusterIP
