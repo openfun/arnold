@@ -604,10 +604,9 @@ jobs:
           command: |
             # Create OpenShift Project
             bin/arnold -c eugene -e ci -a kibana init
-            # OC-activate created project
-            oc project ci-eugene
             # Create ES single-node cluster
-            oc new-app -e discovery.type=single-node elasticsearch:7.7.0
+            kubectl -n ci-eugene run elasticsearch --image=elasticsearch:7.7.0 --env="discovery.type=single-node"
+            kubectl -n ci-eugene expose pod elasticsearch --port 9200 --name=elasticsearch
             # Deploy Kibana
             bin/arnold -c eugene -e ci -a kibana deploy
             # Test service deployed with the next route
@@ -930,15 +929,15 @@ workflows:
 #          filters:
 #            tags:
 #              only: /.*/
-#      - test-bootstrap-kibana:
-#          requires:
-#            - lint-bash
-#            - lint-docker
-#            - lint-ansible
-#            - lint-plugins
-#          filters:
-#            tags:
-#              only: /.*/
+      - test-bootstrap-kibana:
+          requires:
+            - lint-bash
+            - lint-docker
+            - lint-ansible
+            - lint-plugins
+          filters:
+            tags:
+              only: /.*/
       - test-delete-app:
           requires:
             - test-bootstrap-richie
@@ -978,7 +977,7 @@ workflows:
 #            - test-bootstrap-learninglocker
             - test-bootstrap-ashley
 #            - test-bootstrap-etherpad
-#            - test-bootstrap-kibana
+            - test-bootstrap-kibana
             - test-redirect
             - test-delete-app
             - test-prevent-switch-to-nothing
