@@ -56,6 +56,9 @@ spec:
             - mountPath: /etc/nginx/conf.d
               name: redirect-v-nginx
               readOnly: true
+      securityContext:
+        runAsUser: {{ container_uid }}
+        runAsGroup: {{ container_gid }}
       volumes:
         - name: redirect-v-nginx
           configMap:
