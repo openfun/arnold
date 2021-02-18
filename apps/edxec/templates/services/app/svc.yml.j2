@@ -16,5 +16,5 @@ spec:
     targetPort: {{ edxec_django_port }}
   selector:
     app: edxec
-    deploymentconfig: "edxec-app-{{ deployment_stamp }}"
+    deployment: "edxec-app-{{ deployment_stamp }}"
   type: ClusterIP
