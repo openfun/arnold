@@ -4,6 +4,7 @@ apps:
   - name: ashley
   - name: mailcatcher
   - name: marsha
+  - name: flower
   - name: forum
   - name: richie
   - name: learninglocker
