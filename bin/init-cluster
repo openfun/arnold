@@ -74,7 +74,7 @@ echo "K3d cluster configuration exported to ${KUBECONFIG}"
 # Pre-provision PersistentVolumes with RWX accessModes
 
 # Count the number of PVs with RWX accessMode and with the status Available
-AVAILABLE_PV_COUNT=$(kubectl get pv \
+AVAILABLE_PV_COUNT=$(kubectl --kubeconfig="${KUBECONFIG}" get pv \
   -l type=arnold-rwx \
   -o jsonpath='{range .items[?(@.status.phase=="Available")]}{.metadata.name}{"\n"}{end}' \
   | wc -l)
@@ -94,7 +94,7 @@ if [[ $AVAILABLE_PV_COUNT -lt $MINIMUM_AVAILABLE_RWX_VOLUME ]] ; then
     # Note: we use docker to create the directory as root:root to avoid using sudo.
     docker run --rm -u 0:0 -v "${PERSISTENT_VOLUME_PATH}:/data" busybox mkdir -m 770 "/data/${PV_ID}"
     # Create the PV in k8s
-    kubectl apply -f - <<EOF
+    kubectl --kubeconfig="${KUBECONFIG}" apply -f - <<EOF
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -114,7 +114,7 @@ EOF
 fi
 
 echo -n "Checking ingress-nginx controller status... "
-if ! kubectl get ns ingress-nginx &> /dev/null ; then
+if ! kubectl --kubeconfig="${KUBECONFIG}" get ns ingress-nginx &> /dev/null ; then
   echo "not installed"
   # Download ingress-nginx controller
   nginx_controller=$(mktemp -q)
@@ -123,9 +123,10 @@ if ! kubectl get ns ingress-nginx &> /dev/null ; then
   echo "Checking integrity"
   echo "${INGRESS_NGINX_DEPLOYMENT_SHA256} ${nginx_controller}" | sha256sum -c -
   echo "Installing nginx controller"
-  kubectl apply -f "${nginx_controller}"
+  kubectl --kubeconfig="${KUBECONFIG}" apply -f "${nginx_controller}"
   echo "Waiting for nginx-controller to be up and running... "
-  kubectl --namespace ingress-nginx wait --for=condition=available deploy/ingress-nginx-controller --timeout=90s \
+  kubectl --kubeconfig="${KUBECONFIG}" --namespace ingress-nginx wait \
+    --for=condition=available deploy/ingress-nginx-controller --timeout=90s \
     && echo "nginx-controller is ready" \
     || echo "timeout! Please wait a little before deploying an app with arnold."
 else
