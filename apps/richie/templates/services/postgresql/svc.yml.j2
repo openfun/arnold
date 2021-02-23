@@ -18,7 +18,7 @@ spec:
 # As commented in the ad hoc endpoint, the endpoint name points to this service
 # so that it does not rely on a deployment configuration when the "env_type" is
 # not trashable. In this case, we use a PostgreSQL cluster outside of
-# OpenShift.
+# k8s.
 {% if env_type in trashable_env_types %}
   selector:
     app: richie

@@ -9,7 +9,7 @@ metadata:
   namespace: "{{ namespace_name }}"
 spec:
   replicas: 1  # number of pods we want
-  # When upgrading, we don't want OpenShift to run several pods mounted on the same volume
+  # When upgrading, we don't want k8s to run several pods mounted on the same volume
   # because Redis does not support that. Instead we need to make sure that the existing pod
   # is switched off before the new one starts.
   strategy:
