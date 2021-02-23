@@ -48,7 +48,7 @@
         loop_var: deployment
 
     # Check if the nginx service already exists and recreate it only if not
-    # (parts of an OpenShift Service definition are immutable).
+    # (parts of an k8s Service definition are immutable).
     - name: Check if the redirect nginx service already exists
       k8s_info:
         api_version: "v1"

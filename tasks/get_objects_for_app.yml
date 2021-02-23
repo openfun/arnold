@@ -12,7 +12,7 @@
 
 - include_tasks: tasks/filter_empty_templates_for_app.yml
 
-- name: Set OpenShift objects to manage
+- name: Set k8s objects to manage
   set_fact:
     configmaps: "{{ templates | map('regex_search', '.*/cm.*\\.yml\\.j2$') | select('string') | list }}"
     deployments: "{{ templates | map('regex_search', '.*/deploy.*\\.yml\\.j2$') | select('string') | list }}"
@@ -33,7 +33,7 @@
     - service
     - statefulset
 
-- name: Display OpenShift's configmaps for this app
+- name: Display k8s's configmaps for this app
   debug:
     var: configmaps
     verbosity: 2
@@ -42,7 +42,7 @@
     - deploy
     - configmap
 
-- name: Display OpenShift's deployments for this app
+- name: Display k8s's deployments for this app
   debug:
     var: deployments
     verbosity: 2
@@ -51,7 +51,7 @@
     - deploy
     - deployment
 
-- name: Display OpenShift's statefulsets for this app
+- name: Display k8s's statefulsets for this app
   debug:
     var: statefulsets
     verbosity: 2
@@ -60,7 +60,7 @@
     - deploy
     - statefulset
 
-- name: Display OpenShift's endpoints for this app
+- name: Display k8s's endpoints for this app
   debug:
     var: endpoints
     verbosity: 2
@@ -69,7 +69,7 @@
     - deploy
     - endpoint
 
-- name: Display OpenShift's services for this app
+- name: Display k8s's services for this app
   debug:
     var: services
     verbosity: 2
@@ -78,7 +78,7 @@
     - deploy
     - service
 
-- name: Display OpenShift's jobs for this app
+- name: Display k8s's jobs for this app
   debug:
     var: jobs
     verbosity: 2
@@ -87,7 +87,7 @@
     - deploy
     - job
 
-- name: Display OpenShift's cronjobs for this app
+- name: Display k8s's cronjobs for this app
   debug:
     var: cronjobs
     verbosity: 2
