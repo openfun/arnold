@@ -1,5 +1,5 @@
 ---
-# This playbook pushes an OpenShift definition file for a project.
+# This playbook pushes a k8s definition file for a project.
 #
 # A definition file is generated and pushed for a template given the
 # `object_template` path.
