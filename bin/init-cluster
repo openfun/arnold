@@ -75,7 +75,7 @@ echo "K3d cluster configuration exported to ${KUBECONFIG}"
 
 # Count the number of PVs with RWX accessMode and with the status Available
 AVAILABLE_PV_COUNT=$(kubectl --kubeconfig="${KUBECONFIG}" get pv \
-  -l type=arnold-rwx \
+  -l type=arnold-rwx,storageclass=manual \
   -o jsonpath='{range .items[?(@.status.phase=="Available")]}{.metadata.name}{"\n"}{end}' \
   | wc -l)
 
@@ -101,8 +101,9 @@ metadata:
   name: arnold-${PV_ID}
   labels:
     type: arnold-rwx
+    storageclass: manual
 spec:
-  storageClassName: local-path
+  storageClassName: manual
   capacity:
     storage: 1000Gi
   accessModes:
