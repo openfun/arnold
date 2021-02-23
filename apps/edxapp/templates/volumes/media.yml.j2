@@ -13,3 +13,4 @@ spec:
   resources:
     requests:
       storage: {{ edxapp_media_volume_size }}
+  storageClassName: "{{ default_storage_class_rwx }}"

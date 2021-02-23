@@ -14,4 +14,5 @@ spec:
   resources:
     requests:
       storage: {{ elasticsearch_bootstrap_volume_size }}
+  storageClassName: "{{ default_storage_class_rwx }}"
 {% endif %}

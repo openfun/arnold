@@ -178,3 +178,13 @@ container_uid: 10000
 # GID to use for running containers on k8s.
 # This value should be set to 0 (root).
 container_gid: 0
+
+
+# Storage class
+# A default storage class is not necessarily defined in a k8s cluster. The following
+# variables defines the storage class to use for our PVC, depending on the accessMode
+# we are requesting (RWO = ReadWriteOnce, RWX = ReadWriteMany).
+# If an arnold app requires a specific storageClass, it should be handled in the app
+# directly.
+default_storage_class_rwx: "manual"
+default_storage_class_rwo: "local-path"
