@@ -14,7 +14,6 @@
       - type=static-service
       - app={{ app.name }}
       - service_prefix={{ prefix }}
-      - "!acme.openshift.io/temporary"
   register: app_service
   when: static_services | length > 0 and app.settings.is_blue_green_compatible | default(True)
 

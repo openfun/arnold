@@ -18,8 +18,7 @@ spec:
     targetPort: {{ edxapp_mongodb_port }}
 # As commented in the ad hoc endpoint, the endpoint name points to this service
 # so that it does not rely on a deployment configuration when the "env_type" is
-# not trashable. In this case, we use a mongodb cluster outside of
-# OpenShift.
+# not trashable. In this case, we use a mongodb cluster outside of k8s.
   selector:
     app: edxapp
     deployment: "{{ edxapp_mongodb_host }}-{{ deployment_stamp }}"
