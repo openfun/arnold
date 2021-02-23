@@ -12,3 +12,4 @@ spec:
   resources:
     requests:
       storage: {{ redis_data_volume_size }}
+  storageClassName: "{{ default_storage_class_rwx }}"
