@@ -6,7 +6,7 @@
 #     - "absent":  all objects are deleted
 #   deployment_stamp: the stamp of the object we are going to create or delete
 
-- name: OpenShift objects with deployment_stamp[{{ deployment_stamp }}] must be {{ deployment_state | default('present') }}
+- name: k8s objects with deployment_stamp[{{ deployment_stamp }}] must be {{ deployment_state | default('present') }}
   k8s:
     definition: "{{ lookup('template', item) | from_yaml }}"
     state: "{{ deployment_state | default('present') }}"
@@ -45,7 +45,7 @@
     - deploy
     - job
 
-- name: OpenShift cronjobs with deployment_stamp[{{ deployment_stamp }}] must be {{ deployment_state | default('present') }}
+- name: k8s cronjobs with deployment_stamp[{{ deployment_stamp }}] must be {{ deployment_state | default('present') }}
   k8s:
     definition: "{{ lookup('template', item) | from_yaml }}"
     state: "{{ deployment_state | default('present') }}"
@@ -54,7 +54,7 @@
     - deploy
     - cronjob
 
-- name: OpenShift deployments with deployment_stamp[{{ deployment_stamp }}] must be {{ deployment_state | default('present') }}
+- name: k8s deployments with deployment_stamp[{{ deployment_stamp }}] must be {{ deployment_state | default('present') }}
   k8s:
     definition: "{{ lookup('template', item) | from_yaml }}"
     state: "{{ deployment_state | default('present') }}"
@@ -63,7 +63,7 @@
     - deploy
     - deployment
 
-- name: OpenShift StatefulSets with deployment_stamp[{{ deployment_stamp }}] must be {{ deployment_state | default('present') }}
+- name: k8s StatefulSets with deployment_stamp[{{ deployment_stamp }}] must be {{ deployment_state | default('present') }}
   k8s:
     definition: "{{ lookup('template', item) | from_yaml }}"
     state: "{{ deployment_state | default('present') }}"
