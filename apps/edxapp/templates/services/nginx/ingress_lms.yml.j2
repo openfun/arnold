@@ -26,4 +26,4 @@ spec:
   tls:
   - hosts:
     - "{{ edxapp_lms_host | blue_green_host(prefix) }}"
-    secretName: edxapp-lms-tls
+    secretName: "edxapp-lms-tls-{{ prefix }}"
