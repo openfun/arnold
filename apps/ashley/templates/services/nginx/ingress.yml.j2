@@ -12,7 +12,7 @@ metadata:
     route_prefix: "{{ prefix }}"
     route_target_service: "app"
   annotations:
-    cert-manager.io/cluster-issuer: "{{ acme_issuer_name }}"
+    cert-manager.io/issuer: "{{ acme_issuer_name }}"
 spec:
   rules:
   - host: "{{ ashley_host | blue_green_host(prefix) }}"
