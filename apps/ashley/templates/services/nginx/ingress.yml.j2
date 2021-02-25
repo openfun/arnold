@@ -25,4 +25,4 @@ spec:
   tls:
   - hosts:
     - "{{ ashley_host | blue_green_host(prefix) }}"
-    secretName: ashley-app-tls
+    secretName: "ashley-app-tls-{{ prefix }}"
