@@ -24,4 +24,4 @@ spec:
   tls:
   - hosts:
     - "{{ forum_host | blue_green_host(prefix) }}"
-    secretName: forum-app-tls
+    secretName: "forum-app-tls-{{ prefix }}"
