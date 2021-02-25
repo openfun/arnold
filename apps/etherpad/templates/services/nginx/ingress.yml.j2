@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   namespace: "{{ namespace_name }}"
@@ -18,9 +18,12 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: "etherpad-nginx-{{ prefix }}"
-          servicePort: {{ etherpad_nginx_port }}
+          service:
+            name: "etherpad-nginx-{{ prefix }}"
+            port:
+              number: {{ etherpad_nginx_port }}
         path: /
+        pathType: Prefix
   tls:
   - hosts:
     - "{{ etherpad_host | blue_green_host(prefix) }}"

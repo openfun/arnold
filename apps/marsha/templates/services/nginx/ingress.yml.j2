@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   namespace: "{{ namespace_name }}"
@@ -18,9 +18,12 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: "marsha-nginx-{{ prefix }}"
-          servicePort: {{ marsha_nginx_port }}
+          service:
+            name: "marsha-nginx-{{ prefix }}"
+            port:
+              number: {{ marsha_nginx_port }}
         path: /
+        pathType: Prefix
   tls:
   - hosts:
     - "{{ marsha_host | blue_green_host(prefix) }}"
