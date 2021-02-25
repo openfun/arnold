@@ -11,7 +11,7 @@ metadata:
     version: "{{ flower_nginx_image_tag }}"
     route_target_service: "app"
   annotations:
-    cert-manager.io/cluster-issuer: "{{ acme_issuer_name }}"
+    cert-manager.io/issuer: "{{ acme_issuer_name }}"
 spec:
   rules:
   - host: "{{ flower_host }}"
