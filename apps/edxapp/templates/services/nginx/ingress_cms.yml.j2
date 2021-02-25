@@ -12,7 +12,7 @@ metadata:
     route_prefix: "{{ prefix }}"
     route_target_service: "cms"
   annotations:
-    cert-manager.io/cluster-issuer: "{{ acme_issuer_name }}"
+    cert-manager.io/issuer: "{{ acme_issuer_name }}"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ edxapp_routing_timeout | default("60") }}"
 spec:
   rules:
