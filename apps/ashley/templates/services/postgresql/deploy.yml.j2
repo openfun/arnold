@@ -44,7 +44,7 @@ spec:
           envFrom:
             - secretRef:
                 name: "{{ ashley_database_secret_name }}"
-{% endif%}
       securityContext:
         runAsUser: {{ container_uid }}
         runAsGroup: {{ container_gid }}
+{% endif%}
