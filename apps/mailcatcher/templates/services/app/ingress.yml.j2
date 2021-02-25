@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   namespace: "{{ namespace_name }}"
@@ -18,9 +18,12 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: "mailcatcher"
-          servicePort: {{ mailcatcher_reader_port }}
+          service:
+            name: "mailcatcher"
+            port:
+              number: {{ mailcatcher_reader_port }}
         path: /
+        pathType: Prefix
   tls:
   - hosts:
     - "{{ mailcatcher_host }}"
