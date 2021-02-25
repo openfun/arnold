@@ -24,4 +24,4 @@ spec:
   tls:
   - hosts:
     - "{{ kibana_host | blue_green_host(prefix) }}"
-    secretName: kibana-app-tls
+    secretName: "kibana-app-tls-{{ prefix }}"
