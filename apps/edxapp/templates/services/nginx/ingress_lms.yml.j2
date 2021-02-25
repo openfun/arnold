@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: "edxapp-nginx-lms-{{ prefix }}"
@@ -20,9 +20,12 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: "edxapp-nginx-{{ prefix }}"
-          servicePort: {{ edxapp_nginx_lms_port }}
+          service:
+            name: "edxapp-nginx-{{ prefix }}"
+            port:
+              number: {{ edxapp_nginx_lms_port }}
         path: /
+        pathType: Prefix
   tls:
   - hosts:
     - "{{ edxapp_lms_host | blue_green_host(prefix) }}"
