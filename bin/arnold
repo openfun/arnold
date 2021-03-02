@@ -204,6 +204,7 @@ COMMANDS:
 
 > Deploy current namespace:
 
+  acme                  create the acme issuer for the namespace
   bootstrap             shortcut for the init + deploy commands
   create                create a k8s object
   create_namespace      create namespace
@@ -673,6 +674,13 @@ function create_namespace() {
 
     _set_k8s_env
     _ansible_playbook create_namespace.yml "$@"
+}
+
+# Create the acme issuer for the namespace
+function acme() {
+
+    _set_k8s_env
+    _ansible_playbook create_acme.yml "$@"
 }
 
 # Initialize the namespace and deploy its active applications

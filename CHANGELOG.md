@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- CLI: add `acme` command to create or update the namespace Issuer
+
 ### Changed
 
 - Update `hello` app to be compatible with k8s
