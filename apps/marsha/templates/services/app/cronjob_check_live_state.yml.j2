@@ -9,7 +9,7 @@ metadata:
   name: "check-live-state-{{ deployment_stamp }}"
   namespace: "{{ project_name }}"
 spec:
-  schedule: "*/20 * * * *"
+  schedule: "{{ marsha_check_live_state_cronjob_schedule }}"
   successfulJobsHistoryLimit: 2
   failedJobsHistoryLimit: 1
   concurrencyPolicy: Forbid
