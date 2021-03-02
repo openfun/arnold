@@ -11,6 +11,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 ### Added
 
 - CLI: add `acme` command to create or update the namespace Issuer
+- Marsha: cronjob running check_harvested management command
 
 ### Changed
 
