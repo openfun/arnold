@@ -29,4 +29,4 @@ spec:
   tls:
   - hosts:
     - "{{ edxapp_cms_host | blue_green_host(prefix) }}"
-    secretName: "edxapp-cms-tls-{{ prefix }}"
+    secretName: "edxapp-cms-tls-{{ prefix }}-{{acme_env}}"

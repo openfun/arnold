@@ -29,4 +29,4 @@ spec:
   tls:
   - hosts:
     - "{{ edxapp_preview_host | blue_green_host(prefix) }}"
-    secretName: "edxapp-preview-tls-{{ prefix }}"
+    secretName: "edxapp-preview-tls-{{ prefix }}-{{acme_env}}"
