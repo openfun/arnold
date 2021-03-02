@@ -13,6 +13,6 @@ subsets:
   - addresses:
     - ip: "{{ endpoint_mysql_ip }}"
     ports:
-    - port: "{{ edxapp_mysql_port }}"
+    - port: {{ edxapp_mysql_port }}
       name: "{{ edxapp_mysql_port }}-tcp"
 {% endif %}
