@@ -27,4 +27,4 @@ spec:
   tls:
   - hosts:
     - "{{ hello_host | blue_green_host(prefix) }}"
-    secretName: "hello-app-tls-{{ prefix }}"
+    secretName: "hello-app-tls-{{ prefix }}-{{acme_env}}"

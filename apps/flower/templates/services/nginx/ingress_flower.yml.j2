@@ -27,4 +27,4 @@ spec:
   tls:
   - hosts:
     - "{{ flower_host }}"
-    secretName: flower-app-tls
+    secretName: "flower-app-tls-{{acme_env}}"

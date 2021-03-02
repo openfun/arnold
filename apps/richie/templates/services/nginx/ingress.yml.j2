@@ -27,4 +27,4 @@ spec:
   tls:
   - hosts:
     - "{{ richie_host | blue_green_host(prefix) }}"
-    secretName: "richie-app-tls-{{ prefix }}"
+    secretName: "richie-app-tls-{{ prefix }}-{{acme_env}}"
