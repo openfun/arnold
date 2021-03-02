@@ -27,4 +27,4 @@ spec:
   tls:
   - hosts:
     - "{{ mailcatcher_host }}"
-    secretName: mailcatcher-app-tls
+    secretName: "mailcatcher-app-tls-{{acme_env}}"
