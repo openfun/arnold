@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- Marsha: cronjob running check_harvested management command
+
 ### Removed
 
 - Nextcloud: remove usage of BuildConfig and ImageStream objects
