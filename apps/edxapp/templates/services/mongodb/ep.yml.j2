@@ -16,8 +16,8 @@ subsets:
       - 
         ip: "{{ ip }}"
     ports:
-      - 
-        port: "{{ edxapp_mongodb_port }}"
+      -
+        port: {{ edxapp_mongodb_port }}
         name: "mongodb-{{ ip | regex_replace("\.", "-") }}-tcp"
 {% endfor -%}
 {% endif %}
