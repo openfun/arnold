@@ -27,4 +27,4 @@ spec:
   tls:
   - hosts:
     - "{{ etherpad_host | blue_green_host(prefix) }}"
-    secretName: "etherpad-app-tls-{{ prefix }}-{{acme_env}}"
+    secretName: "etherpad-app-tls-{{ prefix }}-{{ acme_env }}"

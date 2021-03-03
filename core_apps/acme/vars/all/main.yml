@@ -13,4 +13,4 @@ acme_contact_email: ""
 
 # (required) Name of the cert-manager Issuer entity created
 # by arnold for the project.
-acme_issuer_name: "arnold-acme-issuer-{{acme_env}}"
+acme_issuer_name: "arnold-acme-issuer-{{ acme_env }}"

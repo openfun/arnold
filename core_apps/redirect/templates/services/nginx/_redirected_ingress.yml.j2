@@ -25,4 +25,4 @@ spec:
   tls:
   - hosts:
     - "{{ redirection_from | default('unknown') }}"
-    secretName: "redirect-app-{{ redirection_from | default('unknown')}}-{{acme_env}}"
+    secretName: "redirect-app-{{ redirection_from | default('unknown') }}-{{ acme_env }}"
