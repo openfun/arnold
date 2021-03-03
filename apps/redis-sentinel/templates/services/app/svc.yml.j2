@@ -36,9 +36,8 @@ spec:
 {% endfor %}
 {% endif %}
     securityContext:
-      runAsUser: {{ redis_sentinel_user_id }}
-      runAsGroup: {{ redis_sentinel_group_id }}
-      fsGroup: {{ redis_sentinel_fsgroup_id }}
+      runAsUser: {{ container_uid }}
+      runAsGroup: {{ container_gid }}
   redis:
     replicas: {{ redis_sentinel_redis_replicas }}
     affinity:
@@ -75,8 +74,8 @@ spec:
           resources:
             requests:
               storage: {{ redis_sentinel_redis_data_volume_size }}
+          storageClassName: "{{ default_storage_class_rwo }}"
 {% endif %}
     securityContext:
-      runAsUser: {{ redis_sentinel_user_id }}
-      runAsGroup: {{ redis_sentinel_group_id }}
-      fsGroup: {{ redis_sentinel_fsgroup_id }}
+      runAsUser: {{ container_uid }}
+      runAsGroup: {{ container_gid }}
