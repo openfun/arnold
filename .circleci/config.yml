@@ -983,6 +983,8 @@ workflows:
             - test-prevent-switch-to-nothing
           filters:
             branches:
-              only: master
+              only:
+                - master
+                - migration-to-k8s
             tags:
               only: /^v.*/
