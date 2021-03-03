@@ -1,17 +1,10 @@
-# The following settings can be found in the project's annotation.
-# To retrieve them run the following command:
-#   $ oc get project $(oc project -q) -o yaml
-# then copy values of the `openshift.io/sa.scc.supplemental-groups` annotation
-redis_sentinel_user_id: null
-redis_sentinel_group_id: null
-redis_sentinel_fsgroup_id: null
 
 ## Service configuration
 # name used by the service. This name will be prefixed by `rfs-` in the final service
 redis_sentinel_service_name: redis-sentinel
 
 ## Sentinel configuration
-# Number of sentinel replicas 
+# Number of sentinel replicas
 redis_sentinel_sentinel_replicas: 3
 # If you need custom sentinel configuration you should add
 # them in this list with one configuration per item, e.g.:
