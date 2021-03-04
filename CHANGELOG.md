@@ -12,6 +12,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 - CLI: add `acme` command to create or update the namespace TLS certificate Issuer
 - Marsha: cronjob running check_harvested management command
+- Marsha: cronjob running check_live_idle management command
 
 ### Changed
 
