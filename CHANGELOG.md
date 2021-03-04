@@ -17,6 +17,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 - Nextcloud: remove usage of BuildConfig and ImageStream objects
 - Build image and image stream playbooks
+- Marsha: remove collectstatic job
 
 ## [5.24.0] - 2021-01-19
 
