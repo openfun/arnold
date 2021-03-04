@@ -11,6 +11,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Marsha: cronjob running check_harvested management command
+- Marsha: cronjob running check_live_idle management command
 
 ### Removed
 
