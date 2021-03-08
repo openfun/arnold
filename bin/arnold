@@ -604,8 +604,15 @@ function _docker_run() {
       fi
     fi
 
+    if tty > /dev/null ; then
+      # If we are in a terminal, add the `-t` option to docker run
+      DOCKER_TERM_OPTIONS="-ti"
+    else
+      DOCKER_TERM_OPTIONS="-i"
+    fi
+
     # shellcheck disable=SC2086
-    docker run --rm -ti \
+    docker run --rm "${DOCKER_TERM_OPTIONS}" \
         -u "${DOCKER_USER}" \
         --env K8S_AUTH_API_KEY \
         --env K8S_AUTH_HOST \

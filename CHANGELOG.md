@@ -22,6 +22,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Use `kubectl` instead of `oc` in `arnold` CLI
 - Authentication in `arnold` CLI must be done with a service account
 - Replace `oc cluster` with k3d for local development
+- CLI: autodetect if we are within a terminal
 
 ### Removed
 
