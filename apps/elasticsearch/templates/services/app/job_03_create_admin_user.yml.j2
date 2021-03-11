@@ -45,4 +45,7 @@ spec:
             - secretRef:
                 name: "{{ elasticsearch_credentials_secret_name }}"
       restartPolicy: Never
+      securityContext:
+        runAsUser: {{ container_uid }}
+        runAsGroup: {{ container_gid }}
 {% endif %}
