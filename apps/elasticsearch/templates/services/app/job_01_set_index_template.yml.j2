@@ -66,3 +66,6 @@ spec:
           persistentVolumeClaim:
             claimName: elasticsearch-pvc-bootstrap
 {% endif %}
+      securityContext:
+        runAsUser: {{ container_uid }}
+        runAsGroup: {{ container_gid }}
