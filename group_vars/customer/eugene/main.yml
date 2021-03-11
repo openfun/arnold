@@ -11,8 +11,8 @@ nextcloud_database_name: nextcloud
 # Elasticsearch
 # Limit memory usage
 elasticsearch_java_opts:
-  - "-Xms64m"
-  - "-Xmx64m"
+  - "-Xms128m"
+  - "-Xmx128m"
 elasticsearch_image_name: "elasticsearch"
 elasticsearch_image_tag: "7.7.0"
 
