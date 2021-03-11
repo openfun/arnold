@@ -12,7 +12,7 @@
     path: "{{ item }}"
   register: filtered_templates
   with_items: "{{ raw_templates }}"
-  when: lookup('template', item) | length > 1
+  when: lookup('template', item) | trim | length > 1
   tags: deploy
 
 - name: Update templates list for this app
