@@ -169,3 +169,6 @@ spec:
         - name: config-dir
           emptyDir: {}
 {% endif %}
+      securityContext:
+        runAsUser: {{ container_uid }}
+        runAsGroup: {{ container_gid }}
