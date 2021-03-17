@@ -1,9 +1,8 @@
 # Load application default variables if not already defined
 
 - name: Load default variables from {{ file }}
-  include_vars:
-    file: "{{ file }}"
-    name: defaults
+  set_fact:
+    defaults: "{{ lookup('template', file) | from_yaml }}"
 
 - name: Print loaded variables from {{ file }}
   debug:
