@@ -68,6 +68,7 @@ spec:
             - mountPath: "{{ http_basic_auth_user_file | dirname }}"
               name: ashley-htpasswd
 {% endif %}
+
           livenessProbe:
             httpGet:
               path: "{{ ashley_nginx_healthcheck_endpoint }}"
