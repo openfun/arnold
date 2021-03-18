@@ -63,6 +63,7 @@ spec:
             - mountPath: "{{ http_basic_auth_user_file | dirname }}"
               name: richie-htpasswd
 {% endif %}
+
           livenessProbe:
             httpGet:
               path: "{{ richie_nginx_healthcheck_endpoint }}"

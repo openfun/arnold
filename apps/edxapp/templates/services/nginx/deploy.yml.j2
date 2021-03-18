@@ -60,10 +60,11 @@ spec:
             - mountPath: /data/export
               name: edxapp-v-export
               readOnly: true
-{% if activate_http_basic_auth or edxapp_activate_http_basic_auth -%}
+            {% if activate_http_basic_auth or edxapp_activate_http_basic_auth -%}
             - mountPath: "{{ http_basic_auth_user_file | dirname }}"
               name: edxapp-htpasswd
-{% endif %}
+            {% endif %}
+
           livenessProbe:
             httpGet:
               path: "{{ edxapp_nginx_healthcheck_endpoint }}"
