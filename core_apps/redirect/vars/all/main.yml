@@ -7,3 +7,9 @@ redirect_nginx_replicas: 1
 redirect_nginx_port: 8999
 redirect_nginx_healthcheck_port: 5000
 redirect_nginx_healthcheck_endpoint: "/__healthcheck__"
+
+# -- resources requests
+redirect_nginx_resources:
+  requests:
+    cpu: 5m
+    memory: 20Mi
