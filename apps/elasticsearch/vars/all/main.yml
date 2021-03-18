@@ -70,9 +70,13 @@ elasticsearch_app_resources:
     cpu: 10m
     memory: 512Mi
 
-elasticsearch_app_job_set_index_template_resources:
-  requests:
-    cpu: 10m
-    memory: 20Mi
-elasticsearch_app_job_set_passwords_resources: {{ elasticsearch_app_job_set_index_template_resources }}
-elasticsearch_app_job_create_admin_user_resources: {{ elasticsearch_app_job_set_index_template_resources }}
+{% set job_resources = {
+  "requests": {
+    "cpu": "10m",
+    "memory": "20Mi"
+  }
+} %}
+
+elasticsearch_app_job_set_index_template_resources: "{{ job_resources }}"
+elasticsearch_app_job_set_passwords_resources: "{{ job_resources }}"
+elasticsearch_app_job_create_admin_user_resources: "{{ job_resources }}"
