@@ -5,7 +5,7 @@ yq==2.11.1
 ansible-lint==5.0.4
 flake8==3.9.0
 isort==5.8.0
-pylint==2.6.0
+pylint==2.7.2
 
 # Tests
 pyfakefs==4.3.3
