@@ -210,9 +210,11 @@ COMMANDS:
   create_namespace      create namespace
   create_volumes        create volumes for every application
   deploy                deploy all objects defined in all applications
-  init                  initialize a namespace with all its volumes and configmaps
-  rollback              switch back the previous stack as current
   ingresses             create ingresses and redirections (if any)
+  init                  initialize a namespace with all its volumes and configmaps
+  pause                 scale down all deployments of the namespace
+  resume                restore all deployments of the namespace
+  rollback              switch back the previous stack as current
   secrets               update namespace secrets
   switch                perform blue/green switch
 
@@ -547,6 +549,74 @@ function _set_tray_vars() {
   log debug "Tray name: ${ARNOLD_TRAY_NAME}"
 }
 
+# _k8s_pause_entity : scale down all kubernetes entities of a specific type
+#
+# usage : _k8s_pause_entity namespace entity_type
+function _k8s_pause_entity() {
+  local namespace="${1}"
+  local entity_type="${2}"
+  local entity_name
+  local entity_replicas
+  local entity_old_replicas_annotation
+
+  ${KUBECTL} get "${entity_type}" -n "${namespace}" -o json | \
+  ${JQ} -r '.items[] | [.metadata.name, .spec.replicas, (.metadata.annotations."'"${entity_type}"'.kubernetes.io/old-replicas" // "NOT-PAUSED") ] | @tsv' | \
+  while IFS=$'\t' read -r -a entity_status
+  do
+    entity_name="${entity_status[0]}"
+    entity_replicas="${entity_status[1]}"
+    entity_old_replicas_annotation="${entity_status[2]}"
+
+    # We only process the entities that are not already paused
+    if [[ "${entity_old_replicas_annotation}" != "NOT-PAUSED" ]]; then
+      log info "Ignoring ${entity_type} ${entity_name} that is already paused"
+      continue;
+    fi
+
+    log info "Scaling down ${entity_type} ${entity_name}"
+
+    # Annotate the entity to store the current number of replicas
+    ${KUBECTL} annotate "${entity_type}" "${entity_name}" -n "${namespace}" "${entity_type}.kubernetes.io/old-replicas=${entity_replicas}"
+
+    # Scale down the entity
+    ${KUBECTL} scale "${entity_type}" "${entity_name}" -n "${namespace}" --replicas=0
+  done
+}
+
+# _k8s_resume_entity : restore all kubernetes entities of a specific type
+#
+# usage : _k8s_resume_entity namespace entity_type
+function _k8s_resume_entity() {
+  local namespace="${1}"
+  local entity_type="${2}"
+  local entity_name
+  local entity_replicas
+  local entity_old_replicas_annotation
+
+  ${KUBECTL} get "${entity_type}" -n "${namespace}" -o json | \
+  ${JQ} -r '.items[] | [.metadata.name, .spec.replicas, (.metadata.annotations."'"${entity_type}"'.kubernetes.io/old-replicas" // "NOT-PAUSED") ] | @tsv' | \
+  while IFS=$'\t' read -r -a entity_status
+  do
+    entity_name="${entity_status[0]}"
+    entity_replicas="${entity_status[1]}"
+    entity_old_replicas_annotation="${entity_status[2]}"
+
+    # We only process the entities that are paused
+    if [[ "${entity_old_replicas_annotation}" = "NOT-PAUSED" ]]; then
+      log info "Ignoring ${entity_type} ${entity_name} that is not paused"
+      continue;
+    fi
+
+    log info "Scaling up ${entity_type} ${entity_name}"
+
+    # Scale up the entity with the replicas count value stored in the annotation
+    ${KUBECTL} scale "${entity_type}" "${entity_name}" -n "${namespace}" --replicas="${entity_old_replicas_annotation}"
+
+    # Remove the annotation
+    ${KUBECTL} annotate "${entity_type}" "${entity_name}" -n "${namespace}" "${entity_type}.kubernetes.io/old-replicas-"
+
+  done
+}
 
 # _docker_run: wrap docker run command
 #
@@ -822,6 +892,35 @@ function reset_vault_pw() {
     vaults decrypt
     vault_pw -fs
     vaults encrypt
+}
+
+# Scale down all deployments of the namespace
+function pause() {
+  _set_k8s_env
+
+  namespace="$(_get_namespace)"
+  log info "Pausing namespace ${namespace}"
+
+  for entity_type in "deployment" "statefulset" "replicationcontroller"; do
+    _k8s_pause_entity "${namespace}" "${entity_type}"
+  done
+
+  log info "Done"
+}
+
+# Restore all deployments of the namespace that have been
+# scaled down with the pause command.
+function resume() {
+  _set_k8s_env
+
+  namespace="$(_get_namespace)"
+  log info "Resuming namespace ${namespace}"
+
+  for entity_type in "deployment" "statefulset" "replicationcontroller"; do
+    _k8s_resume_entity "${namespace}" "${entity_type}"
+  done
+
+  log info "Done"
 }
 
 # Switch back the previous stack as current
