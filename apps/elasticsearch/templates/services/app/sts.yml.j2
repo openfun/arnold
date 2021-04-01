@@ -96,6 +96,10 @@ spec:
               protocol: TCP
               name: "comm-port"
           volumeMounts:
+{% if elasticsearch_persistent_volume_enabled %}
+            - name: elasticsearch-pvc-data
+              mountPath: /usr/share/elasticsearch/data
+{% endif %}
 {% if elasticsearch_security_enabled %}
             - name: config-dir
               mountPath: /usr/share/elasticsearch/config
@@ -173,3 +177,14 @@ spec:
       securityContext:
         runAsUser: {{ container_uid }}
         runAsGroup: {{ container_gid }}
+  volumeClaimTemplates:
+  - metadata:
+      name: elasticsearch-pvc-data
+      labels:
+        app: elasticsearch
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "{{ elasticsearch_persistent_volume_storageclass }}"
+      resources:
+        requests:
+          storage: {{ elasticsearch_persistent_volume_size }}
