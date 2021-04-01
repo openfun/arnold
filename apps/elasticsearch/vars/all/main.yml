@@ -64,6 +64,12 @@ elasticsearch_ca_secret_name: "elasticsearch-ca-{{ elasticsearch_vault_checksum 
 elasticsearch_certificates_passwords_secret_name: "elasticsearch-certificates-passwords-{{ elasticsearch_vault_checksum | default('unset-yet') }}"
 elasticsearch_credentials_secret_name: "elasticsearch-credentials-{{ elasticsearch_vault_checksum | default('unset-yet') }}"
 
+# Persistent storage for elasticsearch index data
+# By default, persistent storage is disabled.
+elasticsearch_persistent_volume_enabled: false
+elasticsearch_persistent_volume_size: 1Gi
+elasticsearch_persistent_volume_storageclass: "{{ default_storage_class_rwo }}"
+
 # -- resources requests
 elasticsearch_app_resources:
   requests:
