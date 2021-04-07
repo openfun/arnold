@@ -1,5 +1,5 @@
 # Core
-ansible==2.9.13
+ansible==2.10.0
 jmespath==0.10.0
 openshift==0.11.2
 passlib==1.7.4
