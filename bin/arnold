@@ -740,7 +740,8 @@ function _vault(){
         return
     fi
 
-    _docker_run ansible-vault "${action}" "${vault_path}"
+    docker_vault_path=${vault_path//"${ARNOLD_PROJECT_PATH}"/"/app"}
+    _docker_run ansible-vault "${action}" "${docker_vault_path}"
 }
 
 

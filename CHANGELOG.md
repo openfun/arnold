@@ -24,6 +24,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Replace `oc cluster` with k3d for local development
 - CLI: autodetect if we are within a terminal
 
+### Fixed
+
+- CLI: fix the `No such file or directory` error in the `vaults` command
+
 ## [5.25.0] - 2021-03-05
 
 ### Added
