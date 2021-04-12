@@ -4,7 +4,7 @@ yq==2.11.1
 # Quality
 ansible-lint==5.0.7
 flake8==3.9.0
-isort==5.7.0
+isort==5.8.0
 pylint==2.6.0
 
 # Tests
