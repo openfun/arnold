@@ -1,0 +1,70 @@
+apiVersion: v1
+kind: Deployment
+metadata:
+  labels:
+    app: prosody
+    service: app
+    version: "{{ prosody_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: "prosody-app"
+  namespace: "{{ namespace_name }}"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prosody
+      service: app
+      deployment: "prosody-app"
+  template:
+    metadata:
+      labels:
+        app: prosody
+        service: app
+        deployment: "prosody-app"
+    spec:
+{% set image_pull_secret_name = prosody_image_pull_secret_name | default(none) or default_image_pull_secret_name %}
+{% if image_pull_secret_name is not none %}
+      imagePullSecrets:
+        - name: "{{ image_pull_secret_name }}"
+{% endif %}
+      containers:
+        - name: prosody
+          image: "{{ prosody_image_name }}:{{ prosody_image_tag }}"
+          imagePullPolicy: Always
+          resources: {{ prosody_app_resources }}
+          volumeMounts:
+            - name: prosody-config
+              mountPath: /etc/prosody
+{% if prosody_storage == "internal" %}
+            - name: prosody-v-storage
+              mountPath: /var/lib/prosody
+{% endif %}
+      initContainers:
+        - name: init-create-config
+          image: "{{ prosody_image_name }}:{{ prosody_image_tag }}"
+          imagePullPolicy: Always
+          envFrom:
+            - secretRef:
+                name: "{{ prosody_secret_name }}"
+          command:
+            - "/bin/bash"
+            - "-c"
+            - envsubst < /tmp/configmap/prosody.cfg.lua > /tmp/config/prosody.cfg.lua &&
+              mkdir /tmp/config/certs
+          volumeMounts:
+            - name: prosody-config
+              mountPath: /tmp/config
+            - name: prosody-configmap
+              mountPath: /tmp/configmap
+      volumes:
+        - name: prosody-configmap
+          configMap:
+            defaultMode: 420
+            name: prosody-app-{{ deployment_stamp }}
+        - name: prosody-config
+          emptyDir: {}  # volume that lives as long as the pod lives
+{% if prosody_storage == "internal" %}
+        - name: prosody-v-storage
+          persistentVolumeClaim:
+            claimName: prosody-pvc-storage
+{% endif %}

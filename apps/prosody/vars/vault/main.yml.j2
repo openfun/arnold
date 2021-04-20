@@ -1,0 +1,9 @@
+# customer: {{ customer }}
+# env_type: {{ env_type }}
+
+# postgresql
+{% set postgresql_credentials = databases.postgresql | json_query("[?release=='" ~ prosody_postgresql_version ~ "'].databases | [0][?application=='prosody'].{user: user, password: password} | [0]") %}
+POSTGRESQL_USER: {{ postgresql_credentials.user }}
+POSTGRESQL_PASSWORD: {{ postgresql_credentials.password }}
+
+JWT_SIGNING_KEY: {{ lookup('password', '/dev/null length=50') }}

@@ -1,0 +1,18 @@
+{% if prosody_storage == "internal" %}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: prosody-pvc-storage
+  namespace: "{{ namespace_name }}"
+  labels:
+    app: prosody
+    version: "{{ prosody_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ prosody_storage_volume_size }}
+  storageClassName: "{{ default_storage_class_rwo }}"
+{% endif %}

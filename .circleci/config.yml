@@ -620,6 +620,28 @@ jobs:
             # Test service switched to the current route
             bin/ci route -s kibana -c green -p "/api/status"
 
+  # Test the bootstrap playbook on the "prosody" application
+  # nota bene: we use a real k8s cluster installed in CircleCI's VM.
+  test-bootstrap-prosody:
+    <<: *defaults
+
+    steps:
+      - checkout
+      - *attach_workspace
+      - *ci_env
+      - *docker_load
+      - *install_k8s_requirements
+      - *configure_sysctl_limits
+      - *run_k3d_cluster
+
+      - run:
+          name: Test the "prosody" application bootstrapping
+          command: |
+            # Bootstrap app
+            bin/arnold -c eugene -e ci -a prosody bootstrap
+            # Test services deployed
+            bin/ci route -s prosody -c "It works! Now point your BOSH client to this URL to connect to Prosody." -p "/http-bind"
+
   # Test the delete_app tasks for blue-green applications
   # nota bene: we use a real k8s cluster installed in CircleCI's VM.
   test-delete-app:
@@ -930,6 +952,15 @@ workflows:
             tags:
               only: /.*/
       - test-bootstrap-kibana:
+          requires:
+            - lint-bash
+            - lint-docker
+            - lint-ansible
+            - lint-plugins
+          filters:
+            tags:
+              only: /.*/
+      - test-bootstrap-prosody:
           requires:
             - lint-bash
             - lint-docker

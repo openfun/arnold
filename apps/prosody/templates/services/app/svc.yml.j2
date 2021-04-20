@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: prosody
+    service: app
+    version: "{{ prosody_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: prosody-app
+  namespace: "{{ namespace_name }}"
+spec:
+  ports:
+    - name: {{ prosody_http_port }}-tcp
+      port: {{ prosody_http_port }}
+      protocol: TCP
+      targetPort: {{ prosody_http_port }}
+    - name: {{ prosody_client_connection_port }}-tcp
+      port: {{ prosody_client_connection_port }}
+      protocol: TCP
+      targetPort: {{ prosody_client_connection_port }}
+    - name: {{ prosody_external_components_port }}-tcp
+      port: {{ prosody_external_components_port }}
+      protocol: TCP
+      targetPort: {{ prosody_external_components_port }}
+  selector:
+    app: prosody
+    service: app
+    deployment: "prosody-app"
+  type: ClusterIP

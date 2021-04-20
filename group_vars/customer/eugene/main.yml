@@ -26,3 +26,6 @@ network_policy_per_namespace_enabled: true
 
 # UID to use for running containers on k8s.
 container_uid: 10100
+
+# Prosody
+prosody_general_authentication: "anonymous"
