@@ -1,0 +1,4 @@
+databases:
+  - engine: "postgresql"
+    release: "9.6"
+is_blue_green_compatible: false

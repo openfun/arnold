@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: prosody
+    service: postgresql
+    version: "{{ prosody_postgresql_image_tag }}"
+  # name of the service should be database host name in settings
+  name: "prosody-postgresql"
+  namespace: "{{ namespace_name }}"
+spec:
+  ports:
+    - name: "{{ prosody_postgresql_port }}-tcp"
+      port: {{ prosody_postgresql_port }}
+      protocol: TCP
+      targetPort: {{ prosody_postgresql_port }}
+# As commented in the ad hoc endpoint, the endpoint name points to this service
+# so that it does not rely on a deployment configuration when the "env_type" is
+# not trashable. In this case, we use a PostgreSQL cluster outside of k8s.
+{% if env_type in trashable_env_types %}
+  selector:
+    app: prosody
+    service: postgresql
+    deployment: "prosody-postgresql"
+  type: ClusterIP
+{% endif%}

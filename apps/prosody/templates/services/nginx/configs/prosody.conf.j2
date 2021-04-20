@@ -1,0 +1,20 @@
+server {
+
+	listen {{ prosody_nginx_port }};
+  server_name localhost;
+
+	location /http-bind {
+{% if prosody_nginx_ip_whitelist | length > 0 %}
+    if ($http_x_forwarded_for !~ ^({{ prosody_nginx_ip_whitelist | join("|") }})) {
+      return 403;
+    }
+{% endif %}
+
+    proxy_pass  http://prosody-app:{{ prosody_http_port }}/http-bind;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_buffering off;
+    tcp_nodelay on;
+	}
+}
