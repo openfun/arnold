@@ -30,6 +30,7 @@ apps:
   - name: edxec
   - name: elasticsearch
   - name: kibana
+  - name: prosody
 
 # While deploying edxapp separately from the forum, those vars are required to
 # compile custom configMaps

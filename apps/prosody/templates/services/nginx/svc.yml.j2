@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: prosody
+    service: nginx
+    version: "{{ prosody_nginx_image_tag }}"
+  name: "prosody-nginx"
+  namespace: "{{ namespace_name }}"
+spec:
+  ports:
+    - name: {{ prosody_nginx_port }}-tcp
+      port: {{ prosody_nginx_port }}
+      protocol: TCP
+      targetPort: {{ prosody_nginx_port }}
+    - name: "{{ prosody_nginx_healthcheck_port }}-tcp"
+      port: {{ prosody_nginx_healthcheck_port }}
+      protocol: TCP
+      targetPort: {{ prosody_nginx_healthcheck_port }}
+  selector:
+    app: prosody
+    deployment: "prosody-nginx"
+  type: ClusterIP

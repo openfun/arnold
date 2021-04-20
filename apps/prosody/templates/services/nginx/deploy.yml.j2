@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: Deployment
+metadata:
+  labels:
+    app: prosody
+    service: nginx
+    version: "{{ prosody_nginx_image_tag }}"
+    deployment: "prosody-nginx"
+  name: "prosody-nginx"
+  namespace: "{{ namespace_name }}"
+spec:
+  replicas: {{ prosody_nginx_replicas }}
+  selector:
+    matchLabels:
+      app: prosody
+      service: nginx
+      deployment: "prosody-nginx"
+  template:
+    metadata:
+      labels:
+        app: prosody
+        service: nginx
+        deployment: "prosody-nginx"
+    spec:
+      # Prefer running pods on different nodes for redundancy
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: deployment
+                  operator: In
+                  values:
+                  - "prosody-nginx"
+              topologyKey: kubernetes.io/hostname
+{% set image_pull_secret_name = prosody_nginx_image_pull_secret_name | default(none) or default_image_pull_secret_name %}
+{% if image_pull_secret_name is not none %}
+      imagePullSecrets:
+        - name: "{{ image_pull_secret_name }}"
+{% endif %}
+      containers:
+        - image: "{{ prosody_nginx_image_name }}:{{ prosody_nginx_image_tag }}"
+          name: nginx
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /etc/nginx/conf.d
+              name: prosody-v-nginx
+              readOnly: true
+          livenessProbe:
+            httpGet:
+              path: "{{ prosody_nginx_healthcheck_endpoint }}"
+              port: {{ prosody_nginx_healthcheck_port }}
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: "{{ prosody_nginx_healthcheck_endpoint }}"
+              port: {{ prosody_nginx_healthcheck_port }}
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          resources: {{ prosody_nginx_resources }}
+      securityContext:
+        runAsUser: {{ container_uid }}
+        runAsGroup: {{ container_gid }}
+      volumes:
+        - name: prosody-v-nginx
+          configMap:
+            name: prosody-nginx-{{ deployment_stamp }}
