@@ -12,6 +12,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 - CLI: add `acme` command to create or update the namespace TLS certificate Issuer
 - Elasticsearch: add support for persistent volume to store indexes data
+- Prosody: create new application for this XMPP server
 
 ### Changed
 

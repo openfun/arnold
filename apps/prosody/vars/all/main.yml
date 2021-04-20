@@ -1,0 +1,95 @@
+# -- route
+prosody_host: "prosody.{{ namespace_name }}.{{ domain_name }}"
+
+# -- Prosody
+
+prosody_image_name: "fundocker/prosody"
+prosody_image_tag: "latest"
+prosody_general_admins: []
+prosody_lua_libevent: true
+prosody_cross_domain_bosh: true
+prosody_consider_bosh_secure: true
+prosody_general_modules_enabled:
+  - roster
+  - saslauth
+  - dialback
+  - disco
+  - carbons
+  - pep
+  - private
+  - blocklist
+  - vcard4
+  - vcard_legacy
+  - version
+  - uptime
+  - time
+  - ping
+  - register
+  - admin_adhoc
+prosody_general_modules_disabled: []
+prosody_allow_registration: false
+prosody_c2s_require_encryption: false
+prosody_allow_unencrypted_plain_auth: true
+prosody_s2s_require_encryption: false
+prosody_s2s_secure_auth: false
+prosody_s2s_insecure_domains: []
+prosody_s2s_secure_domains: []
+prosody_general_authentication: "internal_hashed"
+prosody_storage: "internal"
+prosody_archive_expires_after: "1w"
+prosody_log_level: "info"
+prosody_vertificates_directory: "certs"
+prosody_asap_accepted_issuers:
+  - "prosody"
+prosody_asap_accepted_audiences: 
+  - "prosody"
+prosody_client_connection_port: 5222
+prosody_nodeport_client_connection_port: 30007
+prosody_http_port: 5280
+prosody_external_components_port: 5347
+prosody_nodeport_external_components_port: 30008
+prosody_secret_name: "prosody-{{ prosody_vault_checksum | default('undefined_prosody_vault_checksum') }}"
+
+# -- Volumes
+# The storage volume is used only when the prosody storage is internal.
+prosody_storage_volume_size: 1Gi
+
+# -- Nginx
+prosody_nginx_image_name: "fundocker/openshift-nginx"
+prosody_nginx_image_tag: "1.13"
+prosody_nginx_port: 8068
+prosody_nginx_replicas: 1
+prosody_nginx_healthcheck_port: 5000
+prosody_nginx_healthcheck_endpoint: "/__healthcheck__"
+prosody_nginx_status_endpoint: "/__status__"
+prosody_nginx_ip_whitelist: []
+
+
+# -- resources requests
+{% set app_resources = {
+  "requests": {
+    "cpu": "80m",
+    "memory": "400Mi"
+  }
+} %}
+
+prosody_nginx_resources:
+  requests:
+    cpu: 10m
+    memory: 5Mi
+
+prosody_postgresql_resources:
+  requests:
+    cpu: 10m
+    memory: 100Mi
+
+prosody_app_resources: "{{ app_resources }}"
+
+# -- postgresql
+prosody_postgresql_version: "9.6"
+prosody_postgresql_image_name: "centos/postgresql-96-centos7"
+prosody_postgresql_image_tag: "9.6"
+prosody_postgresql_host: "postgresql"
+prosody_postgresql_port: 5432
+prosody_postgresql_database: "prosody"
+prosody_postgresql_secret_name: "prosody-postgresql-{{ prosody_vault_checksum | default('undefined_prosody_vault_checksum') }}"
