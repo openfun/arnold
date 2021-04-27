@@ -12,7 +12,7 @@ curl -sS \
   -u "${KIBANA_ELASTIC_USERNAME}:${KIBANA_ELASTIC_PASSWORD}" \
 {% endif %}
   "http://localhost:{{ kibana_app_port }}/api/status" | \
-  python -m json.tool > /tmp/status.json
+  tr "," "\n" > /tmp/status.json
 
 if [[ ${check} -eq 1 ]]; then
   grep "state" /tmp/status.json | \
