@@ -14,7 +14,7 @@ SSL_CERTIFICATE_PASSWORD: {{ lookup('password', '/dev/null length=50') }}
 ELASTIC_USERNAME: "elastic"
 ELASTIC_PASSWORD: "{{ lookup('password', '/dev/null length=50') }}"
 ELASTIC_BOOTSTRAP_PASSWORD: "{{ lookup('password', '/dev/null length=50') }}"
-KIBANA_USERNAME: "kibana"
+KIBANA_USERNAME: "kibana_system"
 KIBANA_PASSWORD: "{{ lookup('password', '/dev/null length=50') }}"
 LOGSTASH_USERNAME: "logstash_system"
 LOGSTASH_PASSWORD: "{{ lookup('password', '/dev/null length=50') }}"
