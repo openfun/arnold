@@ -185,6 +185,32 @@ jobs:
               "${ARNOLD_IMAGE}" \
               ansible --version
 
+  test-k3d-cluster-registry:
+    <<: *defaults
+
+    steps:
+      - checkout
+      - *attach_workspace
+      - *ci_env
+      - *install_k8s_requirements
+
+      - run:
+          name: Test the k3d docker registry
+          command: |
+            # Create the cluster with the registry
+            MINIMUM_AVAILABLE_RWX_VOLUME=15 \
+            K3D_BIND_HOST_PORT_HTTP=80 \
+            K3D_BIND_HOST_PORT_HTTPS=443 \
+            K3D_REGISTRY_HOST=registry.127.0.0.1.nip.io \
+            K3D_ENABLE_REGISTRY=1 \
+              make cluster
+            # Pull a small docker image to tag and push
+            docker pull alpine:latest
+            docker tag alpine:latest registry.127.0.0.1.nip.io:5000/testimage:local
+            docker push registry.127.0.0.1.nip.io:5000/testimage:local
+            # Run this image in the cluster
+            kubectl run --image registry.127.0.0.1.nip.io:5000/testimage:local testimage --command -- tail -f /dev/null
+
   # Test the bootstrap playbook on the "hello" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
   test-bootstrap-hello:
@@ -834,6 +860,10 @@ workflows:
             - lint-docker
             - lint-ansible
             - lint-plugins
+          filters:
+            tags:
+              only: /.*/
+      - test-k3d-cluster-registry:
           filters:
             tags:
               only: /.*/

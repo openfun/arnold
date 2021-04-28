@@ -11,6 +11,12 @@ K3D_CLUSTER_NAME="${1:-arnold}"
 K3D_BIND_HOST_PORT_HTTP="${K3D_BIND_HOST_PORT_HTTP:-8080}"
 K3D_BIND_HOST_PORT_HTTPS="${K3D_BIND_HOST_PORT_HTTPS:-8443}"
 
+# Cluster docker registry
+K3D_ENABLE_REGISTRY="${K3D_ENABLE_REGISTRY:-0}"
+K3D_REGISTRY_HOST="${K3D_REGISTRY_HOST:-registry.localhost}"
+K3D_REGISTRY_PORT="${K3D_REGISTRY_PORT:-5000}"
+K3D_REGISTRY_NAME="k3d-${K3D_REGISTRY_HOST}"
+
 # Arnold project root directory
 declare ARNOLD_ROOT
 ARNOLD_ROOT="$(dirname "$(dirname "$(readlink -f "$0")")")"
@@ -52,6 +58,16 @@ fi
 
 if ! k3d cluster list "${K3D_CLUSTER_NAME}" &> /dev/null ; then
 
+  declare -a k3d_registry_option
+
+  # Create cluster docker registry
+  if [[ ${K3D_ENABLE_REGISTRY} -eq 1 ]]; then
+    if ! k3d registry list "${K3D_REGISTRY_NAME}" &> /dev/null ; then
+      k3d registry create "${K3D_REGISTRY_HOST}" --port "${K3D_REGISTRY_PORT}"
+    fi
+    k3d_registry_option=("--registry-use" "${K3D_REGISTRY_NAME}:${K3D_REGISTRY_PORT}")
+  fi
+
   # Ensure that the persistent volume storage directory exists on the host
   if [[ ! -d "${PERSISTENT_VOLUME_PATH}" ]] ; then
     mkdir -p "${PERSISTENT_VOLUME_PATH}"
@@ -62,14 +78,14 @@ if ! k3d cluster list "${K3D_CLUSTER_NAME}" &> /dev/null ; then
     -p "${K3D_BIND_HOST_PORT_HTTP}:80@loadbalancer" \
     -p "${K3D_BIND_HOST_PORT_HTTPS}:443@loadbalancer" \
     -v "${PERSISTENT_VOLUME_PATH}:/data/pv" \
-    --k3s-server-arg '--no-deploy=traefik'
+    --k3s-server-arg '--no-deploy=traefik' \
+    "${k3d_registry_option[@]}"
 else
   k3d cluster start "${K3D_CLUSTER_NAME}"
 fi
 
 KUBECONFIG=$(k3d kubeconfig write "${K3D_CLUSTER_NAME}")
 echo "K3d cluster configuration exported to ${KUBECONFIG}"
-
 
 # Pre-provision PersistentVolumes with RWX accessModes
 
