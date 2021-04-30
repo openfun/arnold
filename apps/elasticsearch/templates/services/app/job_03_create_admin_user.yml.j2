@@ -47,6 +47,8 @@ spec:
           resources: {{ elasticsearch_app_job_create_admin_user_resources }}
       restartPolicy: Never
       securityContext:
-        runAsUser: {{ container_uid }}
-        runAsGroup: {{ container_gid }}
+        runAsUser: {{ elasticsearch_container_uid }}
+        runAsGroup: {{ elasticsearch_container_gid }}
+        fsGroup: {{ elasticsearch_container_gid }}
+        fsGroupChangePolicy: "OnRootMismatch"
 {% endif %}

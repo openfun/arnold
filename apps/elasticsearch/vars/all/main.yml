@@ -2,6 +2,8 @@
 
 elasticsearch_image_name: "fundocker/openshift-elasticsearch"
 elasticsearch_image_tag: "6.6.2"
+elasticsearch_container_uid: {{ container_uid }}
+elasticsearch_container_gid: {{ container_gid }}
 
 # -- Node specific configuration
 
