@@ -12,7 +12,7 @@ metadata:
 spec:
   ports:
     - name: "{{ nextcloud_database_port }}-tcp"
-      port: "{{ nextcloud_database_port }}"
+      port: {{ nextcloud_database_port }}
       protocol: TCP
       targetPort: {{ nextcloud_database_port }}
 # As commented in the ad hoc endpoint, the endpoint name points to this service
