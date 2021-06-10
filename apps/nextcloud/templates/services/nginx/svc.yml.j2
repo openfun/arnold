@@ -20,5 +20,5 @@ spec:
       targetPort: {{ nextcloud_nginx_healthcheck_port }}
   selector:
     app: nextcloud
-    deploymentconfig: "nextcloud-nginx-{{ deployment_stamp }}"
+    deployment: "nextcloud-nginx-{{ deployment_stamp }}"
   type: ClusterIP

@@ -1,6 +1,6 @@
 {% if env_type in trashable_env_types %}
 apiVersion: v1
-kind: DeploymentConfig
+kind: Deployment
 metadata:
   labels:
     app: nextcloud
@@ -11,13 +11,20 @@ metadata:
   namespace: "{{ namespace_name }}"
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: nextcloud
+      service: postgresql
+      version: "{{ nextcloud_database_image_tag }}"
+      deployment: "nextcloud-postgresql-{{ deployment_stamp }}"
+      deployment_stamp: "{{ deployment_stamp }}"
   template:
     metadata:
       labels:
         app: nextcloud
         service: postgresql
         version: "{{ nextcloud_database_image_tag }}"
-        deploymentconfig: "nextcloud-postgresql-{{ deployment_stamp }}"
+        deployment: "nextcloud-postgresql-{{ deployment_stamp }}"
         deployment_stamp: "{{ deployment_stamp }}"
     spec:
 {% set image_pull_secret_name = nextcloud_database_image_pull_secret_name | default(none) or default_image_pull_secret_name %}
@@ -37,4 +44,8 @@ spec:
           envFrom:
             - secretRef:
                 name: "{{ nextcloud_database_secret_name }}"
+          resources: {{ nextcloud_postgresql_resources }}
+      securityContext:
+        runAsUser: {{ container_uid }}
+        runAsGroup: {{ container_gid }}
 {% endif %}
