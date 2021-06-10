@@ -30,8 +30,6 @@ spec:
         - name: nextcloud
           image: {{ nextcloud_image_name }}:{{ nextcloud_image_tag }}
           imagePullPolicy: Always
-          securityContext:
-            runAsUser: "{{ nextcloud_user_id }}"
           envFrom:
             - secretRef:
                 name: "{{ nextcloud_secret_name }}"
@@ -44,6 +42,7 @@ spec:
             - "/bin/bash"
             - "-c"
             - entrypoint.sh install.sh
+          resources: {{ nextcloud_app_job_install_resources }}
           volumeMounts:
             - name: nextcloud-v-install
               mountPath: /tmp/nextcloud  
@@ -51,3 +50,6 @@ spec:
         - name: nextcloud-v-install
           persistentVolumeClaim:
             claimName: nextcloud-pvc-install
+      securityContext:
+        runAsUser: {{ container_uid }}
+        runAsGroup: {{ container_gid }}
