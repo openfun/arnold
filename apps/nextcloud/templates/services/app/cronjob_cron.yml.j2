@@ -9,7 +9,7 @@ metadata:
     version: "{{ nextcloud_version }}"
     deployment_stamp: "{{ deployment_stamp }}"
 spec:
-  schedule: "*/5 * * * *"  
+  schedule: "*/5 * * * *"
   successfulJobsHistoryLimit: 2
   failedJobsHistoryLimit: 1
   concurrencyPolicy: Forbid
@@ -34,8 +34,6 @@ spec:
             - name: nextcloud
               image: {{ nextcloud_image_name }}:{{ nextcloud_image_tag }}
               imagePullPolicy: Always
-              securityContext:
-                runAsUser: "{{ nextcloud_user_id }}"
               command:
                 - "/bin/bash"
                 - "-c"
@@ -45,6 +43,7 @@ spec:
                     name: "{{ nextcloud_secret_name }}"
                 - configMapRef:
                     name: "nextcloud-app-dotenv-{{ deployment_stamp }}"
+              resources: {{ nextcloud_app_cronjob_resources }}
               volumeMounts:
                 - mountPath: {{ nextcloud_base_dir }}/config
                   name: nextcloud-config
@@ -55,8 +54,6 @@ spec:
             # mount this emptyDir in the container.
             - name: init-create-config
               image: "busybox:1.31.1"
-              securityContext:
-                runAsUser: "{{ nextcloud_user_id }}"
               command:
                 - "/bin/sh"
                 - "-c"
@@ -74,3 +71,6 @@ spec:
             - name: nextcloud-config
               emptyDir: {}  # volume that lives as long as the pod lives  
           restartPolicy: Never
+          securityContext:
+            runAsUser: {{ container_uid }}
+            runAsGroup: {{ container_gid }}

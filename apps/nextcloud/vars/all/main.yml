@@ -31,6 +31,8 @@ nextcloud_redis_host: "redis"
 nextcloud_redis_port: 6379
 
 # -- nextcloud
+# The nextcloud Docker image must be built by a user bearing the same id as
+# specified in the `container_uid` variable (defaults to 10000)
 nextcloud_image_name: "fundocker/nextcloud"
 nextcloud_image_tag: "18.0.2-fpm"
 nextcloud_version: "18.0.2"
@@ -41,10 +43,32 @@ nextcloud_admin_user: "admin"
 nextcloud_debug: false
 nextcloud_log_level: 2
 nextcloud_log_type: "file"
-nextcloud_user_id: 1000
 nextcloud_base_dir: "/app"
 nextcloud_container_user: "openfun"
 nextcloud_container_home_dir: "/home/openfun"
 
 # -- volumes
 nextcloud_install_volume_size: 2Mi
+
+# -- resources requests
+{% set app_resources = {
+  "requests": {
+    "cpu": "10m",
+    "memory": "250Mi"
+  }
+} %}
+
+nextcloud_app_resources: "{{ app_resources }}"
+
+nextcloud_app_job_install_resources: "{{ app_resources }}"
+nextcloud_app_cronjob_resources: "{{ app_resources }}"
+
+nextcloud_nginx_resources:
+  requests:
+    cpu: 5m
+    memory: 20Mi
+
+nextcloud_postgresql_resources:
+  requests:
+    cpu: 10m
+    memory: 100Mi
