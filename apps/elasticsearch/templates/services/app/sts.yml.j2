@@ -179,6 +179,7 @@ spec:
         runAsGroup: {{ elasticsearch_container_gid }}
         fsGroup: {{ elasticsearch_container_gid }}
         fsGroupChangePolicy: "OnRootMismatch"
+{% if elasticsearch_persistent_volume_enabled %}
   volumeClaimTemplates:
   - metadata:
       name: elasticsearch-pvc-data
@@ -190,3 +191,4 @@ spec:
       resources:
         requests:
           storage: {{ elasticsearch_persistent_volume_size }}
+{% endif %}
