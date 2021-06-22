@@ -353,16 +353,12 @@ jobs:
           command: |
             # Bootstrap app
             bin/arnold -c eugene -e ci -a forum bootstrap
-            # Test service deployed with the next route
-            bin/ci route -s forum -c collection -p "/api/v1/threads?api_key=thisisafakeapikey" -P next
-
-      - run:
-          name: Test the "forum" application switch
-          command: |
-            # Switch next route to current
-            bin/arnold -c eugene -e ci -a forum switch
-            # Test service switched to the current route
-            bin/ci route -s forum -c collection -p "/api/v1/threads?api_key=thisisafakeapikey"
+            # Select forum's service pods
+            cmd="kubectl get pods -n ci-eugene -l app=forum,service=forum"
+            # Run command to debug output (eventually)
+            eval "${cmd}"
+            # Perform running pods test
+            test $(eval "${cmd} | grep Running | wc -l") -eq 1
 
   # Test the bootstrap playbook on the "edxapp" application
   # nota bene: we use a real k8s cluster installed in CircleCI's VM.
