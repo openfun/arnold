@@ -47,6 +47,20 @@ ashley_cron_reindex_schedule: "0 * * * *"
 
 ashley_activate_http_basic_auth: false
 
+# -- file storage backend
+ashley_default_file_storage: "storages.backends.s3boto3.S3Boto3Storage"
+
+# max upload size for image uploads in MB
+ashley_max_upload_file_mb: "10"
+
+# -- Amazon S3 storage settings
+# See https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html
+
+ashley_aws_storage_bucket_name: ""
+ashley_aws_s3_region_name: "eu-west-1"
+ashley_aws_s3_custom_domain: ""
+ashley_aws_location: "media/"
+
 # -- volumes
 # volume sizes with power of 2 suffices (Ki, Mi, Gi, Ti...) e.g 2Gi and 0 for no volume.
 ashley_media_volume_size: 2Gi
