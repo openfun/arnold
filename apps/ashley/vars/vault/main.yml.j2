@@ -9,3 +9,7 @@ DB_PASSWORD: {{ postgresql_credentials.password }}
 
 # ashley
 DJANGO_SECRET_KEY: {{ lookup('password', '/dev/null length=50') }}
+
+# AWS Credentials
+DJANGO_AWS_ACCESS_KEY_ID: yourAwsAccessKeyId
+DJANGO_AWS_SECRET_ACCESS_KEY: yourAwsSecretAccessKey
