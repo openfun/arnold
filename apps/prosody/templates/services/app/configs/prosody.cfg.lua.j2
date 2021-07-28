@@ -36,10 +36,19 @@ admins = { {{ prosody_general_admins | join(',') }} }
 -- Enable use of libevent for better performance under high load
 -- For more information see: https://prosody.im/doc/libevent
 use_libevent = {{ prosody_lua_libevent | lower }}
+network_settings = {
+  read_timeout = {{ prosody_network_settings_read_timeout }};
+}
 
-
+{% if prosody_use_bosh %}
 cross_domain_bosh = {{ prosody_cross_domain_bosh | lower }}
 consider_bosh_secure = {{ prosody_consider_bosh_secure | lower }}
+{% endif %}
+
+{% if prosody_use_websocket %}
+cross_domain_websocket = {{ prosody_cross_domain_websocket | lower }}
+consider_websocket_secure = {{ prosody_consider_websocket_secure | lower }}
+{% endif %}
 
 -- This is the list of modules Prosody will load on startup.
 -- It looks for mod_modulename.lua in the plugins folder, so make sure that exists too.
@@ -143,7 +152,12 @@ certificates = "{{ prosody_vertificates_directory }}"
 
 VirtualHost "{{ prosody_host }}"
     modules_enabled = {
+{% if prosody_use_bosh %}
         "bosh";
+{% endif %}
+{% if prosody_use_websocket %}
+        "websocket";
+{% endif %}
     }
 
 
