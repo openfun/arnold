@@ -7,8 +7,15 @@ prosody_image_name: "fundocker/prosody"
 prosody_image_tag: "latest"
 prosody_general_admins: []
 prosody_lua_libevent: true
+# bosh
+prosody_use_bosh: true
 prosody_cross_domain_bosh: true
 prosody_consider_bosh_secure: true
+# websocket
+prosody_use_websocket: false
+prosody_cross_domain_websocket: true
+prosody_consider_websocket_secure: true
+prosody_network_settings_read_timeout: 840
 prosody_general_modules_enabled:
   - roster
   - saslauth

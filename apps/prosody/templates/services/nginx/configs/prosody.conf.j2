@@ -3,6 +3,7 @@ server {
 	listen {{ prosody_nginx_port }};
   server_name localhost;
 
+{% if prosody_use_bosh %}
 	location /http-bind {
 {% if prosody_nginx_ip_whitelist | length > 0 %}
     if ($http_x_forwarded_for !~ ^({{ prosody_nginx_ip_whitelist | join("|") }})) {
@@ -17,4 +18,26 @@ server {
     proxy_buffering off;
     tcp_nodelay on;
 	}
+{% endif %}
+
+{% if prosody_use_websocket %}
+	location /xmpp-websocket {
+{% if prosody_nginx_ip_whitelist | length > 0 %}
+    if ($http_x_forwarded_for !~ ^({{ prosody_nginx_ip_whitelist | join("|") }})) {
+      return 403;
+    }
+{% endif %}
+
+    proxy_pass  http://prosody-app:{{ prosody_http_port }}/xmpp-websocket;
+    proxy_http_version 1.1;
+    proxy_set_header Connection "Upgrade";
+    proxy_set_header Upgrade $http_upgrade;
+
+    proxy_buffering off;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_read_timeout 86400;
+	}
+{% endif %}
 }
