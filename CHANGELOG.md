@@ -32,6 +32,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 - CLI: fix the `No such file or directory` error in the `vaults` command
 
+### Removed
+
+- Remove `acme` annotation from flower app ingress as it should not be accessible
+
 ## [5.25.0] - 2021-03-05
 
 ### Added
