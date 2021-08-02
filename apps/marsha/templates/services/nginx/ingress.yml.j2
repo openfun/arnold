@@ -11,7 +11,9 @@ metadata:
     route_prefix: "{{ prefix }}"
     route_target_service: "app"
   annotations:
+{% if prefix in acme_enabled_route_prefix %}
     cert-manager.io/issuer: "{{ acme_issuer_name }}"
+{% endif %}
 spec:
   rules:
   - host: "{{ marsha_host | blue_green_host(prefix) }}"

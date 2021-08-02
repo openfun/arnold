@@ -11,7 +11,9 @@ metadata:
     version: "{{ flower_nginx_image_tag }}"
     route_target_service: "app"
   annotations:
+{% if prefix in acme_enabled_route_prefix %}
     cert-manager.io/issuer: "{{ acme_issuer_name }}"
+{% endif %}
 spec:
   rules:
   - host: "{{ flower_host }}"
