@@ -9,7 +9,9 @@ metadata:
     version: "{{ redirect_nginx_image_tag }}"
     deployment_stamp: "{{ deployment_stamp }}"
   annotations:
+{% if prefix in acme_enabled_route_prefix %}
     cert-manager.io/issuer: "{{ acme_issuer_name }}"
+{% endif %}
 spec:
   rules:
   - host: "{{ redirection_from | default('unknown') }}"

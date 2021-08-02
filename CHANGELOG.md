@@ -10,6 +10,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Allow deactivating `acme` ingress annotation for some blue/green prefixes
 - CLI: add `acme` command to create or update the namespace TLS certificate Issuer
 - Elasticsearch: add support for persistent volume to store indexes data
 - Prosody: create new application for this XMPP server
