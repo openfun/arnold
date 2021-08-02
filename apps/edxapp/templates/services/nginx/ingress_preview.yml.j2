@@ -12,7 +12,9 @@ metadata:
     route_prefix: "{{ prefix }}"
     route_target_service: "lms"
   annotations:
+{% if prefix in acme_enabled_route_prefix %}
     cert-manager.io/issuer: "{{ acme_issuer_name }}"
+{% endif %}
     nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ edxapp_routing_timeout | default("60") }}"
 spec:
   rules:
