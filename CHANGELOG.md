@@ -34,6 +34,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Removed
 
+- Remove deprecated moodlenet app that won't be upgraded to k8s
 - Remove `acme` annotation from flower app ingress as it should not be accessible
 
 ## [5.25.0] - 2021-03-05
