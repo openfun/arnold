@@ -11,7 +11,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Allow deactivating `acme` ingress annotation for some blue/green prefixes
-- CLI: add `acme` command to create or update the namespace TLS certificate Issuer
+- CLI: add `acme` command to create or update the namespace TLS certificate
+  Issuer
 - Elasticsearch: add support for persistent volume to store indexes data
 - Prosody: create new application for this XMPP server
 
@@ -20,7 +21,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Update `hello` app to be compatible with k8s
 - Replace DeploymentConfig with Deployment in Ansible core tasks
 - Replace Route with Ingress in Ansible core tasks
-- Use `cert-manager` instead of `openshift-acme` for TLS certificates generation
+- Use `cert-manager` instead of `openshift-acme` for TLS certificates
+  generation
 - Use `kubectl` instead of `oc` in `arnold` CLI
 - Authentication in `arnold` CLI must be done with a service account
 - Replace `oc cluster` with k3d for local development
@@ -34,8 +36,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Removed
 
-- Remove deprecated moodlenet app that won't be upgraded to k8s
-- Remove `acme` annotation from flower app ingress as it should not be accessible
+- Remove deprecated moodlenet and learninglocker apps that won't be upgraded
+  to k8s
+- Remove `acme` annotation from flower app ingress as it should not be
+  accessible
 
 ## [5.25.0] - 2021-03-05
 
