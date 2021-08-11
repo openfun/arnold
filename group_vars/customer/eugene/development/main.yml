@@ -7,8 +7,6 @@ apps:
   - name: flower
   - name: forum
   - name: richie
-  - name: learninglocker
-  - name: moodlenet
   - name: nextcloud
   - name: etherpad
   - name: edxapp

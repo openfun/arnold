@@ -451,66 +451,6 @@ jobs:
             # Test service switched to the current route
             bin/ci route -s marsha -c "Api Root" -p "/api/"
 
-  # Test the bootstrap playbook on the "moodlenet" application
-  # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
-  test-bootstrap-moodlenet:
-    <<: *defaults
-
-    steps:
-      - checkout
-      - *attach_workspace
-      - *ci_env
-      - *docker_load
-      - *install_k8s_requirements
-      - *configure_sysctl_limits
-      - *run_k3d_cluster
-
-      - run:
-          name: Test the "moodlenet" application bootstrapping
-          command: |
-            # Bootstrap app
-            bin/arnold -c eugene -e ci -a moodlenet bootstrap
-            # Test services deployed with the next route
-            bin/ci route -s api -c "schema" -p "/.well-known/nodeinfo" -P next -H "application/json"
-
-      - run:
-          name: Test the "moodlenet" application switch
-          command: |
-            # Switch next route to current
-            bin/arnold -c eugene -e ci -a moodlenet switch
-            # Test service switched to the current route
-            bin/ci route -s api -c "schema" -p "/.well-known/nodeinfo" -H "application/json"
-
-
-  # Test the bootstrap playbook on the "learninglocker" application.
-  # We also need redis and mailcatcher for this application
-  # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
-  test-bootstrap-learninglocker:
-    <<: *defaults
-
-    steps:
-      - checkout
-      - *attach_workspace
-      - *ci_env
-      - *docker_load
-      - *install_k8s_requirements
-      - *configure_sysctl_limits
-      - *run_k3d_cluster
-
-      - run:
-          name: Test the "learninglocker" application bootstrapping
-          command: |
-            bin/arnold -c eugene -e ci -a redis,mailcatcher,learninglocker bootstrap
-            bin/ci route -s learninglocker -c OK -p "/api" -P next
-
-      - run:
-          name: Test the "learninglocker" application switch
-          command: |
-            # Switch next route to current
-            bin/arnold -c eugene -e ci -a learninglocker switch
-            # Test service switched to the current route
-            bin/ci route -s learninglocker -c OK -p "/api"
-
 
   # Test the bootstrap playbook on the "ashley" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
@@ -923,15 +863,6 @@ workflows:
           filters:
             tags:
               only: /.*/
-#      - test-bootstrap-moodlenet:
-#          requires:
-#            - lint-bash
-#            - lint-docker
-#            - lint-ansible
-#            - lint-plugins
-#          filters:
-#            tags:
-#              only: /.*/
       - test-bootstrap-forum:
           requires:
             - lint-bash
@@ -941,15 +872,6 @@ workflows:
           filters:
             tags:
               only: /.*/
-#      - test-bootstrap-learninglocker:
-#          requires:
-#            - lint-bash
-#            - lint-docker
-#            - lint-ansible
-#            - lint-plugins
-#          filters:
-#            tags:
-#              only: /.*/
       - test-bootstrap-ashley:
           requires:
             - lint-bash
@@ -1031,7 +953,6 @@ workflows:
             - test-bootstrap-mailcatcher
             - test-bootstrap-marsha
             - test-bootstrap-forum
-#            - test-bootstrap-learninglocker
             - test-bootstrap-ashley
             - test-bootstrap-etherpad
             - test-bootstrap-kibana
