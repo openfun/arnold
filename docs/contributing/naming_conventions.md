@@ -1,7 +1,7 @@
 # Naming conventions
 
 To make created object names the most relevant possible, we defined a set of
-naming conventions for OpenShift objects. The following table sums up those
+naming conventions for Kubernetes objects. The following table sums up those
 conventions.
 
 | 0bject type             | Pattern                        | Example            |

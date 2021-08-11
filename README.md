@@ -19,6 +19,7 @@ to make Ansible talk with Kubernetes.
 - [Kubectl](https://kubernetes.io/docs/tasks/tools/):
   This CLI is used to communicate with the running Kubernetes instance you
   will use.
+- [curl](https://curl.se/) is required by Arnold's CLI.
 
 Optionally:
 
@@ -28,7 +29,6 @@ Optionally:
   Kubernetes cluster).
 - [gnupg](https://gnupg.org/) to encrypt Ansible vaults passwords and
   collaborate with your team.
-- [curl](https://curl.se/) to download and install Arnold's CLI.
 
 ## Quick start for Arnold's users
 
@@ -100,14 +100,20 @@ apps:
   - name: hello
 ```
 
-You can start a local development cluster using the `make cluster` command.
+Now, let's deploy this project! You can either do it on an existing Kubernetes
+cluster, or on a local environment on your workstation.
 
-After a while, a local k3d cluster should be up and running.
+- To deploy on an existing Kubernetes cluster, please refer to
+[Authenticating against an existing cluster](./docs/config/k8s-authentication.md)
+
+- To deploy on a local environment, assuming you have the `k3d` dependency
+  installed, you just have to run `make cluster`. After a while, a
+  local k3d cluster should be up and running.
 
 
-It's time to create our new project and deploy the hello application!
+After that, you can run the following command to deploy your application:
 
-> The bootstrap command will ask your confirmation to create a new project,
+> The bootstrap command will ask your confirmation to create a new namespace,
 > please proceed by pressing the enter key from your keyboard.
 
 ```bash
