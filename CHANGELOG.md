@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [6.0.0] - 2021-08-11
+
 ### Added
 
 - Allow deactivating `acme` ingress annotation for some blue/green prefixes
@@ -1001,7 +1003,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v5.25.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v6.0.0...master
+[6.0.0]: https://github.com/openfun/arnold/compare/v5.25.0...v6.0.0
 [5.25.0]: https://github.com/openfun/arnold/compare/v5.24.0...v5.25.0
 [5.24.0]: https://github.com/openfun/arnold/compare/v5.23.0...v5.24.0
 [5.23.0]: https://github.com/openfun/arnold/compare/v5.22.1...v5.23.0
