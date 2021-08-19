@@ -27,7 +27,7 @@ marsha_postgresql_secret_name: "marsha-postgresql-{{ marsha_vault_checksum | def
 
 # -- marsha
 marsha_image_name: "fundocker/marsha"
-marsha_image_tag: "3.17.0"
+marsha_image_tag: "3.23.0"
 marsha_django_port: 8000
 marsha_app_replicas: 1
 marsha_xapi_replicas: 1
@@ -42,6 +42,7 @@ marsha_activate_http_basic_auth: false
 marsha_check_harvested_cronjob_schedule: "0 3 * * *"
 marsha_check_live_state_cronjob_schedule: "*/20 * * * *"
 marsha_check_idle_state_cronjob_schedule: "0 4 * * *"
+marsha_clean_mediapackages_cronjob_schedule: "0 5 * * *"
 
 # -- volumes
 marsha_media_volume_size: 2Gi
@@ -60,6 +61,7 @@ marsha_app_job_db_migrate_resources: "{{ app_resources }}"
 marsha_app_cronjob_check_harvested_resources: "{{ app_resources }}"
 marsha_app_cronjob_check_live_idle_resources: "{{ app_resources }}"
 marsha_app_cronjob_check_live_state_resources: "{{ app_resources }}"
+marsha_app_cronjob_clean_mediapackages_resources: "{{ app_resources }}"
 
 marsha_nginx_resources:
   requests:
