@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- Marsha: cronjob running clean_mediapackages management command
+
 ## [6.0.0] - 2021-08-11
 
 ### Added
