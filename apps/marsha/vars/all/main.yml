@@ -39,10 +39,12 @@ marsha_cloudfront_private_key_path: "/private/.ssh/aws/ssh-privatekey"
 # signature with the aforementioned SSH key
 marsha_should_sign_requests: true
 marsha_activate_http_basic_auth: false
+marsha_deploy_clean_medialive_dev_stack_cronjob: false
 marsha_check_harvested_cronjob_schedule: "0 3 * * *"
 marsha_check_live_state_cronjob_schedule: "*/20 * * * *"
 marsha_check_idle_state_cronjob_schedule: "0 4 * * *"
 marsha_clean_mediapackages_cronjob_schedule: "0 5 * * *"
+marsha_clean_medialive_dev_stack_cronjob_schedule: "*/5 * * * *"
 
 # -- volumes
 marsha_media_volume_size: 2Gi

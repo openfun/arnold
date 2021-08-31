@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- Marsha: cronjob running clean_medialive_dev_stack management command
+
 ## [6.1.0] - 2021-08-24
 
 ### Added
