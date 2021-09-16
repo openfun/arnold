@@ -13,6 +13,8 @@ metadata:
 {% if prefix in acme_enabled_route_prefix %}
     cert-manager.io/issuer: "{{ acme_issuer_name }}"
 {% endif %}
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ prosody_nginx_proxy_read_timeout }}"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ prosody_nginx_proxy_send_timeout }}"
 spec:
   rules:
   - host: "{{ prosody_host }}"

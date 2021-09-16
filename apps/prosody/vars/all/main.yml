@@ -70,6 +70,8 @@ prosody_nginx_healthcheck_port: 5000
 prosody_nginx_healthcheck_endpoint: "/__healthcheck__"
 prosody_nginx_status_endpoint: "/__status__"
 prosody_nginx_ip_whitelist: []
+prosody_nginx_proxy_read_timeout: 86400
+prosody_nginx_proxy_send_timeout: 86400
 
 
 # -- resources requests

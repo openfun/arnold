@@ -11,6 +11,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Prosody: enable mod_smacks when websocket is enabled
+- Prosody: allow to configure nginx proxy read and send timeout
 
 ## [6.2.0] - 2021-09-14
 
