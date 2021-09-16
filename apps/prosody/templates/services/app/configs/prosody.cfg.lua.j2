@@ -157,6 +157,7 @@ VirtualHost "{{ prosody_host }}"
 {% endif %}
 {% if prosody_use_websocket %}
         "websocket";
+        "smacks"; -- XEP-0198: Stream Management
 {% endif %}
     }
 
