@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- Prosody: enable mod_smacks when websocket is enabled
+
 ## [6.2.0] - 2021-09-14
 
 ### Added
