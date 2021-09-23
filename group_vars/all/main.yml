@@ -129,7 +129,7 @@ endpoint_postgresql_ip:  null
 # applies stringent rate limits on image pulls by anonymous users).
 # The secret name should correspond to the name of a secret added to your project.
 # If necessary, the pull secret names can also be configured at the level of each app.
-default_image_pull_secret_name: ""
+default_image_pull_secret_name: none
 
 
 # K8s namespaces
