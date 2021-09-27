@@ -31,7 +31,6 @@ docs
 .pytest_cache
 .pylint.d
 .pylintrc
-.pyup.yml
 .gitlint
 bin/
 !bin/arnold
