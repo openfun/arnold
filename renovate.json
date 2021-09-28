@@ -1,5 +1,15 @@
 {
-    "extends": [
-        "github>openfun/renovate-configuration"
-    ]
+    "extends": ["github>openfun/renovate-configuration"],
+    "enabledManagers": ["pip_requirements"],
+    "packageRules": [
+        {
+            "groupName": "python dependencies",
+            "matchManagers": ["pip_requirements"],
+            "schedule": ["before 7am on monday"],
+            "matchPackagePatterns": ["*"]
+        }
+    ],
+    "pip_requirements": {
+        "fileMatch": ["^requirements/.*\\.txt$"]
+    }
 }
