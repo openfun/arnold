@@ -10,7 +10,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
-- Upgrade `ansible` to `4.2.0`
+- Upgrade `ansible` to `4.6.0`
+- Upgrade to python 3.9
 
 ## [6.3.0] - 2021-09-16
 

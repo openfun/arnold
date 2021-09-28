@@ -18,7 +18,7 @@
 # - K8S_AUTH_SSL_CA_CERT_B64 : A base64 encoded CA certificate to authenticate
 #   against the K8S API (see ca_cert option in ansible k8s plugin)
 
-FROM python:3.6-slim as base
+FROM python:3.9-slim as base
 
 # Upgrade pip to its latest release to speed up dependencies installation
 # hadolint ignore=DL3013
