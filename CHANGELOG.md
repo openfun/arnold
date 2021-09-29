@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- Implemented support for RBAC objects
+
 ### Changed
 
 - Upgrade `ansible` to `4.6.0`

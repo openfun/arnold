@@ -23,6 +23,7 @@
     jobs: "{{ templates | map('regex_search', '.*/job_.*\\.yml\\.j2$') | select('string') | list }}"
     cronjobs: "{{ templates | map('regex_search', '.*/cronjob_.*\\.yml\\.j2$') | select('string') | list }}"
     ingresses: "{{ templates | map('regex_search', '.*/ingress.*\\.yml\\.j2$') | select('string') | list }}"
+    rbacs: "{{ templates | map('regex_search', '.*/rbac.*\\.yml\\.j2$') | select('string') | list }}"
   tags:
     - configmap
     - deploy
@@ -30,6 +31,7 @@
     - endpoint
     - job
     - ingress
+    - rbac
     - service
     - statefulset
 
@@ -104,3 +106,12 @@
   tags:
     - deploy
     - ingress
+
+- name: Display K8S rbac for this app
+  debug:
+    var: rbacs
+    verbosity: 2
+  when: rbacs is defined
+  tags:
+    - deploy
+    - rbac

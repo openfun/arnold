@@ -13,10 +13,12 @@
   with_items:
     - "{{ endpoints }}"
     - "{{ services }}"
+    - "{{ rbacs }}"
   tags:
     - deploy
     - endpoint
     - service
+    - rbac
 
 - name: Prepare jobs ordering & filtering
   set_fact:
