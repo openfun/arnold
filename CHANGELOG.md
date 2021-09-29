@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [6.4.0] - 2021-09-29
+
 ### Added
 
 - Implemented support for RBAC objects
@@ -1031,7 +1033,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v6.3.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v6.4.0...master
+[6.4.0]: https://github.com/openfun/arnold/compare/v6.3.0...v6.4.0
 [6.3.0]: https://github.com/openfun/arnold/compare/v6.2.0...v6.3.0
 [6.2.0]: https://github.com/openfun/arnold/compare/v6.1.0...v6.2.0
 [6.1.0]: https://github.com/openfun/arnold/compare/v6.0.0...v6.1.0
