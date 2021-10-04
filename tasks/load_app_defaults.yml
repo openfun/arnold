@@ -11,7 +11,7 @@
 
 - name: Define missing variables with defaults
   set_fact:
-    "{{ app_var.key }}": "{{ lookup('vars', app_var.key, default=app_var.value) }}"
+    "{{ app_var.key }}": "{{ lookup('vars', app_var.key, default=app_var.value) }}" # noqa var-naming
   loop: "{{ lookup('dict', defaults) }}"
   loop_control:
     loop_var: "app_var"

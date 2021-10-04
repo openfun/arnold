@@ -29,8 +29,7 @@ K8S_DOMAIN ?= "$(shell hostname -I | awk '{print $$1}')"
 K3D_CLUSTER_NAME ?= arnold
 
 # -- Linters
-ANSIBLE_LINT_RULES_DIR  = /usr/local/share/ansible-lint/rules
-ANSIBLE_LINT_SKIP_RULES = E602
+ANSIBLE_LINT_SKIP_RULES =
 
 # ==============================================================================
 # RULES
@@ -65,7 +64,7 @@ lint-ansible: ## lint ansible sources
 	@echo 'Checking syntax…'
 	$(ARNOLD_RUN_DEV) ansible-playbook --syntax-check ./*.yml
 	@echo 'Linting sources…'
-	$(ARNOLD_RUN_DEV) ansible-lint -R -r $(ANSIBLE_LINT_RULES_DIR) -x $(ANSIBLE_LINT_SKIP_RULES) ./*.yml
+	$(ARNOLD_RUN_DEV) ansible-lint -R -x $(ANSIBLE_LINT_SKIP_RULES) ./*.yml
 .PHONY: lint-ansible
 
 lint-bash: ## lint bash scripts with shellcheck

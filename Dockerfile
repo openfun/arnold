@@ -72,13 +72,6 @@ RUN apt-get update && \
 COPY requirements/development.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
-# Install more ansible_lint_rules
-ENV ANSIBLE_LINT_RULES_DIR="/usr/local/share/ansible-lint/rules"
-RUN mkdir -p "${ANSIBLE_LINT_RULES_DIR}" && \
-    curl -sLo /tmp/ansible-lint-rules.zip https://github.com/lean-delivery/ansible-lint-rules/archive/1.2.0.zip && \
-    unzip -j /tmp/ansible-lint-rules.zip  '*/rules/*' -d "${ANSIBLE_LINT_RULES_DIR}" && \
-    rm -rf "/tmp/ansible-lint-rules.zip"
-
 # pylint history and cache files
 ENV PYLINTHOME="/app/.pylint.d"
 
