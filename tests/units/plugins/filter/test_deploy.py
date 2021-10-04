@@ -44,8 +44,8 @@ class TestBlueGreenHostFilter(unittest.TestCase):
 
         host = "foo.com"
 
-        self.assertEqual(blue_green_host(host, "previous"), "previous.{}".format(host))
-        self.assertEqual(blue_green_host(host, "next"), "next.{}".format(host))
+        self.assertEqual(blue_green_host(host, "previous"), f"previous.{host}")
+        self.assertEqual(blue_green_host(host, "next"), f"next.{host}")
 
 
 class TestBlueGreenHostsFilter(unittest.TestCase):

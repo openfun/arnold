@@ -4,6 +4,7 @@ Applications lookup
 """
 from __future__ import absolute_import, division, print_function
 
+from locale import getpreferredencoding
 from pathlib import Path
 
 import yaml
@@ -162,7 +163,10 @@ class LookupModule(LookupBase):
     def _yaml_load(file_path):
         """Syntactic sugar to get yaml content with a simpler line of code"""
 
-        return yaml.load(Path(file_path).read_text(), Loader=yaml.FullLoader)
+        return yaml.load(
+            Path(file_path).read_text(encoding=getpreferredencoding()),
+            Loader=yaml.FullLoader,
+        )
 
     def _get_app_service(self, service_path):
         """Explore an application service"""
