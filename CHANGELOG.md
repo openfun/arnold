@@ -8,6 +8,11 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Fixed
+
+- Allow declaring alternative routes for Ashley as a workaround to third party
+  cookies being blocked by some browsers
+
 ## [6.5.0] - 2021-10-14
 
 ### Added

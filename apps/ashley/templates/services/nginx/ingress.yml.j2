@@ -27,7 +27,22 @@ spec:
               number: {{ ashley_nginx_port }}
         path: /
         pathType: Prefix
+{% for host in ashley_consumer_hosts %}
+  - host: "{{ host | blue_green_host(prefix) }}"
+    http:
+      paths:
+      - backend:
+          service:
+            name: "ashley-nginx-{{ prefix }}"
+            port:
+              number: {{ ashley_nginx_port }}
+        path: /
+        pathType: Prefix
+{% endfor %}
   tls:
   - hosts:
     - "{{ ashley_host | blue_green_host(prefix) }}"
+{% for host in ashley_consumer_hosts %}
+    - "{{ host | blue_green_host(prefix) }}"
+{% endfor %}
     secretName: "ashley-app-tls-{{ prefix }}-{{ acme_env }}"
