@@ -49,12 +49,6 @@
     name: arnold_tray
   when: arnold_tray_file.stat.exists
 
-- name: Get tray metadata (standard trays)
-  include_vars:
-    file: "{{ build_dir.path }}/{{ arnold_tray.source.path }}/{{ tray_file_name }}"
-    name: tray
-  when: arnold_tray_file.stat.exists
-
 - name: Set tray source path (standard trays)
   set_fact:
     tray_src_path: "{{ build_dir.path }}/{{ arnold_tray.source.path }}"
@@ -64,6 +58,11 @@
   set_fact:
     tray_src_path: "{{ build_dir.path }}/{{ app.git.subpath }}"
   when: app.git.subpath is defined
+
+- name: Get tray metadata
+  include_vars:
+    file: "{{ tray_src_path }}/{{ tray_file_name }}"
+    name: tray
 
 - name: Set tray destination path
   set_fact:
