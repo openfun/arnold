@@ -38,7 +38,15 @@ spec:
             - "bash"
             - "-c"
             - python manage.py migrate
+          volumeMounts:
+            - name: ashley-configmap
+              mountPath: /app/sandbox/configs
           resources: {{ ashley_app_job_db_migrate_resources }}
+      volumes:
+        - name: ashley-configmap
+          configMap:
+            defaultMode: 420
+            name: ashley-app-{{ deployment_stamp }}          
       restartPolicy: Never
       securityContext:
         runAsUser: {{ container_uid }}

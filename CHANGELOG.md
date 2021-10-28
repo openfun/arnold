@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- [ashley] create custom settings module
+
 ### Changed
 
 - Upgrade `ansible` to `4.7.0`

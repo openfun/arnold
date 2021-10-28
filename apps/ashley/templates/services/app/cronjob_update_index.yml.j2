@@ -44,4 +44,12 @@ spec:
                 - configMapRef:
                     name: "ashley-app-dotenv-{{ deployment_stamp }}"
               resources: {{ ashley_app_cronjob_update_index_resources }}
+              volumeMounts:
+                - name: ashley-configmap
+                  mountPath: /app/sandbox/configs
+          volumes:
+            - name: ashley-configmap
+              configMap:
+                defaultMode: 420
+                name: ashley-app-{{ deployment_stamp }}              
           restartPolicy: Never

@@ -43,10 +43,16 @@ spec:
             - python manage.py collectstatic --noinput
 {% if ashley_should_activate_static_volume %}
           volumeMounts:
+            - name: ashley-configmap
+              mountPath: /app/sandbox/configs
             - mountPath: /data/static
               name: ashley-v-static
           resources: {{ ashley_app_job_collectstatic_resources }}
       volumes:
+        - name: ashley-configmap
+          configMap:
+            defaultMode: 420
+            name: ashley-app-{{ deployment_stamp }}
         - name: ashley-v-static
           persistentVolumeClaim:
             claimName: ashley-pvc-static
