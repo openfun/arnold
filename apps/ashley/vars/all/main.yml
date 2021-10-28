@@ -34,7 +34,7 @@ ashley_image_name: "fundocker/ashley"
 ashley_image_tag: "master"
 ashley_django_port: 8000
 ashley_app_replicas: 1
-ashley_django_settings_module: "settings"
+ashley_django_settings_module: "configs.settings"
 ashley_django_configuration: "Development"
 ashley_secret_name: "ashley-{{ ashley_vault_checksum | default('undefined_ashley_vault_checksum') }}"
 
