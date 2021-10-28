@@ -10,7 +10,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- [ashley] create custom settings module
+- ashley: create custom settings module
+- ashley: allow to set unlimited secrets
 
 ### Changed
 
