@@ -12,8 +12,8 @@ from ansible.utils.encrypt import random_password
 # pylint: disable=invalid-name,too-many-branches
 def merge_with_app(base, new):
     """
-        Merge data from the "new" application to the "base" application.
-        Services listed in "new" that do not exist in "base" will be ignored.
+    Merge data from the "new" application to the "base" application.
+    Services listed in "new" that do not exist in "base" will be ignored.
     """
 
     if base is None:
@@ -90,8 +90,8 @@ def merge_with_app(base, new):
 
 def merge_with_database(base, database, app_name, customer, environment):
     """
-        Merge a database information with a database structure already existent.
-        If database already exist the new one is ignored.
+    Merge a database information with a database structure already existent.
+    If database already exist the new one is ignored.
     """
 
     if not isinstance(base, dict) or not isinstance(database, dict):
