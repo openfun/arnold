@@ -4,8 +4,7 @@ Tests for the "apps" plugin lookup
 
 import unittest
 
-from pyfakefs.fake_filesystem_unittest import \
-    TestCaseMixin as fakefsTestCaseMixin
+from pyfakefs.fake_filesystem_unittest import TestCaseMixin as fakefsTestCaseMixin
 
 from lookup_plugins.apps import LookupModule as AppsLookupModule
 
@@ -221,7 +220,11 @@ class TestAppsLookup(unittest.TestCase, fakefsTestCaseMixin):
                 "environment_variables": "apps/learninglocker/templates/services/xapi/_env.yml.j2",
             },
         ]
-        self.assertEqual(lkp._get_app_services(app_path), expected)
+
+        self.assertEqual(
+            sorted(lkp._get_app_services(app_path), key=lambda x: x.get("name")),
+            expected,
+        )
 
     def test_get_app_services_ignore_non_directories(self):
         """Test that the _get_app_services method only consider directories
