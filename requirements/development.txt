@@ -3,6 +3,7 @@ yq==2.12.2
 
 # Quality
 ansible-lint==5.2.1
+black==21.10b0
 flake8==4.0.1
 isort==5.10.0
 pylint==2.11.1

@@ -57,9 +57,7 @@ lint: \
   lint-ansible \
   lint-docker \
   lint-bash \
-  lint-isort \
-  lint-flake8 \
-  lint-pylint
+  lint-plugins
 .PHONY: lint
 
 lint-ansible: ## lint ansible sources
@@ -74,6 +72,11 @@ lint-bash: ## lint bash scripts with shellcheck
 	@echo 'lint:bash started…'
 	$(ARNOLD_RUN_DEV) shellcheck -x --shell=bash bin/*
 .PHONY: lint-bash
+
+lint-black: ## lint back-end python sources with Black
+	@echo 'lint:black started…'
+	$(ARNOLD_RUN_DEV) black --check filter_plugins lookup_plugins tests
+.PHONY: lint-black
 
 lint-docker: ## lint Dockerfile
 	@echo 'lint:docker started…'
@@ -92,6 +95,7 @@ lint-isort: ## automatically re-arrange python imports in back-end code base
 
 lint-plugins: ## run python linters for plugins
 lint-plugins: \
+  lint-black \
   lint-isort \
   lint-flake8 \
   lint-pylint

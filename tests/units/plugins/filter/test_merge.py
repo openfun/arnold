@@ -14,8 +14,8 @@ from filter_plugins.merge import merge_with_app, merge_with_database
 # pylint: disable=invalid-name
 def deep_sort_dict(d):
     """
-        Recursively alphabetically sort lists as dictionary values (input dict
-        is not modified)
+    Recursively alphabetically sort lists as dictionary values (input dict
+    is not modified)
     """
     res = {}
     for k, v in d.items():
@@ -87,9 +87,9 @@ class TestMergeWithAppFilter(TestCase):
 
     def assertDictDeepEqual(self, a, b):
         """
-            Compare deeply sorted dictionaries (aka apps) to avoid false
-            positive (list ordering differences is not relevant when comparing
-            apps-related data)
+        Compare deeply sorted dictionaries (aka apps) to avoid false
+        positive (list ordering differences is not relevant when comparing
+        apps-related data)
         """
 
         assert deep_sort_dict(a) == deep_sort_dict(b)
@@ -152,8 +152,8 @@ class TestMergeWithAppFilter(TestCase):
 
     def test_services_merge_with_empty_new_services(self):
         """
-            Test app services merge with no services or volumes for the new
-            app
+        Test app services merge with no services or volumes for the new
+        app
         """
 
         base = {
@@ -179,8 +179,8 @@ class TestMergeWithAppFilter(TestCase):
 
     def test_services_merge_without_duplicates(self):
         """
-            Test app services merge does not create duplicates if same items
-            appear in base and new apps
+        Test app services merge does not create duplicates if same items
+        appear in base and new apps
         """
 
         base = {
