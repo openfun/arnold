@@ -5,10 +5,10 @@ yq==2.12.2
 ansible-lint==5.2.1
 black==21.10b0
 flake8==4.0.1
-isort==5.10.0
+isort==5.10.1
 pylint==2.11.1
 
 # Tests
-pyfakefs==4.5.2
+pyfakefs==4.5.3
 pytest-cov==3.0.0
 pytest==6.2.5
