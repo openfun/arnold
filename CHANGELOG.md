@@ -12,6 +12,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 - Upgrade `ansible` to `4.8.0`
 
+### Removed
+
+- Marsha: remove check_live_idle cronjob
+
 ## [6.6.0] - 2021-10-28
 
 ### Added
