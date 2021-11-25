@@ -8,6 +8,12 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- `resume` and `pause` CLI commands now have an optional `SELECTOR` argument to
+  target specific resources using k8s label selector requests; the `-a <APP>`
+  arnold command flag is also supported
+
 ### Changed
 
 - Upgrade `ansible` to `4.8.0`
