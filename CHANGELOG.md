@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [6.7.0] - 2021-11-26
+
 ### Added
 
 - `resume` and `pause` CLI commands now have an optional `SELECTOR` argument to
@@ -1078,7 +1080,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v6.6.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v6.7.0...master
+[6.7.0]: https://github.com/openfun/arnold/compare/v6.6.0...v6.7.0
 [6.6.0]: https://github.com/openfun/arnold/compare/v6.5.2...v6.6.0
 [6.5.2]: https://github.com/openfun/arnold/compare/v6.5.1...v6.5.2
 [6.5.1]: https://github.com/openfun/arnold/compare/v6.5.0...v6.5.1
