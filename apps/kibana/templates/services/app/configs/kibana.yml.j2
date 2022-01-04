@@ -6,6 +6,12 @@ server.name: ${HOSTNAME}
 # Accept requests from all hosts
 server.host: 0.0.0.0
 
+{% if kibana_server_base_path | default(false, true) %}
+# URL path (if using a proxy)
+server.basePath: {{ kibana_server_base_path }}
+{% endif %}
+server.publicBaseUrl: {{ kibana_server_public_base_url | default("https://" + kibana_host, true) }}
+
 elasticsearch.hosts: {{ kibana_es_hosts | to_yaml }}
 
 {% if kibana_security_enabled %}

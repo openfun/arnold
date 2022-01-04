@@ -16,9 +16,12 @@ kibana_nginx_bypass_htaccess_ip_whitelist: []
 
 # -- kibana
 kibana_image_name: "kibana"
-kibana_image_tag: "7.7.0"
+kibana_image_tag: "7.16.2"
 kibana_app_port: 5601
 kibana_app_replicas: 1
+kibana_server_base_path: ""
+# Defaults to "kibana_host" using https protocol in kibana's configuration
+kibana_server_public_base_url: ""
 kibana_es_hosts: [ "http://elasticsearch:9200" ]
 kibana_config_path: "/usr/share/kibana/config"
 kibana_ca_path: "/usr/share/kibana/config/certs/ca.crt"

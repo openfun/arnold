@@ -1,7 +1,7 @@
 # -- Docker related configuration
 
-elasticsearch_image_name: "fundocker/openshift-elasticsearch"
-elasticsearch_image_tag: "6.6.2"
+elasticsearch_image_name: "elasticsearch"
+elasticsearch_image_tag: "7.16.2"
 elasticsearch_container_uid: {{ container_uid }}
 elasticsearch_container_gid: {{ container_gid }}
 
