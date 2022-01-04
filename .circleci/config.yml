@@ -615,12 +615,10 @@ jobs:
             # Create OpenShift Project
             bin/arnold -c eugene -e ci -a kibana init
             # Create ES single-node cluster
-            kubectl -n ci-eugene run elasticsearch --image=elasticsearch:7.7.0 --env="discovery.type=single-node"
+            kubectl -n ci-eugene run elasticsearch --image=elasticsearch:7.16.2 --env="discovery.type=single-node"
             kubectl -n ci-eugene expose pod elasticsearch --port 9200 --name=elasticsearch
             # Deploy Kibana
             bin/arnold -c eugene -e ci -a kibana deploy
-            # Test service deployed with the next route
-            bin/ci route -s kibana -c green -p "/api/status" -P next
 
       - run:
           name: Test the "kibana" application switch

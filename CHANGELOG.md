@@ -15,6 +15,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Upgrade `ansible` to `5.0.1`
+- Upgrade `kibana` and `elasticsearch` to `7.16.2`
 
 ## [6.7.0] - 2021-11-26
 
