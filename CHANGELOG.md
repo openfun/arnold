@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- Marsha: add x-forwarded-for header in nginx configuration
+
 ### Changed
 
 - Upgrade `ansible` to `5.0.1`
