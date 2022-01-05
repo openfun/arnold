@@ -1,0 +1,51 @@
+{% if env_type in trashable_env_types %}
+apiVersion: v1
+kind: Deployment
+metadata:
+  labels:
+    app: joanie
+    service: postgresql
+    version: "{{ joanie_database_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: "joanie-postgresql-{{ deployment_stamp }}"
+  namespace: "{{ namespace_name }}"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: joanie
+      service: postgresql
+      version: "{{ joanie_database_image_tag }}"
+      deployment: "joanie-postgresql-{{ deployment_stamp }}"
+      deployment_stamp: "{{ deployment_stamp }}"
+  template:
+    metadata:
+      labels:
+        app: joanie
+        service: postgresql
+        version: "{{ joanie_database_image_tag }}"
+        deployment: "joanie-postgresql-{{ deployment_stamp }}"
+        deployment_stamp: "{{ deployment_stamp }}"
+    spec:
+{% set image_pull_secret_name = joanie_database_image_pull_secret_name | default(none) or default_image_pull_secret_name %}
+{% if image_pull_secret_name is not none %}
+      imagePullSecrets:
+        - name: "{{ image_pull_secret_name }}"
+{% endif %}
+      containers:
+        - image: {{ joanie_database_image_name }}:{{ joanie_database_image_tag }}
+          name: postgresql
+          ports:
+            - containerPort: {{ joanie_database_port }}
+              protocol: TCP
+          env:
+            - name: POSTGRESQL_DATABASE
+              value: "{{ joanie_database_name }}"
+          envFrom:
+            - secretRef:
+                name: "{{ joanie_database_secret_name }}"
+          resources: {{ joanie_database_resources }}
+      securityContext:
+        runAsUser: {{ container_uid }}
+        runAsGroup: {{ container_gid }}
+{% endif %}

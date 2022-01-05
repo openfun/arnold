@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: joanie
+    service: postgresql
+    version: "{{ joanie_database_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  # name of the service should be database host name in settings
+  name: "joanie-postgresql-{{ deployment_stamp }}"
+  namespace: "{{ namespace_name }}"
+spec:
+  ports:
+    - name: "{{ joanie_database_port }}-tcp"
+      port: {{ joanie_database_port }}
+      protocol: TCP
+      targetPort: {{ joanie_database_port }}
+# As commented in the ad hoc endpoint, the endpoint name points to this service
+# so that it does not rely on a deployment configuration when the "env_type" is
+# not trashable. In this case, we use a PostgreSQL cluster outside of k8s.
+{% if env_type in trashable_env_types %}
+  selector:
+    app: joanie
+    service: postgresql
+    deployment: "joanie-postgresql-{{ deployment_stamp }}"
+  type: ClusterIP
+{% endif%}

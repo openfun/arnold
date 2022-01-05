@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: joanie
+    service: nginx
+    deployment_stamp: "{{ deployment_stamp }}"
+    service_prefix: "{{ prefix }}"
+    type: static-service
+    removable: "no"
+  name: "joanie-nginx-{{ prefix }}"
+  namespace: "{{ namespace_name }}"
+spec:
+  ports:
+    - name: {{ joanie_nginx_port }}-tcp
+      port: {{ joanie_nginx_port }}
+      protocol: TCP
+      targetPort: {{ joanie_nginx_port }}
+    - name: "{{ joanie_nginx_healthcheck_port }}-tcp"
+      port: {{ joanie_nginx_healthcheck_port }}
+      protocol: TCP
+      targetPort: {{ joanie_nginx_healthcheck_port }}
+  selector:
+    app: joanie
+    deployment: "joanie-nginx-{{ deployment_stamp | default('undefined', true) }}"
+  type: ClusterIP

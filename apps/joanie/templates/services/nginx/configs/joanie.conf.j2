@@ -1,0 +1,69 @@
+{% set http_basic_auth_enabled = activate_http_basic_auth or joanie_activate_http_basic_auth %}
+{% set bypass_htaccess = joanie_nginx_bypass_htaccess_ip_whitelist | length > 0 %}
+upstream joanie-backend {
+  server joanie-app-{{ deployment_stamp }}:{{ joanie_django_port }} fail_timeout=0;
+}
+
+server {
+  listen {{ joanie_nginx_port }};
+  server_name localhost;
+
+{% if http_basic_auth_enabled %}
+{% if bypass_htaccess %}
+  location @basicauth {
+    auth_basic "{{ http_basic_auth_message }}";
+    auth_basic_user_file {{ http_basic_auth_user_file }};
+
+    try_files $uri @proxy_to_joanie_app;
+  }
+{% else %}
+  auth_basic "{{ http_basic_auth_message }}";
+  auth_basic_user_file {{ http_basic_auth_user_file }};
+{% endif %}
+{% endif %}
+
+  client_max_body_size 100M;
+
+  rewrite ^(.*)/favicon.ico$ /static/images/favicon.ico last;
+
+  # Disables server version feedback on pages and in headers
+  server_tokens off;
+  {% block server_extra %}{% endblock %}
+
+  location @proxy_to_joanie_app {
+    proxy_set_header Host $http_host;
+
+    proxy_redirect off;
+    proxy_pass http://joanie-backend;
+  }
+
+  location / {
+{% if http_basic_auth_enabled and bypass_htaccess %}
+    if ($http_x_forwarded_for !~ ^({{ joanie_nginx_bypass_htaccess_ip_whitelist | join("|") }})) {
+      error_page 401 = @basicauth;
+      return 401;
+    }
+{% endif %}
+
+    try_files $uri @proxy_to_joanie_app;
+  }
+
+{% if joanie_nginx_admin_ip_whitelist | length > 0 %}
+  location /admin {
+    {#
+      We want to limit access to a list of whitelisted IP addresses.
+
+      $http_x_forwarded_for variable contains a list of IPs listed from the HTTP_X_FORWARED_FOR
+      header (e.g. w.x.y.z, 10.0.0.1). The first IP corresponds to the client's public address,
+      which is of interest (other ones have been added by subsequent proxies),
+      hence we restrict our comparison with the beginning of this list (this is why our regex starts with a ^).
+    #}
+    if ($http_x_forwarded_for !~ ^({{ joanie_nginx_admin_ip_whitelist | join("|") }})) {
+      return 403;
+    }
+
+    try_files $uri @proxy_to_joanie_app;
+  }
+{% endif %}
+
+}

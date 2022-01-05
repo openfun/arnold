@@ -1,0 +1,15 @@
+# customer: {{ customer }}
+# env_type: {{ env_type }}
+
+# postgresql
+{% set postgresql_credentials = databases.postgresql | json_query("[?release=='" ~ joanie_postgresql_version ~ "'].databases | [0][?application=='joanie'].{user: user, password: password} | [0]") %}
+DB_USER: {{ postgresql_credentials.user }}
+DB_PASSWORD: {{ postgresql_credentials.password }}
+
+# joanie environment
+DJANGO_SECRET_KEY: {{ lookup('password', '/dev/null length=50') }}
+# FIXME uncomment this variable and replace with your sentry's credentials
+# DJANGO_SENTRY_DSN: https://super:django@sentry.io/foo
+
+# JWT Token
+DJANGO_JWT_SIGNING_KEY: {{ lookup('password', '/dev/null length=50') }}

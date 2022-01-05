@@ -10,6 +10,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [6.8.1] - 2022-01-06
 
+### Added
+
+- Add joanie app for Richie's little sister
+
 ### Fixed
 
 - Fix apps filter query regex for names including "-"

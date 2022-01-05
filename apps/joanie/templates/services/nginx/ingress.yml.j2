@@ -1,0 +1,32 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: "{{ namespace_name }}"
+  name: "joanie-nginx-{{ prefix }}"
+  labels:
+    env_type: "{{ env_type }}"
+    customer: "{{ customer }}"
+    app: "joanie"
+    service: "nginx"
+    route_prefix: "{{ prefix }}"
+    route_target_service: "app"
+  annotations:
+{% if prefix in acme_enabled_route_prefix %}
+    cert-manager.io/issuer: "{{ acme_issuer_name }}"
+{% endif %}
+spec:
+  rules:
+  - host: "{{ joanie_host | blue_green_host(prefix) }}"
+    http:
+      paths:
+      - backend:
+          service:
+            name: "joanie-nginx-{{ prefix }}"
+            port:
+              number: {{ joanie_nginx_port }}
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - "{{ joanie_host | blue_green_host(prefix) }}"
+    secretName: "joanie-app-tls-{{ prefix }}-{{ acme_env }}"

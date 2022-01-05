@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: joanie
+    service: app
+    version: "{{ joanie_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: joanie-app-{{ deployment_stamp }}  # name of the service should be host name in nginx
+  namespace: "{{ namespace_name }}"
+spec:
+  ports:
+  - name: {{ joanie_django_port }}-tcp
+    port: {{ joanie_django_port }}
+    protocol: TCP
+    targetPort: {{ joanie_django_port }}
+  selector:
+    app: joanie
+    deployment: "joanie-app-{{ deployment_stamp }}"
+  type: ClusterIP

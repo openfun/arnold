@@ -1,0 +1,90 @@
+apiVersion: v1
+kind: Deployment
+metadata:
+  labels:
+    app: joanie
+    service: joanie
+    version: "{{ joanie_image_tag }}"
+    deployment_stamp: "{{ deployment_stamp }}"
+  name: "joanie-app-{{ deployment_stamp }}"
+  namespace: "{{ namespace_name }}"
+spec:
+  replicas: {{ joanie_app_replicas }}
+  selector:
+    matchLabels:
+      app: joanie
+      service: joanie
+      version: "{{ joanie_image_tag }}"
+      deployment: "joanie-app-{{ deployment_stamp }}"
+      deployment_stamp: "{{ deployment_stamp }}"
+  template:
+    metadata:
+      labels:
+        app: joanie
+        service: joanie
+        version: "{{ joanie_image_tag }}"
+        deployment: "joanie-app-{{ deployment_stamp }}"
+        deployment_stamp: "{{ deployment_stamp }}"
+    spec:
+      # Prefer running pods on different nodes for redundancy
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: deployment
+                      operator: In
+                      values:
+                        - "joanie-app-{{ deployment_stamp }}"
+                topologyKey: kubernetes.io/hostname
+{% set image_pull_secret_name = joanie_image_pull_secret_name | default(none) or default_image_pull_secret_name %}
+{% if image_pull_secret_name is not none %}
+      imagePullSecrets:
+        - name: "{{ image_pull_secret_name }}"
+{% endif %}
+      containers:
+        - name: joanie
+          image: "{{ joanie_image_name }}:{{ joanie_image_tag }}"
+          imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /__heartbeat__
+              port: {{ joanie_django_port }}
+              httpHeaders:
+                - name: Host
+                  value: "{{ joanie_host }}"
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /__lbheartbeat__
+              port: {{ joanie_django_port }}
+              httpHeaders:
+                - name: Host
+                  value: "{{ joanie_host }}"
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          env:
+            - name: DB_HOST
+              value: "joanie-{{ joanie_database_host }}-{{ deployment_stamp }}"
+            - name: DB_NAME
+              value: "{{ joanie_database_name }}"
+            - name: DB_PORT
+              value: "{{ joanie_database_port }}"
+            - name: DJANGO_ALLOWED_HOSTS
+              value: "{{ joanie_host }}"
+            - name: DJANGO_CONFIGURATION
+              value: "{{ joanie_django_configuration }}"
+            - name: DJANGO_SETTINGS_MODULE
+              value: joanie.settings
+          envFrom:
+            - secretRef:
+                name: "{{ joanie_secret_name }}"
+            - configMapRef:
+                name: "joanie-app-dotenv-{{ deployment_stamp }}"
+          resources: {{ joanie_app_resources }}
+      securityContext:
+        runAsUser: {{ container_uid }}
+        runAsGroup: {{ container_gid }}
