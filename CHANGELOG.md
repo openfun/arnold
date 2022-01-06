@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [6.8.1] - 2022-01-06
+
 ### Fixed
 
 - Fix apps filter query regex for names including "-"
@@ -1095,7 +1097,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v6.8.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v6.8.1...master
+[6.8.1]: https://github.com/openfun/arnold/compare/v6.8.0...v6.8.1
 [6.8.0]: https://github.com/openfun/arnold/compare/v6.7.0...v6.8.0
 [6.7.0]: https://github.com/openfun/arnold/compare/v6.6.0...v6.7.0
 [6.6.0]: https://github.com/openfun/arnold/compare/v6.5.2...v6.6.0
