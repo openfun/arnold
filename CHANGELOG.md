@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Fixed
+
+- Fix apps filter query regex for names including "-"
+
 ## [6.8.0] - 2022-01-04
 
 ### Added
