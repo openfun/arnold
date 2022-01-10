@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- Marsha: configure nginx to handle websockets in a dedicated location
+
 ## [6.9.0] - 2022-01-17
 
 ### Changed
