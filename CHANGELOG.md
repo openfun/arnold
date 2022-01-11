@@ -12,6 +12,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 - Marsha: configure nginx to handle websockets in a dedicated location
 
+### Changed
+
+- Marsha: use image nginxinc/nginx-unprivileged to run Nginx
+
 ## [6.9.0] - 2022-01-17
 
 ### Changed
