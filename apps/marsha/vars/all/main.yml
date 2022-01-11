@@ -4,8 +4,8 @@
 marsha_host: "marsha.{{ namespace_name }}.{{ domain_name }}"
 
 # -- nginx
-marsha_nginx_image_name: "fundocker/openshift-nginx"
-marsha_nginx_image_tag: "1.13"
+marsha_nginx_image_name: "nginxinc/nginx-unprivileged"
+marsha_nginx_image_tag: "1.20"
 marsha_nginx_port: 8061
 marsha_nginx_replicas: 1
 marsha_nginx_htpasswd_secret_name: "marsha-htpasswd"
