@@ -12,6 +12,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 - Upgrade `ansible` to `5.2.0`
 
+### Fixed
+
+- Kibana: fix configuration to load balance traffic upon replicas
+
 ## [6.8.1] - 2022-01-06
 
 ### Fixed

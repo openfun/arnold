@@ -1,7 +1,9 @@
 # Arnold-controlled configuration
 
-# The server name should be unique for all replica
+# The server name/uuid should be unique for all replica
 server.name: ${HOSTNAME}
+server.uuid: ${SERVER_UUID}
+xpack.security.cookieName: "{{ kibana_host + '-' + deployment_stamp }}"
 
 # Accept requests from all hosts
 server.host: 0.0.0.0
@@ -15,10 +17,13 @@ server.publicBaseUrl: {{ kibana_server_public_base_url | default("https://" + ki
 elasticsearch.hosts: {{ kibana_es_hosts | to_yaml }}
 
 {% if kibana_security_enabled %}
-elasticsearch.username: "${KIBANA_ELASTIC_USERNAME}"
-elasticsearch.password: "${KIBANA_ELASTIC_PASSWORD}"
+elasticsearch.username: ${KIBANA_ELASTIC_USERNAME}
+elasticsearch.password: ${KIBANA_ELASTIC_PASSWORD}
 elasticsearch.ssl.certificateAuthorities: ["{{ kibana_ca_path }}"]
-xpack.security.encryptionKey: "${XPACK_SECURITY_ENCRYPTIONKEY}"
+xpack.security.encryptionKey: ${XPACK_SECURITY_ENCRYPTIONKEY}
+xpack.reporting.encryptionKey: ${XPACK_REPORTING_ENCRYPTIONKEY}
+xpack.encryptedSavedObjects.encryptionKey: ${XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY}
+xpack.encryptedSavedObjects.keyRotation.decryptionOnlyKeys: ${XPACK_ENCRYPTEDSAVEDOBJECTS_KEYROTATION_DECRYPTIONONLYKEYS}
 {% endif %}
 
 monitoring.ui.container.elasticsearch.enabled: true
