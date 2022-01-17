@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [6.9.0] - 2022-01-17
+
 ### Changed
 
 - Upgrade `ansible` to `5.2.0`
@@ -1105,7 +1107,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v6.8.1...master
+[unreleased]: https://github.com/openfun/arnold/compare/v6.9.0...master
+[6.9.0]: https://github.com/openfun/arnold/compare/v6.8.1...v6.9.0
 [6.8.1]: https://github.com/openfun/arnold/compare/v6.8.0...v6.8.1
 [6.8.0]: https://github.com/openfun/arnold/compare/v6.7.0...v6.8.0
 [6.7.0]: https://github.com/openfun/arnold/compare/v6.6.0...v6.7.0
