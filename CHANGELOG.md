@@ -15,6 +15,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Marsha: use image nginxinc/nginx-unprivileged to run Nginx
+- Upgrade `ansible` to `5.3.0`
 
 ## [6.9.0] - 2022-01-17
 
