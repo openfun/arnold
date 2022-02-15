@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- Marsha: add environment variable DJANGO_CSRF_TRUSTED_ORIGINS in deployment
+
 ## [6.10.0] - 2022-02-04
 
 ### Added
