@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [6.11.0] - 2022-02-15
+
 ### Added
 
 - Marsha: add environment variable DJANGO_CSRF_TRUSTED_ORIGINS in deployment
@@ -1122,7 +1124,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v6.10.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v6.11.0...master
+[6.11.0]: https://github.com/openfun/arnold/compare/v6.10.0...v6.11.0
 [6.10.0]: https://github.com/openfun/arnold/compare/v6.9.0...v6.10.0
 [6.9.0]: https://github.com/openfun/arnold/compare/v6.8.1...v6.9.0
 [6.8.1]: https://github.com/openfun/arnold/compare/v6.8.0...v6.8.1
