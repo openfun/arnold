@@ -6,6 +6,7 @@ aliases:
   - &defaults
     # We use the machine executor, i.e. a VM, not a container
     machine:
+      image: ubuntu-2004:202201-02
       # Prevent cache-related issues
       docker_layer_caching: false
     working_directory: ~/fun
@@ -744,6 +745,7 @@ jobs:
   hub:
     # We use the machine executor, i.e. a VM, not a container
     machine:
+      image: ubuntu-2004:202201-02
       # Prevent cache-related issues
       docker_layer_caching: false
 
