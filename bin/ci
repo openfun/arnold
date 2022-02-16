@@ -108,7 +108,7 @@ function route(){
   url="${PROTOCOL}://${subdomain}${SERVICE}.${ARNOLD_NAMESPACE}.${K8S_DOMAIN}.nip.io:${PORT}${URL_PATH}"
   cmd="curl -vLk --header 'Accept: ${ACCEPT_HEADER}' ${url}"
   # shellcheck disable=SC2016
-  test_='grep "HTTP/1.1 200 OK" /tmp/${random}.err && grep "${CONTENT}" /tmp/${random}.out'
+  test_='grep "HTTP/2 200" /tmp/${random}.err && grep "${CONTENT}" /tmp/${random}.out'
 
   echo "with url : ${url}"
 
