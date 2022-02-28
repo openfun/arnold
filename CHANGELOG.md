@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Changed
+
+- Upgrade `ansible` to `5.4.0`
+
 ## [6.11.0] - 2022-02-15
 
 ### Added
