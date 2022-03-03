@@ -12,6 +12,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 - Upgrade `ansible` to `5.4.0`
 
+### Removed 
+
+- Move the `etherpad` application to `arnold-apps`
+
 ## [6.11.0] - 2022-02-15
 
 ### Added
