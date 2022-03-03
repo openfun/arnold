@@ -566,35 +566,6 @@ jobs:
             # Test service switched to the current route
             bin/ci route -s nextcloud -c Nextcloud -p "/login" -P current -m 40
 
-  # Test the bootstrap playbook on the "etherpad" application
-  # nota bene: we use a real k8s cluster installed in CircleCI's VM.
-  test-bootstrap-etherpad:
-    <<: *defaults
-
-    steps:
-      - checkout
-      - *attach_workspace
-      - *ci_env
-      - *docker_load
-      - *install_k8s_requirements
-      - *configure_sysctl_limits
-      - *run_k3d_cluster
-
-      - run:
-          name: Test the "etherpad" application bootstrapping
-          command: |
-            # Bootstrap app
-            bin/arnold -c eugene -e ci -a etherpad bootstrap
-            # Test service deployed with the next route
-            bin/ci route -s etherpad -c "<title>ci-eugene etherpad</title>" -P next
-
-      - run:
-          name: Test the "etherpad" application switch
-          command: |
-            # Switch next route to current
-            bin/arnold -c eugene -e ci -a etherpad switch
-            # Test service switched to the current route
-            bin/ci route -s etherpad -c "<title>ci-eugene etherpad</title>"
 
   # Test the bootstrap playbook on the "kibana" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
@@ -951,15 +922,6 @@ workflows:
 #          filters:
 #            tags:
 #              only: /.*/
-      - test-bootstrap-etherpad:
-          requires:
-            - lint-bash
-            - lint-docker
-            - lint-ansible
-            - lint-plugins
-          filters:
-            tags:
-              only: /.*/
       - test-bootstrap-kibana:
           requires:
             - lint-bash
@@ -1016,7 +978,6 @@ workflows:
             - test-bootstrap-marsha
             - test-bootstrap-forum
             - test-bootstrap-ashley
-            - test-bootstrap-etherpad
             - test-bootstrap-kibana
             - test-redirect
             - test-delete-app

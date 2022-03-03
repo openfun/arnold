@@ -1,3 +1,0 @@
-databases:
-  - engine: "postgresql"
-    release: "9.6"
