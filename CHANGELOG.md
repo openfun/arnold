@@ -11,8 +11,9 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Upgrade `ansible` to `5.4.0`
+- Upgrade `jmespath` to `1.0.0`
 
-### Removed 
+### Removed
 
 - Move the `etherpad` application to `arnold-apps`
 
