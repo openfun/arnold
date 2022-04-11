@@ -1,6 +1,6 @@
 # Core
 ansible==5.4.0
-jmespath==0.10.0
+jmespath==1.0.0
 openshift==0.13.1
 passlib==1.7.4
 netaddr==0.8.0
