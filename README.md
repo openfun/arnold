@@ -16,17 +16,19 @@ to make Ansible talk with Kubernetes.
 
 - [Docker](https://docs.docker.com/engine/installation/): we use docker to
   develop and run Arnold. This is a strict requirement to use this project.
-- [Kubectl](https://kubernetes.io/docs/tasks/tools/):
+- [Kubectl](https://kubernetes.io/docs/tasks/tools/) (>`v.1.23.5`):
   This CLI is used to communicate with the running Kubernetes instance you
   will use.
 - [curl](https://curl.se/) is required by Arnold's CLI.
 
 Optionally:
 
-- [k3d](https://k3d.io/): This tool is used to setup and run a lightweight
-  Kubernetes cluster, in order to have a local environment (it is required to
-  complete below's quickstart instructions to avoid depending on an existing
-  Kubernetes cluster).
+- [k3d](https://k3d.io/) (`v4.4.8`, `5.x` releases are not compatible with our
+  CI docker versions see [this k3d
+  issue](https://github.com/k3d-io/k3d/issues/807)): This tool is used to setup
+  and run a lightweight Kubernetes cluster, in order to have a local
+  environment (it is required to complete below's quickstart instructions to
+  avoid depending on an existing Kubernetes cluster).
 - [gnupg](https://gnupg.org/) to encrypt Ansible vaults passwords and
   collaborate with your team.
 
