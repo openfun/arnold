@@ -6,33 +6,33 @@
 # https://cert-manager.io/docs/installation/kubernetes/
 
 - hosts: local
-  gather_facts: False
+  gather_facts: false
 
   pre_tasks:
     - import_tasks: tasks/check_configuration.yml
 
   tasks:
     - name: Display playbook name
-      debug: msg="==== Starting create_acme playbook ===="
+      ansible.builtin.debug: msg="==== Starting create_acme playbook ===="
       tags: deploy
 
     - import_tasks: tasks/set_vars.yml
 
     - name: Lookup available core applications
-      set_fact:
+      ansible.builtin.set_fact:
         core_apps: "{{ lookup('apps', core_apps_paths) }}"
 
     - name: Print core_apps
-      debug:
+      ansible.builtin.debug:
         var: core_apps
         verbosity: 2
 
     - name: Set acme_templates
-      set_fact:
+      ansible.builtin.set_fact:
         acme_templates: '{{ core_apps | json_query("[?name==`acme`].services[0].templates[]") | list }}'
 
     - name: Print acme_templates
-      debug:
+      ansible.builtin.debug:
         var: acme_templates
         verbosity: 2
 

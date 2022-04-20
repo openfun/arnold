@@ -2,7 +2,7 @@
 # Run job synchronously
 
 - name: Display job template
-  debug:
+  ansible.builtin.debug:
     msg: "Submitting job: {{ job_template }} [deployment_stamp: {{ deployment_stamp }} // job_stamp: {{ job_stamp }}]"
 
 - name: Submit job

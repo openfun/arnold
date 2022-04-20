@@ -9,7 +9,7 @@
 
 # The select filter removes empty deployment stamps (empty strings)
 - name: Set active_deployment_stamps
-  set_fact:
+  ansible.builtin.set_fact:
     active_deployment_stamps: "{{
       [ previous_app_deployment_stamp,
         current_app_deployment_stamp,
@@ -30,7 +30,7 @@
   register: app_selected_objects
 
 - name: Set orphan deployment stamps
-  set_fact:
+  ansible.builtin.set_fact:
     orphan_deployment_stamps: "{{
       app_selected_objects |
       json_query('results[*].resources[*].metadata.labels.deployment_stamp') |

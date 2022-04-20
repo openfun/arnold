@@ -2,13 +2,13 @@
 # Create volumes for an app
 
 - name: Print app name
-  debug:
+  ansible.builtin.debug:
     msg: "App name {{ app.name }}"
   tags: volume
 
 # Remove empty rendered volume templates (e.g. inactivated for an env_type)
 - name: Ignore empty rendered volume templates
-  set_fact:
+  ansible.builtin.set_fact:
     path: "{{ item }}"
   register: filtered_volumes
   with_items: "{{ app.volumes }}"
@@ -16,7 +16,7 @@
   tags: deploy
 
 - name: Update volume templates list for this app
-  set_fact:
+  ansible.builtin.set_fact:
     volumes: "{{ filtered_volumes | json_query('results[*].ansible_facts.path') | list }}"
   when: app.volumes is defined
   

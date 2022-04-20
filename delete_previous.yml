@@ -4,7 +4,7 @@
 # This playbook may be useful to lower server load with old stack that will
 # never be switched back.
 - hosts: local
-  gather_facts: False
+  gather_facts: false
 
   pre_tasks:
     - import_tasks: tasks/check_configuration.yml
@@ -12,7 +12,7 @@
 
   tasks:
     - name: Display playbook name
-      debug: msg="==== Starting delete_previous playbook ===="
+      ansible.builtin.debug: msg="==== Starting delete_previous playbook ===="
       tags: deploy
 
     - import_tasks: tasks/set_vars.yml

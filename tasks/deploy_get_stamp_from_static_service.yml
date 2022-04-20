@@ -19,19 +19,19 @@
 
 # app_deployment_stamp must be defined otherwise all script dependending on this one will fail
 - name: Initialize app_deployment_stamp
-  set_fact:
+  ansible.builtin.set_fact:
     app_deployment_stamp: ""
 
 - name: Set app_deployment_stamp
-  set_fact:
+  ansible.builtin.set_fact:
     app_deployment_stamp: "{{ (app_service.resources | first ).metadata.labels.deployment_stamp | default(none) }}"
   when: app_service.resources is defined and app_service.resources | length >= 1
 
 - name: "Set {{ prefix }}_app_deployment_stamp"
-  set_fact:
+  ansible.builtin.set_fact:
     "{{ prefix }}_app_deployment_stamp": "{{ app_deployment_stamp }}"
 
 - name: Print app_deployment_stamp
-  debug:
+  ansible.builtin.debug:
     msg: "[{{ app.name }}] app_deployment_stamp[{{ app_deployment_stamp }}]"
   when: app_deployment_stamp is defined

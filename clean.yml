@@ -7,7 +7,7 @@
 # Warning: this playbook has only effects on blue-green compatible apps.
 
 - hosts: local
-  gather_facts: False
+  gather_facts: false
 
   pre_tasks:
     - import_tasks: tasks/check_configuration.yml
@@ -15,7 +15,7 @@
 
   tasks:
     - name: Display playbook name
-      debug: msg="==== Starting clean playbook ===="
+      ansible.builtin.debug: msg="==== Starting clean playbook ===="
       tags: clean
 
     - import_tasks: tasks/set_vars.yml

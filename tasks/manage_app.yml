@@ -21,7 +21,7 @@
     - rbac
 
 - name: Prepare jobs ordering & filtering
-  set_fact:
+  ansible.builtin.set_fact:
     template: "{{ item }}"
     basename: "{{ item | basename }}"
     job_type: "{{ lookup('template', item) | from_yaml | json_query('metadata.labels.job_type') | default('post', true) }}"
@@ -32,7 +32,7 @@
     - job
 
 - name: Sort jobs alphabetically according to their basename
-  set_fact:
+  ansible.builtin.set_fact:
     jobs: "{{ jobs_basename.results | sort(attribute='ansible_facts.basename') | map(attribute='ansible_facts') | list }}"
   tags:
     - deploy
@@ -75,23 +75,23 @@
     - statefulset
 
 - name: Render deployment and statefulset templates to prepare expected running pods calculation
-  set_fact:
+  ansible.builtin.set_fact:
     tpl: "{{ lookup('template', item) | from_yaml }}"
   with_items: "{{ deployments | union(statefulsets) }}"
   register: rendered_deployment_templates
 
 - name: Calculate expected running pods given their replicas
-  set_fact:
+  ansible.builtin.set_fact:
     expected_running_pods: "{{ rendered_deployment_templates.results | json_query('[*].ansible_facts.tpl.spec.replicas') | sum }}"
 
 # The job_stamp label selector is a naive implementation to remove pods that ran
 # jobs from our query: we only want pods created by DCs.
 - name: Define pod label selector
-  set_fact:
+  ansible.builtin.set_fact:
     pod_label_selector: "app={{ app.name }},job_stamp!={{ job_stamp }}"
 
 - name: Add deployment_stamp to label selector
-  set_fact:
+  ansible.builtin.set_fact:
     pod_label_selector: "{{ pod_label_selector }},deployment_stamp={{ deployment_stamp }}"
   when: app.settings.is_blue_green_compatible | default(True) == True
 

@@ -10,7 +10,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
-- Upgrade `ansible` to `5.4.0`
+- Upgrade `ansible` to `5.6.0`
 - Upgrade `jmespath` to `1.0.0`
 
 ### Removed

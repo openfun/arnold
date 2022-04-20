@@ -113,9 +113,9 @@ force_route: false
 # for your databases.
 # Endpoint IPs are initialized at "null" (except for mongodb we initalize it with an empty list) by default
 # and you SHOULD overwrite them in the corresponding environment where you will use them.
-endpoint_mongodb_ips:     []
-endpoint_mysql_ip:       null
-endpoint_postgresql_ip:  null
+endpoint_mongodb_ips: []
+endpoint_mysql_ip: ''
+endpoint_postgresql_ip: ''
 
 # Images
 # It is recommended to pull images with an authenticated user (in particular, Docker Hub now

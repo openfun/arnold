@@ -1,16 +1,16 @@
 # Load application default variables if not already defined
 
 - name: Load default variables from {{ file }}
-  set_fact:
+  ansible.builtin.set_fact:
     defaults: "{{ lookup('template', file) | from_yaml }}"
 
 - name: Print loaded variables from {{ file }}
-  debug:
+  ansible.builtin.debug:
     var: defaults
     verbosity: 3
 
 - name: Define missing variables with defaults
-  set_fact:
+  ansible.builtin.set_fact:
     "{{ app_var.key }}": "{{ lookup('vars', app_var.key, default=app_var.value) }}" # noqa var-naming
   loop: "{{ lookup('dict', defaults) }}"
   loop_control:

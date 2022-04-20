@@ -5,7 +5,7 @@
 # a vault variable, you will need to add its namespace first, e.g.
 # EDXAPP_VAULT.MONGODB_NAME
 - name: Decrypt vaulted credentials for the given customer and environment
-  include_vars:
+  ansible.builtin.include_vars:
     file: "{{ app_vault.stat.path }}"
     name: "{{ app.name | upper }}_VAULT"
   when: app_vault.stat is defined and app_vault.stat.exists and app_vault.stat.isreg
@@ -13,18 +13,18 @@
 - include_tasks: tasks/set_htpasswd_path_for_app.yml
 
 - name: Test htpasswd target file for app
-  stat:
+  ansible.builtin.stat:
     path: "{{ app_htpasswd_file_path }}"
   register: app_htpasswd_file
   tags: htpasswd
 
 - name: Get application activate_http_basic_auth value
-  set_fact:
+  ansible.builtin.set_fact:
     app_activate_http_basic_auth: "{{ lookup('vars', app.name + '_activate_http_basic_auth', default=false) }}"
   tags: htpasswd
 
 - name: Set application htpasswd variable
-  set_fact:
+  ansible.builtin.set_fact:
     "{{ app.name }}_htpasswd": "{{ app_htpasswd_file.stat.path }}"
   # Only set this variable when the htpasswd file exists and is a regular file
   when: (activate_http_basic_auth or app_activate_http_basic_auth) and app_htpasswd_file.stat.exists and app_htpasswd_file.stat.isreg
