@@ -4,14 +4,14 @@
 # ingresses.
 
 - hosts: local
-  gather_facts: False
+  gather_facts: false
 
   pre_tasks:
     - import_tasks: tasks/check_configuration.yml
 
   tasks:
     - name: Display playbook name
-      debug: msg="==== Starting create_network_policy playbook ===="
+      ansible.builtin.debug: msg="==== Starting create_network_policy playbook ===="
       tags: deploy
 
     - import_tasks: tasks/set_vars.yml
@@ -32,7 +32,7 @@
               - Ingress
             ingress:
               - from:
-                - namespaceSelector:
-                    matchLabels:
-                      name: "{{ namespace_name }}"
+                  - namespaceSelector:
+                      matchLabels:
+                        name: "{{ namespace_name }}"
               - from: "{{ network_policy_rule_ingress_controller }}"

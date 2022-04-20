@@ -2,20 +2,20 @@
 # Create vault for an app
 
 - name: Print app name
-  debug: msg="App name {{ app.name }}"
+  ansible.builtin.debug: msg="App name {{ app.name }}"
   tags: vault
 
 - name: Retrieve databases vault file
-  stat:
+  ansible.builtin.stat:
     path: "group_vars/customer/{{ customer }}/{{ env_type }}/secrets/databases.vault.yml"
   register: databases_vault
 
 - name: Set vault destination path variable
-  set_fact:
+  ansible.builtin.set_fact:
     vault_destination_path: "group_vars/customer/{{ customer }}/{{ env_type }}/secrets/{{ app.name }}.vault.yml"
 
 - name: Get destination vault file status
-  stat:
+  ansible.builtin.stat:
     path: "{{ vault_destination_path }}"
   register: vault_destination
 
@@ -25,15 +25,15 @@
   when: databases_vault.stat.exists == False
 
 - name: Import databases variable
-  include_vars:
+  ansible.builtin.include_vars:
     file: "{{ databases_vault.stat.path }}"
 
 - name: Set application root directory
-  set_fact:
+  ansible.builtin.set_fact:
     apps_path: "{{ app | json_query('services[0].templates | [0]') | split('/') | first }}"
 
 - name: Retrieve template file
-  stat:
+  ansible.builtin.stat:
     path: "{{ apps_path }}/{{ app.name }}/vars/vault/main.yml.j2"
   register: vault_template
   no_log: True

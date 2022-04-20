@@ -2,13 +2,13 @@
 # variable should be called url_prefix instead and must default to "next" See:
 # https://github.com/openfun/arnold/issues/118
 - name: set Prefix
-  set_fact:
+  ansible.builtin.set_fact:
     prefix: "next"
   when: prefix is not defined
 
 # Remove empty rendered templates (e.g. inactivated for an env_type)
 - name: Ignore empty rendered templates
-  set_fact:
+  ansible.builtin.set_fact:
     path: "{{ item }}"
   register: filtered_templates
   with_items: "{{ raw_templates }}"
@@ -16,5 +16,5 @@
   tags: deploy
 
 - name: Update templates list for this app
-  set_fact:
+  ansible.builtin.set_fact:
     templates: "{{ filtered_templates | json_query('results[*].ansible_facts.path') | list }}"

@@ -3,7 +3,7 @@
 # Secrets require loading application vaults to be rendered. They are treated
 # separately and should not be included here.
 - name: Set templates list for this app (except secrets)
-  set_fact:
+  ansible.builtin.set_fact:
     raw_templates: "{{ \
       app | json_query('services[*].templates[]') | list | \
       map('regex_search', '.*/(?!.*secret).*\\.yml\\.j2$') | select('string') | list \
@@ -13,7 +13,7 @@
 - include_tasks: tasks/filter_empty_templates_for_app.yml
 
 - name: Set k8s objects to manage
-  set_fact:
+  ansible.builtin.set_fact:
     configmaps: "{{ templates | map('regex_search', '.*/cm.*\\.yml\\.j2$') | select('string') | list }}"
     deployments: "{{ templates | map('regex_search', '.*/deploy.*\\.yml\\.j2$') | select('string') | list }}"
     endpoints: "{{ templates | map('regex_search', '.*/ep.*\\.yml\\.j2$') | select('string') | list }}"
@@ -36,7 +36,7 @@
     - statefulset
 
 - name: Display k8s's configmaps for this app
-  debug:
+  ansible.builtin.debug:
     var: configmaps
     verbosity: 2
   when: configmaps is defined
@@ -45,7 +45,7 @@
     - configmap
 
 - name: Display k8s's deployments for this app
-  debug:
+  ansible.builtin.debug:
     var: deployments
     verbosity: 2
   when: deployments is defined
@@ -54,7 +54,7 @@
     - deployment
 
 - name: Display k8s's statefulsets for this app
-  debug:
+  ansible.builtin.debug:
     var: statefulsets
     verbosity: 2
   when: deployments is defined
@@ -63,7 +63,7 @@
     - statefulset
 
 - name: Display k8s's endpoints for this app
-  debug:
+  ansible.builtin.debug:
     var: endpoints
     verbosity: 2
   when: deployments is defined
@@ -72,7 +72,7 @@
     - endpoint
 
 - name: Display k8s's services for this app
-  debug:
+  ansible.builtin.debug:
     var: services
     verbosity: 2
   when: services is defined
@@ -81,7 +81,7 @@
     - service
 
 - name: Display k8s's jobs for this app
-  debug:
+  ansible.builtin.debug:
     var: jobs
     verbosity: 2
   when: jobs is defined
@@ -90,7 +90,7 @@
     - job
 
 - name: Display k8s's cronjobs for this app
-  debug:
+  ansible.builtin.debug:
     var: cronjobs
     verbosity: 2
   when: cronjobs is defined
@@ -99,7 +99,7 @@
     - cronjob
 
 - name: Display K8S ingresses for this app
-  debug:
+  ansible.builtin.debug:
     var: ingresses
     verbosity: 2
   when: ingresses is defined
@@ -108,7 +108,7 @@
     - ingress
 
 - name: Display K8S rbac for this app
-  debug:
+  ansible.builtin.debug:
     var: rbacs
     verbosity: 2
   when: rbacs is defined

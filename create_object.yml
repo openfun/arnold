@@ -12,7 +12,7 @@
 #
 
 - hosts: local
-  gather_facts: False
+  gather_facts: false
   vars:
     object_template: ""
 
@@ -21,26 +21,26 @@
 
   tasks:
     - name: Display playbook name
-      debug: msg="==== Starting create_object playbook ===="
+      ansible.builtin.debug: msg="==== Starting create_object playbook ===="
       tags: deploy
 
     - import_tasks: tasks/set_vars.yml
 
     - name: Print OpenShift object template path
-      debug: msg="Object template {{ object_template }}"
+      ansible.builtin.debug: msg="Object template {{ object_template }}"
 
     - name: Print deployment stamp
-      debug: msg="Deployment stamp {{ deployment_stamp }}"
+      ansible.builtin.debug: msg="Deployment stamp {{ deployment_stamp }}"
 
     # Set the job stamp for this object (only used for jobs)
     - name: Set job stamp
-      set_fact: job_stamp="j-{{ lookup('pipe', 'date +%y%m%d-%Hh%Mm%Ss') }}"
+      ansible.builtin.set_fact: job_stamp="j-{{ lookup('pipe', 'date +%y%m%d-%Hh%Mm%Ss') }}"
 
     - name: Print job stamp
-      debug: msg="Job stamp {{ job_stamp }}"
+      ansible.builtin.debug: msg="Job stamp {{ job_stamp }}"
 
     - name: Print compiled template
-      debug:
+      ansible.builtin.debug:
         msg: "{{ lookup('template', object_template) }}"
         verbosity: 2
 
@@ -48,4 +48,4 @@
       k8s:
         definition: "{{ lookup('template', object_template) | from_yaml }}"
         state: present
-        force: True
+        force: true

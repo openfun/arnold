@@ -6,6 +6,6 @@ acme_enabled_route_prefix:
 
 # Endpoints IP
 # In production these variables must be set.
-# endpoint_mongodb_ip:     null
-# endpoint_mysql_ip:       null
-# endpoint_postgresql_ip:  null
+# endpoint_mongodb_ip: []
+# endpoint_mysql_ip: ''
+# endpoint_postgresql_ip: ''

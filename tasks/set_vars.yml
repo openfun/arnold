@@ -2,20 +2,20 @@
 # tasks/set_vars.yml
 
 - name: Include global customer & env_type vars
-  include_vars:
+  ansible.builtin.include_vars:
     file: "{{ item }}"
   with_items:
     - "group_vars/customer/{{ customer }}/main.yml"
     - "group_vars/env_type/{{ env_type }}.yml"
 
 - name: Override specific vars given a customer and its env_type
-  include_vars:
+  ansible.builtin.include_vars:
     file: "{{ item }}"
   with_fileglob:
     - "group_vars/customer/{{ customer }}/{{ env_type }}/*.yml"
 
 - name: Display applications paths (apps_paths)
-  debug:
+  ansible.builtin.debug:
     var: apps_paths
     verbosity: 3
 
@@ -75,32 +75,32 @@
 #       ]
 #     }
 - name: Lookup available applications
-  set_fact:
+  ansible.builtin.set_fact:
     available_apps: "{{ lookup('apps', apps_paths) }}"
 
 - name: Display available applications (available_apps)
-  debug:
+  ansible.builtin.debug:
     var: available_apps
     verbosity: 3
 
 - name: Display defined applications (apps)
-  debug:
+  ansible.builtin.debug:
     var: apps
     verbosity: 3
   when: apps is defined
 
 - name: Add meta-data to available applications
-  set_fact:
+  ansible.builtin.set_fact:
     _app: '{{ [ available_apps ] | flatten | json_query("[?name==`" + item.name + "`]") | first | merge_with_app(item) }}'
   register: merged_apps
   with_items: "{{ apps | default([ available_apps ] | flatten) }}"
 
 - name: Set applications for this namespace
-  set_fact:
+  ansible.builtin.set_fact:
     apps: "{{ merged_apps | json_query('results[*].ansible_facts._app') }}"
 
 - name: Display enriched applications definitions (apps)
-  debug:
+  ansible.builtin.debug:
     var: apps
     verbosity: 2
 
@@ -114,19 +114,19 @@
 #
 #    [?name=='richie' || name=='edxapp']
 - name: Set app filtering query
-  set_fact:
+  ansible.builtin.set_fact:
     # We use escaped double quotes in the first regex_replace filter to be able
     # to add single quotes around app name in the query
     apps_filter_query: "[?{{ apps_filter.split(',') | map('regex_replace', '([\\w-]+)', \"name=='\\1'\") | join(' || ') }}]"
   when: apps_filter is defined
 
 - name: Filter apps
-  set_fact:
+  ansible.builtin.set_fact:
     apps: "{{ apps | json_query(apps_filter_query) }}"
   when: apps_filter_query is defined
 
 - name: Display selected applications (apps)
-  debug:
+  ansible.builtin.debug:
     var: apps
     verbosity: 1
 
@@ -142,6 +142,6 @@
   with_items: '{{ apps | json_query("[*].vars[?type==`all`]") | flatten }}'
 
 - name: Print namespace details
-  debug:
+  ansible.builtin.debug:
     msg: "Namespace {{ namespace_name }} - domain {{ domain_name }}"
     verbosity: 1

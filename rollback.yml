@@ -4,7 +4,7 @@
 # 2. point the "next" static service to the stack that was pointed by the "current" static service,
 
 - hosts: local
-  gather_facts: False
+  gather_facts: false
 
   pre_tasks:
     - import_tasks: tasks/check_configuration.yml
@@ -12,7 +12,7 @@
 
   tasks:
     - name: Display playbook name
-      debug: msg="==== Starting rollback playbook ===="
+      ansible.builtin.debug: msg="==== Starting rollback playbook ===="
       tags: rollback
 
     - import_tasks: tasks/set_vars.yml

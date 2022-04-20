@@ -3,7 +3,7 @@
 # (see main.yml)
 
 - hosts: local
-  gather_facts: False
+  gather_facts: false
 
   pre_tasks:
     - import_tasks: tasks/check_configuration.yml
@@ -11,33 +11,33 @@
 
   tasks:
     - name: Display playbook name
-      debug: msg="==== Starting deploy playbook ===="
+      ansible.builtin.debug: msg="==== Starting deploy playbook ===="
       tags: deploy
 
     - import_tasks: tasks/set_vars.yml
 
     # Set the deployment stamp value for this deployment
     - name: Set deployment stamp
-      set_fact: deployment_stamp="d-{{ lookup('pipe', 'date +%y%m%d-%Hh%Mm%Ss') }}"
+      ansible.builtin.set_fact: deployment_stamp="d-{{ lookup('pipe', 'date +%y%m%d-%Hh%Mm%Ss') }}"
       tags: deploy
 
     # Set the job stamp for this deployment
     - name: Set job stamp
-      set_fact: job_stamp="j-{{ lookup('pipe', 'date +%y%m%d-%Hh%Mm%Ss') }}"
+      ansible.builtin.set_fact: job_stamp="j-{{ lookup('pipe', 'date +%y%m%d-%Hh%Mm%Ss') }}"
       tags: deploy
 
     - name: Display deployment details
-      debug: msg="Deploying {{ namespace_name }}-{{ domain_name }} (deployment stamp '{{ deployment_stamp }}' job stamp '{{ job_stamp }}')"
+      ansible.builtin.debug: msg="Deploying {{ namespace_name }}-{{ domain_name }} (deployment stamp '{{ deployment_stamp }}' job stamp '{{ job_stamp }}')"
       tags: deploy
 
     - name: Display apps to deploy
-      debug:
+      ansible.builtin.debug:
         var: apps
       tags: deploy
 
     - include_tasks: tasks/run_tasks_for_apps.yml
       vars:
-        suspend_cronjob: True
+        suspend_cronjob: true
         tasks:
           - tasks/get_objects_for_app
           - tasks/check_app_secrets

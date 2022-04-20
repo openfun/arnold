@@ -20,7 +20,7 @@
 
 # Select services with ConfigMaps
 - name: Set ConfigMaps for application {{ app.name }}
-  set_fact:
+  ansible.builtin.set_fact:
     app_configmaps: "{{ app | json_query('services[?configs].{name: name, configs: configs}') }}"
 
 # Create the configmaps dictionnary:
@@ -39,7 +39,7 @@
 #   }
 # }
 - name: Format configMaps
-  set_fact:
+  ansible.builtin.set_fact:
     configmaps_from_files: |
       {%- set configmaps_from_files = {} -%}
       {%- for service in app_configmaps -%}
@@ -53,7 +53,7 @@
       {{ configmaps_from_files }}
 
 - name: Display config maps
-  debug:
+  ansible.builtin.debug:
     var: configmaps_from_files
     verbosity: 3
 
@@ -77,7 +77,7 @@
 
 # Select services with ConfigMaps
 - name: Set environment variables ConfigMaps for application {{ app.name }}
-  set_fact:
+  ansible.builtin.set_fact:
     app_configmaps: "{{ app | json_query('services[?environment_variables].{name: name, environment_variables: environment_variables}') }}"
 
 - name: Create environment variables ConfigMaps

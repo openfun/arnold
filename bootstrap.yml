@@ -1,12 +1,12 @@
 ---
 
 - hosts: local
-  gather_facts: False
+  gather_facts: false
   tasks:
     - import_tasks: tasks/set_vars.yml
 
     - name: Ask confirmation before running bootstrap playbook to prevent deleting namespace accidentally
-      pause:
+      ansible.builtin.pause:
         prompt: "This playbook will delete namespace {{ namespace_name }} using domain {{ domain_name }}. Press enter to continue, Ctrl+C to interrupt"
       when: skip_verification is not defined
 

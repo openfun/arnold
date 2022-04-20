@@ -2,7 +2,7 @@
 # Create ingress aliases
 
 - name: Build a list of all aliases
-  set_fact:
+  ansible.builtin.set_fact:
     redirections_from: "{{ redirections | json_query('[*].from') | flatten }}"
   when: redirections is not none and redirections is iterable
 
