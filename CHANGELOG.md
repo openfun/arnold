@@ -12,6 +12,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 - Upgrade `ansible` to `5.6.0`
 - Upgrade `jmespath` to `1.0.0`
+- Allow to use the `deployment_stamp` variable in project variables
 
 ### Removed
 

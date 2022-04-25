@@ -14,12 +14,12 @@
       ansible.builtin.debug: msg="==== Starting deploy playbook ===="
       tags: deploy
 
-    - import_tasks: tasks/set_vars.yml
-
     # Set the deployment stamp value for this deployment
     - name: Set deployment stamp
       ansible.builtin.set_fact: deployment_stamp="d-{{ lookup('pipe', 'date +%y%m%d-%Hh%Mm%Ss') }}"
       tags: deploy
+
+    - import_tasks: tasks/set_vars.yml
 
     # Set the job stamp for this deployment
     - name: Set job stamp

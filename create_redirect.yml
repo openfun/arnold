@@ -12,6 +12,11 @@
       ansible.builtin.debug: msg="==== Starting create_redirect playbook ===="
       tags: deploy
 
+    # Set the deployment stamp value that will be used to make created objects
+    # unique.
+    - name: Set deployment stamp
+      ansible.builtin.set_fact: deployment_stamp="d-{{ lookup('pipe', 'date +%y%m%d-%Hh%Mm%Ss') }}"
+
     - import_tasks: tasks/set_vars.yml
 
     - name: Lookup available core applications
@@ -29,11 +34,6 @@
       with_items: '{{ app | json_query("vars[?type==`all`]") }}'
 
     - import_tasks: tasks/get_objects_for_app.yml
-
-    # Set the deployment stamp value that will be used to make created objects
-    # unique.
-    - name: Set deployment stamp
-      ansible.builtin.set_fact: deployment_stamp="d-{{ lookup('pipe', 'date +%y%m%d-%Hh%Mm%Ss') }}"
 
     - import_tasks: tasks/create_app_config.yml
 
