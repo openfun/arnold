@@ -23,7 +23,8 @@
         path: "{{ apps_registry_file_name }}"
       register: registry_file
 
-    - block:
+    - name: Application registry checkpoint
+      block:
         - name: Abort if registry file does not exist
           ansible.builtin.debug:
             msg: "No registry file found"
@@ -47,7 +48,8 @@
         path: "{{ dependencies_file_name }}"
       register: dependencies_file
 
-    - block:
+    - name: Dependencies checkpoint
+      block:
         - name: Abort if dependencies file does not exist
           ansible.builtin.debug:
             msg: "No dependencies file found"
