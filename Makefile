@@ -32,7 +32,7 @@ K8S_DOMAIN ?= "$(shell hostname -I | awk '{print $$1}')"
 K3D_CLUSTER_NAME ?= arnold
 
 # -- Linters
-ANSIBLE_LINT_SKIP_RULES =
+ANSIBLE_LINT_SKIP_RULES = experimental
 
 # ==============================================================================
 # RULES
