@@ -1,5 +1,5 @@
 # Utils
-yq==3.0.2
+yq==3.1.0
 
 # Quality
 ansible-lint==6.3.0
@@ -9,6 +9,6 @@ isort==5.10.1
 pylint==2.14.5
 
 # Tests
-pyfakefs==4.6.2
+pyfakefs==4.6.3
 pytest-cov==3.0.0
 pytest==7.1.2
