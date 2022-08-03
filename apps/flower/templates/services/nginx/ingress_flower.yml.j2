@@ -11,6 +11,7 @@ metadata:
     version: "{{ flower_nginx_image_tag }}"
     route_target_service: "app"
 spec:
+  ingressClassName: "{{ flower_ingress_class_name }}"
   rules:
   - host: "{{ flower_host }}"
     http:

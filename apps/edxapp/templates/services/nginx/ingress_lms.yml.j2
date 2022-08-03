@@ -17,6 +17,7 @@ metadata:
 {% endif %}
     nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ edxapp_routing_timeout | default("60") }}"
 spec:
+  ingressClassName: "{{ edxapp_lms_ingress_class_name }}"
   rules:
   - host: "{{ edxapp_lms_host | blue_green_host(prefix) }}"
     http:

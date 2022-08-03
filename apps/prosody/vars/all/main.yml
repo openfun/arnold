@@ -1,5 +1,6 @@
-# -- route
+# -- ingress
 prosody_host: "prosody.{{ namespace_name }}.{{ domain_name }}"
+prosody_ingress_class_name: "{{ default_ingress_class_name }}"
 
 # -- Prosody
 

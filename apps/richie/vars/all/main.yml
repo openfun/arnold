@@ -1,7 +1,8 @@
 # Application default configuration
 
-# -- route
+# -- ingress
 richie_host: "richie.{{ namespace_name }}.{{ domain_name }}"
+richie_ingress_class_name: "{{ default_ingress_class_name }}"
 
 # -- nginx
 richie_nginx_image_name: "fundocker/richie-demo-nginx"

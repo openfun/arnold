@@ -1,7 +1,8 @@
 # Application default configuration
 
-# -- routes
+# -- ingresses
 edxec_host: "edxec.{{ namespace_name }}.{{ domain_name }}"
+edxec_ingress_class_name: "{{ default_ingress_class_name }}"
 
 # -- edxec
 edxec_image_name: "fundocker/edxec"

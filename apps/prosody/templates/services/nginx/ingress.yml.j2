@@ -16,6 +16,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ prosody_nginx_proxy_read_timeout }}"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ prosody_nginx_proxy_send_timeout }}"
 spec:
+  ingressClassName: "{{ prosody_ingress_class_name }}"
   rules:
   - host: "{{ prosody_host }}"
     http:

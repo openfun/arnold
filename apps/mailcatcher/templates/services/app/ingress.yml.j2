@@ -15,6 +15,7 @@ metadata:
     cert-manager.io/issuer: "{{ acme_issuer_name }}"
 {% endif %}
 spec:
+  ingressClassName: "{{ mailcatcher_ingress_class_name }}"
   rules:
   - host: "{{ mailcatcher_host }}"
     http:

@@ -1,7 +1,8 @@
 # Application default configuration
 
-# -- route
+# -- ingress
 mailcatcher_host: "mailcatcher.{{ namespace_name }}.{{ domain_name }}"
+mailcatcher_ingress_class_name: "{{ default_ingress_class_name }}"
 
 # -- mailcatcher
 mailcatcher_image_name: "sj26/mailcatcher"
