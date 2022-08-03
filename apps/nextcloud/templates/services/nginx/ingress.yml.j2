@@ -16,6 +16,7 @@ metadata:
     cert-manager.io/issuer: "{{ acme_issuer_name }}"
 {% endif %}
 spec:
+  ingressClassName: "{{ nextcloud_ingress_class_name }}"
   rules:
   - host: "{{ nextcloud_host | blue_green_host(prefix) }}"
     http:

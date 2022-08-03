@@ -1,7 +1,8 @@
 # Application default configuration
 
-# -- route
+# -- ingress
 nextcloud_host: "nextcloud.{{ namespace_name }}.{{ domain_name }}"
+nextcloud_ingress_class_name: "{{ default_ingress_class_name }}"
 
 # -- nginx
 nextcloud_nginx_image_name: "fundocker/openshift-nginx"

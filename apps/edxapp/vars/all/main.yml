@@ -1,9 +1,12 @@
 # Application default configuration
 
-# -- routes
+# -- ingresses
 edxapp_cms_host: "cms.{{ namespace_name }}.{{ domain_name }}"
 edxapp_lms_host: "lms.{{ namespace_name }}.{{ domain_name }}"
 edxapp_preview_host: "preview.{{ namespace_name }}.{{ domain_name }}"
+edxapp_cms_ingress_class_name: "{{ default_ingress_class_name }}"
+edxapp_lms_ingress_class_name: "{{ default_ingress_class_name }}"
+edxapp_preview_ingress_class_name: "{{ default_ingress_class_name }}"
 
 # -- edxapp (cms/lms)
 edxapp_image_name: "fundocker/edxapp"

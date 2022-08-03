@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- Define ingress class name to use on each ingress
+
 ### Changed
 
 - Upgrade `ansible` to `6.1.0`
