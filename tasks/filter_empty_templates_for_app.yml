@@ -1,7 +1,7 @@
 # FIXME: we've defined "prefix" to be able to render all templates, this
 # variable should be called url_prefix instead and must default to "next" See:
 # https://github.com/openfun/arnold/issues/118
-- name: set Prefix
+- name: Set Prefix
   ansible.builtin.set_fact:
     prefix: "next"
   when: prefix is not defined
