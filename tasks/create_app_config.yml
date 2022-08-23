@@ -43,9 +43,9 @@
     configmaps_from_files: |
       {%- set configmaps_from_files = {} -%}
       {%- for service in app_configmaps -%}
-        {%- set _ = configmaps_from_files.update({ service.name: {} }) -%}
+        {%- set _ = configmaps_from_files.update({service.name: {}}) -%}
         {%- for cm_path in service.configs -%}
-          {%- set content = lookup('template', cm_path, convert_data = False) -%}
+          {%- set content = lookup('template', cm_path, convert_data=False) -%}
           {%- set filename = cm_path | basename | regex_replace('.j2') -%}
           {%- set _ = configmaps_from_files.get(service.name).update({filename: content}) -%}
         {%- endfor -%}

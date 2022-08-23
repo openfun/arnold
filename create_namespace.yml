@@ -23,7 +23,7 @@
           kind: Namespace
           metadata:
             name: "{{ namespace_name }}"
-            labels: "{{ k8s_namespace_labels | default({}) | combine({ 'name': namespace_name }) }}"
+            labels: "{{ k8s_namespace_labels | default({}) | combine({'name': namespace_name}) }}"
       register: new_namespace
       until: new_namespace.result is defined and new_namespace.result.status is success
       retries: 30
