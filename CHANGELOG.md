@@ -14,7 +14,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
-- Upgrade `ansible` to `6.2.0`
+- Upgrade `ansible` to `6.3.0`
 - Upgrade `jmespath` to `1.0.1`
 - Upgrade `yq` to `3.1.0`
 
