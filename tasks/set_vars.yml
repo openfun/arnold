@@ -117,7 +117,7 @@
   ansible.builtin.set_fact:
     # We use escaped double quotes in the first regex_replace filter to be able
     # to add single quotes around app name in the query
-    apps_filter_query: "[?{{ apps_filter.split(',') | map('regex_replace', '([\\w-]+)', \"name=='\\1'\") | join(' || ') }}]" # noqa var-spacing
+    apps_filter_query: "[?{{ apps_filter.split(',') | map('regex_replace', '([\\w-]+)', \"name=='\\1'\") | join(' || ') }}]" # noqa jinja[spacing]
   when: apps_filter is defined
 
 - name: Filter apps

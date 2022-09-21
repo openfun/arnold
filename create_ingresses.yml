@@ -1,4 +1,5 @@
-- hosts: local
+- name: Create ingresses
+  hosts: local
   gather_facts: false
 
   pre_tasks:

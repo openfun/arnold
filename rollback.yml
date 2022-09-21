@@ -3,7 +3,8 @@
 # 1. point the "current" static service to the stack that was pointed by the "previous" static service,
 # 2. point the "next" static service to the stack that was pointed by the "current" static service,
 
-- hosts: local
+- name: Rollback the previous stack
+  hosts: local
   gather_facts: false
 
   pre_tasks:

@@ -1,6 +1,7 @@
 ---
 
-- hosts: local
+- name: Create vaults
+  hosts: local
   gather_facts: false
 
   tasks:

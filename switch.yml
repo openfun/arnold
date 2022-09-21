@@ -5,7 +5,8 @@
 # 3. delete the stack that was pointed by the "previous" static service,
 # 4. patch the next static service to the init stamp
 
-- hosts: local
+- name: Switch stacks
+  hosts: local
   gather_facts: false
 
   pre_tasks:

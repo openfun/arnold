@@ -2,7 +2,8 @@
 # This playbook creates a K8S namespace for a particular
 # customer/environment
 
-- hosts: local
+- name: Create the namespace
+  hosts: local
   gather_facts: false
 
   pre_tasks:

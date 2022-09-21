@@ -11,7 +11,8 @@
 #       -e "deployment_stamp=d-180611-08h46m30s"
 #
 
-- hosts: local
+- name: Create object
+  hosts: local
   gather_facts: false
   vars:
     object_template: ""

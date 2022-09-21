@@ -5,7 +5,8 @@
 # See the official documentation on how to install it :
 # https://cert-manager.io/docs/installation/kubernetes/
 
-- hosts: local
+- name: Create SSL certificates
+  hosts: local
   gather_facts: false
 
   pre_tasks:
@@ -29,7 +30,7 @@
 
     - name: Set acme_templates
       ansible.builtin.set_fact:
-        acme_templates: '{{ core_apps | json_query("[?name==`acme`].services[0].templates[]") | list }}'
+        acme_templates: '{{ core_apps | json_query("[?name==`acme`].services[0].templates[]") | list }}' # noqa jinja[invalid]
 
     - name: Print acme_templates
       ansible.builtin.debug:

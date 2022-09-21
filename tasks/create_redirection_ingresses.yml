@@ -3,7 +3,7 @@
 
 - name: Build a list of all aliases
   ansible.builtin.set_fact:
-    redirections_from: "{{ redirections | json_query('[*].from') | flatten }}"
+    redirections_from: "{{ redirections | json_query('[*].from') | flatten }}" # noqa jinja[invalid]
   when: redirections is not none and redirections is iterable
 
 - name: Make sure all redirected ingresses exist
