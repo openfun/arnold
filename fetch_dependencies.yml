@@ -1,5 +1,6 @@
 ---
-- hosts: local
+- name: Fetch project dependencies
+  hosts: local
   gather_facts: false
 
   tasks:

@@ -6,7 +6,8 @@
 #
 # Warning: this playbook has only effects on blue-green compatible apps.
 
-- hosts: local
+- name: Clean the namespace
+  hosts: local
   gather_facts: false
 
   pre_tasks:

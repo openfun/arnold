@@ -1,5 +1,6 @@
 ---
-- hosts: local
+- name: Create volumes
+  hosts: local
   gather_facts: false
 
   pre_tasks:

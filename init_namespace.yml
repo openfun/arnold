@@ -1,10 +1,19 @@
-- import_playbook: create_namespace.yml
-- import_playbook: create_network_policy.yml
-- import_playbook: create_volumes.yml
-- import_playbook: create_htpasswds.yml
+- name: Import create namespace playbook
+  ansible.builtin.import_playbook: create_namespace.yml
+- name: Import create network policies playbook
+  ansible.builtin.import_playbook: create_network_policy.yml
+- name: Import create volumes playbook
+  ansible.builtin.import_playbook: create_volumes.yml
+- name: Import create HTTP basic authentication files playbook
+  ansible.builtin.import_playbook: create_htpasswds.yml
   when: activate_http_basic_auth
-- import_playbook: create_secrets.yml
-- import_playbook: create_acme.yml
-- import_playbook: create_redirect.yml
-- import_playbook: create_ingresses.yml
-- import_playbook: create_services.yml
+- name: Import create secrets playbook
+  ansible.builtin.import_playbook: create_secrets.yml
+- name: Import create SSL certificates playbook
+  ansible.builtin.import_playbook: create_acme.yml
+- name: Import create HTTP redirections playbook
+  ansible.builtin.import_playbook: create_redirect.yml
+- name: Import create ingresses playbook
+  ansible.builtin.import_playbook: create_ingresses.yml
+- name: Import create services playbook
+  ansible.builtin.import_playbook: create_services.yml

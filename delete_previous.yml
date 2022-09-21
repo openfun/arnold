@@ -3,7 +3,8 @@
 #
 # This playbook may be useful to lower server load with old stack that will
 # never be switched back.
-- hosts: local
+- name: Delete previous stack
+  hosts: local
   gather_facts: false
 
   pre_tasks:

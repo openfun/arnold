@@ -2,7 +2,8 @@
 # This playbook deletes a K8S namespace for a particular
 # customer/environment
 
-- hosts: local
+- name: Delete namespace
+  hosts: local
   gather_facts: false
 
   pre_tasks:
@@ -40,7 +41,7 @@
         field_selectors:
           - metadata.name={{ namespace_name }}
       register: terminating_namespaces
-      until: terminating_namespaces.resources is defined and ( terminating_namespaces.resources | length ) == 0
+      until: terminating_namespaces.resources is defined and (terminating_namespaces.resources | length) == 0
       retries: 120
       delay: 5
       when: namespace.resources | length > 0

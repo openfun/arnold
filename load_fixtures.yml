@@ -3,7 +3,8 @@
 # and create demo users
 #
 
-- hosts: local
+- name: Load database fixtures
+  hosts: local
   gather_facts: false
   vars:
     load_fixtures_template: "apps/edxapp/job/load_fixtures.yml.j2"

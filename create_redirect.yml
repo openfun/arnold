@@ -1,7 +1,8 @@
 ---
 # This playbook creates the redirection core app objects.
 
-- hosts: local
+- name: Create HTTP redirections
+  hosts: local
   gather_facts: false
 
   pre_tasks:

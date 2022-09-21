@@ -1,6 +1,7 @@
 ---
 
-- hosts: local
+- name: Bootstrap the namespace
+  hosts: local
   gather_facts: false
   tasks:
     - import_tasks: tasks/set_vars.yml
@@ -10,6 +11,9 @@
         prompt: "This playbook will delete namespace {{ namespace_name }} using domain {{ domain_name }}. Press enter to continue, Ctrl+C to interrupt"
       when: skip_verification is not defined
 
-- import_playbook: delete_namespace.yml
-- import_playbook: init_namespace.yml
-- import_playbook: deploy.yml
+- name: Import delete namespace playbook
+  ansible.builtin.import_playbook: delete_namespace.yml
+- name: Import initialize namespace playbook
+  ansible.builtin.import_playbook: init_namespace.yml
+- name: Import deploy selected application playbook
+  ansible.builtin.import_playbook: deploy.yml
