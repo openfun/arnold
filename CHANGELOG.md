@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [6.13.0] - 2022-09-22
+
 ### Added
 
 - Define ingress class name to use on each ingress
@@ -1146,7 +1148,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v6.12.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v6.13.0...master
+[6.13.0]: https://github.com/openfun/arnold/compare/v6.12.0...v6.13.0
 [6.12.0]: https://github.com/openfun/arnold/compare/v6.11.0...v6.12.0
 [6.11.0]: https://github.com/openfun/arnold/compare/v6.10.0...v6.11.0
 [6.10.0]: https://github.com/openfun/arnold/compare/v6.9.0...v6.10.0
