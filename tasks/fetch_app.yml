@@ -3,7 +3,7 @@
 # Expected vars:
 #   - dependency: an application name of the registry list
 
-- name: Will fetch {{ dependency }} app
+- name: Will fetch app {{ dependency }}
   ansible.builtin.debug:
     var: dependency
     verbosity: 1
