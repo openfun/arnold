@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Fixed
+
+- Declare ingress class in core app redirections
+
 ## [6.13.0] - 2022-09-22
 
 ### Added

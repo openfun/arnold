@@ -13,6 +13,7 @@ metadata:
     cert-manager.io/issuer: "{{ acme_issuer_name }}"
 {% endif %}
 spec:
+  ingressClassName: "{{ default_ingress_class_name }}"
   rules:
   - host: "{{ redirection_from | default('unknown') }}"
     http:
