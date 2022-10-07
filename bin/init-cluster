@@ -25,8 +25,8 @@ ARNOLD_ROOT="$(dirname "$(dirname "$(readlink -f "$0")")")"
 declare -r PERSISTENT_VOLUME_PATH="${ARNOLD_ROOT}/k3d-storage"
 
 # Dependencies to download
-declare -r INGRESS_NGINX_DEPLOYMENT="https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.43.0/deploy/static/provider/cloud/deploy.yaml"
-declare -r INGRESS_NGINX_DEPLOYMENT_SHA256="03d80b59660a1818dea0f1b3482aa59cfae2bebcc755b150920ddfa26017adc3"
+declare -r INGRESS_NGINX_DEPLOYMENT="https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.4.0/deploy/static/provider/cloud/deploy.yaml"
+declare -r INGRESS_NGINX_DEPLOYMENT_SHA256="dc953c685157918b08155bff23e526bb1298257fc4d92b94343020ace07b2280"
 
 # PersistentVolume provisionning.
 #
@@ -78,7 +78,7 @@ if ! k3d cluster list "${K3D_CLUSTER_NAME}" &> /dev/null ; then
     -p "${K3D_BIND_HOST_PORT_HTTP}:80@loadbalancer" \
     -p "${K3D_BIND_HOST_PORT_HTTPS}:443@loadbalancer" \
     -v "${PERSISTENT_VOLUME_PATH}:/data/pv" \
-    --k3s-server-arg '--no-deploy=traefik' \
+    --k3s-arg "--disable=traefik@server:0" \
     "${k3d_registry_option[@]}"
 else
   k3d cluster start "${K3D_CLUSTER_NAME}"
@@ -143,7 +143,9 @@ if ! kubectl --kubeconfig="${KUBECONFIG}" get ns ingress-nginx &> /dev/null ; th
   kubectl --kubeconfig="${KUBECONFIG}" apply -f "${nginx_controller}"
   echo "Waiting for nginx-controller to be up and running... "
   kubectl --kubeconfig="${KUBECONFIG}" --namespace ingress-nginx wait \
-    --for=condition=available deploy/ingress-nginx-controller --timeout=90s \
+      --for=condition=ready pod \
+      --selector=app.kubernetes.io/component=controller \
+      --timeout=120s \
     && echo "nginx-controller is ready" \
     || echo "timeout! Please wait a little before deploying an app with arnold."
 else
@@ -159,10 +161,19 @@ items:
   metadata:
     name: arnold
     namespace: default
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    name: arnold-sa-token
+    namespace: default
+    annotations:
+      kubernetes.io/service-account.name: arnold
+  type: kubernetes.io/service-account-token
 - apiVersion: rbac.authorization.k8s.io/v1
   kind: ClusterRoleBinding
   metadata:
     name: arnold-cluster-admin
+    namespace: default
   roleRef:
     apiGroup: rbac.authorization.k8s.io
     kind: ClusterRole

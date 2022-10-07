@@ -23,9 +23,7 @@ to make Ansible talk with Kubernetes.
 
 Optionally:
 
-- [k3d](https://k3d.io/) (`v4.4.8`, `5.x` releases are not compatible with our
-  CI docker versions see [this k3d
-  issue](https://github.com/k3d-io/k3d/issues/807)): This tool is used to setup
+- [k3d](https://k3d.io/) (>`v.5.0.0`): This tool is used to setup
   and run a lightweight Kubernetes cluster, in order to have a local
   environment (it is required to complete below's quickstart instructions to
   avoid depending on an existing Kubernetes cluster).
