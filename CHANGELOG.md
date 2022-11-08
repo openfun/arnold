@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- Marsha: new cronjob managing clean_aws_elemental_stack command
+
 ### Fixed
 
 - Declare ingress class in core app redirections

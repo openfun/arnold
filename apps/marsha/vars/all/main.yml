@@ -46,6 +46,7 @@ marsha_check_live_state_cronjob_schedule: "*/20 * * * *"
 marsha_check_idle_state_cronjob_schedule: "0 4 * * *"
 marsha_clean_mediapackages_cronjob_schedule: "0 5 * * *"
 marsha_clean_medialive_dev_stack_cronjob_schedule: "*/5 * * * *"
+marsha_clean_aws_elemental_stack_cronjob_schedule: "0 */2 * * *"
 
 # -- volumes
 marsha_media_volume_size: 2Gi
@@ -65,6 +66,7 @@ marsha_app_cronjob_check_harvested_resources: "{{ app_resources }}"
 marsha_app_cronjob_check_live_idle_resources: "{{ app_resources }}"
 marsha_app_cronjob_check_live_state_resources: "{{ app_resources }}"
 marsha_app_cronjob_clean_mediapackages_resources: "{{ app_resources }}"
+marsha_app_cronjob_clean_aws_elemental_stack_resources: "{{ app_resources }}"
 
 marsha_nginx_resources:
   requests:
