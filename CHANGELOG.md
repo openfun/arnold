@@ -14,6 +14,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 - Marsha: new cronjob managing clean_aws_elemental_stack command
 
+### Changed
+
+- Upgrade `ansible` to `6.6.0`
+
 ### Fixed
 
 - Declare ingress class in core app redirections
