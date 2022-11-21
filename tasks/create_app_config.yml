@@ -9,7 +9,7 @@
 
 ################# Generic ConfigMaps #######################
 - name: Create generic config maps
-  k8s:
+  kubernetes.core.k8s:
     definition: "{{ lookup('template', item) | from_yaml }}"
     state: present
   with_items: "{{ configmaps }}"
@@ -58,7 +58,7 @@
     verbosity: 3
 
 - name: Create the config maps in k8s
-  k8s:
+  kubernetes.core.k8s:
     state: present
     name: "{{ app.name }}-{{ item.key }}{{ deployment_stamp is none | ternary('', '-') }}{{ deployment_stamp }}"
     namespace: "{{ namespace_name }}"
@@ -81,7 +81,7 @@
     app_configmaps: "{{ app | json_query('services[?environment_variables].{name: name, environment_variables: environment_variables}') }}"
 
 - name: Create environment variables ConfigMaps
-  k8s:
+  kubernetes.core.k8s:
     state: present
     name: "{{ app.name }}-{{ item.name }}-dotenv{{ deployment_stamp is none | ternary('', '-') }}{{ deployment_stamp }}"
     namespace: "{{ namespace_name }}"

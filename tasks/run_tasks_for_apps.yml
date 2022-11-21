@@ -9,7 +9,8 @@
 #       - myGreateTask
 #   tags: ingress
 
-- include_tasks: run_tasks_for_app.yml
+- name: Run tasks for app
+  ansible.builtin.include_tasks: run_tasks_for_app.yml
   loop: "{{ apps }}"
   loop_control:
     loop_var: app

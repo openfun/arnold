@@ -1,6 +1,6 @@
 # Delete a kind of objects for the targeted deployment_stamp
 - name: Lookup {{ resource_to_delete.kind }} to delete with deployment_stamp {{ targeted_deployment_stamp }} for app {{ app.name }}
-  k8s_info:
+  kubernetes.core.k8s_info:
     api_version: "{{ resource_to_delete.api_version }}"
     namespace: "{{ namespace_name }}"
     kind: "{{ resource_to_delete.kind }}"
@@ -12,7 +12,7 @@
   tags: deploy
 
 - name: Delete {{ resource_to_delete.kind }} with deployment_stamp {{ targeted_deployment_stamp }} for app {{ app.name }}
-  k8s:
+  kubernetes.core.k8s:
     api_version: "{{ resource_to_delete.api_version }}"
     namespace: "{{ namespace_name }}"
     kind: "{{ resource_to_delete.kind }}"
@@ -23,7 +23,7 @@
     loop_var: object
 
 - name: Wait for objects of kind {{ resource_to_delete.kind }} to be deleted
-  k8s_info:
+  kubernetes.core.k8s_info:
     api_version: "{{ resource_to_delete.api_version }}"
     namespace: "{{ namespace_name }}"
     kind: "{{ resource_to_delete.kind }}"

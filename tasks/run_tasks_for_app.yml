@@ -1,7 +1,8 @@
 ---
 # This task runs all tasks in {{ tasks }} for an app.
 
-- include_tasks: "{{ task }}.yml"
+- name: Run all tasks for app
+  ansible.builtin.include_tasks: "{{ task }}.yml"
   loop: "{{ tasks }}"
   loop_control:
     loop_var: task

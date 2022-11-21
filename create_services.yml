@@ -3,16 +3,19 @@
   gather_facts: false
 
   pre_tasks:
-    - import_tasks: tasks/check_configuration.yml
+    - name: Check configuration
+      ansible.builtin.import_tasks: tasks/check_configuration.yml
 
   tasks:
     - name: Display playbook name
       ansible.builtin.debug: msg="==== Starting create_services playbook ===="
       tags: deploy
 
-    - import_tasks: tasks/set_vars.yml
+    - name: Set vars
+      ansible.builtin.import_tasks: tasks/set_vars.yml
 
-    - include_tasks: tasks/run_tasks_for_apps.yml
+    - name: Run tasks for apps
+      ansible.builtin.include_tasks: tasks/run_tasks_for_apps.yml
       vars:
         tasks:
           - get_objects_for_app

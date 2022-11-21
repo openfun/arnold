@@ -7,7 +7,7 @@
 #   deployment_stamp: the stamp of the object we are going to create or delete
 
 - name: k8s objects with deployment_stamp[{{ deployment_stamp }}] must be {{ deployment_state | default('present') }}
-  k8s:
+  kubernetes.core.k8s:
     definition: "{{ lookup('template', item) | from_yaml }}"
     state: "{{ deployment_state | default('present') }}"
   with_items:
@@ -48,7 +48,7 @@
     - job
 
 - name: k8s cronjobs with deployment_stamp[{{ deployment_stamp }}] must be {{ deployment_state | default('present') }}
-  k8s:
+  kubernetes.core.k8s:
     definition: "{{ lookup('template', item) | from_yaml }}"
     state: "{{ deployment_state | default('present') }}"
   with_items: "{{ cronjobs }}"
@@ -57,7 +57,7 @@
     - cronjob
 
 - name: k8s deployments with deployment_stamp[{{ deployment_stamp }}] must be {{ deployment_state | default('present') }}
-  k8s:
+  kubernetes.core.k8s:
     definition: "{{ lookup('template', item) | from_yaml }}"
     state: "{{ deployment_state | default('present') }}"
   with_items: "{{ deployments }}"
@@ -66,7 +66,7 @@
     - deployment
 
 - name: k8s StatefulSets with deployment_stamp[{{ deployment_stamp }}] must be {{ deployment_state | default('present') }}
-  k8s:
+  kubernetes.core.k8s:
     definition: "{{ lookup('template', item) | from_yaml }}"
     state: "{{ deployment_state | default('present') }}"
   with_items: "{{ statefulsets }}"
@@ -96,7 +96,7 @@
   when: app.settings.is_blue_green_compatible | default(True) == True
 
 - name: Wait for pods to be running
-  k8s_info:
+  kubernetes.core.k8s_info:
     api_version: "v1"
     namespace: "{{ namespace_name }}"
     kind: "Pod"

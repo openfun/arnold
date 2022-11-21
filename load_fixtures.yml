@@ -10,16 +10,18 @@
     load_fixtures_template: "apps/edxapp/job/load_fixtures.yml.j2"
 
   pre_tasks:
-    - import_tasks: tasks/check_configuration.yml
+    - name: Check configuration
+      ansible.builtin.import_tasks: tasks/check_configuration.yml
 
   tasks:
-    - import_tasks: tasks/set_vars.yml
+    - name: Set vars
+      ansible.builtin.import_tasks: tasks/set_vars.yml
 
     - name: Print Object template
       ansible.builtin.debug: msg="Object template {{ load_fixtures_template }}"
 
     - name: Import demo course and create demo users
-      k8s:
+      kubernetes.core.k8s:
         definition: "{{ lookup('template', load_fixtures_template) | from_yaml }}"
         state: present
         force: true

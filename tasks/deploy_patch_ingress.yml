@@ -1,7 +1,7 @@
 # Patch all ingresses of app (for a specific prefix if the app is blue/green compatible)
 
 - name: "Patching ingresses with prefix {{ prefix }} for the {{ app.name }} application"
-  k8s:
+  kubernetes.core.k8s:
     force: "{{ force_route | bool }}"
     definition: "{{ lookup('template', ingress_template) | from_yaml }}"
     state: present
@@ -12,7 +12,7 @@
   tags: ingress
 
 - name: "Patching ingresses for the {{ app.name }} application"
-  k8s:
+  kubernetes.core.k8s:
     force: "{{ force_route | bool }}"
     definition: "{{ lookup('template', ingress_template) | from_yaml }}"
     state: present

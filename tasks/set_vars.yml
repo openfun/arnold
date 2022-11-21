@@ -130,16 +130,17 @@
     var: apps
     verbosity: 1
 
-- include_tasks: tasks/run_tasks_for_apps.yml
+- name: Run tasks for apps
+  ansible.builtin.include_tasks: tasks/run_tasks_for_apps.yml
   vars:
     tasks:
       - tasks/set_vault_for_app
 
 - name: Include "all" type vars for applications
-  include_tasks: tasks/load_app_defaults.yml
+  ansible.builtin.include_tasks: tasks/load_app_defaults.yml
   vars:
     file: "{{ item.path }}"
-  with_items: '{{ apps | json_query("[*].vars[?type==`all`]") | flatten }}'
+  with_items: '{{ apps | json_query("[*].vars[?type==`all`]") | flatten }}' # noqa jinja[invalid]
 
 - name: Print namespace details
   ansible.builtin.debug:

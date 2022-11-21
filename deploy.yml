@@ -7,8 +7,10 @@
   gather_facts: false
 
   pre_tasks:
-    - import_tasks: tasks/check_configuration.yml
-    - import_tasks: tasks/check_apps_filter.yml
+    - name: Check configuration
+      ansible.builtin.import_tasks: tasks/check_configuration.yml
+    - name: Check apps filter
+      ansible.builtin.import_tasks: tasks/check_apps_filter.yml
 
   tasks:
     - name: Display playbook name
@@ -20,7 +22,8 @@
       ansible.builtin.set_fact: deployment_stamp="d-{{ lookup('pipe', 'date +%y%m%d-%Hh%Mm%Ss') }}"
       tags: deploy
 
-    - import_tasks: tasks/set_vars.yml
+    - name: Set vars
+      ansible.builtin.import_tasks: tasks/set_vars.yml
 
     # Set the job stamp for this deployment
     - name: Set job stamp
@@ -36,7 +39,8 @@
         var: apps
       tags: deploy
 
-    - include_tasks: tasks/run_tasks_for_apps.yml
+    - name: Run tasks for apps
+      ansible.builtin.include_tasks: tasks/run_tasks_for_apps.yml
       vars:
         suspend_cronjob: true
         tasks:
@@ -49,7 +53,8 @@
         - deploy
 
     # Patch all next static services of all apps after deploy
-    - include_tasks: tasks/run_tasks_for_apps.yml
+    - name: Run tasks for apps
+      ansible.builtin.include_tasks: tasks/run_tasks_for_apps.yml
       vars:
         prefix: "next"
         tasks:

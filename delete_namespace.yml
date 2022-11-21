@@ -7,19 +7,21 @@
   gather_facts: false
 
   pre_tasks:
-    - import_tasks: tasks/check_configuration.yml
+    - name: Check configuration
+      ansible.builtin.import_tasks: tasks/check_configuration.yml
 
   tasks:
     - name: Display playbook name
       ansible.builtin.debug: msg="==== Starting delete_namespace playbook ===="
       tags: deploy
 
-    - import_tasks: tasks/set_vars.yml
+    - name: Set vars
+      ansible.builtin.import_tasks: tasks/set_vars.yml
 
     # We must check if the namespace exists first. Without this condition, k8s
     # will try to delete a missing namespace and returns a 403 ¯\_(ツ)_/¯
     - name: Check if namespace exists
-      k8s_info:
+      kubernetes.core.k8s_info:
         api_version: v1
         kind: Namespace
         field_selectors:
@@ -27,7 +29,7 @@
       register: namespace
 
     - name: Delete the namespace
-      k8s:
+      kubernetes.core.k8s:
         api_version: v1
         kind: Namespace
         name: "{{ namespace_name }}"
@@ -35,7 +37,7 @@
       when: namespace.resources | length > 0
 
     - name: Wait for namespace to be terminated
-      k8s_info:
+      kubernetes.core.k8s_info:
         api_version: "v1"
         kind: Namespace
         field_selectors:

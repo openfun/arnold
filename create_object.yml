@@ -18,14 +18,16 @@
     object_template: ""
 
   pre_tasks:
-    - import_tasks: tasks/check_configuration.yml
+    - name: Check configuration
+      ansible.builtin.import_tasks: tasks/check_configuration.yml
 
   tasks:
     - name: Display playbook name
       ansible.builtin.debug: msg="==== Starting create_object playbook ===="
       tags: deploy
 
-    - import_tasks: tasks/set_vars.yml
+    - name: Set vars
+      ansible.builtin.import_tasks: tasks/set_vars.yml
 
     - name: Print OpenShift object template path
       ansible.builtin.debug: msg="Object template {{ object_template }}"
@@ -46,7 +48,7 @@
         verbosity: 2
 
     - name: Create object
-      k8s:
+      kubernetes.core.k8s:
         definition: "{{ lookup('template', object_template) | from_yaml }}"
         state: present
         force: true

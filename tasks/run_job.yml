@@ -6,7 +6,7 @@
     msg: "Submitting job: {{ job_template }} [deployment_stamp: {{ deployment_stamp }} // job_stamp: {{ job_stamp }}]"
 
 - name: Submit job
-  k8s:
+  kubernetes.core.k8s:
     definition: "{{ lookup('template', job_template) | from_yaml }}"
     state: "present"
   register: submitted_job
@@ -15,7 +15,7 @@
     - job
 
 - name: Wait for job completion
-  k8s_info:
+  kubernetes.core.k8s_info:
     api_version: "v1"
     namespace: "{{ namespace_name }}"
     kind: "Job"

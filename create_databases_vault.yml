@@ -7,7 +7,8 @@
     - name: Display playbook name
       ansible.builtin.debug: msg="==== Starting create_databases_vault playbook ===="
 
-    - import_tasks: tasks/set_vars.yml
+    - name: Set vars
+      ansible.builtin.import_tasks: tasks/set_vars.yml
 
     - name: Set databases vault destination path
       ansible.builtin.set_fact:
@@ -23,7 +24,8 @@
         file: "{{ databases_vault.stat.path }}"
       when: databases_vault.stat.exists
 
-    - include_tasks: tasks/run_tasks_for_apps.yml
+    - name: Run tasks for apps
+      ansible.builtin.include_tasks: tasks/run_tasks_for_apps.yml
       vars:
         tasks:
           - tasks/create_app_database_vault
