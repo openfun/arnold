@@ -10,7 +10,8 @@
       }}"
   tags: deploy
 
-- include_tasks: tasks/filter_empty_templates_for_app.yml
+- name: Filter empty templates for app
+  ansible.builtin.include_tasks: tasks/filter_empty_templates_for_app.yml
 
 - name: Set k8s objects to manage
   ansible.builtin.set_fact:

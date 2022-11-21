@@ -7,17 +7,19 @@
   gather_facts: false
 
   pre_tasks:
-    - import_tasks: tasks/check_configuration.yml
+    - name: Check configuration
+      ansible.builtin.import_tasks: tasks/check_configuration.yml
 
   tasks:
     - name: Display playbook name
       ansible.builtin.debug: msg="==== Starting create_namespace playbook ===="
       tags: deploy
 
-    - import_tasks: tasks/set_vars.yml
+    - name: Set vars
+      ansible.builtin.import_tasks: tasks/set_vars.yml
 
     - name: Make sure the namespace exists in K8S and is up-to-date
-      k8s:
+      kubernetes.core.k8s:
         state: present
         definition:
           apiVersion: v1

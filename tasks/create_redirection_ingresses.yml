@@ -7,7 +7,7 @@
   when: redirections is not none and redirections is iterable
 
 - name: Make sure all redirected ingresses exist
-  k8s:
+  kubernetes.core.k8s:
     force: "{{ force_route | bool }}"
     definition: "{{ lookup('template', 'core_apps/redirect/templates/services/nginx/_redirected_ingress.yml.j2') | from_yaml }}"
     state: present

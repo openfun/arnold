@@ -10,14 +10,16 @@
   gather_facts: false
 
   pre_tasks:
-    - import_tasks: tasks/check_configuration.yml
+    - name: Check configuration
+      ansible.builtin.import_tasks: tasks/check_configuration.yml
 
   tasks:
     - name: Display playbook name
       ansible.builtin.debug: msg="==== Starting create_acme playbook ===="
       tags: deploy
 
-    - import_tasks: tasks/set_vars.yml
+    - name: Set vars
+      ansible.builtin.import_tasks: tasks/set_vars.yml
 
     - name: Lookup available core applications
       ansible.builtin.set_fact:
@@ -38,7 +40,7 @@
         verbosity: 2
 
     - name: Create K8s entities
-      k8s:
+      kubernetes.core.k8s:
         namespace: "{{ namespace_name }}"
         definition: "{{ lookup('template', item) | from_yaml }}"
       with_items:

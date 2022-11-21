@@ -6,7 +6,8 @@
   gather_facts: false
 
   pre_tasks:
-    - import_tasks: tasks/check_configuration.yml
+    - name: Check configuration
+      ansible.builtin.import_tasks: tasks/check_configuration.yml
 
   tasks:
     - name: Display playbook name
@@ -18,7 +19,8 @@
     - name: Set deployment stamp
       ansible.builtin.set_fact: deployment_stamp="d-{{ lookup('pipe', 'date +%y%m%d-%Hh%Mm%Ss') }}"
 
-    - import_tasks: tasks/set_vars.yml
+    - name: Set vars
+      ansible.builtin.import_tasks: tasks/set_vars.yml
 
     - name: Lookup available core applications
       ansible.builtin.set_fact:
@@ -29,17 +31,19 @@
         app: '{{ core_apps | json_query("[?name==`redirect`] | [0]") }}'
 
     - name: Include "all" type vars for redirect app
-      include_tasks: tasks/load_app_defaults.yml
+      ansible.builtin.include_tasks: tasks/load_app_defaults.yml
       vars:
         file: "{{ item.path }}"
       with_items: '{{ app | json_query("vars[?type==`all`]") }}'
 
-    - import_tasks: tasks/get_objects_for_app.yml
+    - name: Get objects for app
+      ansible.builtin.import_tasks: tasks/get_objects_for_app.yml
 
-    - import_tasks: tasks/create_app_config.yml
+    - name: Create app config
+      ansible.builtin.import_tasks: tasks/create_app_config.yml
 
     - name: Create redirect deployments
-      k8s:
+      kubernetes.core.k8s:
         force: true
         namespace: "{{ namespace_name }}"
         definition: "{{ lookup('template', deployment) | from_yaml }}"
@@ -51,7 +55,7 @@
     # Check if the nginx service already exists and recreate it only if not
     # (parts of an k8s Service definition are immutable).
     - name: Check if the redirect nginx service already exists
-      k8s_info:
+      kubernetes.core.k8s_info:
         api_version: "v1"
         namespace: "{{ namespace_name }}"
         kind: "Service"
@@ -59,7 +63,7 @@
       register: redirect_nginx_service
 
     - name: Create redirect services
-      k8s:
+      kubernetes.core.k8s:
         namespace: "{{ namespace_name }}"
         definition: "{{ lookup('template', service) | from_yaml }}"
         state: present
@@ -68,4 +72,5 @@
         loop_var: service
       when: redirect_nginx_service.resources | length == 0
 
-    - import_tasks: tasks/create_redirection_ingresses.yml
+    - name: Create redirection ingresses
+      ansible.builtin.import_tasks: tasks/create_redirection_ingresses.yml

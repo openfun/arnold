@@ -69,7 +69,7 @@
         verbosity: 1
 
     - name: Fetch dependencies locally
-      include_tasks: tasks/fetch_app.yml
+      ansible.builtin.include_tasks: tasks/fetch_app.yml
       loop: "{{ dependencies }}"
       loop_control:
         loop_var: dependency

@@ -2,7 +2,7 @@
 # for the current stack and false otherwise
 
 - name: Patch CronJobs with deployment_stamp {{ deployment_stamp }}
-  k8s:
+  kubernetes.core.k8s:
     definition: "{{ lookup('template', cronjob_template) | from_yaml }}"
     state: present
   loop: "{{ cronjobs }}"

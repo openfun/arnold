@@ -1,7 +1,7 @@
 # Patch all static services of a given app to the new deployment_stamp
 
 - name: "Patching services with prefix {{ prefix }} for the {{ app.name }} application with deployment_stamp {{ deployment_stamp }}"
-  k8s:
+  kubernetes.core.k8s:
     force: "{{ force_route | bool }}"
     definition: "{{ lookup('template', service_template) | from_yaml }}"
     state: present
@@ -12,7 +12,7 @@
   tags: static_service
 
 - name: "Patching services for the {{ app.name }} application"
-  k8s:
+  kubernetes.core.k8s:
     force: "{{ force_route | bool }}"
     definition: "{{ lookup('template', service_template) | from_yaml }}"
     state: present

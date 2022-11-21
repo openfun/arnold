@@ -6,7 +6,7 @@
 # deployed stack by getting a service object. We retrieve the service and it will
 # be labelled with the deploy_stamp we are looking for.
 - name: Get static service for application {{ app.name }} with prefix {{ prefix }}
-  k8s_info:
+  kubernetes.core.k8s_info:
     api_version: "v1"
     namespace: "{{ namespace_name }}"
     kind: "Service"
