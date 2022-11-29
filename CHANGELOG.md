@@ -16,7 +16,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
-- Upgrade `ansible` to `6.6.0`
+- Upgrade `ansible` to `7.0.0`
 
 ### Fixed
 
