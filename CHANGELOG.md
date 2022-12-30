@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- Marsha: Add nginx rule to manage service worker
+
 ### Changed
 
 - Upgrade `ansible` to `7.1.0`
