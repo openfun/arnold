@@ -2,11 +2,11 @@
 yq==3.1.0
 
 # Quality
-ansible-lint==6.9.1
+ansible-lint==6.10.2
 black==22.12.0
 flake8==6.0.0
-isort==5.11.2
-pylint==2.15.8
+isort==5.11.4
+pylint==2.15.9
 
 # Tests
 pyfakefs==5.0.0
