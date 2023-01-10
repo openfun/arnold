@@ -10,7 +10,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- Marsha: Add nginx rule to manage service worker
+- Marsha: add nginx rule to manage service worker
+- Marsha: new cronjob managing prefetch_saml_fer_metadata command
 
 ### Changed
 
