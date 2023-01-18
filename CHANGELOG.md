@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [6.15.0] - 2023-01-18
+
 ### Added
 
 - Marsha: add nginx rule to manage service worker
@@ -1171,7 +1173,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v6.14.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v6.15.0...master
+[6.15.0]: https://github.com/openfun/arnold/compare/v6.14.0...v6.15.0
 [6.14.0]: https://github.com/openfun/arnold/compare/v6.13.0...v6.14.0
 [6.13.0]: https://github.com/openfun/arnold/compare/v6.12.0...v6.13.0
 [6.12.0]: https://github.com/openfun/arnold/compare/v6.11.0...v6.12.0
