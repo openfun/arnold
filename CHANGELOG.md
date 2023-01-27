@@ -8,6 +8,11 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Removed
+
+- Marsha app is removed and managed in marsha
+  github repository as a tray.
+
 ## [6.15.0] - 2023-01-18
 
 ### Added
