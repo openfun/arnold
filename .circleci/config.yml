@@ -469,37 +469,6 @@ jobs:
             bin/arnold -c eugene -e ci -a edxec switch
             bin/ci route -s edxec -c OK -p "/health/"
 
-  # Test the bootstrap playbook on the "marsha" application
-  # nota bene: we use a real k8s cluster installed in CircleCI's VM.
-  test-bootstrap-marsha:
-    <<: *defaults
-
-    steps:
-      - checkout
-      - *attach_workspace
-      - *ci_env
-      - *docker_load
-      - *install_k8s_requirements
-      - *configure_sysctl_limits
-      - *run_k3d_cluster
-
-      - run:
-          name: Test the "marsha" application bootstrapping
-          command: |
-            # Bootstrap app
-            bin/arnold -c eugene -e ci -a marsha bootstrap
-            # Test services deployed with the next route
-            bin/ci route -s marsha -c "Api Root" -p "/api/" -P next
-
-      - run:
-          name: Test the "marsha" application switch
-          command: |
-            # Switch next route to current
-            bin/arnold -c eugene -e ci -a marsha switch
-            # Test service switched to the current route
-            bin/ci route -s marsha -c "Api Root" -p "/api/"
-
-
   # Test the bootstrap playbook on the "ashley" application
   # nota bene: we use a real OpenShift cluster installed in CircleCI's VM.
   test-bootstrap-ashley:
@@ -885,15 +854,6 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - test-bootstrap-marsha:
-          requires:
-            - lint-bash
-            - lint-docker
-            - lint-ansible
-            - lint-plugins
-          filters:
-            tags:
-              only: /.*/
       - test-bootstrap-forum:
           requires:
             - lint-bash
@@ -974,7 +934,6 @@ workflows:
             - test-bootstrap-richie
             - test-bootstrap-edxapp
             - test-bootstrap-mailcatcher
-            - test-bootstrap-marsha
             - test-bootstrap-forum
             - test-bootstrap-ashley
             - test-bootstrap-kibana

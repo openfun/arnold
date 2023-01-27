@@ -17,4 +17,8 @@ stable:
     git:
       repository: https://github.com/openfun/ralph.git
       reference: v2.0.1
+  - name: marsha
+    git:
+      repository: https://github.com/openfun/marsha.git
+      reference: arnold-tray
 experimental: []
