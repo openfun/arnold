@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [6.16.0] - 2023-02-02
+
 ### Removed
 
 - Marsha app is removed and managed in marsha
@@ -1178,7 +1180,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v6.15.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v6.16.0...master
+[6.16.0]: https://github.com/openfun/arnold/compare/v6.15.0...v6.16.0
 [6.15.0]: https://github.com/openfun/arnold/compare/v6.14.0...v6.15.0
 [6.14.0]: https://github.com/openfun/arnold/compare/v6.13.0...v6.14.0
 [6.13.0]: https://github.com/openfun/arnold/compare/v6.12.0...v6.13.0
