@@ -11,6 +11,7 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Upgrade `ansible` to `7.2.0`
+- Use batch/v1 api in cronjob_pipeline manifest
 
 ## [6.16.0] - 2023-02-02
 
