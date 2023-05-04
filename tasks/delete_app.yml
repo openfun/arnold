@@ -12,7 +12,7 @@
     - { kind:  "ReplicationController", api_version: "v1" }
     - { kind:  "StatefulSet", api_version: "v1" }
     - { kind:  "Job", api_version: "v1" }
-    - { kind:  "CronJob", api_version: "v1beta1" }
+    - { kind:  "CronJob", api_version: "v1" }
     # Pods must be deleted after all kind of objects that can spawn new pods
     - { kind:  "Pod", api_version: "v1" }
     - { kind:  "Service", api_version: "v1" }
