@@ -48,8 +48,6 @@ spec:
         - name: kibana
           image: "{{ kibana_image_name }}:{{ kibana_image_tag }}"
           imagePullPolicy: Always
-          command: ["/bin/bash"]
-          args: ["-c", "SERVER_UUID=$(uuidgen) /usr/local/bin/kibana-docker"]
           livenessProbe:
             exec:
               command:

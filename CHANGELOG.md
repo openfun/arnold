@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Changed
+
+- Remove UUID generation for kibana
+
 ## [6.17.0] - 2023-06-15
 
 ### Changed
