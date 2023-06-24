@@ -19,3 +19,7 @@
           - tasks/create_app_vault
       tags:
         - vault
+
+    - include_tasks: tasks/execute_apps_hook.yml
+      vars:
+        hook: vaults_created

@@ -1,0 +1,16 @@
+---
+# import handlers defined for the current app
+
+- debug:
+    msg: "{{ app.name }}"
+
+- name: Get role's application
+  stat:
+    path: "apps/{{ app.name }}/hooks/{{ hook }}.yml"
+  register: hook_path
+
+- debug:
+    var: hook_path
+
+- include_tasks: "{{ hook_path.stat.path }}"
+  when: hook_path.stat.exists == True

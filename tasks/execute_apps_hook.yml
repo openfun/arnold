@@ -1,0 +1,10 @@
+---
+# This task loops over all applications in {{ apps }}, defines the {{ app }} var
+# and import handlers defined for this app
+#
+
+- include_tasks: execute_app_hook.yml
+  loop: "{{ apps }}"
+  loop_control:
+    loop_var: app
+  when: apps is defined and hook is defined
