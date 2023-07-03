@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [6.18.0] - 2023-07-03
+
 ### Changed
 
 - Remove UUID generation for kibana
@@ -1191,7 +1193,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v6.17.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v6.18.0...master
+[6.18.0]: https://github.com/openfun/arnold/compare/v6.17.0...v6.18.0
 [6.17.0]: https://github.com/openfun/arnold/compare/v6.16.0...v6.17.0
 [6.16.0]: https://github.com/openfun/arnold/compare/v6.15.0...v6.16.0
 [6.15.0]: https://github.com/openfun/arnold/compare/v6.14.0...v6.15.0
