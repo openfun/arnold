@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- Allow having multiple ingresses for an app
+
 ## [6.18.0] - 2023-07-03
 
 ### Changed

@@ -1,7 +1,8 @@
 # Application default configuration
 
 # -- ingress
-hello_host: "hello.{{ namespace_name }}.{{ domain_name }}"
+hello_hosts:
+  - "hello.{{ namespace_name }}.{{ domain_name }}"
 hello_ingress_class_name: "{{ default_ingress_class_name }}"
 
 # -- misc

@@ -1,3 +1,5 @@
+{% for hello_host in hello_hosts %}
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -31,3 +33,4 @@ spec:
   - hosts:
     - "{{ hello_host | blue_green_host(prefix) }}"
     secretName: "hello-app-tls-{{ prefix }}-{{ acme_env }}"
+{% endfor %}
