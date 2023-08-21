@@ -87,7 +87,7 @@ spec:
 {% if richie_should_activate_media_volume %}
         - name: richie-v-media
           persistentVolumeClaim:
-            claimName: richie-pvc-media
+            claimName: "{{ richie_pvc_media_name }}"
 {% endif %}
 {% if activate_http_basic_auth or richie_activate_http_basic_auth %}
         - name: richie-htpasswd

@@ -62,7 +62,7 @@ spec:
       volumes:
         - name: richie-v-media
           persistentVolumeClaim:
-            claimName: richie-pvc-media
+            claimName: "{{ richie_pvc_media_name }}"
 {% endif %}
       securityContext:
         runAsUser: {{ container_uid }}

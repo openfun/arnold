@@ -49,7 +49,7 @@ spec:
       volumes:
         - name: nextcloud-v-install
           persistentVolumeClaim:
-            claimName: nextcloud-pvc-install
+            claimName: "{{ nextcloud_pvc_install_name }}"
       securityContext:
         runAsUser: {{ container_uid }}
         runAsGroup: {{ container_gid }}

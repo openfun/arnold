@@ -55,7 +55,7 @@ spec:
             name: ashley-app-{{ deployment_stamp }}
         - name: ashley-v-static
           persistentVolumeClaim:
-            claimName: ashley-pvc-static
+            claimName: "{{ ashley_pvc_static_name }}"
 {% endif %}
       securityContext:
         runAsUser: {{ container_uid }}

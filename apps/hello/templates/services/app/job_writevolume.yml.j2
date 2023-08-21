@@ -40,7 +40,7 @@ spec:
       volumes:
         - name: hello-volume
           persistentVolumeClaim:
-            claimName: hello-pvc
+            claimName: "{{ hello_pvc_hello_volume_name }}"
       restartPolicy: Never
       securityContext:
         runAsUser: {{ container_uid }}

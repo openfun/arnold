@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: ashley-pvc-media
+  name: "{{ ashley_pvc_media_name }}"
   namespace: "{{ namespace_name }}"
   labels:
     app: ashley

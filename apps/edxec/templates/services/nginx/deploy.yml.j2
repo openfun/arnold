@@ -87,10 +87,10 @@ spec:
             name: edxec-nginx-{{ deployment_stamp }}
         - name: edxec-v-media
           persistentVolumeClaim:
-            claimName: edxec-pvc-media
+            claimName: "{{ edxec_pvc_media_name }}"
         - name: edxec-v-static
           persistentVolumeClaim:
-            claimName: edxec-pvc-static
+            claimName: "{{ edxec_pvc_static_name }}"
 {% if activate_http_basic_auth or edxec_activate_http_basic_auth %}
         - name: edxec-htpasswd
           secret:

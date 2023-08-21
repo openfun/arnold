@@ -170,7 +170,7 @@ spec:
             secretName: "{{ elasticsearch_ca_secret_name }}"
         - name: elasticsearch-v-bootstrap
           persistentVolumeClaim:
-            claimName: elasticsearch-pvc-bootstrap
+            claimName: "{{ elasticsearch_pvc_bootstrap_name }}"
         - name: config-dir
           emptyDir: {}
 {% endif %}
@@ -182,7 +182,7 @@ spec:
 {% if elasticsearch_persistent_volume_enabled %}
   volumeClaimTemplates:
   - metadata:
-      name: elasticsearch-pvc-data
+      name: "{{ elasticsearch_pvc_bootstrap_name }}"
       labels:
         app: elasticsearch
     spec:

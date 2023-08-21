@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: prosody-pvc-storage
+  name: "{{ prosody_pvc_storage_name }}"
   namespace: "{{ namespace_name }}"
   labels:
     app: prosody

@@ -51,6 +51,7 @@ richie_activate_http_basic_auth: false
 # volume sizes with power of 2 suffices (Ki, Mi, Gi, Ti...) e.g 2Gi and 0 for no volume.
 richie_media_volume_size: 2Gi
 richie_should_activate_media_volume: true
+richie_pvc_media_name: "richie-pvc-media"
 
 # -- resources requests
 {% set app_resources = {

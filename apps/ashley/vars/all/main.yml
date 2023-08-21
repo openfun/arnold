@@ -69,6 +69,8 @@ ashley_media_volume_size: 2Gi
 ashley_static_volume_size: 1Gi
 ashley_should_activate_media_volume: true
 ashley_should_activate_static_volume: true
+ashley_pvc_media_name: "ashley-pvc-media"
+ashley_pvc_static_name: "ashley-pvc-static"
 
 # -- resources requests
 {% set app_resources = {

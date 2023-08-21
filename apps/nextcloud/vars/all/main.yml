@@ -50,6 +50,7 @@ nextcloud_container_home_dir: "/home/openfun"
 
 # -- volumes
 nextcloud_install_volume_size: 2Mi
+nextcloud_pvc_install_name: "nextcloud-pvc-install"
 
 # -- resources requests
 {% set app_resources = {

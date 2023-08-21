@@ -69,7 +69,7 @@ spec:
       volumes:
         - name: redis-v-data
           persistentVolumeClaim:
-            claimName: redis-pvc-data
+            claimName: "{{ redis_pvc_data_name }}"
         - name: redis-v-config
           configMap:
             name: "redis-app-{{ deployment_stamp }}"

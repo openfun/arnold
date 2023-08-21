@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: elasticsearch-pvc-bootstrap
+  name: "{{ elasticsearch_pvc_bootstrap_name }}"
   namespace: "{{ namespace_name }}"
   labels:
     app: elasticsearch

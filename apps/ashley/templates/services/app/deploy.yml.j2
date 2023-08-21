@@ -91,12 +91,12 @@ spec:
 {% if ashley_should_activate_media_volume %}
         - name: ashley-v-media
           persistentVolumeClaim:
-            claimName: ashley-pvc-media
+            claimName: "{{ ashley_pvc_media_name }}"
 {% endif %}
 {% if ashley_should_activate_static_volume %}
         - name: ashley-v-static
           persistentVolumeClaim:
-            claimName: ashley-pvc-static
+            claimName: "{{ ashley_pvc_static_name }}"
 {% endif %}
       securityContext:
         runAsUser: {{ container_uid }}

@@ -64,7 +64,7 @@ spec:
       keepAfterDeletion: true
       persistentVolumeClaim:
         metadata:
-          name: redis-sentinel-pvc-data
+          name: "{{ redis_sentinel_pvc_data_name }}"
           namespace: "{{ namespace_name }}"
           labels:
             app: redis-sentinel
@@ -75,7 +75,7 @@ spec:
           resources:
             requests:
               storage: {{ redis_sentinel_redis_data_volume_size }}
-          storageClassName: "{{ default_storage_class_rwo }}"
+          storageClassName: "{{ redis_sentinel_storage_class_rwo }}"
 {% endif %}
     securityContext:
       runAsUser: {{ container_uid }}

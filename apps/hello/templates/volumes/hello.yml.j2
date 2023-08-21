@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: hello-pvc
+  name: "{{ hello_pvc_hello_volume_name }}"
   namespace: "{{ namespace_name }}"
   labels:
     app: hello
