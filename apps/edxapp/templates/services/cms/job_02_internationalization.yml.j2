@@ -75,6 +75,6 @@ spec:
       volumes:
         - name: edxapp-v-locale
           persistentVolumeClaim:
-            claimName: edxapp-pvc-locale
+            claimName: "{{ edxapp_pvc_locale_name }}"
       restartPolicy: Never
 {% endif %}

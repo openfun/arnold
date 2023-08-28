@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: richie-pvc-media
+  name: "{{ richie_pvc_media_name }}"
   namespace: "{{ namespace_name }}"
   labels:
     app: richie

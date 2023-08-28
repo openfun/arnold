@@ -61,6 +61,7 @@ prosody_secret_name: "prosody-{{ prosody_vault_checksum | default('undefined_pro
 # -- Volumes
 # The storage volume is used only when the prosody storage is internal.
 prosody_storage_volume_size: 1Gi
+prosody_pvc_storage_name: "prosody-pvc-storage"
 
 # -- Nginx
 prosody_nginx_image_name: "fundocker/openshift-nginx"

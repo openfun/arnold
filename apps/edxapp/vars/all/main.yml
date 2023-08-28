@@ -26,6 +26,16 @@ edxapp_i18n_languages:
   - fr
 edxapp_tx_secret_name: "edxapp-tx-{{ edxapp_vault_checksum | default('undefined_edxapp_vault_checksum') }}"
 
+# -- pvc
+# Persitent volume name use for media
+edxapp_pvc_media_name: "edxapp-pvc-media"
+edxapp_pvc_data_name: "edxapp-pvc-data"
+edxapp_pvc_export_name: "edxapp-pvc-export"
+edxapp_pvc_locale_name: "edxapp-pvc-locale"
+
+# -- volumes
+
+
 # -- volumes size
 edxapp_data_volume_size: 2Gi
 edxapp_media_volume_size: 2Gi

@@ -101,9 +101,9 @@ spec:
             secretName: "{{ edxapp_secret_name }}"
         - name: edxapp-v-media
           persistentVolumeClaim:
-            claimName: "{{ edxapp_pvc_media_name | default("edxapp-pvc-media") }}"
+            claimName: "{{ edxapp_pvc_media_name }}"
         - name: edxapp-v-data
           persistentVolumeClaim:
-            claimName: edxapp-pvc-data
+            claimName: "{{ edxapp_pvc_data_name }}"
       restartPolicy: Never
 {% endif %}

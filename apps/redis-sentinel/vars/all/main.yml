@@ -29,3 +29,10 @@ redis_sentinel_resources:
   requests:
     cpu: 20m
     memory: 100Mi
+
+# -- pvc
+redis_sentinel_storage_class_rwo: "{{ default_storage_class_rwo }}"
+
+
+# -- volumes
+redis_sentinel_pvc_data_name: "redis-sentinel-pvc-data"

@@ -35,6 +35,10 @@ edxec_mysql_image_tag: "5.7"
 edxec_mysql_port: 3306
 edxec_mysql_secret_name: "edxec-mysql-{{ edxec_vault_checksum | default('undefined_edxec_vault_checksum') }}"
 
+# -- pvc
+edxec_pvc_media_name: "edxec-pvc-media"
+edxec_pvc_static_name: "edxec-pvc-static"
+
 # -- volumes size
 edxec_static_volume_size: 2Gi
 edxec_media_volume_size: 2Gi

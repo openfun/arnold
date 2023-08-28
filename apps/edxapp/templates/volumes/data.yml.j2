@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: edxapp-pvc-data
+  name: "{{ edxapp_pvc_data_name }}"
   namespace: "{{ namespace_name }}"
   labels:
     app: edxapp

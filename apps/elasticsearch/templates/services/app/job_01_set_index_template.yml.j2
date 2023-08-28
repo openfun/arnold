@@ -65,7 +65,7 @@ spec:
 {% if elasticsearch_security_enabled %}
         - name: elasticsearch-v-bootstrap
           persistentVolumeClaim:
-            claimName: elasticsearch-pvc-bootstrap
+            claimName: "{{ elasticsearch_pvc_bootstrap_name }}"
 {% endif %}
       securityContext:
         runAsUser: {{ elasticsearch_container_uid }}

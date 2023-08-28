@@ -7,6 +7,10 @@ redis_app_port: 6379
 # -- volume size
 redis_data_volume_size: 2Gi
 
+# -- volumes
+# Name of the persitent volume use by redis's data volume
+redis_pvc_data_name: "redis-pvc-data"
+
 # -- resources requests
 redis_app_resources:
   requests:

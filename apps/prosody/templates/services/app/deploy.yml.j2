@@ -66,5 +66,5 @@ spec:
 {% if prosody_storage == "internal" %}
         - name: prosody-v-storage
           persistentVolumeClaim:
-            claimName: prosody-pvc-storage
+            claimName: "{{ prosody_pvc_storage_name }}"
 {% endif %}

@@ -87,10 +87,10 @@ spec:
             name: "edxapp-nginx-{{ deployment_stamp }}"
         - name: edxapp-v-media
           persistentVolumeClaim:
-            claimName: "{{ edxapp_pvc_media_name | default("edxapp-pvc-media") }}"
+            claimName: "{{ edxapp_pvc_media_name }}"
         - name: edxapp-v-export
           persistentVolumeClaim:
-            claimName: edxapp-pvc-export
+            claimName: "{{ edxapp_pvc_export_name }}"
         {% if activate_http_basic_auth or edxapp_activate_http_basic_auth -%}
         - name: edxapp-htpasswd
           secret:
