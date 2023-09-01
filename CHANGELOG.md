@@ -10,6 +10,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+## [6.19.0] - 2023-09-01
+
+### Added
+
 - Add variables to override persistent volume names
 
 ## [6.18.0] - 2023-07-03
