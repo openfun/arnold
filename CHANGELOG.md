@@ -8,7 +8,9 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
-### Changed
+### Added
+
+- Use Gitlab token when call the Github's API
 
 ## [6.19.0] - 2023-09-01
 
