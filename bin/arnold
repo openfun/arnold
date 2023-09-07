@@ -254,9 +254,14 @@ function _get_log_level_name() {
 
 # Get the latest Arnold release by querying Github's API
 function _get_latest_release() {
+  local auth_header=()
+  if [ -n "$GITHUB_TOKEN" ]; then
+    auth_header=(-H "Authorization: Bearer $GITHUB_TOKEN")
+  fi
+
   if ! curl \
       -s \
-      -H "Accept: application/vnd.github.v3+json" \
+      -H "Accept: application/vnd.github.v3+json" "${auth_header[@]}" \
       "https://api.github.com/repos/openfun/arnold/releases?per_page=1" ; then
     log debug "Cannot get latest release from GitHub.com"
   fi
