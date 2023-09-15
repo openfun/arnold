@@ -72,6 +72,7 @@ elasticsearch_persistent_volume_enabled: false
 elasticsearch_persistent_volume_size: 1Gi
 elasticsearch_persistent_volume_storageclass: "{{ default_storage_class_rwo }}"
 elasticsearch_pvc_bootstrap_name: "elasticsearch-pvc-bootstrap"
+elasticsearch_pvc_persistent_name: "elasticsearch-pvc-data"
 
 # -- resources requests
 elasticsearch_app_resources:
