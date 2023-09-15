@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Fixed
+
+- Missing variable to configure elasticsearch persistent PVC name
+
 ### Changed
 
 ## [6.19.0] - 2023-09-01

@@ -97,7 +97,7 @@ spec:
               name: "comm-port"
           volumeMounts:
 {% if elasticsearch_persistent_volume_enabled %}
-            - name: elasticsearch-pvc-data
+            - name: {{ elasticsearch_pvc_persistent_name }}
               mountPath: /usr/share/elasticsearch/data
 {% endif %}
 {% if elasticsearch_security_enabled %}
@@ -182,7 +182,7 @@ spec:
 {% if elasticsearch_persistent_volume_enabled %}
   volumeClaimTemplates:
   - metadata:
-      name: "{{ elasticsearch_pvc_bootstrap_name }}"
+      name: "{{ elasticsearch_pvc_persistent_name }}"
       labels:
         app: elasticsearch
     spec:
