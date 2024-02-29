@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Fixed
+
+- App filtering when `apps_filter` variable is set but empty
+
 ## [6.19.1] - 2023-09-15
 
 ### Fixed
