@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [6.19.2] - 2024-03-19
+
 ### Fixed
 
 - App filtering when `apps_filter` variable is set but empty
@@ -1211,7 +1213,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v6.19.1...master
+[unreleased]: https://github.com/openfun/arnold/compare/v6.19.2...master
+[6.19.2]: https://github.com/openfun/arnold/compare/v6.19.1...v6.19.2
 [6.19.1]: https://github.com/openfun/arnold/compare/v6.19.0...v6.19.1
 [6.19.0]: https://github.com/openfun/arnold/compare/v6.18.0...v6.19.0
 [6.18.0]: https://github.com/openfun/arnold/compare/v6.17.0...v6.18.0
