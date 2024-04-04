@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Changed
+
+- Force image richie nginx pull policy to always
+
 ## [6.19.2] - 2024-03-19
 
 ### Fixed
