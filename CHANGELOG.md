@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [6.20.0] - 2024-04-04
+
 ### Changed
 
 - Force image richie nginx pull policy to always
@@ -1217,7 +1219,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v6.19.2...master
+[unreleased]: https://github.com/openfun/arnold/compare/v6.20.0...master
+[6.20.0]: https://github.com/openfun/arnold/compare/v6.19.2...v6.20.0
 [6.19.2]: https://github.com/openfun/arnold/compare/v6.19.1...v6.19.2
 [6.19.1]: https://github.com/openfun/arnold/compare/v6.19.0...v6.19.1
 [6.19.0]: https://github.com/openfun/arnold/compare/v6.18.0...v6.19.0
