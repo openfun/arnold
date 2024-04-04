@@ -46,6 +46,7 @@ spec:
 {% endif %}
       containers:
         - image: "{{ richie_nginx_image_name }}:{{ richie_nginx_image_tag }}"
+          imagePullPolicy: Always
           name: nginx
           ports:
             - containerPort: {{ richie_nginx_port }}
