@@ -1,0 +1,5 @@
+--- 
+
+- name: manage api key
+  debug:
+    msg: "vaults created, we should inject the good api key in this hook"
