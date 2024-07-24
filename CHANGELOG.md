@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- Add a block in the main richie nginx location
+
 ## [6.20.0] - 2024-04-04
 
 ### Changed

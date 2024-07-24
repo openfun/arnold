@@ -45,6 +45,8 @@ server {
     }
 {% endif %}
 
+    {% block location_main_extra %}{% endblock %}
+
     try_files $uri @proxy_to_richie_app;
   }
 
