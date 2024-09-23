@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Changed
+
+- Declare DJANGO_ALLOWED_HOSTS in env template file
+
 ## [6.21.0] - 2024-07-24
 
 ### Added
