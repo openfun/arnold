@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [6.22.0] - 2024-09-23
+
 ### Changed
 
 - Declare DJANGO_ALLOWED_HOSTS in env template file
@@ -1229,7 +1231,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v6.21.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v6.22.0...master
+[6.22.0]: https://github.com/openfun/arnold/compare/v6.21.0...v6.22.0
 [6.21.0]: https://github.com/openfun/arnold/compare/v6.20.0...v6.21.0
 [6.20.0]: https://github.com/openfun/arnold/compare/v6.19.2...v6.20.0
 [6.19.2]: https://github.com/openfun/arnold/compare/v6.19.1...v6.19.2
