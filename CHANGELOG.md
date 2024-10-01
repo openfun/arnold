@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [6.23.0] - 2024-10-01
+
 ### Changed
 
 - Allow to load multiple document in yaml templates
@@ -1235,7 +1237,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v6.22.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v6.23.0...master
+[6.23.0]: https://github.com/openfun/arnold/compare/v6.22.0...v6.23.0
 [6.22.0]: https://github.com/openfun/arnold/compare/v6.21.0...v6.22.0
 [6.21.0]: https://github.com/openfun/arnold/compare/v6.20.0...v6.21.0
 [6.20.0]: https://github.com/openfun/arnold/compare/v6.19.2...v6.20.0
