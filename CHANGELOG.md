@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Changed
+
+- Allow to load multiple document in yaml templates
+
 ## [6.22.0] - 2024-09-23
 
 ### Changed

@@ -42,7 +42,7 @@
     - name: Create K8s entities
       kubernetes.core.k8s:
         namespace: "{{ namespace_name }}"
-        definition: "{{ lookup('template', item) | from_yaml }}"
+        definition: "{{ lookup('template', item) | from_yaml_all }}"
       with_items:
         - "{{ acme_templates }}"
       when: env_type not in ('development', 'ci')

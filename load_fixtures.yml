@@ -22,6 +22,6 @@
 
     - name: Import demo course and create demo users
       kubernetes.core.k8s:
-        definition: "{{ lookup('template', load_fixtures_template) | from_yaml }}"
+        definition: "{{ lookup('template', load_fixtures_template) | from_yaml_all }}"
         state: present
         force: true

@@ -46,7 +46,7 @@
       kubernetes.core.k8s:
         force: true
         namespace: "{{ namespace_name }}"
-        definition: "{{ lookup('template', deployment) | from_yaml }}"
+        definition: "{{ lookup('template', deployment) | from_yaml_all }}"
         state: present
       loop: "{{ deployments }}"
       loop_control:
@@ -65,7 +65,7 @@
     - name: Create redirect services
       kubernetes.core.k8s:
         namespace: "{{ namespace_name }}"
-        definition: "{{ lookup('template', service) | from_yaml }}"
+        definition: "{{ lookup('template', service) | from_yaml_all }}"
         state: present
       loop: "{{ services }}"
       loop_control:

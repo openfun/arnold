@@ -3,7 +3,7 @@
 - name: "Patching services with prefix {{ prefix }} for the {{ app.name }} application with deployment_stamp {{ deployment_stamp }}"
   kubernetes.core.k8s:
     force: "{{ force_route | bool }}"
-    definition: "{{ lookup('template', service_template) | from_yaml }}"
+    definition: "{{ lookup('template', service_template) | from_yaml_all }}"
     state: present
   loop: "{{ static_services }}"
   loop_control:
@@ -14,7 +14,7 @@
 - name: "Patching services for the {{ app.name }} application"
   kubernetes.core.k8s:
     force: "{{ force_route | bool }}"
-    definition: "{{ lookup('template', service_template) | from_yaml }}"
+    definition: "{{ lookup('template', service_template) | from_yaml_all }}"
     state: present
   loop: "{{ static_services }}"
   loop_control:

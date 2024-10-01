@@ -3,7 +3,7 @@
 
 - name: Patch CronJobs with deployment_stamp {{ deployment_stamp }}
   kubernetes.core.k8s:
-    definition: "{{ lookup('template', cronjob_template) | from_yaml }}"
+    definition: "{{ lookup('template', cronjob_template) | from_yaml_all }}"
     state: present
   loop: "{{ cronjobs }}"
   loop_control:

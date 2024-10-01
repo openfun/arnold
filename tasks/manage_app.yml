@@ -8,7 +8,7 @@
 
 - name: k8s objects with deployment_stamp[{{ deployment_stamp }}] must be {{ deployment_state | default('present') }}
   kubernetes.core.k8s:
-    definition: "{{ lookup('template', item) | from_yaml }}"
+    definition: "{{ lookup('template', item) | from_yaml_all }}"
     state: "{{ deployment_state | default('present') }}"
   with_items:
     - "{{ endpoints }}"
@@ -24,7 +24,7 @@
   ansible.builtin.set_fact:
     template: "{{ item }}"
     basename: "{{ item | basename }}"
-    job_type: "{{ lookup('template', item) | from_yaml | json_query('metadata.labels.job_type') | default('post', true) }}"
+    job_type: "{{ lookup('template', item) | from_yaml_all | json_query('metadata.labels.job_type') | default('post', true) }}"
   register: jobs_basename
   with_items: "{{ jobs | flatten }}"
   tags:
@@ -49,7 +49,7 @@
 
 - name: k8s cronjobs with deployment_stamp[{{ deployment_stamp }}] must be {{ deployment_state | default('present') }}
   kubernetes.core.k8s:
-    definition: "{{ lookup('template', item) | from_yaml }}"
+    definition: "{{ lookup('template', item) | from_yaml_all }}"
     state: "{{ deployment_state | default('present') }}"
   with_items: "{{ cronjobs }}"
   tags:
@@ -58,7 +58,7 @@
 
 - name: k8s deployments with deployment_stamp[{{ deployment_stamp }}] must be {{ deployment_state | default('present') }}
   kubernetes.core.k8s:
-    definition: "{{ lookup('template', item) | from_yaml }}"
+    definition: "{{ lookup('template', item) | from_yaml_all }}"
     state: "{{ deployment_state | default('present') }}"
   with_items: "{{ deployments }}"
   tags:
@@ -67,7 +67,7 @@
 
 - name: k8s StatefulSets with deployment_stamp[{{ deployment_stamp }}] must be {{ deployment_state | default('present') }}
   kubernetes.core.k8s:
-    definition: "{{ lookup('template', item) | from_yaml }}"
+    definition: "{{ lookup('template', item) | from_yaml_all }}"
     state: "{{ deployment_state | default('present') }}"
   with_items: "{{ statefulsets }}"
   tags:
@@ -76,7 +76,7 @@
 
 - name: Render deployment and statefulset templates to prepare expected running pods calculation
   ansible.builtin.set_fact:
-    tpl: "{{ lookup('template', item) | from_yaml }}"
+    tpl: "{{ lookup('template', item) | from_yaml_all }}"
   with_items: "{{ deployments | union(statefulsets) }}"
   register: rendered_deployment_templates
 

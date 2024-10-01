@@ -49,6 +49,6 @@
 
     - name: Create object
       kubernetes.core.k8s:
-        definition: "{{ lookup('template', object_template) | from_yaml }}"
+        definition: "{{ lookup('template', object_template) | from_yaml_all }}"
         state: present
         force: true
