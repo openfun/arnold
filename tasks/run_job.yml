@@ -7,7 +7,7 @@
 
 - name: Submit job
   kubernetes.core.k8s:
-    definition: "{{ lookup('template', job_template) | from_yaml }}"
+    definition: "{{ lookup('template', job_template) | from_yaml_all }}"
     state: "present"
   register: submitted_job
   tags:

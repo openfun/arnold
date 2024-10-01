@@ -22,7 +22,7 @@
   
 - name: Make sure application volumes exist
   kubernetes.core.k8s:
-    definition: "{{ lookup('template', item) | from_yaml }}"
+    definition: "{{ lookup('template', item) | from_yaml_all }}"
     state: present
   with_items: "{{ volumes }}"
   when: app.volumes is defined

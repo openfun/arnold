@@ -10,7 +10,7 @@
 ################# Generic ConfigMaps #######################
 - name: Create generic config maps
   kubernetes.core.k8s:
-    definition: "{{ lookup('template', item) | from_yaml }}"
+    definition: "{{ lookup('template', item) | from_yaml_all }}"
     state: present
   with_items: "{{ configmaps }}"
   when: configmaps is defined
