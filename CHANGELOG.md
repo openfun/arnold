@@ -8,6 +8,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## [6.24.0] - 2025-01-08
+
 ### Changed
 
 - Avoid indexing of attestations files with a nginx rule
@@ -1241,7 +1243,8 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 - Official Docker image is available at:
   https://hub.docker.com/r/fundocker/arnold/
 
-[unreleased]: https://github.com/openfun/arnold/compare/v6.23.0...master
+[unreleased]: https://github.com/openfun/arnold/compare/v6.24.0...master
+[6.24.0]: https://github.com/openfun/arnold/compare/v6.23.0...v6.24.0
 [6.23.0]: https://github.com/openfun/arnold/compare/v6.22.0...v6.23.0
 [6.22.0]: https://github.com/openfun/arnold/compare/v6.21.0...v6.22.0
 [6.21.0]: https://github.com/openfun/arnold/compare/v6.20.0...v6.21.0
