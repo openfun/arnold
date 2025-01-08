@@ -73,6 +73,7 @@ server {
     access_log off;
     expires {{ richie_nginx_media_cache_expires }};
     add_header Cache-Control public;
+    add_header X-Robots-Tag "noindex, nofollow";
     root /data/media;
     try_files /$file =404;
   }
