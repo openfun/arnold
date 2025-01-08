@@ -8,6 +8,10 @@ Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Changed
+
+- Avoid indexing of attestations files with a nginx rule
+
 ## [6.23.0] - 2024-10-01
 
 ### Changed
